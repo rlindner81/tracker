@@ -1,5 +1,5 @@
 "use strict"
 
-// var factory = require("./factory")
+var factory = require("./factory")
 
-// module.exports.ask = factory.bind(null, require("./askSchema"))
+module.exports.test = factory.bind(null, require("./testSchema"))

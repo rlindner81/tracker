@@ -5,7 +5,7 @@ var Joi = require("joi")
 module.exports = function (schema, req, res, next) {
   if (schema.body) {
     return Joi.validate(req.body, schema.body)
-      // TODO why not .then(next) ???
+      // NOTE: this anonymous function is needed so the output of validate is not passed into next
       .then(function () {
         next()
       })
