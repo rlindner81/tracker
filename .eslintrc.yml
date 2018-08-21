@@ -1,0 +1,37 @@
+---
+  root: true
+  # https://eslint.org/docs/rules/
+  extends: 'eslint:recommended'
+  parserOptions:
+    ecmaVersion: 5
+  env:
+    node: true
+  globals:
+    Promise: false
+  rules:
+    # http://eslint.org/docs/rules/indent
+    indent: [error, 2]
+    # http://eslint.org/docs/rules/linebreak-style
+    linebreak-style: [error, unix]
+    # http://eslint.org/docs/rules/quotes
+    quotes: [error, double]
+    # http://eslint.org/docs/rules/semi
+    semi: [error, never]
+    # http://eslint.org/docs/rules/comma-dangle
+    comma-dangle: [error, never]
+    # http://eslint.org/docs/rules/eqeqeq
+    eqeqeq: [error, always]
+    # http://eslint.org/docs/rules/strict
+    strict: [error, safe]
+    # http://eslint.org/docs/rules/eol-last
+    eol-last: [error, always]
+    # http://eslint.org/docs/rules/keyword-spacing
+    keyword-spacing: error
+    # http://eslint.org/docs/rules/key-spacing
+    key-spacing: error
+    # http://eslint.org/docs/rules/comma-spacing
+    comma-spacing: error
+    # http://eslint.org/docs/rules/space-before-function-paren
+    space-before-function-paren: [error, named: never]
+    # http://eslint.org/docs/rules/space-before-blocks
+    space-before-blocks: error
