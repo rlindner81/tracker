@@ -2,14 +2,15 @@
 
 var uuidv4 = require("uuid/v4")
   , logger = require("../util").logger
+  , db = require("./dataService")
 
-function getId() {
-  return Promise.resolve({ "id": uuidv4() })
+function getUsers() {
+  return db.users.findAsync({})
 }
-module.exports.getId = getId
+module.exports.getUsers = getUsers
 
-function test(body) {
-  logger.info("", body)
-  return Promise.resolve()
+function addUser(user) {
+  logger.info("user:", user)
+  return db.users.insertAsync(user)
 }
-module.exports.test = test
+module.exports.addUser = addUser
