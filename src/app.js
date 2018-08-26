@@ -10,19 +10,12 @@ var express = require("express")
   , error = require("./error")
   , dataService = require("./service").data
   , route = require("./route")
+  , config = require("./config")
   , app = express()
-  // , args = process.argv.slice(2)
-  , sessionConfig = {
+  , sessionConfig = Object.assign({}, config.session, {
     store: dataService.sessions,
-    genid: uuid,
-    resave: false,
-    saveUninitialized: false,
-    secret: process.env.SESSION_SECRET || "secret",
-    cookie: {
-      secure: process.env.SESSION_SECURE || false,
-      maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year
-    }
-  },
+    genid: uuid
+  }),
   server
 
 if (process.env.NODE_ENV === "development") {
@@ -30,10 +23,10 @@ if (process.env.NODE_ENV === "development") {
   logger.debug("raised default log level to debug")
 }
 
-app.set("port", process.env.PORT || 8080)
+app.set("port", config.server.port)
 
 app.disable("x-powered-by")
-app.set("trust proxy", process.env.TRUST_PROXY || false)
+app.set("trust proxy", config.server.trustProxy)
 app.use(session(sessionConfig))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
