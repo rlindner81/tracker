@@ -17,7 +17,7 @@ function login(session, fields) {
     return Promise.reject(new error.AlreadyLoggedIn())
   }
 
-  return dbUsers.findOne({ $or: [{ name: fields.nameOrEmail }, { email: fields.nameOrEmail }]})
+  return dbUsers.findOneAsync({ $or: [{ name: fields.nameOrEmail }, { email: fields.nameOrEmail }]})
     .then(function (dbUser) {
       if (dbUser === null) {
         return Promise.reject(new error.UserNotFound())
@@ -47,6 +47,6 @@ function logout(session) {
 module.exports.logout = logout
 
 function readMe(session) {
-  return dbUsers.find({ "id": session.userId })
+  return dbUsers.findAsync({ "id": session.userId })
 }
 module.exports.readMe = readMe
