@@ -7,6 +7,7 @@ var express = require("express")
   , bodyParser = require("body-parser")
   , logger = require("./util").logger
   , uuid = require("uuid/v4")
+  , auth = require("./auth")
   , error = require("./error")
   , dataService = require("./service").data
   , route = require("./route")
@@ -31,9 +32,10 @@ app.use(session(sessionConfig))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use("/api/tracker", route.tracker)
+app.use("/api/auth", auth.route)
+app.use("/api/tracker", auth.handler, route.tracker)
 
-app.use(error.applicationErrorHandler)
+app.use(error.handler)
 
 server = app.listen(app.get("port"), function () {
   logger.info("Started server on port " + app.get("port"))

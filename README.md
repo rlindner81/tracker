@@ -12,6 +12,7 @@ You will need at least [NodeJS](https://nodejs.org) 8.x.
 * [NeDB](https://www.npmjs.com/package/nedb) as an embedded document database
   * [NeDB-Session-Store](https://www.npmjs.com/package/nedb-session-store) session NeDB backend
 * [Winston](https://www.npmjs.com/package/winston) for all logging
+* [BCrypt](https://www.npmjs.com/package/bcrypt) for secure password storage
 * [Joi](https://www.npmjs.com/package/joi) for request validation
 * [UUID](https://www.npmjs.com/package/uuid) for generating version 4 UUIDs
 
@@ -19,8 +20,6 @@ You will need at least [NodeJS](https://nodejs.org) 8.x.
 
 * Code will be in [ECMAScript 5.1](https://www.ecma-international.org/ecma-262/5.1/) published in June 2011
 * Style rules are specfied in [ESLint](.eslintrc.yml)
-
-<!-- ## Config -->
 
 ## TODO
 
