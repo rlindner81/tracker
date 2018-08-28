@@ -29,7 +29,7 @@ function login(session, fields) {
       if (!match) {
         return Promise.reject(new error.WrongPassword())
       }
-      session.userId = user.id
+      session.userId = user._id
     })
     .catch(function (err) {
       delete session.userId
@@ -47,6 +47,6 @@ function logout(session) {
 module.exports.logout = logout
 
 function readMe(session) {
-  return dbUsers.findAsync({ "id": session.userId })
+  return dbUsers.findOneAsync({ "_id": session.userId })
 }
 module.exports.readMe = readMe
