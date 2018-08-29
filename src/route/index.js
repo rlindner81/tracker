@@ -1,3 +1,3 @@
 "use strict"
 
-module.exports.tracker = require("./trackerRoute")
+module.exports.track = require("./trackRoute")

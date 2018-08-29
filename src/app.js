@@ -32,7 +32,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use("/api/auth", auth.route)
-app.use("/api/tracker", auth.handler, route.tracker)
+app.use("/api/track", auth.handler, route.track)
 
 app.use(error.handler)
 

@@ -1,4 +1,4 @@
 "use strict"
 
-module.exports.tracker = require("./trackerService")
+module.exports.track = require("./trackService")
 module.exports.data = require("./dataService")

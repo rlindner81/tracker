@@ -21,6 +21,19 @@ You will need at least [NodeJS](https://nodejs.org) 8.x.
 * Code will be in [ECMAScript 5.1](https://www.ecma-international.org/ecma-262/5.1/) published in June 2011
 * Style rules are specfied in [ESLint](.eslintrc.yml)
 
+## API
+```
+GET    /api/track
+POST   /api/track
+PATCH  /api/track/:trackId
+DELETE /api/track/:trackId
+
+GET    /api/track/:trackId/step
+POST   /api/track/:trackId/step
+PATCH  /api/track/:trackId/step/:stepId
+DELETE /api/track/:trackId/step/:stepId
+```
+
 ## TODO
 
 * Setup project

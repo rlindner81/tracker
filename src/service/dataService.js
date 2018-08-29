@@ -9,8 +9,8 @@ promisifyAll(Datastore.prototype)
 promisifyAll(Sessionstore.prototype)
 
 module.exports = {
+  sessions: new Sessionstore({ filename: "data/sessions.db", autoload: true }),
   users: new Datastore({ filename: "data/users.db", autoload: true }),
-  trackers: new Datastore({ filename: "data/trackers.db", autoload: true }),
   tracks: new Datastore({ filename: "data/tracks.db", autoload: true }),
-  sessions: new Sessionstore({ filename: "data/sessions.db", autoload: true })
+  steps: new Datastore({ filename: "data/steps.db", autoload: true })
 }
