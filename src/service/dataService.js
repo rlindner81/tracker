@@ -9,7 +9,6 @@ var session = require("express-session")
 Datastore.prototype.createNewId = uuid
 
 promisifyAll(Datastore.prototype)
-promisifyAll(Sessionstore.prototype)
 
 module.exports = {
   sessions: new Sessionstore({ filename: "data/sessions.db" }),
