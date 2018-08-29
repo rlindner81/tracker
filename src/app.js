@@ -14,8 +14,7 @@ var express = require("express")
   , config = require("./config")
   , app = express()
   , sessionConfig = Object.assign({}, config.session, {
-    store: dataService.sessions,
-    genid: uuid
+    store: dataService.sessions
   }),
   server
 
