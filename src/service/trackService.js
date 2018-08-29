@@ -12,22 +12,24 @@ var uuidv4 = require("uuid/v4")
  */
 
 function getTracks(session) {
-  throw new error.NotImplementedError()
+  return dbTracks.findAsync({ userId: session.userId })
 }
 module.exports.getTracks = getTracks
 
 function addTrack(session, track) {
-  throw new error.NotImplementedError()
+  Object.assign(track, { userId: session.userId })
+  return dbTracks.insertAsync(track)
 }
 module.exports.addTrack = addTrack
 
 function updateTrack(session, trackId, track) {
-  throw new error.NotImplementedError()
+  Object.assign(track, { _id: trackId, userId: session.userId })
+  return dbTracks.updateAsync({ _id: trackId }, track, {})
 }
 module.exports.updateTrack = updateTrack
 
 function deleteTrack(session, trackId) {
-  throw new error.NotImplementedError()
+  return dbTracks.deleteAsync({ _id: trackId }, {})
 }
 module.exports.deleteTrack = deleteTrack
 
@@ -36,21 +38,23 @@ module.exports.deleteTrack = deleteTrack
  */
 
 function getSteps(session, trackId) {
-  throw new error.NotImplementedError()
+  return dbSteps.findAsync({ userId: session.userId, trackId: trackId })
 }
 module.exports.getSteps = getSteps
 
 function addStep(session, trackId, step) {
-  throw new error.NotImplementedError()
+  Object.assign(step, { userId: session.userId, trackId: trackId })
+  return dbSteps.insertAsync(step)
 }
 module.exports.addStep = addStep
 
 function updateStep(session, trackId, stepId, step) {
-  throw new error.NotImplementedError()
+  Object.assign(step, { _id: stepId, userId: session.userId, trackId: trackId })
+  return dbSteps.updateAsync({ _id: stepId }, step, {})
 }
 module.exports.updateStep = updateStep
 
 function deleteStep(session, trackId, stepId) {
-  throw new error.NotImplementedError()
+  return dbTracks.deleteAsync({ _id: stepId }, {})
 }
 module.exports.deleteStep = deleteStep
