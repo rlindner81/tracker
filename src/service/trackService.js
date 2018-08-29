@@ -1,7 +1,6 @@
 "use strict"
 
-var uuidv4 = require("uuid/v4")
-  , logger = require("../util").logger
+var logger = require("../util").logger
   , error = require("../error")
   , dbUsers = require("./dataService").users
   , dbTracks = require("./dataService").tracks

@@ -6,7 +6,6 @@ var express = require("express")
   , session = require("express-session")
   , bodyParser = require("body-parser")
   , logger = require("./util").logger
-  , uuid = require("uuid/v4")
   , auth = require("./auth")
   , error = require("./error")
   , dataService = require("./service").data
