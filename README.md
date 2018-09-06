@@ -28,10 +28,73 @@ POST   /api/track
 PATCH  /api/track/:trackId
 DELETE /api/track/:trackId
 
+[
+  {
+    "_id": "b90c3b7d-a0a4-4d5d-b537-1cec064d7870",
+    "title": "Willpower",
+    "fields": [
+      {
+        "key": "count",
+        "name": "Count",
+        "editable": false,
+        "generator": "ENUMERATE",
+        "parameters": {
+          "start": 1,
+          "step": 1
+        }
+      },
+      {
+        "key": "createdAt",
+        "name": "Created At",
+        "editable": false,
+        "generator": "TIME_NOW"
+      },
+      {
+        "key": "lastStep",
+        "name": "Last Step",
+        "editable": false,
+        "generator": "TIME_SINCE_LAST_STEP"
+      },
+      {
+        "key": "motivation",
+        "name": "Motivation",
+        "editable": true,
+        "generator": "STATIC",
+        "parameters": {
+          "value": "Make a difference today"
+        }
+      }
+    ]
+  }
+]
+
 GET    /api/track/:trackId/step
 POST   /api/track/:trackId/step
 PATCH  /api/track/:trackId/step/:stepId
 DELETE /api/track/:trackId/step/:stepId
+
+[
+  {
+    "_id": "12f16191-40f4-45b9-b8b8-90af8351415f",
+    "trackId": "b90c3b7d-a0a4-4d5d-b537-1cec064d7870",
+    "values": [
+      "1",
+      "2018-09-06T18:11:26.123Z",
+      null,
+      "Make a difference today"
+    ]
+  },
+  {
+    "_id": "1baa86ed-3520-45e4-a0e5-52fbbf23aad2",
+    "trackId": "b90c3b7d-a0a4-4d5d-b537-1cec064d7870",
+    "values": [
+      "2",
+      "2018-09-06T18:17:00.937Z",
+      "6 seconds",
+      "Keep it rolling"
+    ]
+  }
+]
 ```
 
 ## TODO
