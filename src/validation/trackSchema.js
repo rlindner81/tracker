@@ -6,16 +6,15 @@ var joi = require("joi")
     parameters: joi.object().optional()
   }
   , fieldSchema = {
+    position: joi.number().integer().min(0),
     key: joi.string().min(1).max(256),
     name: joi.string().min(1).max(256),
-    editable: joi.boolean(),
-    generator: joi.object().keys(generatorSchema),
-    formatter: joi.string().min(1).max(256).uppercase().optional()
+    generator: joi.object().keys(generatorSchema)
   }
   , trackSchema = {
-    _id: joi.string().uuid().optional(),
     name: joi.string().min(1).max(256),
-    fields: joi.array().items(fieldSchema).min(1)
+    inputFields: joi.array().items(fieldSchema).min(1),
+    computedFields: joi.array().items(fieldSchema).min(1)
   }
 
 module.exports = {

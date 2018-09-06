@@ -28,8 +28,8 @@ POST   /api/track
 PATCH  /api/track/:trackId
 DELETE /api/track/:trackId
 
+POST
 {
-  "userId": "...",
   "name": "Willpower",
   "inputFields": [
     {
@@ -75,7 +75,9 @@ DELETE /api/track/:trackId
     }
   ]
 }
+```
 
+```
 GET    /api/track/:trackId/step
 POST   /api/track/:trackId/step
 PATCH  /api/track/:trackId/step/:stepId
@@ -83,9 +85,7 @@ DELETE /api/track/:trackId/step/:stepId
 
 POST
 {
-  "values": {
-    "motivation": "Make a first difference"
-  }
+  "values": {}
 }
 
 POST
@@ -100,7 +100,7 @@ GET
   {
     "trackId": "...",
     "values": {
-      "motivation": "Make a first difference",
+      "motivation": "Make a difference today",
       "count": 1,
       "createdAt": "2018-09-06T18:17:00.937Z",
       "gap": null
@@ -111,7 +111,7 @@ GET
     "values": {
       "motivation": "Make another difference",
       "count": 2,
-      "createdAt": "2018-09-06T18:17:00.937Z",
+      "createdAt": "2018-09-06T18:17:02.937Z",
       "gap": "2 seconds"
     }
   }
@@ -120,4 +120,7 @@ GET
 
 ## TODO
 
+* Implement POST /step without computedFields
+* Add field type ENUMERATE
+* Add field type TIME_NOW
 * Maybe switch to expressions?
