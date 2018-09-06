@@ -30,15 +30,15 @@ DELETE /api/track/:trackId
 
 [
   {
-    "_id": "b90c3b7d-a0a4-4d5d-b537-1cec064d7870",
-    "title": "Willpower",
+    "userId": "...",
+    "name": "Willpower",
     "fields": [
       {
         "key": "count",
         "name": "Count",
         "editable": false,
         "generator": {
-          "type: "ENUMERATE",
+          "type": "ENUMERATE",
           "parameters": {
             "start": 1,
             "step": 1
@@ -63,7 +63,7 @@ DELETE /api/track/:trackId
             "field": "createdAt"
           }
         },
-        "formatter: "TIME_RELATIVE"
+        "formatter": "TIME_RELATIVE"
       },
       {
         "key": "motivation",
@@ -87,8 +87,7 @@ DELETE /api/track/:trackId/step/:stepId
 
 [
   {
-    "_id": "12f16191-40f4-45b9-b8b8-90af8351415f",
-    "trackId": "b90c3b7d-a0a4-4d5d-b537-1cec064d7870",
+    "trackId": "...",
     "values": [
       "1",
       "2018-09-06T18:11:26.123Z",
@@ -97,8 +96,7 @@ DELETE /api/track/:trackId/step/:stepId
     ]
   },
   {
-    "_id": "1baa86ed-3520-45e4-a0e5-52fbbf23aad2",
-    "trackId": "b90c3b7d-a0a4-4d5d-b537-1cec064d7870",
+    "trackId": "...",
     "values": [
       "2",
       "2018-09-06T18:17:00.937Z",
