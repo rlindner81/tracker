@@ -1,8 +1,14 @@
 "use strict"
 
-var Joi = require("joi")
+var joi = require("joi")
+  , loginSchema = {
+    nameOrEmail: joi.string().min(1).max(256),
+    password: joi.string().alphanum().min(1).max(256)
+  }
 
-module.exports.body = Joi.object().keys({
-  nameOrEmail: Joi.string().min(1).max(256).required(),
-  password: Joi.string().alphanum().min(1).max(256).required()
-})
+module.exports = {
+  options: {
+    presence: "required"
+  },
+  body: joi.object().keys(loginSchema)
+}
