@@ -37,31 +37,43 @@ DELETE /api/track/:trackId
         "key": "count",
         "name": "Count",
         "editable": false,
-        "generator": "ENUMERATE",
-        "parameters": {
-          "start": 1,
-          "step": 1
+        "generator": {
+          "type: "ENUMERATE",
+          "parameters": {
+            "start": 1,
+            "step": 1
+          }
         }
       },
       {
         "key": "createdAt",
         "name": "Created At",
         "editable": false,
-        "generator": "TIME_NOW"
+        "generator": {
+          "type": "TIME"
+        }
       },
       {
-        "key": "lastStep",
-        "name": "Last Step",
+        "key": "gap",
+        "name": "Gap",
         "editable": false,
-        "generator": "TIME_SINCE_LAST_STEP"
+        "generator": {
+          "type": "PREVIOUS_STEP",
+          "parameters": {
+            "field": "createdAt"
+          }
+        },
+        "formatter: "TIME_RELATIVE"
       },
       {
         "key": "motivation",
         "name": "Motivation",
         "editable": true,
-        "generator": "STATIC",
-        "parameters": {
-          "value": "Make a difference today"
+        "generator": {
+          "type": "STATIC",
+          "parameters": {
+            "value": "Make a difference today"
+          }
         }
       }
     ]
@@ -99,4 +111,4 @@ DELETE /api/track/:trackId/step/:stepId
 
 ## TODO
 
-* Setup project
+* Maybe switch to expressions?
