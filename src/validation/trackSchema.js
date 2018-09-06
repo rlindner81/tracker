@@ -13,7 +13,7 @@ var joi = require("joi")
     formatter: joi.string().min(1).max(256).uppercase().optional()
   }
   , trackSchema = {
-    _id: joi.string().uuid(),
+    _id: joi.string().uuid().optional(),
     name: joi.string().min(1).max(256),
     fields: joi.array().items(fieldSchema).min(1)
   }

@@ -3,8 +3,9 @@
 var joi = require("joi")
   , valueSchema = joi.string().min(1).max(256)
   , stepSchema = {
-    _id: joi.string().uuid(),
-    trackId: joi.string().uuid(),
+    _id: joi.string().uuid().optional(),
+    trackId: joi.string().uuid().optional(),
+    userId: joi.string().uuid().optional(),
     values: joi.array().items(valueSchema).min(1)
   }
 
