@@ -28,81 +28,92 @@ POST   /api/track
 PATCH  /api/track/:trackId
 DELETE /api/track/:trackId
 
-[
-  {
-    "userId": "...",
-    "name": "Willpower",
-    "fields": [
-      {
-        "key": "count",
-        "name": "Count",
-        "editable": false,
-        "generator": {
-          "type": "ENUMERATE",
-          "parameters": {
-            "start": 1,
-            "step": 1
-          }
-        }
-      },
-      {
-        "key": "createdAt",
-        "name": "Created At",
-        "editable": false,
-        "generator": {
-          "type": "TIME"
-        }
-      },
-      {
-        "key": "gap",
-        "name": "Gap",
-        "editable": false,
-        "generator": {
-          "type": "PREVIOUS_STEP",
-          "parameters": {
-            "field": "createdAt"
-          }
-        },
-        "formatter": "TIME_RELATIVE"
-      },
-      {
-        "key": "motivation",
-        "name": "Motivation",
-        "editable": true,
-        "generator": {
-          "type": "STATIC",
-          "parameters": {
-            "value": "Make a difference today"
-          }
+{
+  "userId": "...",
+  "name": "Willpower",
+  "inputFields": [
+    {
+      "position": 0,
+      "key": "motivation",
+      "name": "Motivation",
+      "generator": {
+        "type": "STATIC",
+        "parameters": {
+          "value": "Make a difference today"
         }
       }
-    ]
-  }
-]
+    }
+  ],
+  "computedFields": [
+    {
+      "position": 1,
+      "key": "count",
+      "name": "Count",
+      "generator": {
+        "type": "ENUMERATE",
+        "parameters": {
+          "start": 1,
+          "step": 1
+        }
+      }
+    },
+    {
+      "position": 2,
+      "key": "createdAt",
+      "name": "Created At",
+      "generator": {
+        "type": "TIME_NOW"
+      }
+    },
+    {
+      "position": 3,
+      "key": "gap",
+      "name": "Gap",
+      "generator": {
+        "type": "TIME_RELATIVE_PREVIOUS"
+      }
+    }
+  ]
+}
 
 GET    /api/track/:trackId/step
 POST   /api/track/:trackId/step
 PATCH  /api/track/:trackId/step/:stepId
 DELETE /api/track/:trackId/step/:stepId
 
+POST
+{
+  "values": {
+    "motivation": "Make a first difference"
+  }
+}
+
+POST
+{
+  "values": {
+    "motivation": "Make another difference"
+  }
+}
+
+GET
 [
   {
     "trackId": "...",
-    "values": [
-      "1",
-      "2018-09-06T18:11:26.123Z",
-      null,
-      "Make a difference today"
-    ]
+    "values": {
+      "motivation": "Make a first difference",
+      "count": 1,
+      "createdAt": "2018-09-06T18:17:00.937Z",
+      "gap": null
+    }
   },
   {
     "trackId": "...",
-    "values": [
-      "2",
-      "2018-09-06T18:17:00.937Z",
-      "6 seconds",
-      "Keep it rolling"
-    ]
+    "values": {
+      "motivation": "Make another difference",
+      "count": 2,
+      "createdAt": "2018-09-06T18:17:00.937Z",
+      "gap": "2 seconds"
+    }
   }
 ]
 ```
