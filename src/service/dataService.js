@@ -3,12 +3,14 @@
 var session = require("express-session")
   , Sessionstore = require("nedb-session-store")(session)
   , Datastore = require("nedb")
+  , Cursor = (new Datastore()).find().constructor
   , uuid = require("uuid/v4")
   , promisifyAll = require("../util").promisifyAll
 
 Datastore.prototype.createNewId = uuid
 
 promisifyAll(Datastore.prototype)
+promisifyAll(Cursor.prototype)
 
 module.exports = {
   sessions: new Sessionstore({ filename: "data/sessions.db" }),
