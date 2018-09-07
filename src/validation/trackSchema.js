@@ -2,14 +2,25 @@
 
 var joi = require("joi")
   , generatorSchema = {
-    type: joi.string().min(1).max(256).uppercase(),
+    identifier: joi.string().min(1).max(256).uppercase(),
+    parameters: joi.object().optional()
+  }
+  , typeSchema = {
+    identifier: joi.string().min(1).max(256).uppercase(),
     parameters: joi.object().optional()
   }
   , fieldSchema = {
     position: joi.number().integer().min(0),
     key: joi.string().min(1).max(256),
     name: joi.string().min(1).max(256),
-    generator: joi.object().keys(generatorSchema)
+    type: joi.alternatives().try(
+      joi.string().min(1).max(256).uppercase(),
+      joi.object().keys(typeSchema)
+    ),
+    generator: joi.alternatives().try(
+      joi.string().min(1).max(256).uppercase(),
+      joi.object().keys(generatorSchema)
+    )
   }
   , trackSchema = {
     name: joi.string().min(1).max(256),

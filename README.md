@@ -36,21 +36,57 @@ POST
       "position": 0,
       "key": "motivation",
       "name": "Motivation",
+      "type": "TEXT",
       "generator": {
-        "type": "STATIC",
+        "identifier": "STATIC",
         "parameters": {
           "value": "Make a difference today"
+        }
+      }
+    },
+    {
+      "position": 1,
+      "key": "mood",
+      "name": "Mood",
+      "type": {
+        "identifier": "SELECT_SINGLE",
+        "parameters": {
+          "values": [
+            {
+              "key": "good",
+              "name": "Good"
+            },
+            {
+              "key": "postive",
+              "name": "Postive"
+            },
+            {
+              "key": "bored",
+              "name": "Bored"
+            },
+            {
+              "key": "bad",
+              "name": "Bad"
+            }
+          ]
+        }
+      },
+      "generator": {
+        "identifier": "STATIC",
+        "parameters": {
+          "value": "postive"
         }
       }
     }
   ],
   "computedFields": [
     {
-      "position": 1,
+      "position": 2,
       "key": "count",
       "name": "Count",
+      "type": "NUMBER",
       "generator": {
-        "type": "ENUMERATE",
+        "identifier": "ENUMERATE",
         "parameters": {
           "start": 1,
           "step": 1
@@ -58,20 +94,18 @@ POST
       }
     },
     {
-      "position": 2,
+      "position": 3,
       "key": "createdAt",
       "name": "Created At",
-      "generator": {
-        "type": "TIME_NOW"
-      }
+      "type": "TIME",
+      "generator": "TIME_NOW"
     },
     {
-      "position": 3,
+      "position": 4,
       "key": "gap",
       "name": "Gap",
-      "generator": {
-        "type": "TIME_RELATIVE_PREVIOUS"
-      }
+      "type": "TEXT",
+      "generator": "TIME_RELATIVE_PREVIOUS"
     }
   ]
 }
@@ -91,7 +125,8 @@ POST
 POST
 {
   "values": {
-    "motivation": "Make another difference"
+    "motivation": "Make another difference",
+    "mood": "bored"
   }
 }
 
@@ -101,6 +136,7 @@ GET
     "trackId": "...",
     "values": {
       "motivation": "Make a difference today",
+      "mood": "Positive"
       "count": 1,
       "createdAt": "2018-09-06T18:17:00.937Z",
       "gap": null
@@ -110,9 +146,10 @@ GET
     "trackId": "...",
     "values": {
       "motivation": "Make another difference",
+      "mood": "Bored"
       "count": 2,
-      "createdAt": "2018-09-06T18:17:02.937Z",
-      "gap": "2 seconds"
+      "createdAt": "2018-09-06T19:20:12.937Z",
+      "gap": "2 hours"
     }
   }
 ]
@@ -120,7 +157,6 @@ GET
 
 ## TODO
 
-* Add field type information, in particular enums for combo box selection
 * Implement POST /step without computedFields
 * Add field type ENUMERATE
 * Add field type TIME_NOW
