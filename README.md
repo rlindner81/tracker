@@ -158,6 +158,7 @@ GET
 ## TODO
 
 * Implement POST /step without computedFields
+* Should probably unify fields again... they are not that different or maybe they are for the frontend?
 * Add field type ENUMERATE
 * Add field type TIME_NOW
 * Maybe switch to expressions?

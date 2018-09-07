@@ -3,7 +3,7 @@
 var session = require("express-session")
   , Sessionstore = require("nedb-session-store")(session)
   , Datastore = require("nedb")
-  , Cursor = (new Datastore()).find().constructor
+  , Cursor = Datastore.prototype.find().constructor
   , uuid = require("uuid/v4")
   , promisifyAll = require("../util").promisifyAll
 

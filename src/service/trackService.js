@@ -36,8 +36,36 @@ module.exports.deleteTrack = deleteTrack
  * Steps
  */
 
-function prepareStep(step) {
+function addValueFromFieldToResult(values, field, steps, inputValues) {
+  var key = field.key
 
+  if (inputValues && key in inputValues) {
+    values[key] = inputValues[key]
+  }
+}
+
+function prepareStep(step) {
+  var inputValues = step.values
+    , values = {}
+
+  return Promise.all([
+    dbTracks.findOneAsync({ _id: step.trackId }),
+    dbTracks.find({ userId: step.userId, trackId: step.trackId }).sort({ createdAt: -1 }).execAsync()
+  ])
+    .then(function (results) {
+      var track = results[0]
+        , steps = results[1]
+
+      track.inputFields.forEach(function (field) {
+        addValueFromFieldToResult(values, field, steps, inputValues)
+      })
+      track.computedFields.forEach(function (field) {
+        addValueFromFieldToResult(values, field, steps)
+      })
+
+      step.values = values
+      return step
+    })
 }
 
 function getSteps(session, trackId) {
@@ -47,15 +75,15 @@ module.exports.getSteps = getSteps
 
 function addStep(session, trackId, step) {
   Object.assign(step, { userId: session.userId, trackId: trackId })
-  prepareStep(step)
-  return dbSteps.insertAsync(step)
+  return prepareStep(step)
+    .then(dbSteps.insertAsync.bind(dbSteps))
 }
 module.exports.addStep = addStep
 
 function updateStep(session, trackId, stepId, step) {
   Object.assign(step, { _id: stepId, userId: session.userId, trackId: trackId })
-  prepareStep(step)
-  return dbSteps.updateAsync({ _id: stepId }, step)
+  return prepareStep(step)
+    .then(dbSteps.updateAsync.bind(dbSteps, { _id: stepId }))
 }
 module.exports.updateStep = updateStep
 
