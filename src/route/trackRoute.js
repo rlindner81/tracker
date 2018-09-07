@@ -26,7 +26,7 @@ router.post("/", validation.track, function (req, res, next) {
 })
 
 router.patch("/:trackId", validation.track, function (req, res, next) {
-  return service.updateTrack(req.session, req.param.trackId, req.body)
+  return service.updateTrack(req.session, req.params.trackId, req.body)
     .then(function (data) {
       res.json(data)
     })
@@ -34,7 +34,7 @@ router.patch("/:trackId", validation.track, function (req, res, next) {
 })
 
 router.delete("/:trackId", function (req, res, next) {
-  return service.deleteTrack(req.session, req.param.trackId)
+  return service.deleteTrack(req.session, req.params.trackId)
     .then(function (data) {
       res.json(data)
     })
@@ -46,7 +46,7 @@ router.delete("/:trackId", function (req, res, next) {
  */
 
 router.get("/:trackId/step", function (req, res, next) {
-  return service.getSteps(req.session, req.param.trackId)
+  return service.getSteps(req.session, req.params.trackId)
     .then(function (data) {
       res.json(data)
     })
@@ -54,7 +54,7 @@ router.get("/:trackId/step", function (req, res, next) {
 })
 
 router.post("/:trackId/step", validation.step, function (req, res, next) {
-  return service.addStep(req.session, req.param.trackId, req.body)
+  return service.addStep(req.session, req.params.trackId, req.body)
     .then(function (data) {
       res.json(data)
     })
@@ -62,7 +62,7 @@ router.post("/:trackId/step", validation.step, function (req, res, next) {
 })
 
 router.patch("/:trackId/step/:stepId", validation.step, function (req, res, next) {
-  return service.updateStep(req.session, req.param.trackId, req.param.stepId, req.body)
+  return service.updateStep(req.session, req.params.trackId, req.params.stepId, req.body)
     .then(function (data) {
       res.json(data)
     })
@@ -70,7 +70,7 @@ router.patch("/:trackId/step/:stepId", validation.step, function (req, res, next
 })
 
 router.delete("/:trackId/step/:stepId", function (req, res, next) {
-  return service.deleteStep(req.session, req.param.trackId, req.param.stepId)
+  return service.deleteStep(req.session, req.params.trackId, req.params.stepId)
     .then(function (data) {
       res.json(data)
     })

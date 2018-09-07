@@ -23,18 +23,22 @@ module.exports.addTrack = addTrack
 
 function updateTrack(session, trackId, track) {
   Object.assign(track, { _id: trackId, userId: session.userId })
-  return dbTracks.updateAsync({ _id: trackId }, track, {})
+  return dbTracks.updateAsync({ _id: trackId }, track)
 }
 module.exports.updateTrack = updateTrack
 
 function deleteTrack(session, trackId) {
-  return dbTracks.deleteAsync({ _id: trackId }, {})
+  return dbTracks.removeAsync({ _id: trackId })
 }
 module.exports.deleteTrack = deleteTrack
 
 /**
  * Steps
  */
+
+function prepareStep(step) {
+
+}
 
 function getSteps(session, trackId) {
   return dbSteps.findAsync({ userId: session.userId, trackId: trackId })
@@ -43,17 +47,19 @@ module.exports.getSteps = getSteps
 
 function addStep(session, trackId, step) {
   Object.assign(step, { userId: session.userId, trackId: trackId })
+  prepareStep(step)
   return dbSteps.insertAsync(step)
 }
 module.exports.addStep = addStep
 
 function updateStep(session, trackId, stepId, step) {
   Object.assign(step, { _id: stepId, userId: session.userId, trackId: trackId })
-  return dbSteps.updateAsync({ _id: stepId }, step, {})
+  prepareStep(step)
+  return dbSteps.updateAsync({ _id: stepId }, step)
 }
 module.exports.updateStep = updateStep
 
 function deleteStep(session, trackId, stepId) {
-  return dbTracks.deleteAsync({ _id: stepId }, {})
+  return dbTracks.removeAsync({ _id: stepId })
 }
 module.exports.deleteStep = deleteStep
