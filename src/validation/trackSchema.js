@@ -13,8 +13,8 @@ var joi = require("joi")
   }
   , trackSchema = {
     name: joi.string().min(1).max(256),
-    inputFields: joi.array().items(fieldSchema).min(1),
-    computedFields: joi.array().items(fieldSchema).min(1)
+    inputFields: joi.array().items(fieldSchema),
+    computedFields: joi.array().items(fieldSchema)
   }
 
 module.exports = {

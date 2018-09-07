@@ -120,6 +120,7 @@ GET
 
 ## TODO
 
+* Add field type information, in particular enums for combo box selection
 * Implement POST /step without computedFields
 * Add field type ENUMERATE
 * Add field type TIME_NOW
