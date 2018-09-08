@@ -6,8 +6,9 @@ var util = require("util")
 // https://stackoverflow.com/questions/8802845/inheriting-from-the-error-object-where-is-the-message-property
 // NOTE: inheriting from Error is wrought with peril!
 // I want to the stacktrace to be correct and I want instanceof to work.
-function ApplicationError(status) {
-  var instance = Error.apply(null, Array.prototype.slice.call(arguments, 1))
+function ApplicationError(status, defaultMessage) {
+  var errorArgs = arguments.length === 2 ? [defaultMessage] : Array.prototype.slice.call(arguments, 2)
+    , instance = Error.apply(null, errorArgs)
 
   Object.getOwnPropertyNames(instance).forEach(function (key) {
     if (key !== "stack") {
