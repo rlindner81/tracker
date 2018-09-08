@@ -1,6 +1,7 @@
 "use strict"
 
-var logger = require("../util").logger
+var timeago = require("timeago.js")
+  , logger = require("../util").logger
   , error = require("../error")
   , dbUsers = require("./dataService").users
   , dbTracks = require("./dataService").tracks
@@ -36,12 +37,40 @@ module.exports.deleteTrack = deleteTrack
  * Steps
  */
 
+function generateValue(generator, type, steps) {
+  var identifier = typeof generator === "string" ? generator : generator.identifier
+    , now, previous
+
+  switch (identifier) {
+    case "COUNT":
+      return steps.length + 1
+    case "TIME_NOW":
+      now = new Date()
+      return now.toISOString()
+    case "TIME_RELATIVE_PREVIOUS":
+      previous = steps.length > 0 ? null : steps[0]
+      if (previous) {
+        return timeago().format(previous.createdAt.getTime())
+      }
+      break
+    default:
+      throw new error.UnknownIdentifier("Unknown identifier: " + identifier)
+  }
+}
+
 function addValueFromFieldToResult(values, field, steps, inputValues) {
   var key = field.key
+    , type = field.type
+    , generator = field.generator
+    , value
 
   if (inputValues && key in inputValues) {
-    values[key] = inputValues[key]
+    value = inputValues[key]
   }
+
+  value = value || generateValue(generator, type, steps)
+
+  values[key] = value
 }
 
 function prepareStep(step) {
