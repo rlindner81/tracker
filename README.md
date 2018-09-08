@@ -85,13 +85,7 @@ POST
       "key": "count",
       "name": "Count",
       "type": "NUMBER",
-      "generator": {
-        "identifier": "ENUMERATE",
-        "parameters": {
-          "start": 1,
-          "step": 1
-        }
-      }
+      "generator": "COUNT"
     },
     {
       "position": 3,
