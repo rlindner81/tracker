@@ -48,7 +48,7 @@ function generateValue(generator, type, steps) {
       now = new Date()
       return now.toISOString()
     case "TIME_RELATIVE_PREVIOUS":
-      previous = steps.length > 0 ? null : steps[0]
+      previous = steps.length > 0 ? steps[0] : null
       if (previous) {
         return timeago().format(previous.createdAt.getTime())
       }
@@ -79,7 +79,7 @@ function prepareStep(step) {
 
   return Promise.all([
     dbTracks.findOneAsync({ _id: step.trackId }),
-    dbTracks.find({ userId: step.userId, trackId: step.trackId }).sort({ createdAt: -1 }).execAsync()
+    dbSteps.find({ userId: step.userId, trackId: step.trackId }).sort({ createdAt: -1 }).execAsync()
   ])
     .then(function (results) {
       var track = results[0]
