@@ -15,6 +15,7 @@ You will need at least [NodeJS](https://nodejs.org) 8.x.
 * [BCrypt](https://www.npmjs.com/package/bcrypt) for secure password storage
 * [Joi](https://www.npmjs.com/package/joi) for request validation
 * [UUID](https://www.npmjs.com/package/uuid) for generating version 4 UUIDs
+* [timeago.js](https://www.npmjs.com/package/timeago.js) for getting relative times
 
 ## Codestyle
 

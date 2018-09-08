@@ -19,6 +19,7 @@
     "joi": "^13.6.0",
     "nedb": "^1.8.0",
     "nedb-session-store": "^1.1.2",
+    "timeago.js": "^3.0.2",
     "uuid": "^3.2.1",
     "winston": "^3.0.0"
   }
