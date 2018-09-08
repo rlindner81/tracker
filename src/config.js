@@ -3,6 +3,10 @@
 // var args = process.argv.slice(2)
 
 module.exports = {
+  server: {
+    port: process.env.PORT || 8080,
+    trustProxy: process.env.TRUST_PROXY || false
+  },
   session: {
     resave: false,
     saveUninitialized: false,
@@ -11,9 +15,5 @@ module.exports = {
       secure: process.env.SESSION_SECURE || false,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year
     }
-  },
-  server: {
-    port: process.env.PORT || 8080,
-    trustProxy: process.env.TRUST_PROXY || false
   }
 }
