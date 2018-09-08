@@ -19,3 +19,8 @@ module.exports.MissingAuthentication = ApplicationError.bind(null, 401, "Missing
 module.exports.MissingAuthorization = ApplicationError.bind(null, 403, "Missing authorization")
 module.exports.AlreadyLoggedIn = ApplicationError.bind(null, 200, "Already logged in")
 module.exports.AlreadyLoggedOut = ApplicationError.bind(null, 200, "Already logged out")
+
+/**
+ * Track related errors
+ */
+module.exports.UnknownIdentifier = ApplicationError.bind(null, 500, "Unknown identifier")
