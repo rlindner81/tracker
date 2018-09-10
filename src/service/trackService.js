@@ -12,7 +12,7 @@ var timeago = require("timeago.js")
  */
 
 function getTracks(session) {
-  return dbTracks.findAsync({ userId: session.userId })
+  return dbTracks.find({ userId: session.userId }).sort({ createdAt: -1 }).execAsync()
 }
 module.exports.getTracks = getTracks
 
@@ -43,6 +43,7 @@ function generateValue(generator, type, steps) {
 
   switch (identifier) {
     case "COUNT":
+      // TODO: allow TOTAL (default) / PER_DAY / PER_WEEK / PER_MONTH / PER_YEAR count
       return steps.length + 1
     case "TIME_NOW":
       now = new Date()
@@ -98,7 +99,7 @@ function prepareStep(step) {
 }
 
 function getSteps(session, trackId) {
-  return dbSteps.findAsync({ userId: session.userId, trackId: trackId })
+  return dbSteps.find({ userId: session.userId, trackId: trackId }).sort({ createdAt: -1 }).execAsync()
 }
 module.exports.getSteps = getSteps
 
