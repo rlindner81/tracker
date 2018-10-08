@@ -4,7 +4,7 @@
 
 module.exports = {
   server: {
-    port: process.env.PORT || 8080,
+    port: process.env.PORT || 8000,
     trustProxy: process.env.TRUST_PROXY || false
   },
   session: {
