@@ -9,18 +9,18 @@
   "author": "Richard Lindner <rlindner81@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^5.4.0"
+    "eslint": "^5.6.1"
   },
   "dependencies": {
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.2",
-    "express": "^4.16.3",
+    "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "joi": "^13.6.0",
+    "joi": "^13.7.0",
     "nedb": "^1.8.0",
     "nedb-session-store": "^1.1.2",
     "timeago.js": "^3.0.2",
     "uuid": "^3.2.1",
-    "winston": "^3.0.0"
+    "winston": "^3.1.0"
   }
 }
