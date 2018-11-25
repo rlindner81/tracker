@@ -52,6 +52,7 @@ POST
       "type": {
         "identifier": "SELECT_SINGLE",
         "parameters": {
+          "selected": "good",
           "values": [
             {
               "key": "good",
