@@ -15,7 +15,7 @@ router.post("/login", validation.login, function (req, res, next) {
     .catch(next)
 })
 
-router.get("/logout", function (req, res, next) {
+router.post("/logout", function (req, res, next) {
   service.logout(req.session)
     .then(function () {
       res.send("Logout successful")
