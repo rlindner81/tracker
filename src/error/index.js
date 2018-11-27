@@ -13,14 +13,14 @@ module.exports.VerificationFailedError = ApplicationError.bind(null, 422, "Verif
 /**
  * Authentication related errors
  */
-module.exports.UserNotFound = ApplicationError.bind(null, 401, "User not found")
-module.exports.WrongPassword = ApplicationError.bind(null, 401, "Wrong password")
-module.exports.MissingAuthentication = ApplicationError.bind(null, 401, "Missing authentication")
-module.exports.MissingAuthorization = ApplicationError.bind(null, 403, "Missing authorization")
-module.exports.AlreadyLoggedIn = ApplicationError.bind(null, 200, "Already logged in")
-module.exports.AlreadyLoggedOut = ApplicationError.bind(null, 200, "Already logged out")
+module.exports.UserNotFoundError = ApplicationError.bind(null, 401, "User not found")
+module.exports.WrongPasswordError = ApplicationError.bind(null, 401, "Wrong password")
+module.exports.MissingAuthenticationError = ApplicationError.bind(null, 401, "Missing authentication")
+module.exports.MissingAuthorizationError = ApplicationError.bind(null, 403, "Missing authorization")
+module.exports.AlreadyLoggedInError = ApplicationError.bind(null, 200, "Already logged in")
+module.exports.AlreadyLoggedOutError = ApplicationError.bind(null, 200, "Already logged out")
 
 /**
  * Track related errors
  */
-module.exports.UnknownIdentifier = ApplicationError.bind(null, 500, "Unknown identifier")
+module.exports.UnknownIdentifierError = ApplicationError.bind(null, 500, "Unknown identifier")

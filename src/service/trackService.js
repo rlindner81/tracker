@@ -6,6 +6,7 @@ var timeago = require("timeago.js")
   , dbUsers = require("./dataService").users
   , dbTracks = require("./dataService").tracks
   , dbSteps = require("./dataService").steps
+  , UnknownIdentifierError = error.UnknownIdentifierError
 
 /**
  * Tracks
@@ -55,7 +56,7 @@ function generateValue(generator, type, steps) {
       }
       break
     default:
-      throw new error.UnknownIdentifier("Unknown identifier: " + identifier)
+      throw new UnknownIdentifierError("Unknown identifier: " + identifier)
   }
 }
 

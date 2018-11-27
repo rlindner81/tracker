@@ -4,6 +4,10 @@ var bcrypt = require("bcrypt")
   , promisify = require("util").promisify
   , dbUsers = require("../service").data.users
   , error = require("../error")
+  , AlreadyLoggedInError = error.AlreadyLoggedInError
+  , AlreadyLoggedOutError = error.AlreadyLoggedOutError
+  , UserNotFoundError = error.UserNotFoundError
+  , WrongPasswordError = error.WrongPasswordError
 
 
 function isLoggedIn(session) {
@@ -14,33 +18,33 @@ module.exports.isLoggedIn = isLoggedIn
 function login(session, fields) {
   var user
   if (isLoggedIn(session)) {
-    return Promise.reject(new error.AlreadyLoggedIn())
+    throw new AlreadyLoggedInError()
   }
 
   return dbUsers.findOneAsync({ $or: [{ name: fields.nameOrEmail }, { email: fields.nameOrEmail }]})
     .then(function (dbUser) {
       if (dbUser === null) {
-        return Promise.reject(new error.UserNotFound())
+        throw new UserNotFoundError()
       }
       user = dbUser
       return bcrypt.compare(fields.password, user.password)
     })
     .then(function (match) {
       if (!match) {
-        return Promise.reject(new error.WrongPassword())
+        throw new WrongPasswordError()
       }
       session.userId = user._id
     })
     .catch(function (err) {
       delete session.userId
-      return Promise.reject(err)
+      throw err
     })
 }
 module.exports.login = login
 
 function logout(session) {
   if (!isLoggedIn(session)) {
-    return Promise.reject(new error.AlreadyLoggedOut())
+    throw new AlreadyLoggedOutError()
   }
   return promisify(session.destroy.bind(session))()
 }
