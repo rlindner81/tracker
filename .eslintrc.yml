@@ -35,8 +35,6 @@ rules:
   key-spacing: error
   # http://eslint.org/docs/rules/comma-spacing
   comma-spacing: error
-  # http://eslint.org/docs/rules/space-before-function-paren
-  space-before-function-paren: [error, named: never]
   # http://eslint.org/docs/rules/space-before-blocks
   space-before-blocks: error
   # https://eslint.org/docs/rules/curly

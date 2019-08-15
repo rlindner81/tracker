@@ -1,7 +1,7 @@
 "use strict"
 
-var joi = require("joi")
-  , stepSchema = {
+var joi = require("joi"),
+  stepSchema = {
     values: joi.object()
   }
 

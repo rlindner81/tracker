@@ -2,17 +2,17 @@
 
 process.env.TZ = "Etc/UTC"
 
-var express = require("express")
-  , session = require("express-session")
-  , bodyParser = require("body-parser")
-  , logger = require("./util").logger
-  , auth = require("./auth")
-  , error = require("./error")
-  , dataService = require("./service").data
-  , route = require("./route")
-  , config = require("./config")
-  , app = express()
-  , sessionConfig = Object.assign({}, config.session, {
+var express = require("express"),
+  session = require("express-session"),
+  bodyParser = require("body-parser"),
+  logger = require("./util").logger,
+  auth = require("./auth"),
+  error = require("./error"),
+  dataService = require("./service").data,
+  route = require("./route"),
+  config = require("./config"),
+  app = express(),
+  sessionConfig = Object.assign({}, config.session, {
     store: dataService.sessions
   }),
   server
@@ -35,9 +35,9 @@ app.use("/api/track", auth.handler, route.track)
 
 app.use(error.handler)
 
-server = app.listen(app.get("port"), function () {
+server = app.listen(app.get("port"), function() {
   logger.info("Started server on port " + app.get("port"))
 })
-server.on("error", function (err) {
+server.on("error", function(err) {
   logger.error(err)
 })

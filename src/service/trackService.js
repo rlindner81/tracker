@@ -1,19 +1,22 @@
 "use strict"
 
-var moment = require("moment")
-  , logger = require("../util").logger
-  , error = require("../error")
-  , dbUsers = require("./dataService").users
-  , dbTracks = require("./dataService").tracks
-  , dbSteps = require("./dataService").steps
-  , UnknownIdentifierError = error.UnknownIdentifierError
+var moment = require("moment"),
+  logger = require("../util").logger,
+  error = require("../error"),
+  dbUsers = require("./dataService").users,
+  dbTracks = require("./dataService").tracks,
+  dbSteps = require("./dataService").steps,
+  UnknownIdentifierError = error.UnknownIdentifierError
 
 /**
  * Tracks
  */
 
 function getTracks(session) {
-  return dbTracks.find({ userId: session.userId }).sort({ createdAt: -1 }).execAsync()
+  return dbTracks
+    .find({ userId: session.userId })
+    .sort({ createdAt: -1 })
+    .execAsync()
 }
 module.exports.getTracks = getTracks
 
@@ -39,8 +42,9 @@ module.exports.deleteTrack = deleteTrack
  */
 
 function generateValue(generator, type, steps) {
-  var identifier = typeof generator === "string" ? generator : generator.identifier
-    , now, previous
+  var identifier = typeof generator === "string" ? generator : generator.identifier,
+    now,
+    previous
 
   switch (identifier) {
     case "COUNT":
@@ -61,10 +65,10 @@ function generateValue(generator, type, steps) {
 }
 
 function addValueFromFieldToResult(values, field, steps, inputValues) {
-  var key = field.key
-    , type = field.type
-    , generator = field.generator
-    , value
+  var key = field.key,
+    type = field.type,
+    generator = field.generator,
+    value
 
   if (inputValues && key in inputValues) {
     value = inputValues[key]
@@ -76,45 +80,48 @@ function addValueFromFieldToResult(values, field, steps, inputValues) {
 }
 
 function prepareStep(step) {
-  var inputValues = step.values
-    , values = {}
+  var inputValues = step.values,
+    values = {}
 
   return Promise.all([
     dbTracks.findOneAsync({ _id: step.trackId }),
-    dbSteps.find({ userId: step.userId, trackId: step.trackId }).sort({ createdAt: -1 }).execAsync()
-  ])
-    .then(function (results) {
-      var track = results[0]
-        , steps = results[1]
+    dbSteps
+      .find({ userId: step.userId, trackId: step.trackId })
+      .sort({ createdAt: -1 })
+      .execAsync()
+  ]).then(function(results) {
+    var track = results[0],
+      steps = results[1]
 
-      track.inputFields.forEach(function (field) {
-        addValueFromFieldToResult(values, field, steps, inputValues)
-      })
-      track.computedFields.forEach(function (field) {
-        addValueFromFieldToResult(values, field, steps)
-      })
-
-      step.values = values
-      return step
+    track.inputFields.forEach(function(field) {
+      addValueFromFieldToResult(values, field, steps, inputValues)
     })
+    track.computedFields.forEach(function(field) {
+      addValueFromFieldToResult(values, field, steps)
+    })
+
+    step.values = values
+    return step
+  })
 }
 
 function getSteps(session, trackId) {
-  return dbSteps.find({ userId: session.userId, trackId: trackId }).sort({ createdAt: -1 }).execAsync()
+  return dbSteps
+    .find({ userId: session.userId, trackId: trackId })
+    .sort({ createdAt: -1 })
+    .execAsync()
 }
 module.exports.getSteps = getSteps
 
 function addStep(session, trackId, step) {
   Object.assign(step, { userId: session.userId, trackId: trackId })
-  return prepareStep(step)
-    .then(dbSteps.insertAsync.bind(dbSteps))
+  return prepareStep(step).then(dbSteps.insertAsync.bind(dbSteps))
 }
 module.exports.addStep = addStep
 
 function updateStep(session, trackId, stepId, step) {
   Object.assign(step, { _id: stepId, userId: session.userId, trackId: trackId })
-  return prepareStep(step)
-    .then(dbSteps.updateAsync.bind(dbSteps, { _id: stepId }))
+  return prepareStep(step).then(dbSteps.updateAsync.bind(dbSteps, { _id: stepId }))
 }
 module.exports.updateStep = updateStep
 

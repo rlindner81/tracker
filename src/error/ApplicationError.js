@@ -7,14 +7,16 @@ var util = require("util")
 // NOTE: inheriting from Error is wrought with peril!
 // I want to the stacktrace to be correct and I want instanceof to work.
 function ApplicationError(status, defaultMessage) {
-  var errorArgs = arguments.length === 2 ? [defaultMessage] : Array.prototype.slice.call(arguments, 2)
-    , instance = Error.apply(null, errorArgs)
+  var errorArgs = arguments.length === 2 ? [defaultMessage] : Array.prototype.slice.call(arguments, 2),
+    instance = Error.apply(null, errorArgs)
 
-  Object.getOwnPropertyNames(instance).forEach(function (key) {
-    if (key !== "stack") {
-      this[key] = instance[key]
-    }
-  }.bind(this))
+  Object.getOwnPropertyNames(instance).forEach(
+    function(key) {
+      if (key !== "stack") {
+        this[key] = instance[key]
+      }
+    }.bind(this)
+  )
 
   if (Error.captureStackTrace) {
     Error.captureStackTrace(this, ApplicationError)
