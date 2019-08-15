@@ -19,7 +19,7 @@ You will need at least [NodeJS](https://nodejs.org) 10.x.
 
 ## Codestyle
 
-* Code will be in [ECMAScript 2018](http://www.ecma-international.org/ecma-262/9.0/) published in June 2011
+* Code will be in [ECMAScript 2018](http://www.ecma-international.org/ecma-262/9.0/)
 * Style rules are specfied in [ESLint](.eslintrc.yml)
 
 ## API
