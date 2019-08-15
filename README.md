@@ -13,7 +13,7 @@ You will need at least [NodeJS](https://nodejs.org) 10.x.
   * [NeDB-Session-Store](https://www.npmjs.com/package/nedb-session-store) session NeDB backend
 * [Winston](https://www.npmjs.com/package/winston) for all logging
 * [BCrypt](https://www.npmjs.com/package/bcrypt) for secure password storage
-* [Joi](https://www.npmjs.com/package/joi) for request validation
+* [Joi](https://www.npmjs.com/package/@hapi/joi) for request validation
 * [UUID](https://www.npmjs.com/package/uuid) for generating version 4 UUIDs
 * [moment](https://www.npmjs.com/package/moment) for getting relative times
 

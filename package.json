@@ -15,17 +15,16 @@
   },
   "devDependencies": {
     "eslint": "^6.1.0",
-    "eslint-config": "^0.3.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "prettier": "^1.18.2"
   },
   "dependencies": {
+    "@hapi/joi": "^15.1.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.2",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "joi": "^14.3.1",
     "moment": "^2.24.0",
     "nedb": "^1.8.0",
     "nedb-session-store": "^1.1.2",
