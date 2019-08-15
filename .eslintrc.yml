@@ -1,78 +1,82 @@
 ---
-  root: true
-  # https://eslint.org/docs/rules/
-  extends: 'eslint:recommended'
-  parserOptions:
-    ecmaVersion: 5
-  env:
-    node: true
-  globals:
-    Promise: false
-  rules:
-    # http://eslint.org/docs/rules/indent
-    indent: [error, 2, { SwitchCase: 1, FunctionDeclaration: { parameters: 'first' }, FunctionExpression: { parameters: 'first' } }]
-    # http://eslint.org/docs/rules/linebreak-style
-    linebreak-style: [error, unix]
-    # http://eslint.org/docs/rules/quotes
-    quotes: [error, double]
-    # http://eslint.org/docs/rules/semi
-    semi: [error, never]
-    # http://eslint.org/docs/rules/comma-dangle
-    comma-dangle: [error, never]
-    # http://eslint.org/docs/rules/eqeqeq
-    eqeqeq: error
-    # http://eslint.org/docs/rules/strict
-    strict: error
-    # http://eslint.org/docs/rules/eol-last
-    eol-last: [error, always]
-    # http://eslint.org/docs/rules/keyword-spacing
-    keyword-spacing: error
-    # http://eslint.org/docs/rules/key-spacing
-    key-spacing: error
-    # http://eslint.org/docs/rules/comma-spacing
-    comma-spacing: error
-    # http://eslint.org/docs/rules/space-before-function-paren
-    space-before-function-paren: [error, named: never]
-    # http://eslint.org/docs/rules/space-before-blocks
-    space-before-blocks: error
-    # https://eslint.org/docs/rules/curly
-    curly: error
-    # https://eslint.org/docs/rules/guard-for-in
-    guard-for-in: error
-    # https://eslint.org/docs/rules/wrap-iife
-    wrap-iife: error
-    # https://eslint.org/docs/rules/no-use-before-define
-    no-use-before-define: [error, { variables: true, functions: false }]
-    # https://eslint.org/docs/rules/new-cap
-    new-cap: [error, { newIsCap: true, capIsNew: false }]
-    # https://eslint.org/docs/rules/no-caller
-    no-caller: error
-    # https://eslint.org/docs/rules/no-empty
-    no-empty: error
-    # https://eslint.org/docs/rules/no-new
-    no-new: off
-    # https://eslint.org/docs/rules/no-plusplus
-    no-plusplus: off
-    # https://eslint.org/docs/rules/no-undef
-    no-undef: error
-    # https://eslint.org/docs/rules/no-unused-vars
-    no-unused-vars: off
-    # https://eslint.org/docs/rules/no-unused-expressions
-    no-unused-expressions: off
-    # https://eslint.org/docs/rules/no-underscore-dangle
-    no-underscore-dangle: off
-    # https://eslint.org/docs/rules/one-var
-    one-var: off
-    # https://eslint.org/docs/rules/no-catch-shadow
-    no-catch-shadow: off
-    # https://eslint.org/docs/rules/block-scoped-var
-    block-scoped-var: error
-    # https://eslint.org/docs/rules/no-return-assign
-    no-return-assign: error
-    # https://eslint.org/docs/rules/no-invalid-this
-    no-invalid-this: error
+root: true
+# https://eslint.org/docs/rules/
+parserOptions:
+  ecmaVersion: 2018
+plugins:
+  - prettier
+extends:
+  - 'eslint:recommended'
+  - 'plugin:prettier/recommended'
+env:
+  node: true
+globals:
+  Promise: false
+rules:
+  # http://eslint.org/docs/rules/indent
+  indent: [error, 2, { SwitchCase: 1, FunctionDeclaration: { parameters: 'first' }, FunctionExpression: { parameters: 'first' } }]
+  # http://eslint.org/docs/rules/linebreak-style
+  linebreak-style: [error, unix]
+  # http://eslint.org/docs/rules/quotes
+  quotes: [error, double]
+  # http://eslint.org/docs/rules/semi
+  semi: [error, never]
+  # http://eslint.org/docs/rules/comma-dangle
+  comma-dangle: [error, never]
+  # http://eslint.org/docs/rules/eqeqeq
+  eqeqeq: error
+  # http://eslint.org/docs/rules/strict
+  strict: error
+  # http://eslint.org/docs/rules/eol-last
+  eol-last: [error, always]
+  # http://eslint.org/docs/rules/keyword-spacing
+  keyword-spacing: error
+  # http://eslint.org/docs/rules/key-spacing
+  key-spacing: error
+  # http://eslint.org/docs/rules/comma-spacing
+  comma-spacing: error
+  # http://eslint.org/docs/rules/space-before-function-paren
+  space-before-function-paren: [error, named: never]
+  # http://eslint.org/docs/rules/space-before-blocks
+  space-before-blocks: error
+  # https://eslint.org/docs/rules/curly
+  curly: error
+  # https://eslint.org/docs/rules/guard-for-in
+  guard-for-in: error
+  # https://eslint.org/docs/rules/wrap-iife
+  wrap-iife: error
+  # https://eslint.org/docs/rules/no-use-before-define
+  no-use-before-define: [error, { variables: true, functions: false }]
+  # https://eslint.org/docs/rules/new-cap
+  new-cap: [error, { newIsCap: true, capIsNew: false }]
+  # https://eslint.org/docs/rules/no-caller
+  no-caller: error
+  # https://eslint.org/docs/rules/no-empty
+  no-empty: error
+  # https://eslint.org/docs/rules/no-new
+  no-new: off
+  # https://eslint.org/docs/rules/no-plusplus
+  no-plusplus: off
+  # https://eslint.org/docs/rules/no-undef
+  no-undef: error
+  # https://eslint.org/docs/rules/no-unused-vars
+  no-unused-vars: off
+  # https://eslint.org/docs/rules/no-unused-expressions
+  no-unused-expressions: off
+  # https://eslint.org/docs/rules/no-underscore-dangle
+  no-underscore-dangle: off
+  # https://eslint.org/docs/rules/one-var
+  one-var: off
+  # https://eslint.org/docs/rules/no-catch-shadow
+  no-catch-shadow: off
+  # https://eslint.org/docs/rules/block-scoped-var
+  block-scoped-var: error
+  # https://eslint.org/docs/rules/no-return-assign
+  no-return-assign: error
+  # https://eslint.org/docs/rules/no-invalid-this
+  no-invalid-this: error
 
-    # https://eslint.org/docs/rules/quote-props
-    # quote-props: error
-    # https://eslint.org/docs/rules/no-bitwise
-    # no-bitwise: [off] 
+  # https://eslint.org/docs/rules/quote-props
+  # quote-props: error
+  # https://eslint.org/docs/rules/no-bitwise
+  # no-bitwise: [off]

@@ -1,6 +1,6 @@
 "use strict"
 
-var timeago = require("timeago.js")
+var moment = require("moment")
   , logger = require("../util").logger
   , error = require("../error")
   , dbUsers = require("./dataService").users
@@ -52,7 +52,7 @@ function generateValue(generator, type, steps) {
     case "TIME_RELATIVE_PREVIOUS":
       previous = steps.length > 0 ? steps[0] : null
       if (previous) {
-        return timeago().format(previous.createdAt.getTime())
+        return moment().from(previous.createdAt.getTime())
       }
       break
     default:

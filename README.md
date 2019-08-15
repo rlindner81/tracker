@@ -4,7 +4,7 @@ This is the Javascript backend for the ultimate tracker.
 
 ## Dependencies
 
-You will need at least [NodeJS](https://nodejs.org) 8.x.
+You will need at least [NodeJS](https://nodejs.org) 10.x.
 
 * [Express](https://www.npmjs.com/package/express) for routering and low-level request handling
   * [Body-Parser](https://www.npmjs.com/package/body-parser) to parse request bodies in `req.body` 
@@ -15,11 +15,11 @@ You will need at least [NodeJS](https://nodejs.org) 8.x.
 * [BCrypt](https://www.npmjs.com/package/bcrypt) for secure password storage
 * [Joi](https://www.npmjs.com/package/joi) for request validation
 * [UUID](https://www.npmjs.com/package/uuid) for generating version 4 UUIDs
-* [timeago.js](https://www.npmjs.com/package/timeago.js) for getting relative times
+* [moment](https://www.npmjs.com/package/moment) for getting relative times
 
 ## Codestyle
 
-* Code will be in [ECMAScript 5.1](https://www.ecma-international.org/ecma-262/5.1/) published in June 2011
+* Code will be in [ECMAScript 2018](http://www.ecma-international.org/ecma-262/9.0/) published in June 2011
 * Style rules are specfied in [ESLint](.eslintrc.yml)
 
 ## API
