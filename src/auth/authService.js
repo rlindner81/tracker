@@ -52,5 +52,9 @@ module.exports.logout = logout
 
 function readMe(session) {
   return dbUsers.findOneAsync({ _id: session.userId })
+    .then(user => {
+      delete user.password;
+      return user;
+    });
 }
 module.exports.readMe = readMe

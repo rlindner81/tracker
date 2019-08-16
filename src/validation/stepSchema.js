@@ -1,6 +1,6 @@
 "use strict"
 
-var joi = require("joi"),
+var joi = require("@hapi/joi"),
   stepSchema = {
     values: joi.object()
   }

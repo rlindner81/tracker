@@ -1,6 +1,6 @@
 "use strict"
 
-var joi = require("joi"),
+var joi = require("@hapi/joi"),
   generatorSchema = {
     identifier: joi
       .string()
