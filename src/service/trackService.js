@@ -64,7 +64,7 @@ function generateValue(track, steps, field) {
     case "TIME_RELATIVE_PREVIOUS":
       previous = steps.length > 0 ? steps[0] : null
       if (previous) {
-        return moment(previous.createdAt.getTime()).fromNow()
+        return moment(previous.createdAt.getTime()).fromNow(true)
       }
       break
     default:
