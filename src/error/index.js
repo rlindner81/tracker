@@ -24,3 +24,4 @@ module.exports.AlreadyLoggedOutError = ApplicationError.bind(null, 200, "Already
  * Track related errors
  */
 module.exports.UnknownIdentifierError = ApplicationError.bind(null, 500, "Unknown identifier")
+module.exports.MissingGeneratorParameters = ApplicationError.bind(null, 500, "Missing generator parameters")

@@ -6,7 +6,8 @@ var moment = require("moment"),
   dbUsers = require("./dataService").users,
   dbTracks = require("./dataService").tracks,
   dbSteps = require("./dataService").steps,
-  UnknownIdentifierError = error.UnknownIdentifierError
+  UnknownIdentifierError = error.UnknownIdentifierError,
+  MissingGeneratorParameters = error.MissingGeneratorParameters
 
 /**
  * Tracks
@@ -41,12 +42,19 @@ module.exports.deleteTrack = deleteTrack
  * Steps
  */
 
-function generateValue(generator, type, steps) {
-  var identifier = typeof generator === "string" ? generator : generator.identifier,
+function generateValue(track, steps, field) {
+  var type = field.type,
+    generator = field.generator,
+    identifier = typeof generator === "string" ? generator : generator.identifier,
     now,
     previous
 
   switch (identifier) {
+    case "STATIC":
+      if (!generator.parameters || !generator.parameters.value) {
+        throw new MissingGeneratorParameters("Static field is missing a value parameter: " + field.key)
+      }
+      return generator.parameters.value
     case "COUNT":
       // TODO: allow TOTAL (default) / PER_DAY / PER_WEEK / PER_MONTH / PER_YEAR count
       return steps.length + 1
@@ -64,7 +72,7 @@ function generateValue(generator, type, steps) {
   }
 }
 
-function addValueFromFieldToResult(values, field, steps, inputValues) {
+function addValueFromFieldToResult(track, steps, field, values, inputValues) {
   var key = field.key,
     type = field.type,
     generator = field.generator,
@@ -74,7 +82,7 @@ function addValueFromFieldToResult(values, field, steps, inputValues) {
     value = inputValues[key]
   }
 
-  value = value || generateValue(generator, type, steps)
+  value = value || generateValue(track, steps, field)
 
   values[key] = value
 }
@@ -94,10 +102,10 @@ function prepareStep(step) {
       steps = results[1]
 
     track.inputFields.forEach(function(field) {
-      addValueFromFieldToResult(values, field, steps, inputValues)
+      addValueFromFieldToResult(track, steps, field, values, inputValues)
     })
     track.computedFields.forEach(function(field) {
-      addValueFromFieldToResult(values, field, steps)
+      addValueFromFieldToResult(track, steps, field, values)
     })
 
     step.values = values
