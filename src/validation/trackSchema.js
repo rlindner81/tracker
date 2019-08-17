@@ -26,7 +26,10 @@ var joi = require("@hapi/joi"),
   },
   trackSchema = {
     name: string,
-    fields: joi.array().items(fieldSchema)
+    fields: joi
+      .array()
+      .min(1)
+      .items(fieldSchema)
   }
 
 module.exports = {
