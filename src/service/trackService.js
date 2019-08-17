@@ -78,7 +78,7 @@ function addValueFromFieldToResult(track, steps, field, values, inputValues) {
     generator = field.generator,
     value
 
-  if (inputValues && key in inputValues) {
+  if (field.input && inputValues && key in inputValues) {
     value = inputValues[key]
   }
 
@@ -101,11 +101,8 @@ function prepareStep(step) {
     var track = results[0],
       steps = results[1]
 
-    track.inputFields.forEach(function(field) {
+    track.fields.forEach(function(field) {
       addValueFromFieldToResult(track, steps, field, values, inputValues)
-    })
-    track.computedFields.forEach(function(field) {
-      addValueFromFieldToResult(track, steps, field, values)
     })
 
     step.values = values

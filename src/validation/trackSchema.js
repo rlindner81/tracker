@@ -30,6 +30,7 @@ var joi = require("@hapi/joi"),
       .string()
       .min(1)
       .max(256),
+    input: joi.boolean().optional(),
     type: joi.alternatives().try(
       joi
         .string()
@@ -52,8 +53,7 @@ var joi = require("@hapi/joi"),
       .string()
       .min(1)
       .max(256),
-    inputFields: joi.array().items(fieldSchema),
-    computedFields: joi.array().items(fieldSchema)
+    fields: joi.array().items(fieldSchema)
   }
 
 module.exports = {

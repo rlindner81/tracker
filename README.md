@@ -32,11 +32,12 @@ DELETE /api/track/:trackId
 POST
 {
   "name": "Willpower",
-  "inputFields": [
+  "fields": [
     {
       "position": 0,
       "key": "motivation",
       "name": "Motivation",
+      "input": true,
       "type": "TEXT",
       "generator": {
         "identifier": "STATIC",
@@ -49,6 +50,7 @@ POST
       "position": 1,
       "key": "mood",
       "name": "Mood",
+      "input": true,
       "type": {
         "identifier": "SELECT_SINGLE",
         "parameters": {
@@ -79,9 +81,7 @@ POST
           "value": "postive"
         }
       }
-    }
-  ],
-  "computedFields": [
+    },
     {
       "position": 2,
       "key": "count",
@@ -153,7 +153,6 @@ GET
 
 ## TODO
 
-* Should unify inputFields and computedFields to just fields
 * Extend generator COUNT to handle options "TOTAL", "PER_DAY", ...
 * Add field type ENUMERATE
 * Maybe switch to expressions?
