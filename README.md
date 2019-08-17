@@ -22,6 +22,25 @@ You will need at least [NodeJS](https://nodejs.org) 10.x.
 * Code will be in [ECMAScript 2018](http://www.ecma-international.org/ecma-262/9.0/)
 * Style rules are specfied in [ESLint](.eslintrc.yml)
 
+## Indentifiers
+Marked with `?` means it could change/be removed.
+
+* Field types: 
+  *`TEXT`
+  *`NUMBER` for the moment this covers both floats and integers, same as javascript
+  *`TIME` same as TEXT, but is a JS Date in ISO format
+  * `SELECT_SINGLE`? could become `ENUM` if we can distinguish single/multiselect via a parameter
+* Generator types:
+  * `STATIC` just pass through the parameters.value and don't even sweat
+  * `COUNT`? this could be change if we can do the same through reporting
+    * parameters.unique options are `YEAR|MONTH|WEEK|DAY|HOUR|MINUTE|SECOND` via momentjs
+  * `TIME_NOW`? this could change as well. every step has an internal createdAt timestamp anyway...
+  * `TIME_RELATIVE_PREVIOUS`? mostly for playing around for now
+* Report aggregations:
+  * `MIN|MAX|AVG|SUM`
+* Report intervals:
+  * `YEAR|MONTH|WEEK|DAY|HOUR|MINUTE|SECOND`
+
 ## API
 ```
 GET    /api/track
@@ -122,7 +141,6 @@ POST
 ```
 GET    /api/track/:trackId/step
 POST   /api/track/:trackId/step
-PATCH  /api/track/:trackId/step/:stepId
 DELETE /api/track/:trackId/step/:stepId
 
 POST
@@ -163,6 +181,19 @@ GET
 ]
 ```
 
+```
+POST   /api/track/:trackId/report
+
+POST
+{
+  "values": {
+    "count": "SUM"
+  }
+  "interval": "WEEK"
+}
+```
+
 ## TODO
 
+* Add reporting
 * Maybe switch to expressions?
