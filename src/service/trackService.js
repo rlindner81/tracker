@@ -154,13 +154,12 @@ module.exports.deleteStep = deleteStep
  */
 
 function computeAggregations(steps, interval, inputAggregations) {
-  let stepCount = 0
   let aggregations = []
   let aggregation = {}
   let aggregationCount = 0
-  for (const step of steps) {
+  for (let stepIndex = 0; stepIndex < steps.length; stepIndex++) {
+    let step = steps[stepIndex]
     let anchor = moment(step.createdAt)
-    stepCount++
     aggregation.startAt = aggregation.startAt || anchor
     aggregationCount++
     for (const { key, type, field } of inputAggregations) {
@@ -185,7 +184,9 @@ function computeAggregations(steps, interval, inputAggregations) {
       }
       aggregation[key] = value
     }
-    if (!anchor.isSame(aggregation.startAt, interval) || stepCount === steps.length - 1) {
+    // If this is the last iteration or the _next_ step leaves the interval
+    let nextStep = stepIndex !== steps.length - 1 ? steps[stepIndex + 1] : null
+    if (!nextStep || !aggregation.startAt.isSame(nextStep.createdAt, interval)) {
       aggregation.endAt = anchor
       for (const { key, type } of inputAggregations) {
         if (type !== "AVG") {
