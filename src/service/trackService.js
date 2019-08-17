@@ -55,15 +55,16 @@ function generateValue(track, steps, field) {
       }
       return parameters.value
     case "COUNT":
-      if (parameters && parameters.interval) {
-        if (!["PER_DAY", "PER_WEEK", "PER_MONTH", "PER_YEAR"].includes(parameters.interval)) {
-          throw new ApplicationError(422, `Unknown interval ${parameters.interval} for COUNT on field ${field.key}`)
+      if (parameters && parameters.unique) {
+        let m = /(year|month|week|day|hour|minute|second)s?/gi.exec(parameters.unique)
+        if (m === null) {
+          throw new ApplicationError(422, `Unknown unique parameter ${parameters.unique} on field ${field.key}`)
         }
         let count = 1
         let anchor = now
-        let interval = parameters.interval.substring(4).toLowerCase()
+        let unique = m[1].toLowerCase()
         for (const step of steps) {
-          if (!anchor.isSame(step.createdAt, interval)) {
+          if (!anchor.isSame(step.createdAt, unique)) {
             anchor = moment(step.createdAt)
             count++
           }

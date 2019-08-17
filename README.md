@@ -91,13 +91,13 @@ POST
     },
     {
       "position": 3,
-      "key": "countPerDay",
-      "name": "CountPerDay",
+      "key": "countUniqueDays",
+      "name": "CountUniqueDays",
       "type": "NUMBER",
       "generator": {
         "identifier": "COUNT",
         "parameters": {
-          "interval": "PER_DAY"
+          "unique": "DAYS"
         }
       }
     },
