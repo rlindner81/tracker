@@ -1,0 +1,88 @@
+<template>
+  <div id="app">
+    <router-view/>
+
+    <div class="errors">
+      <div
+        class="error"
+        v-for="error in errors"
+        :key="error._id"
+      >{{ error.message }}</div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+export default {
+  computed: {
+    ...mapState('error', ['errors'])
+  }
+}
+</script>
+
+<style lang="less">
+@import (css) url('https://fonts.googleapis.com/css?family=Oswald&display=swap');
+@import "less/variables";
+@import "less/helpers";
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body * {
+  font-family: 'Oswald', sans-serif;
+
+  color: @font-color;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  display: block;
+  font-size: 1rem;
+
+  -webkit-appearance: unset;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  height: 100vh;
+
+  .errors {
+    position: fixed;
+    width: 200px;
+    top: 50px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+
+    .error {
+      .shadow();
+      background: tomato;
+      padding: 0.5rem 1rem;
+      color: @white;
+    }
+  }
+}
+
+input, select, textarea, button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid @highlight;
+
+  + * {
+    margin-top: 1rem;
+  }
+}
+
+button {
+  border: none;
+  background: @highlight;
+  color: @white;
+  cursor: pointer;
+}
+</style>
