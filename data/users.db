@@ -1,2 +1,2 @@
-{"_id":"ecd066d4-0e2a-4bc1-9833-934f6b1981e5","name":"navi","email":"navi@home.com","password":"$2a$10$N7q.JQFTABpDJPiArC7n/uBBeaX.N0SIa6Zc/ewqrckA7eIguEpqW"}
 {"name":"Frank","email":"mail@frank-hufnagel.de","password":"$2b$10$aKmJotWzptPGuOaHBwAineKslAimU3AZ04Xa/KcajHpisdDpi6JMa","_id":"1f620c29-6f7b-4803-b728-1e630f7b5de5","createdAt":{"$$date":1566071804303},"updatedAt":{"$$date":1566071804303}}
+{"_id":"ecd066d4-0e2a-4bc1-9833-934f6b1981e5","name":"navi","email":"navi@home.com","password":"$2a$10$N7q.JQFTABpDJPiArC7n/uBBeaX.N0SIa6Zc/ewqrckA7eIguEpqW"}

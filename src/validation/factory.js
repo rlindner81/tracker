@@ -12,7 +12,7 @@ module.exports = function(schema, req, res, next) {
       })
       .then(next)
       .catch(function(err) {
-        res.status(422).send(err.details[0].message)
+        res.status(422).json(err.details)
       })
   }
   next()
