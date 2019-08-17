@@ -190,9 +190,12 @@ POST   /api/track/:trackId/report
 
 POST
 {
-  "values": {
-    "count": "SUM"
-  }
+  "fields": [
+    {
+      "key": "count",
+      "aggregation": "SUM"
+    }
+  ],
   "interval": "WEEK"
 }
 ```
