@@ -206,7 +206,7 @@ function getReport(session, trackId, report) {
     dbTracks.findOneAsync({ _id: trackId }),
     dbSteps
       .find({ userId: session.userId, trackId: trackId })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: 1 })
       .execAsync()
   ]).then(([track, steps]) => {
     if (track === null) {
