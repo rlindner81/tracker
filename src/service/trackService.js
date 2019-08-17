@@ -153,15 +153,53 @@ module.exports.deleteStep = deleteStep
  * Reports
  */
 
-function computeAggregation(steps, interval, aggregation) {
-  // TODO
+function computeAggregations(steps, inputAggregations, interval) {
+  let aggregations = []
+  let aggregation = {}
+  let count = 0
+  for (const step of steps) {
+    let anchor = moment(step.createdAt)
+    aggregation.startAt = aggregation.startAt || anchor
+    count++
+    for (const { key, type, field } of inputAggregations) {
+      let value = key in aggregation ? aggregation[key] : null
+      let stepValue = field && step.values[field]
+      switch (type) {
+        case "COUNT":
+          value = count
+          break
+        case "MIN":
+          value = value === null || stepValue < value ? stepValue : value
+          break
+        case "MAX":
+          value = value === null || stepValue > value ? stepValue : value
+          break
+        case "AVG":
+        case "SUM":
+          value += stepValue
+          break
+        default:
+          throw new ApplicationError(422, `Unknown aggregation type: ${type} on field ${key}`)
+      }
+      aggregation[key] = value
+    }
+    if (!anchor.isSame(aggregation.startAt, interval)) {
+      aggregation.endAt = anchor
+      for (const { key, type } of inputAggregations) {
+        if (type !== "AVG") {
+          continue
+        }
+        aggregation[key] = aggregation[key] / count
+      }
+      aggregations.push(aggregation)
+      aggregation = {}
+      count = 0
+    }
+  }
+  return aggregations
 }
 
 function getReport(session, trackId, report) {
-  let result = {
-    trackId,
-    aggregations: []
-  }
   return Promise.all([
     dbTracks.findOneAsync({ _id: trackId }),
     dbSteps
@@ -173,11 +211,10 @@ function getReport(session, trackId, report) {
       throw new ApplicationError(404, "Track not found")
     }
 
-    for (const aggregation of report.aggregations) {
-      result.aggregations.push(computeAggregation(steps, report.interval, aggregation))
+    return {
+      trackId,
+      aggregations: computeAggregations(steps, report.interval, report.aggregations)
     }
-
-    return result
   })
 }
 module.exports.getReport = getReport
