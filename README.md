@@ -42,6 +42,8 @@ Marked with `?` means it could change/be removed.
   * `YEAR|MONTH|WEEK|DAY|HOUR|MINUTE|SECOND`
 
 ## API
+
+### Track
 ```
 GET    /api/track
 POST   /api/track
@@ -138,6 +140,7 @@ POST
 }
 ```
 
+### Track/Step
 ```
 GET    /api/track/:trackId/step
 POST   /api/track/:trackId/step
@@ -181,6 +184,7 @@ GET
 ]
 ```
 
+### Track/Report
 ```
 POST   /api/track/:trackId/report
 
