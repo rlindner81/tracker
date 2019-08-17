@@ -153,8 +153,7 @@ GET
 
 ## TODO
 
-* Implement POST /step without computedFields
-* Should probably unify fields again... they are not that different or maybe they are for the frontend?
+* Should unify inputFields and computedFields to just fields
+* Extend generator COUNT to handle options "TOTAL", "PER_DAY", ...
 * Add field type ENUMERATE
-* Add field type TIME_NOW
 * Maybe switch to expressions?
