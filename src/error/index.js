@@ -7,6 +7,7 @@ module.exports.handler = require("./applicationErrorHandler")
 /**
  * Common errors
  */
+module.exports.ApplicationError = ApplicationError
 module.exports.NotImplementedError = ApplicationError.bind(null, 500, "Not implemented error")
 module.exports.VerificationFailedError = ApplicationError.bind(null, 422, "Verification failed")
 
@@ -25,4 +26,4 @@ module.exports.AlreadyLoggedOutError = ApplicationError.bind(null, 200, "Already
  * Track related errors
  */
 module.exports.UnknownIdentifierError = ApplicationError.bind(null, 500, "Unknown identifier")
-module.exports.MissingGeneratorParametersError = ApplicationError.bind(null, 500, "Missing generator parameters")
+module.exports.MissingParameterError = ApplicationError.bind(null, 500, "Missing parameter")

@@ -91,13 +91,25 @@ POST
     },
     {
       "position": 3,
+      "key": "countPerDay",
+      "name": "CountPerDay",
+      "type": "NUMBER",
+      "generator": {
+        "identifier": "COUNT",
+        "parameters": {
+          "interval": "PER_DAY"
+        }
+      }
+    },
+    {
+      "position": 4,
       "key": "createdAt",
       "name": "Created At",
       "type": "TIME",
       "generator": "TIME_NOW"
     },
     {
-      "position": 4,
+      "position": 5,
       "key": "gap",
       "name": "Gap",
       "type": "TEXT",
@@ -153,6 +165,5 @@ GET
 
 ## TODO
 
-* Extend generator COUNT to handle options "TOTAL", "PER_DAY", ...
 * Add field type ENUMERATE
 * Maybe switch to expressions?

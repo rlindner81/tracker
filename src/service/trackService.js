@@ -2,12 +2,10 @@
 
 var moment = require("moment"),
   logger = require("../util").logger,
-  error = require("../error"),
+  ApplicationError = require("../error").ApplicationError,
   dbUsers = require("./dataService").users,
   dbTracks = require("./dataService").tracks,
-  dbSteps = require("./dataService").steps,
-  UnknownIdentifierError = error.UnknownIdentifierError,
-  MissingGeneratorParametersError = error.MissingGeneratorParametersError
+  dbSteps = require("./dataService").steps
 
 /**
  * Tracks
@@ -45,21 +43,35 @@ module.exports.deleteTrack = deleteTrack
 function generateValue(track, steps, field) {
   var type = field.type,
     generator = field.generator,
+    parameters = generator && generator.parameters,
     identifier = typeof generator === "string" ? generator : generator.identifier,
-    now,
+    now = moment(),
     previous
 
   switch (identifier) {
     case "STATIC":
-      if (!generator.parameters || !generator.parameters.value) {
-        throw new MissingGeneratorParametersError("Static field is missing a value parameter: " + field.key)
+      if (!parameters || !parameters.value) {
+        throw new ApplicationError(422, "Static field is missing a value parameter: " + field.key)
       }
-      return generator.parameters.value
+      return parameters.value
     case "COUNT":
-      // TODO: allow TOTAL (default) / PER_DAY / PER_WEEK / PER_MONTH / PER_YEAR count
+      if (parameters && parameters.interval) {
+        if (!["PER_DAY", "PER_WEEK", "PER_MONTH", "PER_YEAR"].includes(parameters.interval)) {
+          throw new ApplicationError(422, `Unknown interval ${parameters.interval} for COUNT on field ${field.key}`)
+        }
+        let count = 1
+        let anchor = now
+        let interval = parameters.interval.substring(4).toLowerCase()
+        for (const step of steps) {
+          if (!anchor.isSame(step.createdAt, interval)) {
+            anchor = moment(step.createdAt)
+            count++
+          }
+        }
+        return count
+      }
       return steps.length + 1
     case "TIME_NOW":
-      now = new Date()
       return now.toISOString()
     case "TIME_RELATIVE_PREVIOUS":
       previous = steps.length > 0 ? steps[0] : null
@@ -68,7 +80,7 @@ function generateValue(track, steps, field) {
       }
       break
     default:
-      throw new UnknownIdentifierError("Unknown identifier: " + identifier)
+      throw new ApplicationError(422, `Unknown generator: ${identifier} on field ${field.key}`)
   }
 }
 
@@ -97,9 +109,10 @@ function prepareStep(step) {
       .find({ userId: step.userId, trackId: step.trackId })
       .sort({ createdAt: -1 })
       .execAsync()
-  ]).then(function(results) {
-    var track = results[0],
-      steps = results[1]
+  ]).then(([track, steps]) => {
+    if (track === null) {
+      throw new ApplicationError(404, "Track not found")
+    }
 
     track.fields.forEach(function(field) {
       addValueFromFieldToResult(track, steps, field, values, inputValues)
