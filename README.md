@@ -103,7 +103,7 @@ POST
       "generator": {
         "identifier": "STATIC",
         "parameters": {
-          "value": "postive"
+          "value": 1
         }
       }
     },
@@ -175,16 +175,16 @@ POST
 {
   "aggregations": [
     {
-      "key": "count"
+      "key": "count",
       "type": "COUNT"
     },
     {
-      "key": "avgMood"
+      "key": "avgMood",
       "type": "AVG",
       "field": "mood"
     },
     {
-      "key": "maxMood"
+      "key": "maxMood",
       "type": "MAX",
       "field": "mood"
     }

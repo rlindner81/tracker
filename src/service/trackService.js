@@ -60,16 +60,16 @@ function generateValue(track, steps, field) {
         if (m === null) {
           throw new ApplicationError(422, `Unknown unique parameter ${parameters.unique} on field ${field.key}`)
         }
-        let count = 1
+        let aggregationCount = 1
         let anchor = now
         let unique = m[1].toLowerCase()
         for (const step of steps) {
           if (!anchor.isSame(step.createdAt, unique)) {
             anchor = moment(step.createdAt)
-            count++
+            aggregationCount++
           }
         }
-        return count
+        return aggregationCount
       }
       return steps.length + 1
     case "TIME_NOW":
@@ -153,20 +153,22 @@ module.exports.deleteStep = deleteStep
  * Reports
  */
 
-function computeAggregations(steps, inputAggregations, interval) {
+function computeAggregations(steps, interval, inputAggregations) {
+  let stepCount = 0
   let aggregations = []
   let aggregation = {}
-  let count = 0
+  let aggregationCount = 0
   for (const step of steps) {
     let anchor = moment(step.createdAt)
+    stepCount++
     aggregation.startAt = aggregation.startAt || anchor
-    count++
+    aggregationCount++
     for (const { key, type, field } of inputAggregations) {
       let value = key in aggregation ? aggregation[key] : null
       let stepValue = field && step.values[field]
       switch (type) {
         case "COUNT":
-          value = count
+          value = aggregationCount
           break
         case "MIN":
           value = value === null || stepValue < value ? stepValue : value
@@ -183,17 +185,17 @@ function computeAggregations(steps, inputAggregations, interval) {
       }
       aggregation[key] = value
     }
-    if (!anchor.isSame(aggregation.startAt, interval)) {
+    if (!anchor.isSame(aggregation.startAt, interval) || stepCount === steps.length - 1) {
       aggregation.endAt = anchor
       for (const { key, type } of inputAggregations) {
         if (type !== "AVG") {
           continue
         }
-        aggregation[key] = aggregation[key] / count
+        aggregation[key] = aggregation[key] / aggregationCount
       }
       aggregations.push(aggregation)
       aggregation = {}
-      count = 0
+      aggregationCount = 0
     }
   }
   return aggregations
