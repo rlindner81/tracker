@@ -9,3 +9,6 @@ npm-debug.log
 temp/
 
 # config files
+
+# data files
+data/sessions.db
