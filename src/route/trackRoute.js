@@ -85,4 +85,17 @@ router.delete("/:trackId/step/:stepId", function(req, res, next) {
     .catch(next)
 })
 
+/**
+ * Reports
+ */
+
+router.post("/:trackId/report", validation.report, function(req, res, next) {
+  return service
+    .getReport(req.session, req.params.trackId, req.body)
+    .then(function(data) {
+      res.json(data)
+    })
+    .catch(next)
+})
+
 module.exports = router

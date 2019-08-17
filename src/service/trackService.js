@@ -138,13 +138,46 @@ function addStep(session, trackId, step) {
 }
 module.exports.addStep = addStep
 
-function updateStep(session, trackId, stepId, step) {
-  Object.assign(step, { _id: stepId, userId: session.userId, trackId: trackId })
-  return prepareStep(step).then(dbSteps.updateAsync.bind(dbSteps, { _id: stepId }))
-}
-module.exports.updateStep = updateStep
+// function updateStep(session, trackId, stepId, step) {
+//   Object.assign(step, { _id: stepId, userId: session.userId, trackId: trackId })
+//   return prepareStep(step).then(dbSteps.updateAsync.bind(dbSteps, { _id: stepId }))
+// }
+// module.exports.updateStep = updateStep
 
 function deleteStep(session, trackId, stepId) {
   return dbTracks.removeAsync({ _id: stepId })
 }
 module.exports.deleteStep = deleteStep
+
+/**
+ * Reports
+ */
+
+function computeAggregation(steps, interval, aggregation) {
+  // TODO
+}
+
+function getReport(session, trackId, report) {
+  let result = {
+    trackId,
+    aggregations: []
+  }
+  return Promise.all([
+    dbTracks.findOneAsync({ _id: trackId }),
+    dbSteps
+      .find({ userId: session.userId, trackId: trackId })
+      .sort({ createdAt: -1 })
+      .execAsync()
+  ]).then(([track, steps]) => {
+    if (track === null) {
+      throw new ApplicationError(404, "Track not found")
+    }
+
+    for (const aggregation of report.aggregations) {
+      result.aggregations.push(computeAggregation(steps, report.interval, aggregation))
+    }
+
+    return result
+  })
+}
+module.exports.getReport = getReport
