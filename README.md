@@ -29,11 +29,9 @@ Marked with `?` means it could change/be removed.
   * `TEXT`
   * `NUMBER` for the moment this covers both floats and integers, same as javascript
   * `TIME` same as TEXT, but is a JS Date in ISO format
-  * `SELECT_SINGLE?` could become `ENUM` or better `SELECT` if we can distinguish single/multiselect via `parameters`
+  * `SELECT_SINGLE?` this does nothing only info for frontend right now... could become `ENUM` or better `SELECT` if we can distinguish single/multiselect via `parameters`
 * Generator types:
   * `STATIC` just pass through the `parameters.value` and don't even sweat
-  * `COUNT?` this could be change if we can do the same through reporting
-    * `parameters.unique` options are `YEAR|MONTH|WEEK|DAY|HOUR|MINUTE|SECOND` via momentjs
   * `TIME_NOW?` this could change as well. every step has an internal createdAt timestamp anyway...
   * `TIME_RELATIVE_PREVIOUS?` mostly for playing around for now
 * Report aggregations:
@@ -211,5 +209,4 @@ POST
 ## TODO
 
 * Problem: SELECT hides the actual type of the input
-* Add reporting
 * Maybe switch to expressions?

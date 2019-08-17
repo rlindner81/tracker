@@ -1,20 +1,14 @@
 "use strict"
 
 var joi = require("@hapi/joi"),
+  fieldType = joi.string().valid("TEXT", "NUMBER", "TIME", "SELECT_SINGLE"),
+  generatorType = joi.string().valid("STATIC", "TIME_NOW", "TIME_RELATIVE_PREVIOUS"),
   generatorSchema = {
-    identifier: joi
-      .string()
-      .min(1)
-      .max(256)
-      .uppercase(),
+    identifier: generatorType,
     parameters: joi.object().optional()
   },
   typeSchema = {
-    identifier: joi
-      .string()
-      .min(1)
-      .max(256)
-      .uppercase(),
+    identifier: fieldType,
     parameters: joi.object().optional()
   },
   fieldSchema = {
@@ -31,22 +25,8 @@ var joi = require("@hapi/joi"),
       .min(1)
       .max(256),
     input: joi.boolean().optional(),
-    type: joi.alternatives().try(
-      joi
-        .string()
-        .min(1)
-        .max(256)
-        .uppercase(),
-      joi.object().keys(typeSchema)
-    ),
-    generator: joi.alternatives().try(
-      joi
-        .string()
-        .min(1)
-        .max(256)
-        .uppercase(),
-      joi.object().keys(generatorSchema)
-    )
+    type: joi.alternatives().try(fieldType, joi.object().keys(typeSchema)),
+    generator: joi.alternatives().try(generatorType, joi.object().keys(generatorSchema))
   },
   trackSchema = {
     name: joi
