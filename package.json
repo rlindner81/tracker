@@ -4,6 +4,10 @@
   "description": "Track whatever you want",
   "author": "Richard Lindner <rlindner81@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com:rlindner81/tracker.git"
+  },
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
