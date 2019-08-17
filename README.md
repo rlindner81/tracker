@@ -26,9 +26,9 @@ You will need at least [NodeJS](https://nodejs.org) 10.x.
 Marked with `?` means it could change/be removed.
 
 * Field types: 
-  *`TEXT`
-  *`NUMBER` for the moment this covers both floats and integers, same as javascript
-  *`TIME` same as TEXT, but is a JS Date in ISO format
+  * `TEXT`
+  * `NUMBER` for the moment this covers both floats and integers, same as javascript
+  * `TIME` same as TEXT, but is a JS Date in ISO format
   * `SELECT_SINGLE`? could become `ENUM` if we can distinguish single/multiselect via a parameter
 * Generator types:
   * `STATIC` just pass through the parameters.value and don't even sweat
