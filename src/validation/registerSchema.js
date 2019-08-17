@@ -1,11 +1,11 @@
 "use strict"
 
 var joi = require("@hapi/joi"),
-  alphanum = require("./commonSchema").alphanum,
+  string = require("./commonSchema").string,
   registerSchema = {
-    name: alphanum,
-    email: alphanum,
-    password: alphanum
+    name: string,
+    email: string.email(),
+    password: string
   }
 
 module.exports = {

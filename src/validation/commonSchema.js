@@ -1,12 +1,13 @@
 "use strict"
 
 var joi = require("@hapi/joi"),
-  alphanum = joi
+  string = joi
     .string()
-    .alphanum()
     .min(1)
-    .max(256)
+    .max(256),
+  alphanum = string.alphanum()
 
 module.exports = {
+  string,
   alphanum
 }

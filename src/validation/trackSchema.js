@@ -1,6 +1,7 @@
 "use strict"
 
 var joi = require("@hapi/joi"),
+  string = require("./commonSchema").string,
   alphanum = require("./commonSchema").alphanum,
   fieldType = joi.string().valid("TEXT", "NUMBER", "TIME", "SELECT_SINGLE"),
   generatorType = joi.string().valid("STATIC", "TIME_NOW", "TIME_RELATIVE_PREVIOUS"),
@@ -18,13 +19,13 @@ var joi = require("@hapi/joi"),
       .integer()
       .min(0),
     key: alphanum,
-    name: alphanum,
+    name: string,
     input: joi.boolean().optional(),
     type: joi.alternatives().try(fieldType, joi.object().keys(typeSchema)),
     generator: joi.alternatives().try(generatorType, joi.object().keys(generatorSchema))
   },
   trackSchema = {
-    name: alphanum,
+    name: string,
     fields: joi.array().items(fieldSchema)
   }
 
