@@ -12,3 +12,4 @@ temp/
 
 # data files
 data/sessions.db
+data/steps.db
