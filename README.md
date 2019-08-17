@@ -37,7 +37,7 @@ Marked with `?` means it could change/be removed.
   * `TIME_NOW?` this could change as well. every step has an internal createdAt timestamp anyway...
   * `TIME_RELATIVE_PREVIOUS?` mostly for playing around for now
 * Report aggregations:
-  * `MIN|MAX|AVG|SUM`
+  * `COUNT|MIN|MAX|AVG|SUM`
 * Report intervals:
   * `YEAR|MONTH|WEEK|DAY|HOUR|MINUTE|SECOND`
 
@@ -79,19 +79,23 @@ POST
           "values": [
             {
               "key": "good",
-              "name": "Good"
+              "name": "Good",
+              "value": 1
             },
             {
               "key": "postive",
-              "name": "Postive"
+              "name": "Postive",
+              "value": 2
             },
             {
               "key": "bored",
-              "name": "Bored"
+              "name": "Bored",
+              "value": -1
             },
             {
               "key": "bad",
-              "name": "Bad"
+              "name": "Bad",
+              "value": -2
             }
           ]
         }
@@ -105,32 +109,13 @@ POST
     },
     {
       "position": 2,
-      "key": "count",
-      "name": "Count",
-      "type": "NUMBER",
-      "generator": "COUNT"
-    },
-    {
-      "position": 3,
-      "key": "countUniqueDays",
-      "name": "CountUniqueDays",
-      "type": "NUMBER",
-      "generator": {
-        "identifier": "COUNT",
-        "parameters": {
-          "unique": "DAYS"
-        }
-      }
-    },
-    {
-      "position": 4,
       "key": "createdAt",
       "name": "Created At",
       "type": "TIME",
       "generator": "TIME_NOW"
     },
     {
-      "position": 5,
+      "position": 3,
       "key": "gap",
       "name": "Gap",
       "type": "TEXT",
@@ -165,8 +150,7 @@ GET
     "trackId": "...",
     "values": {
       "motivation": "Make a difference today",
-      "mood": "Positive"
-      "count": 1,
+      "mood": 1
       "createdAt": "2018-09-06T18:17:00.937Z",
       "gap": null
     }
@@ -175,8 +159,7 @@ GET
     "trackId": "...",
     "values": {
       "motivation": "Make another difference",
-      "mood": "Bored"
-      "count": 2,
+      "mood": -1
       "createdAt": "2018-09-06T19:20:12.937Z",
       "gap": "2 hours"
     }
@@ -190,17 +173,43 @@ POST   /api/track/:trackId/report
 
 POST
 {
-  "fields": [
+  "aggregations": [
     {
-      "key": "count",
-      "aggregation": "SUM"
+      "key": "count"
+      "type": "COUNT"
+    },
+    {
+      "key": "avgMood"
+      "type": "AVG",
+      "field": "mood"
+    },
+    {
+      "key": "maxMood"
+      "type": "MAX",
+      "field": "mood"
     }
   ],
   "interval": "WEEK"
 }
+
+[
+  {
+    "trackId": "...",
+    "aggregations": [
+      {
+        "count": 1,
+        "avgMood": 1.5,
+        "maxMood": 2,
+        "startAt": "2018-09-06T18:17:00.937Z",
+        "endAt": "2018-09-06T18:17:00.937Z"
+      }
+    ]
+  }
+]
 ```
 
 ## TODO
 
+* Problem: SELECT hides the actual type of the input
 * Add reporting
 * Maybe switch to expressions?
