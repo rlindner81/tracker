@@ -1,16 +1,10 @@
 "use strict"
 
 var joi = require("@hapi/joi"),
+  alphanum = require("./commonSchema").alphanum,
   loginSchema = {
-    nameOrEmail: joi
-      .string()
-      .min(1)
-      .max(256),
-    password: joi
-      .string()
-      .alphanum()
-      .min(1)
-      .max(256)
+    nameOrEmail: alphanum,
+    password: alphanum
   }
 
 module.exports = {

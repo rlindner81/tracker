@@ -1,19 +1,16 @@
 "use strict"
 
 var joi = require("@hapi/joi"),
-  fieldKey = joi
-    .string()
-    .min(1)
-    .max(256),
+  alphanum = require("./commonSchema").alphanum,
   aggregationSchema = joi.alternatives().try(
     {
-      key: fieldKey,
+      key: alphanum,
       type: joi.string().valid("COUNT")
     },
     {
-      key: fieldKey,
+      key: alphanum,
       type: joi.string().valid("MIN", "MAX", "AVG", "SUM"),
-      field: fieldKey
+      field: alphanum
     }
   ),
   reportSchema = {
