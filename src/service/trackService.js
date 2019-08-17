@@ -7,7 +7,7 @@ var moment = require("moment"),
   dbTracks = require("./dataService").tracks,
   dbSteps = require("./dataService").steps,
   UnknownIdentifierError = error.UnknownIdentifierError,
-  MissingGeneratorParameters = error.MissingGeneratorParameters
+  MissingGeneratorParametersError = error.MissingGeneratorParametersError
 
 /**
  * Tracks
@@ -52,7 +52,7 @@ function generateValue(track, steps, field) {
   switch (identifier) {
     case "STATIC":
       if (!generator.parameters || !generator.parameters.value) {
-        throw new MissingGeneratorParameters("Static field is missing a value parameter: " + field.key)
+        throw new MissingGeneratorParametersError("Static field is missing a value parameter: " + field.key)
       }
       return generator.parameters.value
     case "COUNT":

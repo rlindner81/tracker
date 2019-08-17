@@ -24,6 +24,15 @@ router.post("/logout", function(req, res, next) {
     .catch(next)
 })
 
+router.post("/register", validation.register, function(req, res, next) {
+  service
+    .register(req.session, req.body)
+    .then(function(result) {
+      res.json(result)
+    })
+    .catch(next)
+})
+
 router.get("/me", authHandler, function(req, res, next) {
   service
     .readMe(req.session)
