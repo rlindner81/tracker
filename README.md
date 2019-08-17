@@ -165,5 +165,4 @@ GET
 
 ## TODO
 
-* Add field type ENUMERATE
 * Maybe switch to expressions?
