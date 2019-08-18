@@ -11,11 +11,23 @@ launch.json
       "request": "launch",
       "name": "Debug backend",
       "outputCapture": "std",
-      "program": "${workspaceFolder}/backend/src/app.js",
+      "program": "${workspaceFolder}/backend/src/server.js",
       "cwd": "${workspaceFolder}/backend",
       "env": {
         "NODE_ENV": "development"
       }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug tests",
+      "outputCapture": "std",
+      "program": "${workspaceFolder}/backend/node_modules/jest/bin/jest.js",
+      "cwd": "${workspaceFolder}/backend",
+      "env": {
+        "NODE_ENV": "test"
+      },
+      "disableOptimisticBPs": true
     }
   ]
 }

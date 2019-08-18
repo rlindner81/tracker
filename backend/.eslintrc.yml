@@ -4,9 +4,11 @@ root: true
 parserOptions:
   ecmaVersion: 2018
 plugins:
+  - jest
   - prettier
 extends:
   - 'eslint:recommended'
+  - 'plugin:jest/recommended'
   - 'plugin:prettier/recommended'
 env:
   node: true
@@ -26,7 +28,7 @@ rules:
   # http://eslint.org/docs/rules/eqeqeq
   eqeqeq: error
   # http://eslint.org/docs/rules/strict
-  strict: error
+  strict: [off]
   # http://eslint.org/docs/rules/eol-last
   eol-last: [error, always]
   # http://eslint.org/docs/rules/keyword-spacing
@@ -52,21 +54,21 @@ rules:
   # https://eslint.org/docs/rules/no-empty
   no-empty: error
   # https://eslint.org/docs/rules/no-new
-  no-new: off
+  no-new: [off]
   # https://eslint.org/docs/rules/no-plusplus
-  no-plusplus: off
+  no-plusplus: [off]
   # https://eslint.org/docs/rules/no-undef
   no-undef: error
   # https://eslint.org/docs/rules/no-unused-vars
-  no-unused-vars: off
+  no-unused-vars: error
   # https://eslint.org/docs/rules/no-unused-expressions
-  no-unused-expressions: off
+  no-unused-expressions: error
   # https://eslint.org/docs/rules/no-underscore-dangle
-  no-underscore-dangle: off
+  no-underscore-dangle: error
   # https://eslint.org/docs/rules/one-var
-  one-var: off
+  one-var: [off]
   # https://eslint.org/docs/rules/no-catch-shadow
-  no-catch-shadow: off
+  no-catch-shadow: [off]
   # https://eslint.org/docs/rules/block-scoped-var
   block-scoped-var: error
   # https://eslint.org/docs/rules/no-return-assign
