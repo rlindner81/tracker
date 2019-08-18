@@ -14,7 +14,21 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
+  created () {
+    this.load()
+      .then(() => {
+        // if already logged in
+        this.$router.replace('/tracker')
+      })
+  },
+  computed: {
+    ...mapState('track', { tracks: 'data' })
+  },
+  methods: {
+    ...mapActions('user', { load: 'init', clear: 'clear' })
+  }
 }
 </script>
 

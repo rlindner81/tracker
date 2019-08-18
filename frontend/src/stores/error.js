@@ -5,18 +5,30 @@ export default {
   },
   mutations: {
     raw (state, error) {
-      let e = {
-        _id: Math.random(),
-        message: error.response.data
+      let messages = []
+
+      if (Array.isArray(error.response.data)) {
+        messages = error.response.data.map(error => {
+          return error.message
+        })
+      } else {
+        messages.push(error.response.data)
       }
 
-      state.errors = [e]
+      messages.forEach(message => {
+        let e = {
+          _id: Math.random(),
+          message
+        }
 
-      setTimeout(() => {
-        state.errors = state.errors.filter(message => {
-          return message._id !== e._id
-        })
-      }, 4000)
+        state.errors = [e]
+
+        setTimeout(() => {
+          state.errors = state.errors.filter(message => {
+            return message._id !== e._id
+          })
+        }, 4000)
+      })
     }
   },
   getters: {},

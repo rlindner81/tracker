@@ -17,9 +17,10 @@
     <h2>Add a new Track</h2>
 
     <form @submit.prevent="create">
-      <label>Name</label>
-      <input type="text" v-model="track.name" placeholder="Enter a name ...">
-
+      <div class="general">
+        <label>Name</label>
+        <input type="text" v-model="track.name" placeholder="Enter a name ...">
+      </div>
       <div class="fields">
         <div
           class="field"
@@ -27,7 +28,7 @@
           :key="i"
         >
           <label>Type</label>
-          <select v-model="field.type">
+          <select v-model="field.type.identifier">
             <option v-for="type in types" :key="type" :value="type">{{ type }}</option>
           </select>
           <label>Field Name</label>
@@ -38,13 +39,14 @@
             @input="field.key = slugify($event.target.value)"
           >
           <label>Field Key</label>
-          <input type="text" :value="field.key" :disabled="true" >
+          <input type="text" :value="field.key" :disabled="true">
+          <button type="button" class="remove" @click="removeField(i)">Remove Field</button>
         </div>
 
         <button class="add-field" type="button" @click="addField">Add Field</button>
       </div>
 
-      <LoadingButton>Create</LoadingButton>
+      <LoadingButton>Create Track</LoadingButton>
     </form>
   </div>
 </template>
@@ -63,7 +65,7 @@ export default {
   },
   methods: {
     ...mapActions('track', { create: 'create' }),
-    ...mapMutations('track', { addField: 'addField' }),
+    ...mapMutations('track', { addField: 'addField', removeField: 'removeField' }),
     slugify (str) {
       str = str.replace(/^\s+|\s+$/g, '') // trim
       str = str.toLowerCase()
@@ -106,20 +108,41 @@ export default {
   }
 
   > form {
-    background: @white;
-    padding: 1rem;
+    .general {
+      .shadow();
+      background: @white;
+      padding: 1rem;
+    }
   }
 
   .fields {
     .column(flex-end);
-    padding-left: 2rem;
 
     input, select, label, .field {
       width: 100%;
+
+      &[disabled] {
+        background: #efefef;
+        cursor: not-allowed;
+      }
     }
 
     .field {
-      margin-bottom: 2rem;
+      .shadow();
+      margin: 1rem auto;
+      padding: 1rem;
+      background: @white;
+      position: relative;
+
+      .remove {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.1rem 0.3rem;
+        width: auto;
+        margin: 0;
+        font-size: 0.8rem;
+      }
     }
 
     .add-field {

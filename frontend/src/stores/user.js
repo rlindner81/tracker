@@ -25,19 +25,19 @@ export default {
   getters: {},
   actions: {
     init ({ commit }) {
-      axios.get('/api/auth/me')
+      return axios.get('/api/auth/me')
         .then(response => {
           commit('set', response.data)
         })
     },
     login ({ commit, state }) {
-      axios.post('/api/auth/login', state.login)
+      return axios.post('/api/auth/login', state.login)
         .then(response => {
           commit('set', response.data)
         })
     },
     register ({ commit, state }) {
-      axios.post('/api/auth/register', state.register)
+      return axios.post('/api/auth/register', state.register)
         .then(response => {
           commit('set', response.data)
         })

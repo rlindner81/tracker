@@ -2,6 +2,10 @@
   <div class="layout protected">
     <div class="letter-box">
       <nav>
+        <router-link
+          to="/tracker"
+        >Dashboard</router-link>
+
         <h1>Tracks</h1>
 
         <router-link
@@ -12,7 +16,7 @@
       </nav>
 
       <main>
-        <router-view></router-view>
+        <router-view v-if="initialized"></router-view>
       </main>
     </div>
   </div>
@@ -22,18 +26,30 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
+  data () {
+    return {
+      initialized: false
+    }
+  },
   created () {
     this.load()
       .catch(() => {
         this.clear()
         this.$router.push('/login')
       })
+      .then(() => {
+        return this.loadTracks()
+      })
+      .then(() => {
+        this.initialized = true
+      })
   },
   computed: {
     ...mapState('track', { tracks: 'data' })
   },
   methods: {
-    ...mapActions('user', { load: 'init', clear: 'clear' })
+    ...mapActions('user', { load: 'init', clear: 'clear' }),
+    ...mapActions('track', { loadTracks: 'load' })
   }
 }
 </script>
@@ -44,6 +60,7 @@ export default {
 
 .layout.protected {
   .size(100%, 100%);
+  overflow-y: auto;
   padding: 8rem 4rem;
   background: url('~@/assets/paper.png') repeat;
 
@@ -60,7 +77,7 @@ export default {
     margin-top: 3.5rem;
 
     h1 {
-      margin-bottom: 1rem;
+      margin: 1rem 0;
       font-size: 1.5rem;
     }
 
