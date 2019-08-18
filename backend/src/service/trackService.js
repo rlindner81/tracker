@@ -12,10 +12,21 @@ var moment = require("moment"),
  */
 
 function getTracks(session) {
+  let tracks
   return dbTracks
     .find({ userId: session.userId })
     .sort({ createdAt: -1 })
     .execAsync()
+    .then(tracks => {
+      tracks = tracks
+      return Promise.all(tracks.map(track => {
+        return dbSteps.countAsync({ trackId: track._id })
+          .then(count => {
+            track.stepCount = count
+            return track
+          })
+      }))
+    })
 }
 module.exports.getTracks = getTracks
 
@@ -115,7 +126,7 @@ function prepareStep(step) {
       throw new ApplicationError(404, "Track not found")
     }
 
-    track.fields.forEach(function(field) {
+    track.fields.forEach(function (field) {
       addValueFromFieldToResult(track, steps, field, values, inputValues)
     })
 
