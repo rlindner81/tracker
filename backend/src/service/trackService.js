@@ -1,9 +1,7 @@
 "use strict"
 
 var moment = require("moment"),
-  logger = require("../util").logger,
   ApplicationError = require("../error").ApplicationError,
-  dbUsers = require("./dataService").users,
   dbTracks = require("./dataService").tracks,
   dbSteps = require("./dataService").steps
 
@@ -17,15 +15,16 @@ function getTracks(session) {
     .find({ userId: session.userId })
     .sort({ createdAt: -1 })
     .execAsync()
-    .then(tracks => {
-      tracks = tracks
-      return Promise.all(tracks.map(track => {
-        return dbSteps.countAsync({ trackId: track._id })
-          .then(count => {
+    .then(result => {
+      tracks = result
+      return Promise.all(
+        tracks.map(track => {
+          return dbSteps.countAsync({ trackId: track["_id"] }).then(count => {
             track.stepCount = count
             return track
           })
-      }))
+        })
+      )
     })
 }
 module.exports.getTracks = getTracks
@@ -52,8 +51,7 @@ module.exports.deleteTrack = deleteTrack
  */
 
 function generateValue(track, steps, field) {
-  var type = field.type,
-    generator = field.generator,
+  var generator = field.generator,
     parameters = generator && generator.parameters,
     identifier = typeof generator === "string" ? generator : generator.identifier,
     now = moment(),
@@ -98,8 +96,6 @@ function generateValue(track, steps, field) {
 
 function addValueFromFieldToResult(track, steps, field, values, inputValues) {
   var key = field.key,
-    type = field.type,
-    generator = field.generator,
     value
 
   if (field.input && inputValues && key in inputValues) {
@@ -126,7 +122,7 @@ function prepareStep(step) {
       throw new ApplicationError(404, "Track not found")
     }
 
-    track.fields.forEach(function (field) {
+    track.fields.forEach(function(field) {
       addValueFromFieldToResult(track, steps, field, values, inputValues)
     })
 
@@ -148,25 +144,23 @@ function getStepsPaged(session, trackId, options) {
   const page = "page" in options ? parseInt(options.page) : 1
   const offset = limit * (page - 1)
   return Promise.all([
-    dbSteps
-      .countAsync({ userId: session.userId, trackId: trackId }),
+    dbSteps.countAsync({ userId: session.userId, trackId: trackId }),
     dbSteps
       .find({ userId: session.userId, trackId: trackId })
       .skip(offset)
       .limit(limit)
       .sort({ createdAt: -1 })
       .execAsync()
-  ])
-    .then(([count, data]) => {
-      const pages = Math.trunc(count / limit) + 1
-      return {
-        count,
-        limit,
-        pages,
-        page,
-        data
-      }
-    })
+  ]).then(([count, data]) => {
+    const pages = Math.trunc(count / limit) + 1
+    return {
+      count,
+      limit,
+      pages,
+      page,
+      data
+    }
+  })
 }
 module.exports.getStepsPaged = getStepsPaged
 

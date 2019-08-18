@@ -5,7 +5,6 @@ process.env.TZ = "Etc/UTC"
 var express = require("express"),
   session = require("express-session"),
   bodyParser = require("body-parser"),
-  logger = require("./util").logger,
   auth = require("./auth"),
   error = require("./error"),
   dataService = require("./service").data,
@@ -14,13 +13,7 @@ var express = require("express"),
   app = express(),
   sessionConfig = Object.assign({}, config.session, {
     store: dataService.sessions
-  }),
-  server
-
-if (process.env.NODE_ENV === "development") {
-  logger.level = "debug"
-  logger.debug("raised default log level to debug")
-}
+  })
 
 app.set("port", config.server.port)
 
@@ -35,9 +28,4 @@ app.use("/api/track", auth.handler, route.track)
 
 app.use(error.handler)
 
-server = app.listen(app.get("port"), function() {
-  logger.info("Started server on port " + app.get("port"))
-})
-server.on("error", function(err) {
-  logger.error(err)
-})
+module.exports = app

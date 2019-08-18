@@ -34,7 +34,7 @@ function login(session, fields) {
       if (!match) {
         throw new WrongPasswordError()
       }
-      session.userId = user._id
+      session.userId = user["_id"]
     })
     .catch(function(err) {
       delete session.userId

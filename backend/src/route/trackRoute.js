@@ -74,7 +74,7 @@ router.post("/:trackId/step", validation.step, function(req, res, next) {
       res.json(data)
     })
     .catch(next)
-  })
+})
 
 router.delete("/:trackId/step/:stepId", function(req, res, next) {
   return service
