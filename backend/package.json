@@ -24,15 +24,15 @@
     "prettier": "^1.18.2"
   },
   "dependencies": {
-    "@hapi/joi": "^15.1.0",
+    "@hapi/joi": "^15.1.1",
     "bcrypt": "^3.0.6",
-    "body-parser": "^1.18.2",
-    "express": "^4.16.4",
-    "express-session": "^1.15.6",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
     "moment": "^2.24.0",
     "nedb": "^1.8.0",
     "nedb-session-store": "^1.1.2",
-    "uuid": "^3.2.1",
-    "winston": "^3.1.0"
+    "uuid": "^3.3.2",
+    "winston": "^3.2.1"
   }
 }
