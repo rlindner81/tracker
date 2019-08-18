@@ -22,7 +22,7 @@ export default {
 </script>
 
 <style lang="less">
-@import (css) url('https://fonts.googleapis.com/css?family=Oswald&display=swap');
+@import (css) url('https://fonts.googleapis.com/css?family=Fira+Sans&display=swap');
 @import "less/variables";
 @import "less/helpers";
 
@@ -32,7 +32,7 @@ html, body {
 }
 
 body * {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Fira Sans', sans-serif;
 
   color: @font-color;
   box-sizing: border-box;
