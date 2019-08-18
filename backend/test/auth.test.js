@@ -1,12 +1,7 @@
 const http = require("http")
 const request = require("supertest")
 const app = require("../src/app")
-
-const user = {
-  name: "test",
-  email: "test@test.com",
-  password: "test"
-}
+const { user } = require("./helper")
 
 describe("Auth APIs", function() {
   let server
@@ -51,8 +46,8 @@ describe("Auth APIs", function() {
     const res = await request(server)
       .get("/api/auth/me")
       .set("Cookie", sessionCookie)
-    // .expect("Content-Type", /json/)
-    // .expect(200)
+      .expect("Content-Type", /json/)
+      .expect(200)
     expect(res.body.name).toBe(user.name)
     expect(res.body.email).toBe(user.email)
     expect("password" in res.body).toBe(false)

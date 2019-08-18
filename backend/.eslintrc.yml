@@ -80,3 +80,5 @@ rules:
   # quote-props: error
   # https://eslint.org/docs/rules/no-bitwise
   # no-bitwise: [off]
+  # https://eslint.org/docs/rules/require-atomic-updates
+  require-atomic-updates: [off]
