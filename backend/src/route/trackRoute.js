@@ -27,7 +27,7 @@ router.post("/", validation.track, function(req, res, next) {
     .catch(next)
 })
 
-router.patch("/:trackId", validation.track, function(req, res, next) {
+router.patch("/:trackId", validation.trackUpdate, function(req, res, next) {
   return service
     .updateTrack(req.session, req.params.trackId, req.body)
     .then(function(data) {
@@ -61,15 +61,6 @@ router.get("/:trackId/step", function(req, res, next) {
 router.post("/:trackId/step", validation.step, function(req, res, next) {
   return service
     .addStep(req.session, req.params.trackId, req.body)
-    .then(function(data) {
-      res.json(data)
-    })
-    .catch(next)
-})
-
-router.patch("/:trackId/step/:stepId", validation.step, function(req, res, next) {
-  return service
-    .updateStep(req.session, req.params.trackId, req.params.stepId, req.body)
     .then(function(data) {
       res.json(data)
     })

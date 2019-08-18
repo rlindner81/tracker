@@ -1,7 +1,7 @@
 "use strict"
 
 var joi = require("@hapi/joi"),
-  alphanum = require("./commonSchema").alphanum,
+  alphanum = require("./common").alphanum,
   aggregationSchema = joi.alternatives().try(
     {
       key: alphanum,
