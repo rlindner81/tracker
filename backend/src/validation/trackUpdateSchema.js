@@ -2,14 +2,13 @@
 
 var joi = require("@hapi/joi"),
   string = require("./common").string,
-  loginSchema = {
-    nameOrEmail: string,
-    password: string
+  trackSchema = {
+    name: string
   }
 
 module.exports = {
   options: {
     presence: "required"
   },
-  body: joi.object().keys(loginSchema)
+  body: joi.object().keys(trackSchema)
 }

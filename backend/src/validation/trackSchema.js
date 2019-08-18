@@ -1,8 +1,8 @@
 "use strict"
 
 var joi = require("@hapi/joi"),
-  string = require("./commonSchema").string,
-  alphanum = require("./commonSchema").alphanum,
+  string = require("./common").string,
+  alphanum = require("./common").alphanum,
   fieldType = joi.string().valid("TEXT", "NUMBER", "TIME", "SELECT_SINGLE"),
   generatorType = joi.string().valid("STATIC", "TIME_NOW", "TIME_RELATIVE_PREVIOUS"),
   generatorSchema = {

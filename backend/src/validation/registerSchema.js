@@ -1,7 +1,7 @@
 "use strict"
 
 var joi = require("@hapi/joi"),
-  string = require("./commonSchema").string,
+  string = require("./common").string,
   registerSchema = {
     name: string,
     email: string.email(),
