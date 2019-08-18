@@ -13,19 +13,21 @@ describe("Auth APIs", function() {
   })
 
   it("POST /api/auth/register", async function(done) {
-    const response = await request(app).post(
-      "/api/auth/register",
-      JSON.stringify({
-        name: "test",
-        emails: "test@test.com",
-        password: "test"
-      })
-    )
-    const i = 0
+    const user = {
+      name: "test",
+      email: "test@test.com",
+      password: "test"
+    }
+    const res = await request(app)
+      .post("/api/auth/register")
+      .set("Accept", "application/json")
+      .send(user)
+      .expect("Content-Type", /json/)
+      .expect(200)
+    expect(res.body.name).toBe(user.name)
+    expect(res.body.email).toBe(user.email)
+    expect("password" in res.body).toBe(false)
     done()
-    // .set('Accept', 'application/json')
-    // .expect('Content-Type', /json/)
-    // .expect(200, done);
   })
 
   // it('POST /api/auth/login', function (done) {
