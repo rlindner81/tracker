@@ -206,6 +206,18 @@ POST
 ]
 ```
 
+### Track/Step/Paged
+```
+GET    /api/track/:id/steps/paged?limit=20&page=2
+{
+  "count": 1000,
+  "limit": 20,
+  "pages": 50,
+  "page": 2,
+  "data": [...]
+}
+```
+
 ## TODO
 
 * Problem: SELECT hides the actual type of the input

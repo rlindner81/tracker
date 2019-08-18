@@ -143,6 +143,33 @@ function getSteps(session, trackId) {
 }
 module.exports.getSteps = getSteps
 
+function getStepsPaged(session, trackId, options) {
+  const limit = "limit" in options ? parseInt(options.limit) : 20
+  const page = "page" in options ? parseInt(options.page) : 1
+  const offset = limit * (page - 1)
+  return Promise.all([
+    dbSteps
+      .countAsync({ userId: session.userId, trackId: trackId }),
+    dbSteps
+      .find({ userId: session.userId, trackId: trackId })
+      .skip(offset)
+      .limit(limit)
+      .sort({ createdAt: -1 })
+      .execAsync()
+  ])
+    .then(([count, data]) => {
+      const pages = Math.trunc(count / limit) + 1
+      return {
+        count,
+        limit,
+        pages,
+        page,
+        data
+      }
+    })
+}
+module.exports.getStepsPaged = getStepsPaged
+
 function addStep(session, trackId, step) {
   Object.assign(step, { userId: session.userId, trackId: trackId })
   return prepareStep(step).then(dbSteps.insertAsync.bind(dbSteps))
