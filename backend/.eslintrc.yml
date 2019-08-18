@@ -68,7 +68,7 @@ rules:
   # https://eslint.org/docs/rules/one-var
   one-var: [off]
   # https://eslint.org/docs/rules/no-catch-shadow
-  no-catch-shadow: 0
+  no-catch-shadow: [off]
   # https://eslint.org/docs/rules/block-scoped-var
   block-scoped-var: error
   # https://eslint.org/docs/rules/no-return-assign

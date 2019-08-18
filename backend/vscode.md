@@ -25,7 +25,7 @@ launch.json
       "program": "${workspaceFolder}/backend/node_modules/jest/bin/jest.js",
       "cwd": "${workspaceFolder}/backend",
       "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "test"
       },
       "disableOptimisticBPs": true
     }
