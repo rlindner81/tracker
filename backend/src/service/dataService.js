@@ -8,7 +8,6 @@ var session = require("express-session"),
   promisifyAll = require("../util").promisifyAll
 
 const inMemoryOnly = process.env.NODE_ENV === "test" ? true : false
-console.log("inMemoryOnly", inMemoryOnly)
 
 Datastore.prototype.createNewId = uuid
 
