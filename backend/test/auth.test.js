@@ -8,7 +8,7 @@ const user = {
   password: "test"
 }
 
-describe("Auth APIs", function () {
+describe("Auth APIs", function() {
   let server
   let sessionCookie
 
@@ -21,7 +21,7 @@ describe("Auth APIs", function () {
     server.close(done)
   })
 
-  it("POST /api/auth/register", async function () {
+  it("POST /api/auth/register", async function() {
     const res = await request(server)
       .post("/api/auth/register")
       .send(user)
@@ -33,24 +33,24 @@ describe("Auth APIs", function () {
     expect("password" in res.body).toBe(false)
   })
 
-  it('POST /api/auth/login', async function () {
+  it("POST /api/auth/login", async function() {
     const res = await request(server)
       .post("/api/auth/login")
       .send({
         nameOrEmail: user.name,
         password: user.password
       })
-      .expect('Set-Cookie', /connect.sid/)
+      .expect("Set-Cookie", /connect.sid/)
       .expect("Content-Type", /text\/html/)
       .expect(200)
-    sessionCookie = res.headers['set-cookie'];
+    sessionCookie = res.headers["set-cookie"]
     expect(res.text).toBe("Login successful")
-  });
+  })
 
-  it("GET /api/auth/me", async function () {
+  it("GET /api/auth/me", async function() {
     const res = await request(server)
       .get("/api/auth/me")
-      .set('Cookie', sessionCookie)
+      .set("Cookie", sessionCookie)
     // .expect("Content-Type", /json/)
     // .expect(200)
     expect(res.body.name).toBe(user.name)
@@ -58,14 +58,13 @@ describe("Auth APIs", function () {
     expect("password" in res.body).toBe(false)
   })
 
-  it('POST /api/auth/logout', async function () {
+  it("POST /api/auth/logout", async function() {
     const res = await request(server)
       .post("/api/auth/logout")
       .send()
-      .set('Cookie', sessionCookie)
+      .set("Cookie", sessionCookie)
       .expect("Content-Type", /text\/html/)
       .expect(200)
     expect(res.text).toBe("Logout successful")
-  });
-
+  })
 })
