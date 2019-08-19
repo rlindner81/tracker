@@ -1,9 +1,9 @@
 "use strict"
 
-var joi = require("@hapi/joi"),
-  stepSchema = {
-    values: joi.object()
-  }
+const joi = require("@hapi/joi")
+const stepSchema = {
+  values: joi.object()
+}
 
 module.exports = {
   options: {

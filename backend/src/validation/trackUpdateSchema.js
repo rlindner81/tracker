@@ -1,10 +1,10 @@
 "use strict"
 
-var joi = require("@hapi/joi"),
-  string = require("./common").string,
-  trackSchema = {
-    name: string
-  }
+const joi = require("@hapi/joi")
+const { string } = require("./common")
+const trackSchema = {
+  name: string
+}
 
 module.exports = {
   options: {

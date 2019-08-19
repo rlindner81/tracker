@@ -1,6 +1,6 @@
 "use strict"
 
-var joi = require("@hapi/joi")
+const joi = require("@hapi/joi")
 
 module.exports = function(schema, req, res, next) {
   if (schema.body) {

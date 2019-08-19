@@ -1,6 +1,6 @@
 "use strict"
 
-var factory = require("./factory")
+const factory = require("./factory")
 
 module.exports.login = factory.bind(null, require("./loginSchema"))
 module.exports.register = factory.bind(null, require("./registerSchema"))

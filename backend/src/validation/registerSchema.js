@@ -1,12 +1,12 @@
 "use strict"
 
-var joi = require("@hapi/joi"),
-  string = require("./common").string,
-  registerSchema = {
-    name: string,
-    email: string.email(),
-    password: string
-  }
+const joi = require("@hapi/joi")
+const { string } = require("./common")
+const registerSchema = {
+  name: string,
+  email: string.email(),
+  password: string
+}
 
 module.exports = {
   options: {
