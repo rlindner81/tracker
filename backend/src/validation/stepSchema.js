@@ -1,5 +1,3 @@
-"use strict"
-
 const joi = require("@hapi/joi")
 const stepSchema = {
   values: joi.object()

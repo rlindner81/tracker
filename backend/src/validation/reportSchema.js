@@ -1,5 +1,3 @@
-"use strict"
-
 const joi = require("@hapi/joi")
 const { token, frequencyType } = require("./common")
 const aggregationSchema = joi.alternatives().try(

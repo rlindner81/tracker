@@ -1,5 +1,3 @@
-"use strict"
-
 var moment = require("moment"),
   ApplicationError = require("../error").ApplicationError,
   dbTracks = require("./dataService").tracks,

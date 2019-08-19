@@ -1,5 +1,3 @@
-"use strict"
-
 var util = require("util")
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error

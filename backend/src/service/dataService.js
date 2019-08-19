@@ -1,5 +1,3 @@
-"use strict"
-
 var session = require("express-session"),
   Sessionstore = require("nedb-session-store")(session),
   Datastore = require("nedb"),

@@ -1,5 +1,3 @@
-"use strict"
-
 const joi = require("@hapi/joi")
 const { string, token, fieldType, generatorType, inputType, displayType, frequencyType } = require("./common")
 const typeSchema = {

@@ -1,5 +1,3 @@
-"use strict"
-
 function serialResolve(arraylike) {
   return Array.prototype.reduce.call(
     arraylike,

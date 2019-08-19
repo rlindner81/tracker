@@ -1,5 +1,3 @@
-"use strict"
-
 process.env.TZ = "Etc/UTC"
 
 var express = require("express"),

@@ -1,5 +1,3 @@
-"use strict"
-
 const factory = require("./factory")
 
 module.exports.login = factory.bind(null, require("./loginSchema"))

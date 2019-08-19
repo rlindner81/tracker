@@ -1,5 +1,3 @@
-"use strict"
-
 // var args = process.argv.slice(2)
 
 module.exports = {

@@ -1,5 +1,3 @@
-"use strict"
-
 var promisify = require("util").promisify,
   suffix = "Async"
 

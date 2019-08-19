@@ -1,5 +1,3 @@
-"use strict"
-
 var ApplicationError = require("./ApplicationError")
 
 module.exports.handler = require("./applicationErrorHandler")

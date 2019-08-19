@@ -28,7 +28,7 @@ rules:
   # http://eslint.org/docs/rules/eqeqeq
   eqeqeq: error
   # http://eslint.org/docs/rules/strict
-  strict: [off]
+  strict: [error, never]
   # http://eslint.org/docs/rules/eol-last
   eol-last: [error, always]
   # http://eslint.org/docs/rules/keyword-spacing

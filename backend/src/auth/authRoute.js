@@ -1,5 +1,3 @@
-"use strict"
-
 var express = require("express"),
   service = require("./authService"),
   authHandler = require("./authHandler"),

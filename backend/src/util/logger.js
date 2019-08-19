@@ -1,5 +1,3 @@
-"use strict"
-
 var winston = require("winston"),
   logger = winston.createLogger({
     level: "info",

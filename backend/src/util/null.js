@@ -1,5 +1,3 @@
-"use strict"
-
 function isNull() {
   return hasNull(arguments)
 }

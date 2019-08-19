@@ -1,5 +1,3 @@
-"use strict"
-
 var express = require("express"),
   validation = require("../validation"),
   service = require("../service").track,

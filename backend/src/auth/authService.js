@@ -1,5 +1,3 @@
-"use strict"
-
 var { promisify } = require("util"),
   bcrypt = require("bcrypt"),
   dbUsers = require("../service").data.users,

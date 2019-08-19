@@ -1,5 +1,3 @@
-"use strict"
-
 var authService = require("./authService"),
   error = require("../error"),
   MissingAuthenticationError = error.MissingAuthenticationError

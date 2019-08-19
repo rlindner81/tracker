@@ -1,5 +1,3 @@
-"use strict"
-
 const joi = require("@hapi/joi")
 const { string } = require("./common")
 const trackSchema = {

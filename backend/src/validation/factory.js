@@ -1,5 +1,3 @@
-"use strict"
-
 const joi = require("@hapi/joi")
 
 module.exports = function(schema, req, res, next) {
