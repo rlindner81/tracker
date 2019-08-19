@@ -247,6 +247,7 @@ GET    /api/track/:id/steps/$paged?limit=20&page=2
 
 ## TODO
 
+* Tracks get field public and frequency, which are PATCH changeable
 * Update example with newest codelists
 * Key fields should allow underscore `joi.string().token()`
 * Persist reports per user per track
