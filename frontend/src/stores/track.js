@@ -65,7 +65,7 @@ export default {
   },
   getters: {
     titleById: state => id => {
-      let entry = state.data.find(entry => entry._id === parseInt(id))
+      let entry = state.data.find(entry => entry._id === id)
       return entry ? entry.name : null
     },
     current (state) {

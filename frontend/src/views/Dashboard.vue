@@ -51,6 +51,10 @@ export default {
       transition: all 0.2s ease-in-out;
       margin: 1rem;
       background: white;
+
+      @media @small {
+        .size(~"calc(50% - 2rem)", 6rem);
+      }
     }
   }
 
