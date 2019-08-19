@@ -88,7 +88,7 @@ POST
       "name": "Mood",
       "input": true,
       "type": {
-        "identifier": "SELECT_SINGLE",
+        "identifier": "SELECT",
         "parameters": {
           "selected": "good",
           "values": [

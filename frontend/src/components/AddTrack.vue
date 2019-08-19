@@ -26,7 +26,7 @@
           <option v-for="type in types" :key="type" :value="type">{{ type }}</option>
         </select>
 
-        <div class="select" v-if="field.type.identifier === 'SELECT_SINGLE'">
+        <div class="select" v-if="field.type.identifier === 'SELECT'">
           <div
             class="value"
             v-for="(value, i) in field.type.parameters.values"

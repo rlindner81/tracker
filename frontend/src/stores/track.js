@@ -11,7 +11,7 @@ export default {
       fields: []
     },
     newStep: null, // has to be initialized by the relevant track
-    types: ['TEXT', 'NUMBER', 'SELECT_SINGLE', 'TIME']
+    types: ['TEXT', 'FLOAT', 'INTEGER', 'SELECT', 'TIME']
   },
   mutations: {
     set (state, data) {
@@ -25,6 +25,12 @@ export default {
     },
     clear (state) {
       state.data = null
+    },
+    clearNew (state) {
+      state.new = {
+        name: null,
+        fields: []
+      }
     },
     clearCurrent (state) {
       state.currentId = null
@@ -85,7 +91,13 @@ export default {
           let track = response.data
           track.stepCount = 0
           commit('add', track)
+          commit('clearNew')
         })
+    },
+    update ({ getters }) {
+      return axios.patch(`/api/track/${getters.current._id}`, {
+        name: getters.current.name
+      })
     },
     delete ({ commit, getters }) {
       return axios.delete(`/api/track/${getters.current._id}`)
