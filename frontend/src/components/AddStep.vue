@@ -10,10 +10,24 @@
         type="text"
         v-model="newStep[field.key]"
         :placeholder="`Enter ${field.name}`"
-        v-if="field.type.identifier !== 'SELECT_SINGLE'"
+        v-if="field.type.identifier === 'TEXT'"
+      >
+      <input
+        type="number"
+        step="0.00001"
+        v-model="newStep[field.key]"
+        :placeholder="`Enter ${field.name}`"
+        v-if="field.type.identifier === 'FLOAT'"
+      >
+      <input
+        type="number"
+        step="1"
+        v-model="newStep[field.key]"
+        :placeholder="`Enter ${field.name}`"
+        v-if="field.type.identifier === 'INTEGER'"
       >
       <select
-        v-else
+        v-if="field.type.identifier === 'SELECT'"
         v-model="newStep[field.key]"
       >
         <option
@@ -24,7 +38,10 @@
       </select>
     </div>
 
-    <LoadingButton>Track It</LoadingButton>
+    <div class="button-row">
+      <button type="button" @click="$emit('closed')">Cancel</button>
+      <LoadingButton>Track It</LoadingButton>
+    </div>
   </form>
 </template>
 
@@ -41,10 +58,12 @@ export default {
   },
   methods: {
     ...mapActions('step', { create: 'create' }),
+    ...mapActions('track', { report: 'report' }),
     submit () {
       this.create()
-        .then(() => {
+        .then(response => {
           this.$emit('tracked')
+          this.report()
         })
     }
   }
@@ -58,6 +77,18 @@ export default {
 .component.add-step {
   .input {
     margin: 1rem 0;
+  }
+
+  .button-row {
+    .row();
+
+    > * {
+      margin: 0;
+
+      &:first-child {
+        margin-right: 1rem;
+      }
+    }
   }
 }
 </style>

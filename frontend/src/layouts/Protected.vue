@@ -2,9 +2,6 @@
   <div class="layout protected">
     <div class="letter-box">
       <nav :data-open="mobileNavVisible">
-        <div class="toggle" @click="toggleMobileNav">
-          <div></div><div></div><div></div>
-        </div>
         <router-link
           to="/tracker"
         >Dashboard</router-link>
@@ -16,6 +13,10 @@
           :key="track._id"
           :to="`/tracker/${track._id}`"
         >{{ track.name }}</router-link>
+
+        <div class="toggle" @click="toggleMobileNav">
+          <div></div><div></div><div></div>
+        </div>
       </nav>
 
       <main>
@@ -102,7 +103,7 @@ export default {
       margin-top: 0.25rem;
       transition: all 0.1s ease;
 
-      &.router-link-exact-active {
+      &.router-link-active:not(:first-child), &.router-link-exact-active {
         color: @highlight;
         text-decoration: underline;
       }

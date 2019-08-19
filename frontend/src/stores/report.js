@@ -5,7 +5,13 @@ export default {
   state: {
     data: [],
     trackId: null,
-    new: null // has to be initialized by the relevant track
+    new: {
+      name: null,
+      interval: null,
+      aggregations: []
+    },
+    intervals: ['HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR'],
+    aggregations: ['COUNT', 'SUM', 'AVG', 'MIN', 'MAX']
   },
   mutations: {
     set (state, data) {
@@ -14,42 +20,39 @@ export default {
     setTrack (state, id) {
       state.trackId = id
     },
-    setNew (state, track) {
-      let newStep = {}
-
-      track.fields.forEach(field => {
-        newStep[field.key] = null
-      })
-
-      state.new = newStep
-    },
     clear (state) {
       state.data = null
       state.trackId = null
       state.new = null
     },
+    clearNew (state) {
+      state.new = {
+        name: null,
+        interval: null,
+        aggregations: []
+      }
+    },
     add (state, data) {
       state.data.unshift(data)
     },
     remove (state, id) {
-      state.data = state.data.filter(step => {
-        return step._id !== id
+      state.data = state.data.filter(report => {
+        return report._id !== id
       })
     }
   },
   actions: {
     load ({ commit, state, rootGetters }) {
       commit('setTrack', rootGetters['track/current']._id)
-      commit('setNew', rootGetters['track/current'])
-      return axios.get(`/api/track/${state.trackId}/step`)
+      return axios.get(`/api/track/${state.trackId}/report`)
         .then(response => {
           commit('set', response.data)
         })
     },
     create ({ commit, state, rootGetters }) {
-      return axios.post(`/api/track/${rootGetters['track/current']._id}/step`, { values: state.new })
+      return axios.post(`/api/track/${rootGetters['track/current']._id}/report`, state.new)
         .then(response => {
-          commit('setNew', rootGetters['track/current'])
+          commit('clearNew')
           commit('add', response.data)
         })
     }
