@@ -25,28 +25,45 @@ You will need at least [NodeJS](https://nodejs.org) 10.x.
 ## Indentifiers
 Marked with `?` means it could change/be removed.
 
-* Field types: 
-  * `TEXT`
-  * `NUMBER` for the moment this covers both floats and integers, same as javascript
-  * `TIME` same as TEXT, but is a JS Date in ISO format
-  * `SELECT_SINGLE?` this does nothing only info for frontend right now... could become `ENUM` or better `SELECT` if we can distinguish single/multiselect via `parameters`
-* Generator types:
-  * `STATIC` just pass through the `parameters.value` and don't even sweat
-  * `TIME_NOW?` this could change as well. every step has an internal createdAt timestamp anyway...
-  * `TIME_RELATIVE_PREVIOUS?` mostly for playing around for now
-* Report aggregations:
-  * `COUNT|MIN|MAX|AVG|SUM`
-* Report intervals:
-  * `YEAR|MONTH|WEEK|DAY|HOUR|MINUTE|SECOND`
+### Field types
+Field type conversion happens when a step is saved. Expected inputs are all basic types JSON allows.
+* `INPUT` leave as is
+* `TEXT` convert to text
+* `INTEGER` convert with `parseInt`
+* `FLOAT` convert with `parseFloat`
+* `TIME` convert to JS Date
+
+### Input types
+This defines the input interface for each step entry.
+* `FIELD`
+* `SELECT?`
+
+### Display types
+This defines the way the field information is displayed to the user.
+For example if we know a field to be currency, we could add a suffix here so that instead of just the number they see `123,00€`.
+* `CURRENCY?`
+
+### Generator types
+* `STATIC` just pass through the `parameters.value` and don't even sweat
+* `TIME_NOW?` this could change as well. every step has an internal createdAt timestamp anyway...
+* `TIME_RELATIVE_PREVIOUS?` mostly for playing around for now
+
+### Report
+* aggregations: `COUNT|MIN|MAX|AVG|SUM`
+* intervals: `YEAR|MONTH|WEEK|DAY|HOUR|MINUTE|SECOND`
 
 ## API
 
 ### Track
 ```
+# Normal REST handling of tracks
 GET    /api/track
 POST   /api/track
 PATCH  /api/track/:trackId
 DELETE /api/track/:trackId
+
+# Search public tracks
+GET    /api/track/$search?name=lalala
 
 POST
 {
@@ -167,10 +184,19 @@ GET
 
 ### Track/Report
 ```
+# Normal REST handling of report definitions
+GET    /api/track/:trackId/report
 POST   /api/track/:trackId/report
+DELETE /api/track/:trackId/report/:reportId
 
-POST
+# Evaluate all my reports and send the results
+GET    /api/track/:trackId/report/$evaluate
+# Evaluate a dynamic report and send the results
+POST   /api/track/:trackId/report/$dynamic
+
+# Report definition
 {
+  "name": "Moods",
   "aggregations": [
     {
       "key": "count",
@@ -190,25 +216,26 @@ POST
   "interval": "WEEK"
 }
 
-[
-  {
-    "trackId": "...",
-    "aggregations": [
-      {
-        "count": 1,
-        "avgMood": 1.5,
-        "maxMood": 2,
-        "startAt": "2018-09-06T18:17:00.937Z",
-        "endAt": "2018-09-06T18:17:00.937Z"
-      }
-    ]
-  }
-]
+# Report result
+{
+  "name": "Moods",
+  "reportId": "...",
+  "trackId": "...",
+  "aggregations": [
+    {
+      "count": 1,
+      "avgMood": 1.5,
+      "maxMood": 2,
+      "startAt": "2018-09-06T18:17:00.937Z",
+      "endAt": "2018-09-06T18:17:00.937Z"
+    }
+  ]
+}
 ```
 
 ### Track/Step/Paged
 ```
-GET    /api/track/:id/steps/paged?limit=20&page=2
+GET    /api/track/:id/steps/$paged?limit=20&page=2
 {
   "count": 1000,
   "limit": 20,
@@ -220,5 +247,9 @@ GET    /api/track/:id/steps/paged?limit=20&page=2
 
 ## TODO
 
+* Update example with newest codelists
+* Key fields should allow underscore `joi.string().token()`
+* Persist reports per user per track
+* Public tracks search API for name field
 * Problem: SELECT hides the actual type of the input
 * Maybe switch to expressions?
