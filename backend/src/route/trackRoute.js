@@ -1,11 +1,16 @@
 var express = require("express"),
   validation = require("../validation"),
   service = require("../service").track,
+  { ApplicationError } = require("../error"),
   router = express.Router()
 
 /**
  * Tracks
  */
+
+router.get("/$search", function() {
+  throw new ApplicationError(500, "Not implemented")
+})
 
 router.get("/", function(req, res, next) {
   return service
@@ -47,18 +52,18 @@ router.delete("/:trackId", function(req, res, next) {
  * Steps
  */
 
-router.get("/:trackId/step", function(req, res, next) {
+router.get("/:trackId/step/$paged", function(req, res, next) {
   return service
-    .getSteps(req.session, req.params.trackId)
+    .getStepsPaged(req.session, req.params.trackId, req.query)
     .then(function(data) {
       res.json(data)
     })
     .catch(next)
 })
 
-router.get("/:trackId/step/paged", function(req, res, next) {
+router.get("/:trackId/step", function(req, res, next) {
   return service
-    .getStepsPaged(req.session, req.params.trackId, req.query)
+    .getSteps(req.session, req.params.trackId)
     .then(function(data) {
       res.json(data)
     })
@@ -87,13 +92,27 @@ router.delete("/:trackId/step/:stepId", function(req, res, next) {
  * Reports
  */
 
-router.post("/:trackId/report", validation.report, function(req, res, next) {
+router.get("/:trackId/report/$evaluate", function() {
+  throw new ApplicationError(500, "Not implemented")
+})
+
+router.post("/:trackId/report/$dynamic", validation.report, function(req, res, next) {
   return service
-    .getReport(req.session, req.params.trackId, req.body)
+    .getDynamicReport(req.session, req.params.trackId, req.body)
     .then(function(data) {
       res.json(data)
     })
     .catch(next)
+})
+
+router.get("/:trackId/report/", function() {
+  throw new ApplicationError(500, "Not implemented")
+})
+router.post("/:trackId/report/", function() {
+  throw new ApplicationError(500, "Not implemented")
+})
+router.delete("/:trackId/report/:reportId", function() {
+  throw new ApplicationError(500, "Not implemented")
 })
 
 module.exports = router

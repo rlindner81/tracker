@@ -247,7 +247,7 @@ function computeAggregations(steps, interval, inputAggregations) {
   return aggregations
 }
 
-function getReport(session, trackId, report) {
+function getDynamicReport(session, trackId, report) {
   return Promise.all([
     dbTracks.findOneAsync({ _id: trackId }),
     dbSteps
@@ -265,4 +265,4 @@ function getReport(session, trackId, report) {
     }
   })
 }
-module.exports.getReport = getReport
+module.exports.getDynamicReport = getDynamicReport
