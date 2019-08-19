@@ -36,8 +36,22 @@ function addTrack(session, track) {
 module.exports.addTrack = addTrack
 
 function updateTrack(session, trackId, track) {
-  Object.assign(track, { _id: trackId, userId: session.userId })
-  return dbTracks.updateAsync({ _id: trackId }, track)
+  return dbTracks
+    .findOne({ _id: trackId })
+    .execAsync()
+    .then(dbTrack => {
+      if (dbTrack === null) {
+        throw new ApplicationError(404, `Cannot find track with id ${trackId}`)
+      }
+      track = Object.assign({}, dbTrack, track, { _id: trackId, userId: session.userId })
+      return dbTracks.updateAsync({ _id: trackId }, track)
+    })
+    .then(updateCount => {
+      if (updateCount === 0) {
+        throw new ApplicationError(404, `Could not update track with id ${trackId}`)
+      }
+      return track
+    })
 }
 module.exports.updateTrack = updateTrack
 
@@ -170,6 +184,7 @@ function addStep(session, trackId, step) {
 }
 module.exports.addStep = addStep
 
+// If we ever uncomment this. Make it a real PATCH not a PUT
 // function updateStep(session, trackId, stepId, step) {
 //   Object.assign(step, { _id: stepId, userId: session.userId, trackId: trackId })
 //   return prepareStep(step).then(dbSteps.updateAsync.bind(dbSteps, { _id: stepId }))
