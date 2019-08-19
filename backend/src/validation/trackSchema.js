@@ -1,16 +1,21 @@
 "use strict"
 
-var joi = require("@hapi/joi"),
-  string = require("./common").string,
-  alphanum = require("./common").alphanum,
-  fieldType = joi.string().valid("TEXT", "NUMBER", "TIME", "SELECT_SINGLE"),
-  generatorType = joi.string().valid("STATIC", "TIME_NOW", "TIME_RELATIVE_PREVIOUS"),
+const joi = require("@hapi/joi")
+const { string, token, fieldType, generatorType, inputType, displayType, frequencyType } = require("./common")
+const typeSchema = {
+    identifier: fieldType,
+    parameters: joi.object().optional()
+  },
   generatorSchema = {
     identifier: generatorType,
     parameters: joi.object().optional()
   },
-  typeSchema = {
-    identifier: fieldType,
+  inputSchema = {
+    identifier: inputType,
+    parameters: joi.object().optional()
+  },
+  displaySchema = {
+    identifier: displayType,
     parameters: joi.object().optional()
   },
   fieldSchema = {
@@ -18,11 +23,20 @@ var joi = require("@hapi/joi"),
       .number()
       .integer()
       .min(0),
-    key: alphanum,
+    key: token,
     name: string,
-    input: joi.boolean().optional(),
+    public: joi.boolean().optional(),
+    frequency: frequencyType.optional(),
     type: joi.alternatives().try(fieldType, joi.object().keys(typeSchema)),
-    generator: joi.alternatives().try(generatorType, joi.object().keys(generatorSchema))
+    generator: joi.alternatives().try(generatorType, joi.object().keys(generatorSchema)),
+    input: joi
+      .alternatives()
+      .try(inputType, joi.object().keys(inputSchema))
+      .optional(),
+    display: joi
+      .alternatives()
+      .try(displayType, joi.object().keys(displaySchema))
+      .optional()
   },
   trackSchema = {
     name: string,
