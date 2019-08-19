@@ -248,6 +248,7 @@ GET    /api/track/:id/steps/$paged?limit=20&page=2
 ## TODO
 
 * Update example with newest codelists
-* Persist reports per user per track
-* Public tracks search API for name field
+* Reports normal Rest API
+* Reports $evaluate API
+* Public tracks $search API for name field
 * Maybe switch to expressions?
