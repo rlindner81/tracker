@@ -5,6 +5,7 @@ export default {
   state: {
     data: [],
     currentId: null,
+    currentUsage: [],
     new: {
       name: null,
       fields: []
@@ -16,29 +17,21 @@ export default {
     set (state, data) {
       state.data = data
     },
-    setCurrent (state, data) {
-      state.currentId = data._id
+    setCurrent (state, id) {
+      state.currentId = id
+    },
+    setCurrentUsage (state, data) {
+      state.currentUsage = data
     },
     clear (state) {
       state.data = null
     },
     clearCurrent (state) {
       state.currentId = null
-      state.newStep = null
-    },
-    resetNewStep (state, track) {
-      let newStep = {}
-
-      track.fields.forEach(field => {
-        newStep[field.key] = null
-      })
-      state.newStep = newStep
+      state.currentUsage = []
     },
     add (state, data) {
       state.data.push(data)
-    },
-    addStep (state, data) {
-      state.data.find(track => track._id === state.currentId).steps.unshift(data)
     },
     remove (state, id) {
       state.data = state.data.filter(track => {
@@ -54,7 +47,8 @@ export default {
         type: {
           identifier: 'TEXT',
           parameters: {
-
+            selected: null,
+            values: []
           }
         },
         generator: {
@@ -82,26 +76,15 @@ export default {
     load ({ commit }) {
       return axios.get('/api/track')
         .then(response => {
-          commit('set', response.data.map(track => {
-            track.steps = []
-            return track
-          }))
-        })
-    },
-    getSteps ({ commit, state }, id) {
-      commit('clearCurrent')
-      return axios.get(`/api/track/${id}/step`)
-        .then(response => {
-          let current = state.data.find(track => track._id === id)
-          current.steps = response.data
-          commit('resetNewStep', current)
-          commit('setCurrent', current)
+          commit('set', response.data)
         })
     },
     create ({ commit, state }) {
       return axios.post('/api/track', state.new)
         .then(response => {
-          commit('add', response.data)
+          let track = response.data
+          track.stepCount = 0
+          commit('add', track)
         })
     },
     delete ({ commit, getters }) {
@@ -110,12 +93,13 @@ export default {
           commit('remove', getters.current._id)
         })
     },
-    addStep ({ commit, state, getters }) {
-      return axios.post(`/api/track/${getters.current._id}/step`, { values: state.newStep })
-        .then(response => {
-          commit('resetNewStep', getters.current)
-          commit('addStep', response.data)
-        })
+    report ({ commit, getters }) {
+      return axios.post(`/api/track/${getters.current._id}/report`, {
+        aggregations: [{ key: 'count', type: 'COUNT' }],
+        interval: 'DAY'
+      }).then(response => {
+        commit('setCurrentUsage', response.data.aggregations)
+      })
     }
   }
 }

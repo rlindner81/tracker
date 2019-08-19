@@ -16,7 +16,7 @@
       </nav>
 
       <main>
-        <router-view v-if="initialized"></router-view>
+        <router-view v-if="initialized" :key="$route.path"></router-view>
       </main>
     </div>
   </div>

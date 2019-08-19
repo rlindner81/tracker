@@ -1,92 +1,101 @@
 <template>
-  <div class="view tracker" v-if="track">
+  <div class="view tracker">
     <h1>{{ title($route.params.track) }}</h1>
 
     <div class="chart-container">
       <ActivityChart></ActivityChart>
     </div>
 
-    <h2>Add a Step</h2>
+    <div class="title-with-button">
+      <h2>Steps</h2>
+      <button @click="toggleAddModal">Add Step</button>
+    </div>
 
-    <form @submit.prevent="addStep">
-      <div
-        class="input"
-        v-for="field in track.fields"
-        :key="field._id"
-      >
-        <label>{{ field.name }}</label>
-        <input
-          type="text"
-          v-model="newStep[field.key]"
-          :placeholder="`Enter ${field.name}`"
-        >
-      </div>
-
-      <LoadingButton>Track It</LoadingButton>
-    </form>
-
-    <h2>Steps</h2>
-
-    <div class="info" v-if="!track.steps.length">
+    <div class="info" v-if="steps && !steps.length">
       <p>You don't have any step tracked yet.</p>
     </div>
 
-    <div class="steps">
+    <div class="steps" v-if="steps && steps.length > 0">
       <div
         class="step"
-        v-for="step in track.steps"
+        v-for="step in steps"
         :key="step._id"
       >
-        <div
-          class="value"
-          v-for="(value, key) in step.values"
-          :key="key"
-        >{{ `${key}: ${value}`}}</div>
+        <div class="values">
+          <div
+            class="value"
+            v-for="(value, key) in step.values"
+            :key="key"
+          >
+            <label>{{ track.fields.find(field => field.key === key).name }}</label>
+            <span v-if="track.fields.find(field => field.key === key).type.identifier !== 'SELECT_SINGLE'">{{ value }}</span>
+            <span v-else>{{ track.fields.find(field => field.key === key).type.parameters.values.find(v => v.value.toString() === value.toString()).name + ` (${value})` }}</span>
+          </div>
+        </div>
+        <div class="master-data">
+          <label>Tracked at</label>
+          <span :title="step.createdAt | date">{{ step.createdAt | relativeDate }}</span>
+        </div>
       </div>
     </div>
 
     <h2>Settings</h2>
-    <button @click="showDeleteModal">Delete Track</button>
+    <button @click="toggleDeleteModal">Delete Track</button>
+
+    <!-- modals -->
+
+    <Modal v-show="addModal">
+      <h2>Add a Step</h2>
+      <AddStep @tracked="toggleAddModal"></AddStep>
+    </Modal>
 
     <Modal v-show="deleteModal">
       <p>Do you really want to delete this track?</p>
       <div class="buttons">
         <LoadingButton @click.native="deleteTrack">Delete</LoadingButton>
-        <button @click="hideDeleteModal">Cancel</button>
+        <button @click="toggleDeleteModal">Cancel</button>
       </div>
     </Modal>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import ActivityChart from '../components/ActivityChart'
 import Modal from '../components/Modal'
 import LoadingButton from '../components/LoadingButton'
+import AddStep from '../components/AddStep'
 
 export default {
   components: {
-    ActivityChart, Modal, LoadingButton
+    ActivityChart, Modal, LoadingButton, AddStep
   },
   data () {
     return {
-      deleteModal: false
+      deleteModal: false,
+      addModal: false
     }
   },
   created () {
-    this.getSteps(this.$route.params.track)
+    this.clear()
+    this.setCurrent(this.$route.params.track)
+    this.load()
+    this.report()
   },
   computed: {
-    ...mapState('track', { newStep: 'newStep' }),
+    ...mapState('step', { newStep: 'new', steps: 'data' }),
     ...mapGetters('track', { title: 'titleById', track: 'current' })
   },
   methods: {
-    ...mapActions('track', { deleteTrack: 'delete', getSteps: 'getSteps', addStep: 'addStep' }),
-    showDeleteModal () {
-      this.deleteModal = true
+    ...mapActions('track', { deleteTrack: 'delete', report: 'report' }),
+    ...mapMutations('track', { setCurrent: 'setCurrent' }),
+    ...mapActions('step', { load: 'load' }),
+    ...mapMutations('step', { clear: 'clear' }),
+    toggleDeleteModal () {
+      this.deleteModal = !this.deleteModal
     },
-    hideDeleteModal () {
-      this.deleteModal = false
+    toggleAddModal () {
+      this.addModal = !this.addModal
     }
   }
 }
@@ -106,6 +115,14 @@ export default {
     }
   }
 
+  .title-with-button {
+    .row(center, space-between);
+    margin-top: 2rem;
+    button {
+      width: auto;
+    }
+  }
+
   h2 {
     margin: 1rem 0;
   }
@@ -116,15 +133,29 @@ export default {
     border-radius: 3px;
   }
 
-  form .input {
-    margin: 1rem 0;
-  }
-
   .step {
     .shadow();
+    .row(flex-start, space-between);
+    transition: all 0.15s ease-in-out;
     background: @white;
     padding: 0.25rem 0.5rem;
     margin-bottom: 0.5rem;
+
+    label {
+      font-size: 0.87rem;
+    }
+
+    span {
+      font-weight: bold;
+    }
+
+    .master-data {
+      text-align: end;
+    }
+  }
+
+  .modal-content > *:first-child {
+    margin-top: 0;
   }
 
   .component.modal .buttons {
