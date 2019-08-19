@@ -1,5 +1,5 @@
 const joi = require("@hapi/joi")
-const { string } = require("./common")
+const { string, frequencyType } = require("./common")
 const trackUpdateSchema = {
   name: string,
   public: joi.boolean().optional(),
