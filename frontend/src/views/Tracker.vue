@@ -52,7 +52,7 @@
     <Modal v-show="deleteModal">
       <p>Do you really want to delete this track?</p>
       <div class="buttons">
-        <LoadingButton @click.native="deleteTrack">Delete</LoadingButton>
+        <LoadingButton @click.native="remove">Delete</LoadingButton>
         <button @click="toggleDeleteModal">Cancel</button>
       </div>
     </Modal>
@@ -91,6 +91,12 @@ export default {
     ...mapMutations('track', { setCurrent: 'setCurrent' }),
     ...mapActions('step', { load: 'load' }),
     ...mapMutations('step', { clear: 'clear' }),
+    remove () {
+      this.deleteTrack()
+        .then(() => {
+          this.$router.replace('/tracker')
+        })
+    },
     toggleDeleteModal () {
       this.deleteModal = !this.deleteModal
     },

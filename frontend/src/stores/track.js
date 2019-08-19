@@ -90,7 +90,9 @@ export default {
     delete ({ commit, getters }) {
       return axios.delete(`/api/track/${getters.current._id}`)
         .then(response => {
-          commit('remove', getters.current._id)
+          let id = getters.current._id
+          commit('clearCurrent')
+          commit('remove', id)
         })
     },
     report ({ commit, getters }) {
