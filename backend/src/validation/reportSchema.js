@@ -1,5 +1,5 @@
 const joi = require("@hapi/joi")
-const { token, frequencyType } = require("./common")
+const { string, token, frequencyType } = require("./common")
 const aggregationSchema = joi.alternatives().try(
   {
     key: token,
@@ -12,7 +12,7 @@ const aggregationSchema = joi.alternatives().try(
   }
 )
 const reportSchema = {
-  name: joi.string.optional(),
+  name: string.optional(),
   aggregations: joi
     .array()
     .min(1)

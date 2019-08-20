@@ -10,10 +10,10 @@ var moment = require("moment"),
 
 function searchTracks(session, options) {
   let tracks
-  if (!Object.prototype.hasOwnProperty.call(options, "name")) {
-    return Promise.resolve([])
+  if (!Object.prototype.hasOwnProperty.call(options, "name") || options.name === "") {
+    return getTracks(session)
   }
-  const name = new RegExp(options.name)
+  const name = new RegExp(options.name, "i")
 
   return dbTracks
     .find({ userId: session.userId, name })
