@@ -29,6 +29,14 @@
         <div class="info" v-if="reports && !reports.length">
           <p>You don't have any reports defined yet.</p>
         </div>
+
+        <div
+          class="report-wrap"
+          v-for="report in reports"
+          :key="report.id"
+        >
+          <GenericReport :report="report"></GenericReport>
+        </div>
       </Tab>
 
       <Tab name="Settings">
@@ -58,10 +66,11 @@ import Tab from '../components/Tab'
 import TrackList from '../components/TrackList'
 import TrackSettings from '../components/TrackSettings'
 import AddReport from '../components/AddReport'
+import GenericReport from '../components/GenericReport'
 
 export default {
   components: {
-    ActivityChart, Modal, AddStep, Tabs, Tab, TrackList, TrackSettings, AddReport
+    ActivityChart, Modal, AddStep, Tabs, Tab, TrackList, TrackSettings, AddReport, GenericReport
   },
   data () {
     return {
@@ -73,6 +82,7 @@ export default {
     this.clear()
     this.setCurrent(this.$route.params.track)
     this.load()
+    this.loadReports()
     this.report()
   },
   computed: {
@@ -85,6 +95,7 @@ export default {
     ...mapMutations('track', { setCurrent: 'setCurrent' }),
     ...mapActions('step', { load: 'load' }),
     ...mapMutations('step', { clear: 'clear' }),
+    ...mapActions('report', { loadReports: 'load' }),
     toggleAddModal () {
       this.addModal = !this.addModal
     },
@@ -118,6 +129,14 @@ export default {
     margin-top: 1rem;
     button {
       width: auto;
+    }
+  }
+
+  .report-wrap {
+    .size(100%, 300px);
+
+    > div {
+      .size(100%, 300px);
     }
   }
 

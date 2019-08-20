@@ -10,7 +10,7 @@ export default {
       interval: null,
       aggregations: []
     },
-    intervals: ['HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR'],
+    intervals: ['SECOND', 'MINUTE', 'HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR'],
     aggregations: ['COUNT', 'SUM', 'AVG', 'MIN', 'MAX']
   },
   mutations: {

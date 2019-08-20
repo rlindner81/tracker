@@ -10,28 +10,28 @@
         type="text"
         v-model="newStep[field.key]"
         :placeholder="`Enter ${field.name}`"
-        v-if="field.type.identifier === 'TEXT'"
+        v-if="field.input.identifier === 'FIELD' && field.type === 'TEXT'"
       >
       <input
         type="number"
         step="0.00001"
         v-model="newStep[field.key]"
         :placeholder="`Enter ${field.name}`"
-        v-if="field.type.identifier === 'FLOAT'"
+        v-if="field.input.identifier === 'FIELD' && field.type === 'FLOAT'"
       >
       <input
         type="number"
         step="1"
         v-model="newStep[field.key]"
         :placeholder="`Enter ${field.name}`"
-        v-if="field.type.identifier === 'INTEGER'"
+        v-if="field.input.identifier === 'FIELD' && field.type === 'INTEGER'"
       >
       <select
-        v-if="field.type.identifier === 'SELECT'"
+        v-if="field.input.identifier === 'SELECT'"
         v-model="newStep[field.key]"
       >
         <option
-          v-for="option in field.type.parameters.values"
+          v-for="option in field.input.parameters.values"
           :key="option.key"
           :value="option.value"
         >{{ option.name }}</option>

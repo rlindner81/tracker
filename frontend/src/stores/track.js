@@ -11,7 +11,8 @@ export default {
       fields: []
     },
     newStep: null, // has to be initialized by the relevant track
-    types: ['TEXT', 'FLOAT', 'INTEGER', 'SELECT', 'TIME']
+    types: ['TEXT', 'FLOAT', 'INTEGER', 'TIME'],
+    inputs: ['SELECT', 'FIELD']
   },
   mutations: {
     set (state, data) {
@@ -49,18 +50,12 @@ export default {
         position: state.new.fields.length,
         key: null,
         name: null,
-        input: true,
-        type: {
-          identifier: 'TEXT',
+        type: 'TEXT',
+        input: {
+          identifier: 'FIELD',
           parameters: {
             selected: null,
             values: []
-          }
-        },
-        generator: {
-          identifier: 'STATIC',
-          parameters: {
-            value: null
           }
         }
       })
@@ -108,7 +103,7 @@ export default {
         })
     },
     report ({ commit, getters }) {
-      return axios.post(`/api/track/${getters.current._id}/report`, {
+      return axios.post(`/api/track/${getters.current._id}/report/$dynamic`, {
         aggregations: [{ key: 'count', type: 'COUNT' }],
         interval: 'DAY'
       }).then(response => {

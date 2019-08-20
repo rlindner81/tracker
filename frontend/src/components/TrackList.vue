@@ -12,8 +12,8 @@
           :key="key"
         >
           <label>{{ track.fields.find(field => field.key === key).name }}</label>
-          <span v-if="track.fields.find(field => field.key === key).type.identifier !== 'SELECT'">{{ value }}</span>
-          <span v-else>{{ track.fields.find(field => field.key === key).type.parameters.values.find(v => v.value.toString() === value.toString()).name + ` (${value})` }}</span>
+          <span v-if="track.fields.find(field => field.key === key).input.identifier !== 'SELECT'">{{ value }}</span>
+          <span v-else>{{ track.fields.find(field => field.key === key).input.parameters.values.find(v => v.value.toString() === value.toString()).name + ` (${value})` }}</span>
         </div>
       </div>
       <div class="master-data">

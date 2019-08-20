@@ -22,27 +22,31 @@
         <input type="text" :value="field.key" :disabled="true">
 
         <label>Type</label>
-        <select v-model="field.type.identifier">
+        <select v-model="field.type">
           <option v-for="type in types" :key="type" :value="type">{{ type }}</option>
         </select>
 
-        <div class="select" v-if="field.type.identifier === 'SELECT'">
+        <label>Input Type</label>
+        <select v-model="field.input.identifier">
+          <option v-for="type in inputs" :key="type" :value="type">{{ type }}</option>
+        </select>
+
+        <div class="select" v-if="field.input.identifier === 'SELECT'">
           <div
             class="value"
-            v-for="(value, i) in field.type.parameters.values"
+            v-for="(value, i) in field.input.parameters.values"
             :key="i"
           >
             <input type="text" placeholder="Name" v-model="value.name" @input="value.key = slugify(value.name)" />
-            <input type="text" placeholder="Key" :disabled="true" :value="value.key" />
             <input type="text" placeholder="Value" v-model="value.value" />
           </div>
           <button type="button" @click="addValue(field)">Add Value</button>
 
           <label>Default Selection</label>
-          <select v-model="field.type.parameters.selected">
+          <select v-model="field.input.parameters.selected">
             <option :value="null"></option>
             <option
-              v-for="option in field.type.parameters.values"
+              v-for="option in field.input.parameters.values"
               :key="option.key"
               :value="option.value"
             >{{ option.name }}</option>
@@ -67,14 +71,13 @@ export default {
     LoadingButton
   },
   computed: {
-    ...mapState('track', { track: 'new', types: 'types' })
+    ...mapState('track', { track: 'new', types: 'types', inputs: 'inputs' })
   },
   methods: {
     ...mapActions('track', { create: 'create' }),
     ...mapMutations('track', { addField: 'addField', removeField: 'removeField' }),
     addValue (field) {
-      field.type.parameters.values.push({
-        key: null,
+      field.input.parameters.values.push({
         name: null,
         value: null
       })
