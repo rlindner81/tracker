@@ -15,14 +15,6 @@ env:
 globals:
   Promise: false
 rules:
-  # http://eslint.org/docs/rules/indent
-  indent: [error, 2, { SwitchCase: 1, FunctionDeclaration: { parameters: 'first' }, FunctionExpression: { parameters: 'first' } }]
-  # http://eslint.org/docs/rules/linebreak-style
-  linebreak-style: [error, unix]
-  # http://eslint.org/docs/rules/quotes
-  quotes: [error, double]
-  # http://eslint.org/docs/rules/semi
-  semi: [error, never]
   # http://eslint.org/docs/rules/comma-dangle
   comma-dangle: [error, never]
   # http://eslint.org/docs/rules/eqeqeq
