@@ -8,6 +8,31 @@ var moment = require("moment"),
  * Tracks
  */
 
+function searchTracks(session, options) {
+  let tracks
+  if (!Object.prototype.hasOwnProperty.call(options, "name") || options.name === "") {
+    return getTracks(session)
+  }
+  const name = new RegExp(options.name, "i")
+
+  return dbTracks
+    .find({ userId: session.userId, name })
+    .sort({ createdAt: -1 })
+    .execAsync()
+    .then(result => {
+      tracks = result
+      return Promise.all(
+        tracks.map(track => {
+          return dbSteps.countAsync({ trackId: track["_id"] }).then(count => {
+            track.stepCount = count
+            return track
+          })
+        })
+      )
+    })
+}
+module.exports.searchTracks = searchTracks
+
 function getTracks(session) {
   let tracks
   return dbTracks
@@ -111,7 +136,7 @@ function addValueFromFieldToResult(track, steps, field, values, inputValues) {
   var key = field.key,
     value
 
-  if (field.input && inputValues && key in inputValues) {
+  if (field.input && inputValues && Object.prototype.hasOwnProperty.call(inputValues, key)) {
     value = inputValues[key]
   }
 
@@ -153,8 +178,8 @@ function getSteps(session, trackId) {
 module.exports.getSteps = getSteps
 
 function getStepsPaged(session, trackId, options) {
-  const limit = "limit" in options ? parseInt(options.limit) : 20
-  const page = "page" in options ? parseInt(options.page) : 1
+  const limit = Object.prototype.hasOwnProperty.call(options, "limit") ? parseInt(options.limit) : 20
+  const page = Object.prototype.hasOwnProperty.call(options, "page") ? parseInt(options.page) : 1
   const offset = limit * (page - 1)
   return Promise.all([
     dbSteps.countAsync({ userId: session.userId, trackId: trackId }),
@@ -209,7 +234,7 @@ function computeAggregations(steps, interval, inputAggregations) {
     aggregation.startAt = aggregation.startAt || anchor
     aggregationCount++
     for (const { key, type, field } of inputAggregations) {
-      let value = key in aggregation ? aggregation[key] : null
+      let value = Object.prototype.hasOwnProperty.call(aggregation, key) ? aggregation[key] : null
       let stepValue = field && step.values[field]
       switch (type) {
         case "COUNT":
@@ -248,7 +273,33 @@ function computeAggregations(steps, interval, inputAggregations) {
   return aggregations
 }
 
-function getDynamicReport(session, trackId, report) {
+function evaluateReport(session, trackId, reportId) {
+  return Promise.all([
+    dbTracks.findOneAsync({ _id: trackId }),
+    dbReports.findOneAsync({ _id: reportId }),
+    dbSteps
+      .find({ userId: session.userId, trackId: trackId })
+      .sort({ createdAt: 1 })
+      .execAsync()
+  ]).then(([track, report, steps]) => {
+    if (track === null) {
+      throw new ApplicationError(404, `Track with id ${trackId} not found`)
+    }
+    if (report === null) {
+      throw new ApplicationError(404, `Report with id ${reportId} not found`)
+    }
+
+    return {
+      trackId,
+      reportId,
+      ...(Object.prototype.hasOwnProperty.call(report, "name") && { name: report.name }),
+      aggregations: computeAggregations(steps, report.interval, report.aggregations)
+    }
+  })
+}
+module.exports.evaluateReport = evaluateReport
+
+function evaluateDynamicReport(session, trackId, report) {
   return Promise.all([
     dbTracks.findOneAsync({ _id: trackId }),
     dbSteps
@@ -257,7 +308,7 @@ function getDynamicReport(session, trackId, report) {
       .execAsync()
   ]).then(([track, steps]) => {
     if (track === null) {
-      throw new ApplicationError(404, "Track not found")
+      throw new ApplicationError(404, `Track with id ${trackId} not found`)
     }
 
     return {
@@ -266,7 +317,7 @@ function getDynamicReport(session, trackId, report) {
     }
   })
 }
-module.exports.getDynamicReport = getDynamicReport
+module.exports.evaluateDynamicReport = evaluateDynamicReport
 
 function getReports(session, trackId) {
   return dbReports

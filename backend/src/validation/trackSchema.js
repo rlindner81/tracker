@@ -26,10 +26,10 @@ const fieldSchema = {
   public: joi.boolean().optional(),
   frequency: frequencyType.optional(),
   type: joi.alternatives().try(fieldType, joi.object().keys(typeSchema)),
-  generator: joi.alternatives().try(generatorType, joi.object().keys(generatorSchema)),
-  input: joi
+  input: joi.alternatives().try(inputType, joi.object().keys(inputSchema)),
+  generator: joi
     .alternatives()
-    .try(inputType, joi.object().keys(inputSchema))
+    .try(generatorType, joi.object().keys(generatorSchema))
     .optional(),
   display: joi
     .alternatives()

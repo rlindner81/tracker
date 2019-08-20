@@ -1,15 +1,19 @@
 var express = require("express"),
   validation = require("../validation"),
   service = require("../service").track,
-  { ApplicationError } = require("../error"),
   router = express.Router()
 
 /**
  * Tracks
  */
 
-router.get("/$search", function() {
-  throw new ApplicationError(500, "Not implemented")
+router.get("/\\$search", function(req, res, next) {
+  return service
+    .searchTracks(req.session, req.query)
+    .then(function(data) {
+      res.json(data)
+    })
+    .catch(next)
 })
 
 router.get("/", function(req, res, next) {
@@ -52,7 +56,7 @@ router.delete("/:trackId", function(req, res, next) {
  * Steps
  */
 
-router.get("/:trackId/step/$paged", function(req, res, next) {
+router.get("/:trackId/step/\\$paged", function(req, res, next) {
   return service
     .getStepsPaged(req.session, req.params.trackId, req.query)
     .then(function(data) {
@@ -92,13 +96,18 @@ router.delete("/:trackId/step/:stepId", function(req, res, next) {
  * Reports
  */
 
-router.get("/:trackId/report/$evaluate", function() {
-  throw new ApplicationError(500, "Not implemented")
+router.get("/:trackId/report/:reportId/\\$evaluate", function(req, res, next) {
+  return service
+    .evaluateReport(req.session, req.params.trackId, req.params.reportId)
+    .then(function(data) {
+      res.json(data)
+    })
+    .catch(next)
 })
 
-router.post("/:trackId/report/$dynamic", validation.report, function(req, res, next) {
+router.post("/:trackId/report/\\$dynamic", validation.report, function(req, res, next) {
   return service
-    .getDynamicReport(req.session, req.params.trackId, req.body)
+    .evaluateDynamicReport(req.session, req.params.trackId, req.body)
     .then(function(data) {
       res.json(data)
     })
@@ -114,8 +123,7 @@ router.get("/:trackId/report/", function(req, res, next) {
     .catch(next)
 })
 
-// TODO validation
-router.post("/:trackId/report/", function(req, res, next) {
+router.post("/:trackId/report/", validation.report, function(req, res, next) {
   return service
     .addReport(req.session, req.params.trackId, req.body)
     .then(function(data) {

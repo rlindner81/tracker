@@ -185,8 +185,8 @@ GET    /api/track/:trackId/report
 POST   /api/track/:trackId/report
 DELETE /api/track/:trackId/report/:reportId
 
-# Evaluate all my reports and send the results
-GET    /api/track/:trackId/report/$evaluate
+# Evaluate a report and send the results
+GET    /api/track/:trackId/report/:reportId/$evaluate
 # Evaluate a dynamic report and send the results
 POST   /api/track/:trackId/report/$dynamic
 
@@ -243,8 +243,6 @@ GET    /api/track/:id/steps/$paged?limit=20&page=2
 
 ## TODO
 
-* Reports normal Rest API
-* Reports $evaluate API
 * Field type conversion
-* Public tracks $search API for name field
+* Tests for Track/Step/Report
 * Maybe switch to expressions?
