@@ -92,7 +92,7 @@ router.delete("/:trackId/step/:stepId", function(req, res, next) {
  * Reports
  */
 
-router.get("/:trackId/report/$evaluate", function() {
+router.get("/:trackId/report/:reportId/$evaluate", function() {
   throw new ApplicationError(500, "Not implemented")
 })
 
@@ -114,8 +114,7 @@ router.get("/:trackId/report/", function(req, res, next) {
     .catch(next)
 })
 
-// TODO validation
-router.post("/:trackId/report/", function(req, res, next) {
+router.post("/:trackId/report/", validation.report, function(req, res, next) {
   return service
     .addReport(req.session, req.params.trackId, req.body)
     .then(function(data) {

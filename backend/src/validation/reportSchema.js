@@ -12,6 +12,7 @@ const aggregationSchema = joi.alternatives().try(
   }
 )
 const reportSchema = {
+  name: joi.string.optional(),
   aggregations: joi
     .array()
     .min(1)
