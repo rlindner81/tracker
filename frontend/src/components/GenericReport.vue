@@ -58,7 +58,6 @@ export default {
     report: {
       handler () {
         if (!this.report) {
-          console.log('asd')
           return null
         }
 
