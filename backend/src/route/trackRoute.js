@@ -1,15 +1,19 @@
 var express = require("express"),
   validation = require("../validation"),
   service = require("../service").track,
-  { ApplicationError } = require("../error"),
   router = express.Router()
 
 /**
  * Tracks
  */
 
-router.get("/$search", function() {
-  throw new ApplicationError(500, "Not implemented")
+router.get("/$search", function(req, res, next) {
+  return service
+    .searchTracks(req.session, req.query)
+    .then(function(data) {
+      res.json(data)
+    })
+    .catch(next)
 })
 
 router.get("/", function(req, res, next) {

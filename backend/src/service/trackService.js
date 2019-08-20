@@ -8,6 +8,31 @@ var moment = require("moment"),
  * Tracks
  */
 
+function searchTracks(session, options) {
+  let tracks
+  if (!Object.prototype.hasOwnProperty.call(options, "name")) {
+    return Promise.resolve([])
+  }
+  const name = new RegExp(options.name)
+
+  return dbTracks
+    .find({ userId: session.userId, name })
+    .sort({ createdAt: -1 })
+    .execAsync()
+    .then(result => {
+      tracks = result
+      return Promise.all(
+        tracks.map(track => {
+          return dbSteps.countAsync({ trackId: track["_id"] }).then(count => {
+            track.stepCount = count
+            return track
+          })
+        })
+      )
+    })
+}
+module.exports.searchTracks = searchTracks
+
 function getTracks(session) {
   let tracks
   return dbTracks
@@ -111,7 +136,7 @@ function addValueFromFieldToResult(track, steps, field, values, inputValues) {
   var key = field.key,
     value
 
-  if (field.input && inputValues && key in inputValues) {
+  if (field.input && inputValues && Object.prototype.hasOwnProperty.call(inputValues, key)) {
     value = inputValues[key]
   }
 
@@ -153,8 +178,8 @@ function getSteps(session, trackId) {
 module.exports.getSteps = getSteps
 
 function getStepsPaged(session, trackId, options) {
-  const limit = "limit" in options ? parseInt(options.limit) : 20
-  const page = "page" in options ? parseInt(options.page) : 1
+  const limit = Object.prototype.hasOwnProperty.call(options, "limit") ? parseInt(options.limit) : 20
+  const page = Object.prototype.hasOwnProperty.call(options, "page") ? parseInt(options.page) : 1
   const offset = limit * (page - 1)
   return Promise.all([
     dbSteps.countAsync({ userId: session.userId, trackId: trackId }),
@@ -209,7 +234,7 @@ function computeAggregations(steps, interval, inputAggregations) {
     aggregation.startAt = aggregation.startAt || anchor
     aggregationCount++
     for (const { key, type, field } of inputAggregations) {
-      let value = key in aggregation ? aggregation[key] : null
+      let value = Object.prototype.hasOwnProperty.call(aggregation, key) ? aggregation[key] : null
       let stepValue = field && step.values[field]
       switch (type) {
         case "COUNT":
@@ -267,7 +292,7 @@ function evaluateReport(session, trackId, reportId) {
     return {
       trackId,
       reportId,
-      ...("name" in report && { name: report.name }),
+      ...(Object.prototype.hasOwnProperty.call(report, "name") && { name: report.name }),
       aggregations: computeAggregations(steps, report.interval, report.aggregations)
     }
   })

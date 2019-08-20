@@ -25,7 +25,7 @@ describe("Auth APIs", function() {
       .expect(200)
     expect(res.body.name).toBe(user.name)
     expect(res.body.email).toBe(user.email)
-    expect("password" in res.body).toBe(false)
+    expect(Object.prototype.hasOwnProperty.call(res.body, "password")).toBe(false)
   })
 
   it("POST /api/auth/login", async function() {
@@ -50,7 +50,7 @@ describe("Auth APIs", function() {
       .expect(200)
     expect(res.body.name).toBe(user.name)
     expect(res.body.email).toBe(user.email)
-    expect("password" in res.body).toBe(false)
+    expect(Object.prototype.hasOwnProperty.call(res.body, "password")).toBe(false)
   })
 
   it("POST /api/auth/logout", async function() {
