@@ -16,5 +16,6 @@ module.exports = {
   sessions: new Sessionstore({ filename: "data/sessions.db", autoCompactInterval: null, inMemoryOnly }),
   users: new Datastore({ filename: "data/users.db", autoload: true, timestampData: true, inMemoryOnly }),
   tracks: new Datastore({ filename: "data/tracks.db", autoload: true, timestampData: true, inMemoryOnly }),
-  steps: new Datastore({ filename: "data/steps.db", autoload: true, timestampData: true, inMemoryOnly })
+  steps: new Datastore({ filename: "data/steps.db", autoload: true, timestampData: true, inMemoryOnly }),
+  reports: new Datastore({ filename: "data/reports.db", autoload: true, timestampData: true, inMemoryOnly })
 }

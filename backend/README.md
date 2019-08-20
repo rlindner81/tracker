@@ -31,7 +31,7 @@ Field type conversion happens when a step is saved. Expected inputs are all basi
 * `TEXT` convert to text
 * `INTEGER` convert with `parseInt`
 * `FLOAT` convert with `parseFloat`
-* `TIME` convert to JS Date
+* `TIME` convert to ISO-formatted string `Date.toISOString()` output
 
 ### Input types
 This defines the input interface for each step entry.
@@ -73,7 +73,7 @@ POST
       "position": 0,
       "key": "motivation",
       "name": "Motivation",
-      "input": true,
+      "input": "FIELD",
       "type": "TEXT",
       "generator": {
         "identifier": "STATIC",
@@ -86,29 +86,25 @@ POST
       "position": 1,
       "key": "mood",
       "name": "Mood",
-      "input": true,
-      "type": {
+      "type": "INTEGER",
+      "input": {
         "identifier": "SELECT",
         "parameters": {
-          "selected": "good",
+          "selected": "1",
           "values": [
             {
-              "key": "good",
               "name": "Good",
               "value": 1
             },
             {
-              "key": "postive",
               "name": "Postive",
               "value": 2
             },
             {
-              "key": "bored",
               "name": "Bored",
               "value": -1
             },
             {
-              "key": "bad",
               "name": "Bad",
               "value": -2
             }
@@ -247,8 +243,8 @@ GET    /api/track/:id/steps/$paged?limit=20&page=2
 
 ## TODO
 
-* Update example with newest codelists
 * Reports normal Rest API
 * Reports $evaluate API
+* Field type conversion
 * Public tracks $search API for name field
 * Maybe switch to expressions?

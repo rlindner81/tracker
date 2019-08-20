@@ -1,7 +1,8 @@
 var moment = require("moment"),
   ApplicationError = require("../error").ApplicationError,
   dbTracks = require("./dataService").tracks,
-  dbSteps = require("./dataService").steps
+  dbSteps = require("./dataService").steps,
+  dbReports = require("./dataService").reports
 
 /**
  * Tracks
@@ -266,3 +267,22 @@ function getDynamicReport(session, trackId, report) {
   })
 }
 module.exports.getDynamicReport = getDynamicReport
+
+function getReports(session, trackId) {
+  return dbReports
+    .find({ userId: session.userId, trackId: trackId })
+    .sort({ createdAt: -1 })
+    .execAsync()
+}
+module.exports.getReports = getReports
+
+function addReport(session, trackId, report) {
+  Object.assign(report, { userId: session.userId, trackId: trackId })
+  return dbReports.insertAsync(report)
+}
+module.exports.addReport = addReport
+
+function deleteReport(session, trackId, reportId) {
+  return dbReports.removeAsync({ _id: reportId })
+}
+module.exports.deleteReport = deleteReport

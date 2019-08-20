@@ -105,14 +105,31 @@ router.post("/:trackId/report/$dynamic", validation.report, function(req, res, n
     .catch(next)
 })
 
-router.get("/:trackId/report/", function() {
-  throw new ApplicationError(500, "Not implemented")
+router.get("/:trackId/report/", function(req, res, next) {
+  return service
+    .getReports(req.session, req.params.trackId)
+    .then(function(data) {
+      res.json(data)
+    })
+    .catch(next)
 })
-router.post("/:trackId/report/", function() {
-  throw new ApplicationError(500, "Not implemented")
+
+// TODO validation
+router.post("/:trackId/report/", function(req, res, next) {
+  return service
+    .addReport(req.session, req.params.trackId, req.body)
+    .then(function(data) {
+      res.json(data)
+    })
+    .catch(next)
 })
-router.delete("/:trackId/report/:reportId", function() {
-  throw new ApplicationError(500, "Not implemented")
+router.delete("/:trackId/report/:reportId", function(req, res, next) {
+  return service
+    .deleteReport(req.session, req.params.trackId, req.params.reportId)
+    .then(function(data) {
+      res.json(data)
+    })
+    .catch(next)
 })
 
 module.exports = router
