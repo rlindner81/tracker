@@ -243,7 +243,6 @@ GET    /api/track/:id/steps/$paged?limit=20&page=2
 
 ## TODO
 
-* Reports $evaluate API
 * Field type conversion
-* Public tracks $search API for name field
+* Tests for Track/Step/Report
 * Maybe switch to expressions?
