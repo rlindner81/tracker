@@ -248,7 +248,33 @@ function computeAggregations(steps, interval, inputAggregations) {
   return aggregations
 }
 
-function getDynamicReport(session, trackId, report) {
+function evaluateReport(session, trackId, reportId) {
+  return Promise.all([
+    dbTracks.findOneAsync({ _id: trackId }),
+    dbReports.findOneAsync({ _id: reportId }),
+    dbSteps
+      .find({ userId: session.userId, trackId: trackId })
+      .sort({ createdAt: 1 })
+      .execAsync()
+  ]).then(([track, report, steps]) => {
+    if (track === null) {
+      throw new ApplicationError(404, `Track with id ${trackId} not found`)
+    }
+    if (report === null) {
+      throw new ApplicationError(404, `Report with id ${reportId} not found`)
+    }
+
+    return {
+      trackId,
+      reportId,
+      ...("name" in report && { name: report.name }),
+      aggregations: computeAggregations(steps, report.interval, report.aggregations)
+    }
+  })
+}
+module.exports.evaluateReport = evaluateReport
+
+function evaluateDynamicReport(session, trackId, report) {
   return Promise.all([
     dbTracks.findOneAsync({ _id: trackId }),
     dbSteps
@@ -257,7 +283,7 @@ function getDynamicReport(session, trackId, report) {
       .execAsync()
   ]).then(([track, steps]) => {
     if (track === null) {
-      throw new ApplicationError(404, "Track not found")
+      throw new ApplicationError(404, `Track with id ${trackId} not found`)
     }
 
     return {
@@ -266,7 +292,7 @@ function getDynamicReport(session, trackId, report) {
     }
   })
 }
-module.exports.getDynamicReport = getDynamicReport
+module.exports.evaluateDynamicReport = evaluateDynamicReport
 
 function getReports(session, trackId) {
   return dbReports

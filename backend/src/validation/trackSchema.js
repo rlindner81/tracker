@@ -27,7 +27,10 @@ const fieldSchema = {
   frequency: frequencyType.optional(),
   type: joi.alternatives().try(fieldType, joi.object().keys(typeSchema)),
   input: joi.alternatives().try(inputType, joi.object().keys(inputSchema)),
-  generator: joi.alternatives().try(generatorType, joi.object().keys(generatorSchema)).optional(),
+  generator: joi
+    .alternatives()
+    .try(generatorType, joi.object().keys(generatorSchema))
+    .optional(),
   display: joi
     .alternatives()
     .try(displayType, joi.object().keys(displaySchema))

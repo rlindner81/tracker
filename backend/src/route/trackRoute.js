@@ -92,13 +92,18 @@ router.delete("/:trackId/step/:stepId", function(req, res, next) {
  * Reports
  */
 
-router.get("/:trackId/report/:reportId/$evaluate", function() {
-  throw new ApplicationError(500, "Not implemented")
+router.get("/:trackId/report/:reportId/$evaluate", function(req, res, next) {
+  return service
+    .evaluateReport(req.session, req.params.trackId, req.params.reportId)
+    .then(function(data) {
+      res.json(data)
+    })
+    .catch(next)
 })
 
 router.post("/:trackId/report/$dynamic", validation.report, function(req, res, next) {
   return service
-    .getDynamicReport(req.session, req.params.trackId, req.body)
+    .evaluateDynamicReport(req.session, req.params.trackId, req.body)
     .then(function(data) {
       res.json(data)
     })
