@@ -1,12 +1,15 @@
 const { unlinkSync } = require("fs")
 const { execSync } = require("child_process")
 const package = require("./package.json")
+const dependencies = Object.keys(package.dependencies)
+const devDependencies = Object.keys(package.devDependencies)
 
-for (const dep of Object.keys(package.dependencies)) {
-  execSync(`npm install --save ${dep}`, { stdio: "inherit" })
+const run = cmd => {
+  console.log(cmd)
+  execSync(cmd, { stdio: "inherit" })
 }
-for (const dep of Object.keys(package.devDependencies)) {
-  execSync(`npm install --save-dev ${dep}`, { stdio: "inherit" })
-}
+
+run(`npm install ${dependencies.map(dep => dep + "@latest").join(" ")}`)
+run(`npm install --dev ${devDependencies.map(dep => dep + "@latest").join(" ")}`)
 unlinkSync("package-lock.json")
-execSync("npm install --package-lock-only", { stdio: "inherit" })
+run("npm install --package-lock-only")
