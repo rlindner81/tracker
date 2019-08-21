@@ -1,4 +1,5 @@
-var moment = require("moment"),
+var _ = require("lodash"),
+  moment = require("moment"),
   ApplicationError = require("../error").ApplicationError,
   dbTracks = require("./dataService").tracks,
   dbSteps = require("./dataService").steps,
@@ -13,10 +14,10 @@ function searchTracks(session, options) {
   if (!Object.prototype.hasOwnProperty.call(options, "name") || options.name === "") {
     return getTracks(session)
   }
-  const name = new RegExp(options.name, "i")
+  const name = new RegExp(_.escapeRegExp(options.name), "i")
 
   return dbTracks
-    .find({ userId: session.userId, name })
+    .find({ $or: [{ userId: session.userId }, { public: true }], name })
     .sort({ createdAt: -1 })
     .execAsync()
     .then(result => {
