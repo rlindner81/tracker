@@ -9,7 +9,7 @@ const run = cmd => {
   execSync(cmd, { stdio: "inherit" })
 }
 
-run(`npm install ${dependencies.map(dep => dep + "@latest").join(" ")}`)
-run(`npm install --dev ${devDependencies.map(dep => dep + "@latest").join(" ")}`)
+run(`npm install --no-audit --no-package-lock --only=prod ${dependencies.map(dep => dep + "@latest").join(" ")}`)
+run(`npm install --no-audit --no-package-lock --only=dev ${devDependencies.map(dep => dep + "@latest").join(" ")}`)
 unlinkSync("package-lock.json")
 run("npm install --package-lock-only")
