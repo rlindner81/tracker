@@ -11,7 +11,7 @@ export default {
       aggregations: []
     },
     intervals: ['SECOND', 'MINUTE', 'HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR'],
-    aggregations: ['COUNT', 'SUM', 'AVG', 'MIN', 'MAX']
+    aggregations: ['SUM', 'AVG', 'MIN', 'MAX']
   },
   mutations: {
     set (state, data) {

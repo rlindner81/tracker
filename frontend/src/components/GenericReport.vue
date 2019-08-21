@@ -1,6 +1,9 @@
 <script>
 import { Line, mixins } from 'vue-chartjs'
 
+import axios from 'axios'
+import momemt from 'moment'
+
 const { reactiveData } = mixins
 
 export default {
@@ -61,20 +64,32 @@ export default {
           return null
         }
 
-        this.chartData = {
-          labels: [new Date(new Date().setMonth(0)), new Date(new Date().setMonth(1)), new Date(new Date().setMonth(2))],
-          datasets: [
-            {
-              label: this.report ? this.report.name : 'Amount of Steps',
-              backgroundColor: '#49D49D',
-              data: [
-                { t: new Date(new Date().setMonth(0)).toISOString(), y: 80 },
-                { t: new Date(new Date().setMonth(1)).toISOString(), y: 79 },
-                { t: new Date(new Date().setMonth(2)).toISOString(), y: 77 }
-              ]
+        let datasets = []
+        let labels = []
+
+        axios.get(`/api/track/${this.report.trackId}/report/${this.report._id}/$evaluate`)
+          .then(response => {
+            labels = response.data.aggregations.map(result => {
+              return momemt(result.startAt).utc()
+            })
+            datasets = this.report.aggregations.map(aggregation => {
+              return {
+                label: this.report ? this.report.name : 'Amount of Steps',
+                backgroundColor: '#49D49D',
+                data: response.data.aggregations.map(result => {
+                  return {
+                    t: momemt(result.startAt).utc(),
+                    y: result[aggregation.key]
+                  }
+                })
+              }
+            })
+
+            this.chartData = {
+              labels,
+              datasets
             }
-          ]
-        }
+          })
       },
       immediate: true
     }

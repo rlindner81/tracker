@@ -18,7 +18,7 @@ export default {
       let newStep = {}
 
       track.fields.forEach(field => {
-        newStep[field.key] = null
+        newStep[field.key] = field.input && field.input.parameters && field.input.parameters.selected ? field.input.parameters.selected : null
       })
 
       state.new = newStep

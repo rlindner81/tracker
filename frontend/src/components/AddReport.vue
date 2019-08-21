@@ -17,21 +17,32 @@
         v-for="(aggregation, i) in newReport.aggregations"
         :key="i"
       >
-        <input type="text" v-model="aggregation.key" placeholder="key">
-        <select v-model="aggregation.type">
+        <select
+          v-model="aggregation.type"
+          @input="setKey(i)"
+        >
           <option
             v-for="type in aggregations"
             :key="type"
             :value="type"
           >{{ type }}</option>
         </select>
-        <select v-model="aggregation.field" v-show="aggregation.type !== 'COUNT'">
+        <select
+          v-model="aggregation.field"
+          @input="setKey(i)"
+        >
           <option
             v-for="field in track.fields"
             :key="field.key"
             :value="field.key"
           >{{ field.name }}</option>
         </select>
+        <input
+          type="hidden"
+          :value="aggregation.key"
+          placeholder="key"
+          :disabled="true"
+        >
       </div>
       <button class="add-aggregation" type="button" @click="addAggregation">Add Aggregation</button>
     </div>
@@ -67,6 +78,11 @@ export default {
         type: this.aggregations[0],
         field: null
       })
+    },
+    setKey (index) {
+      setTimeout(() => {
+        this.newReport.aggregations[index].key = `${this.newReport.aggregations[index].type}_${this.newReport.aggregations[index].field}`
+      }, 0)
     }
   }
 }

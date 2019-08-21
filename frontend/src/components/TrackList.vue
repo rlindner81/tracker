@@ -12,8 +12,9 @@
           :key="key"
         >
           <label>{{ track.fields.find(field => field.key === key).name }}</label>
-          <span v-if="track.fields.find(field => field.key === key).input.identifier !== 'SELECT'">{{ value }}</span>
-          <span v-else>{{ track.fields.find(field => field.key === key).input.parameters.values.find(v => v.value.toString() === value.toString()).name + ` (${value})` }}</span>
+          <span v-if="getInputIdentifier(key) !== 'SELECT'">{{ value }}</span>
+          <span v-if="getType(key) === 'TEXT'">{{ getField(key).input.parameters.values.find(v => v.value.toString() === value.toString()).name }}</span>
+          <span v-if="getType(key) !== 'TEXT' && getInputIdentifier(key) === 'SELECT'">{{ getField(key).input.parameters.values.find(v => v.value.toString() === value.toString()).name + ` (${value})` }}</span>
         </div>
       </div>
       <div class="master-data">
@@ -30,6 +31,21 @@ export default {
   computed: {
     ...mapState('step', { steps: 'data' }),
     ...mapGetters('track', { track: 'current' })
+  },
+  methods: {
+    getInputIdentifier (key) {
+      let field = this.getField(key)
+
+      return field ? field.input.identifier : null
+    },
+    getType (key) {
+      let field = this.getField(key)
+
+      return field ? field.type : null
+    },
+    getField (key) {
+      return this.track.fields.find(field => field.key === key)
+    }
   }
 }
 </script>
@@ -46,6 +62,14 @@ export default {
     background: @white;
     padding: 0.25rem 0.5rem;
     margin-bottom: 0.5rem;
+
+    .values {
+      .row(flex-start);
+
+      .value {
+        margin-right: 1rem;
+      }
+    }
 
     label {
       font-size: 0.87rem;
