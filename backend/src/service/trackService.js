@@ -133,8 +133,8 @@ function generateValue(track, steps, field) {
 }
 
 function addValueFromFieldToResult(track, steps, field, values, inputValues) {
-  var key = field.key,
-    value
+  const key = field.key
+  let value
 
   if (field.input && inputValues && Object.prototype.hasOwnProperty.call(inputValues, key)) {
     value = inputValues[key]
@@ -143,6 +143,49 @@ function addValueFromFieldToResult(track, steps, field, values, inputValues) {
   value = value || generateValue(track, steps, field)
 
   values[key] = value
+}
+
+function convertFieldInputToType(field, inputValues) {
+  const key = field.key
+  if (!field.input || !inputValues || !Object.prototype.hasOwnProperty.call(inputValues, key)) {
+    continue
+  }
+  const type = field.type
+  let result = inputValues[key]
+  switch (type) {
+    case "INPUT":
+      break
+    case "TEXT":
+      if (typeof result !== "string") {
+        result = String(result)
+      }
+      break
+    case "INTEGER":
+      if (typeof result === "string") {
+        result = parseInt(result)
+      } else if (typeof result === "number") {
+        result = Math.trunc(result)
+      }
+      break
+    case "FLOAT":
+      if (typeof result === "string") {
+        result = parseFloat(result)
+      }
+      break
+    case "BOOLEAN":
+      if (typeof result === "string") {
+        result = !!result.match(/true/i)
+      } else if (typeof result === "number") {
+        result = result === 0
+      }
+      break
+    case "TIME":
+      result = moment(result).toISOString()
+      break
+    case "DEFAULT":
+      throw new ApplicationError(500, `Unknown field type ${type} on field ${key}`)
+  }
+  inputValues[key] = result
 }
 
 function prepareStep(step) {
@@ -160,9 +203,10 @@ function prepareStep(step) {
       throw new ApplicationError(404, "Track not found")
     }
 
-    track.fields.forEach(function(field) {
+    for (const field of track.fields) {
+      convertFieldInputToType(field, inputValues)
       addValueFromFieldToResult(track, steps, field, values, inputValues)
-    })
+    }
 
     step.values = values
     return step

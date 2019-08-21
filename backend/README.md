@@ -243,6 +243,5 @@ GET    /api/track/:id/steps/$paged?limit=20&page=2
 
 ## TODO
 
-* Field type conversion
 * Tests for Track/Step/Report
 * Maybe switch to expressions?
