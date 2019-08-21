@@ -1,9 +1,10 @@
-var _ = require("lodash"),
-  moment = require("moment"),
-  ApplicationError = require("../error").ApplicationError,
-  dbTracks = require("./dataService").tracks,
-  dbSteps = require("./dataService").steps,
-  dbReports = require("./dataService").reports
+const _ = require("lodash")
+const moment = require("moment")
+const { ApplicationError } = require("../error")
+const { isNull } = require("../util")
+const dbTracks = require("./dataService").tracks
+const dbSteps = require("./dataService").steps
+const dbReports = require("./dataService").reports
 
 /**
  * Tracks
@@ -141,7 +142,9 @@ function addValueFromFieldToResult(track, steps, field, values, inputValues) {
     value = inputValues[key]
   }
 
-  value = value || generateValue(track, steps, field)
+  if (isNull(value) && field.generator) {
+    value = generateValue(track, steps, field)
+  }
 
   values[key] = value
 }
