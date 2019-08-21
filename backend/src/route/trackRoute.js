@@ -83,6 +83,15 @@ router.post("/:trackId/step", validation.step, function(req, res, next) {
     .catch(next)
 })
 
+router.patch("/:trackId/step/:stepId", validation.step, function(req, res, next) {
+  return service
+    .updateStep(req.session, req.params.trackId, req.params.stepId, req.body)
+    .then(function(data) {
+      res.json(data)
+    })
+    .catch(next)
+})
+
 router.delete("/:trackId/step/:stepId", function(req, res, next) {
   return service
     .deleteStep(req.session, req.params.trackId, req.params.stepId)

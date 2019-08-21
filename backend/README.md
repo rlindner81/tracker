@@ -16,7 +16,7 @@ You will need at least [NodeJS](https://nodejs.org) 10.x.
 * [Joi](https://www.npmjs.com/package/@hapi/joi) for request validation
 * [UUID](https://www.npmjs.com/package/uuid) for generating version 4 UUIDs
 * [moment](https://www.npmjs.com/package/moment) for getting relative times
-* [lodash](https://www.npmjs.com/package/lodash) for regexp escaping
+* [lodash](https://www.npmjs.com/package/lodash) for regexp escaping and deep merge
 
 ## Codestyle
 
@@ -141,6 +141,7 @@ POST
 ```
 GET    /api/track/:trackId/step
 POST   /api/track/:trackId/step
+PATCH  /api/track/:trackId/step/:stepId
 DELETE /api/track/:trackId/step/:stepId
 
 POST
