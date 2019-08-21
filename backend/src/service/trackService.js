@@ -148,7 +148,7 @@ function addValueFromFieldToResult(track, steps, field, values, inputValues) {
 function convertFieldInputToType(field, inputValues) {
   const key = field.key
   if (!field.input || !inputValues || !Object.prototype.hasOwnProperty.call(inputValues, key)) {
-    continue
+    return
   }
   const type = field.type
   let result = inputValues[key]
