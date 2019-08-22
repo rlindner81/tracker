@@ -225,6 +225,24 @@ function getSteps(session, trackId) {
 }
 module.exports.getSteps = getSteps
 
+function exportSteps(session, trackId) {
+  return Promise.all([
+    dbTracks.findOneAsync({ _id: trackId }),
+    dbSteps
+      .find({ userId: session.userId, trackId: trackId })
+      .sort({ createdAt: -1 })
+      .execAsync()
+  ]).then(([track, steps]) => {
+    if (track === null) {
+      throw new ApplicationError(404, `Track ${trackId} not found`)
+    }
+
+    // throw new ApplicationError(500, "Not implemented yet")
+    // return [track.name, JSON.stringify(steps, null, 2)]
+  })
+}
+module.exports.exportSteps = exportSteps
+
 function getStepsPaged(session, trackId, options) {
   const limit = Object.prototype.hasOwnProperty.call(options, "limit") ? parseInt(options.limit) : 20
   const page = Object.prototype.hasOwnProperty.call(options, "page") ? parseInt(options.page) : 1
@@ -264,7 +282,7 @@ function updateStep(session, trackId, stepId, step) {
       if (dbStep === null) {
         throw new ApplicationError(404, `Cannot find step ${stepId} on track ${trackId}`)
       }
-      
+
       step = _.merge({}, dbStep, step, { _id: stepId, userId: session.userId, trackId: trackId })
       return dbSteps.updateAsync({ _id: stepId }, step)
     })

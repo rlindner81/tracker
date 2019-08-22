@@ -180,6 +180,24 @@ GET
 ]
 ```
 
+### Track/Step/Paged
+```
+GET    /api/track/:id/steps/$paged?limit=20&page=2
+{
+  "count": 1000,
+  "limit": 20,
+  "pages": 50,
+  "page": 2,
+  "data": [...]
+}
+```
+
+### Track/Step/Export
+```
+GET    /api/track/:trackId/step/$export
+```
+Sends a CSV file with all step data.
+
 ### Track/Report
 ```
 # Normal REST handling of report definitions
@@ -231,17 +249,6 @@ POST   /api/track/:trackId/report/$dynamic
 }
 ```
 
-### Track/Step/Paged
-```
-GET    /api/track/:id/steps/$paged?limit=20&page=2
-{
-  "count": 1000,
-  "limit": 20,
-  "pages": 50,
-  "page": 2,
-  "data": [...]
-}
-```
 
 ## TODO
 

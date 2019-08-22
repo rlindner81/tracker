@@ -56,6 +56,17 @@ router.delete("/:trackId", function(req, res, next) {
  * Steps
  */
 
+router.get("/:trackId/step/\\$export", function(req, res, next) {
+  return service
+    .exportSteps(req.session, req.params.trackId)
+    .then(([name, data]) => {
+      res.set("Content-Type", "text/csv")
+      res.set("Content-Disposition", `attachment;filename="${name}.csv"`)
+      res.send(data)
+    })
+    .catch(next)
+})
+
 router.get("/:trackId/step/\\$paged", function(req, res, next) {
   return service
     .getStepsPaged(req.session, req.params.trackId, req.query)
