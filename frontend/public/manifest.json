@@ -1,6 +1,6 @@
 {
-  "name": "ultimate",
-  "short_name": "ultimate",
+  "name": "Personal Tracker",
+  "short_name": "Tracker",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",

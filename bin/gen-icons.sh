@@ -3,7 +3,8 @@ script="$0"
 script_dir=`pwd`/`dirname "$script"`
 
 export PROJECT=tracker
-inkscape=/Applications/Inkscape.app/Contents/Resources/bin/inkscape
+# inkscape=/Applications/Inkscape.app/Contents/Resources/bin/inkscape
+inkscape=/c/portable/inkscape/inkscape.exe
 source="$script_dir"/../assets/"$PROJECT".svg
 target_dir="$script_dir"/../frontend/public/img/icons
 
