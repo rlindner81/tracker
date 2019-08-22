@@ -78,7 +78,7 @@ export default {
   }
 
   @media @small {
-    padding: 2rem 0;
+    padding: 0;
     overflow: hidden;
   }
 
@@ -187,7 +187,8 @@ export default {
     }
 
     @media @small {
-      padding: 0 1rem;
+      padding: 1rem;
+      height: 100vh;
       overflow-y: auto;
     }
   }

@@ -20,6 +20,11 @@ export default {
   .row(flex-start, center);
   width: 100%;
 
+  @media @small {
+    overflow: hidden;
+    padding: 2px;
+  }
+
   > .tiles-container {
     .row(flex-start, flex-start, wrap);
     width: ~"calc(100% + 2rem)";
