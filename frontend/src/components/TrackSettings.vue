@@ -57,4 +57,12 @@ export default {
 <style lang="less">
 @import "../less/variables";
 @import "../less/helpers";
+
+.component.track-settings {
+  form {
+    .shadow();
+    background: @white;
+    padding: 1rem;
+  }
+}
 </style>

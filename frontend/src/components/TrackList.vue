@@ -73,6 +73,7 @@ export default {
 
     label {
       font-size: 0.87rem;
+      margin-bottom: 0.25rem;
     }
 
     span {

@@ -46,7 +46,10 @@ export default {
             }
           }],
           yAxes: [{
-            display: true
+            display: true,
+            ticks: {
+              beginAtZero: true
+            }
           }]
         }
       }
