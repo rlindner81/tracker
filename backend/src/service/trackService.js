@@ -1,8 +1,10 @@
-var moment = require("moment"),
-  ApplicationError = require("../error").ApplicationError,
-  dbTracks = require("./dataService").tracks,
-  dbSteps = require("./dataService").steps,
-  dbReports = require("./dataService").reports
+const _ = require("lodash")
+const moment = require("moment")
+const { ApplicationError } = require("../error")
+const { isNull } = require("../util")
+const dbTracks = require("./dataService").tracks
+const dbSteps = require("./dataService").steps
+const dbReports = require("./dataService").reports
 
 /**
  * Tracks
@@ -13,10 +15,10 @@ function searchTracks(session, options) {
   if (!Object.prototype.hasOwnProperty.call(options, "name") || options.name === "") {
     return getTracks(session)
   }
-  const name = new RegExp(options.name, "i")
+  const name = new RegExp(_.escapeRegExp(options.name), "i")
 
   return dbTracks
-    .find({ userId: session.userId, name })
+    .find({ $or: [{ userId: session.userId }, { public: true }], name })
     .sort({ createdAt: -1 })
     .execAsync()
     .then(result => {
@@ -65,14 +67,14 @@ function updateTrack(session, trackId, track) {
     .execAsync()
     .then(dbTrack => {
       if (dbTrack === null) {
-        throw new ApplicationError(404, `Cannot find track with id ${trackId}`)
+        throw new ApplicationError(404, `Cannot find track ${trackId}`)
       }
-      track = Object.assign({}, dbTrack, track, { _id: trackId, userId: session.userId })
+      track = _.merge({}, dbTrack, track, { _id: trackId, userId: session.userId })
       return dbTracks.updateAsync({ _id: trackId }, track)
     })
     .then(updateCount => {
       if (updateCount === 0) {
-        throw new ApplicationError(404, `Could not update track with id ${trackId}`)
+        throw new ApplicationError(405, `Could not update track ${trackId}`)
       }
       return track
     })
@@ -140,7 +142,9 @@ function addValueFromFieldToResult(track, steps, field, values, inputValues) {
     value = inputValues[key]
   }
 
-  value = value || generateValue(track, steps, field)
+  if (isNull(value) && field.generator) {
+    value = generateValue(track, steps, field)
+  }
 
   values[key] = value
 }
@@ -252,12 +256,26 @@ function addStep(session, trackId, step) {
 }
 module.exports.addStep = addStep
 
-// If we ever uncomment this. Make it a real PATCH not a PUT
-// function updateStep(session, trackId, stepId, step) {
-//   Object.assign(step, { _id: stepId, userId: session.userId, trackId: trackId })
-//   return prepareStep(step).then(dbSteps.updateAsync.bind(dbSteps, { _id: stepId }))
-// }
-// module.exports.updateStep = updateStep
+function updateStep(session, trackId, stepId, step) {
+  return dbSteps
+    .findOne({ _id: stepId })
+    .execAsync()
+    .then(dbStep => {
+      if (dbStep === null) {
+        throw new ApplicationError(404, `Cannot find step ${stepId} on track ${trackId}`)
+      }
+      
+      step = _.merge({}, dbStep, step, { _id: stepId, userId: session.userId, trackId: trackId })
+      return dbSteps.updateAsync({ _id: stepId }, step)
+    })
+    .then(updateCount => {
+      if (updateCount === 0) {
+        throw new ApplicationError(405, `Could not update step ${stepId} on track ${trackId}`)
+      }
+      return step
+    })
+}
+module.exports.updateStep = updateStep
 
 function deleteStep(session, trackId, stepId) {
   return dbTracks.removeAsync({ _id: stepId })
@@ -327,10 +345,10 @@ function evaluateReport(session, trackId, reportId) {
       .execAsync()
   ]).then(([track, report, steps]) => {
     if (track === null) {
-      throw new ApplicationError(404, `Track with id ${trackId} not found`)
+      throw new ApplicationError(404, `Track ${trackId} not found`)
     }
     if (report === null) {
-      throw new ApplicationError(404, `Report with id ${reportId} not found`)
+      throw new ApplicationError(404, `Report ${reportId} not found`)
     }
 
     return {
@@ -352,7 +370,7 @@ function evaluateDynamicReport(session, trackId, report) {
       .execAsync()
   ]).then(([track, steps]) => {
     if (track === null) {
-      throw new ApplicationError(404, `Track with id ${trackId} not found`)
+      throw new ApplicationError(404, `Track ${trackId} not found`)
     }
 
     return {
