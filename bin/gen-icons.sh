@@ -2,7 +2,7 @@
 script="$0"
 script_dir=`pwd`/`dirname "$script"`
 
-export PROJECT=sudoku
+export PROJECT=tracker
 inkscape=/Applications/Inkscape.app/Contents/Resources/bin/inkscape
 source="$script_dir"/../assets/"$PROJECT".svg
 target_dir="$script_dir"/../frontend/public/img/icons
