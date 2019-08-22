@@ -5,7 +5,7 @@ script_dir=`pwd`/`dirname "$script"`
 export PROJECT=sudoku
 inkscape=/Applications/Inkscape.app/Contents/Resources/bin/inkscape
 source="$script_dir"/../assets/"$PROJECT".svg
-target_dir="$script_dir"/../public/img/icons
+target_dir="$script_dir"/../frontend/public/img/icons
 
 # PNG
 gen_png() {
