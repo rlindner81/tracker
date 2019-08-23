@@ -22,14 +22,28 @@
         <input type="text" :value="field.key" :disabled="true">
 
         <label>Type</label>
-        <select v-model="field.type">
+        <select v-model="field.type" @change="cleanUpInputType(field)">
           <option v-for="type in types" :key="type" :value="type">{{ type }}</option>
         </select>
 
         <label>Input Type</label>
         <select v-model="field.input.identifier">
-          <option v-for="type in inputs" :key="type" :value="type">{{ type }}</option>
+          <option v-for="type in getSelectableInputs(field)" :key="type" :value="type">{{ type }}</option>
         </select>
+
+        <div class="slider" v-if="field.input.identifier === 'SLIDER'">
+          <label>Min Value</label>
+          <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.min">
+          <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.min">
+
+          <label>Max Value</label>
+          <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.max">
+          <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.max">
+
+          <label>Step Size</label>
+          <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.step">
+          <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.step">
+        </div>
 
         <div class="select" v-if="field.input.identifier === 'SELECT'">
           <div
@@ -107,6 +121,20 @@ export default {
         .replace(/-+/g, '_') // collapse dashes
 
       return str
+    },
+    getSelectableInputs (field) {
+      return this.inputs.filter(input => {
+        if (input === 'SLIDER' && field.type !== 'FLOAT' && field.type !== 'INTEGER') {
+          return false
+        }
+
+        return true
+      })
+    },
+    cleanUpInputType (field) {
+      if (field.input.identier === 'SLIDER' && field.type !== 'FLOAT' && field.type !== 'INTEGER') {
+        field.input.identifier = null
+      }
     }
   }
 }

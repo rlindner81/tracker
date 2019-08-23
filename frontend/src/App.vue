@@ -67,7 +67,7 @@ body * {
   }
 }
 
-input, select, textarea, button {
+input:not([type="range"]), select, textarea, button {
   width: 100%;
   background: none;
   border: none;
@@ -76,6 +76,21 @@ input, select, textarea, button {
 
   + * {
     margin-top: 1rem;
+  }
+}
+
+input[type="range"] {
+  width: 100%;
+  position: relative;
+  &:after {
+    content: ' ';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 2px;
+    background: #ccc;
   }
 }
 

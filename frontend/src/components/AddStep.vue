@@ -36,6 +36,32 @@
           :value="option.value"
         >{{ option.name }}</option>
       </select>
+      <div
+        class="slider"
+        v-if="field.input.identifier === 'SLIDER'"
+      >
+        <input
+          type="range"
+          :min="field.input.parameters.min ? parseFloat(field.input.parameters.min) : 0"
+          :max="field.input.parameters.max ? parseFloat(field.input.parameters.max) : 1000"
+          :step="field.input.parameters.step ? parseFloat(field.input.parameters.step) : 1"
+          v-model="newStep[field.key]"
+        >
+        <input
+          type="number"
+          step="0.00001"
+          v-model="newStep[field.key]"
+          :placeholder="`Enter ${field.name}`"
+          v-if="field.type === 'FLOAT'"
+        >
+        <input
+          type="number"
+          step="1"
+          v-model="newStep[field.key]"
+          :placeholder="`Enter ${field.name}`"
+          v-if="field.type === 'INTEGER'"
+        >
+      </div>
     </div>
 
     <div class="button-row">
@@ -77,6 +103,18 @@ export default {
 .component.add-step {
   .input {
     margin: 1rem 0;
+  }
+
+  .slider {
+    .row(center);
+
+    input {
+      margin: 0;
+      &:last-child {
+        width: 100px;
+        margin-left: 2rem;
+      }
+    }
   }
 
   .button-row {

@@ -12,7 +12,7 @@ export default {
     },
     newStep: null, // has to be initialized by the relevant track
     types: ['TEXT', 'FLOAT', 'INTEGER', 'TIME'],
-    inputs: ['SELECT', 'FIELD']
+    inputs: ['SELECT', 'FIELD', 'SLIDER']
   },
   mutations: {
     set (state, data) {
@@ -55,6 +55,9 @@ export default {
           identifier: 'FIELD',
           parameters: {
             selected: null,
+            min: null,
+            max: null,
+            step: null,
             values: []
           }
         }
