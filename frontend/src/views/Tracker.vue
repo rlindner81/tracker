@@ -46,7 +46,7 @@
 
     <Modal v-show="addModal">
       <h2>Add a Step</h2>
-      <AddStep @tracked="toggleAddModal" @closed="toggleAddModal"></AddStep>
+      <AddStep @tracked="onTrackCreated" @closed="toggleAddModal"></AddStep>
     </Modal>
 
     <Modal v-show="reportModal">
@@ -101,6 +101,10 @@ export default {
     },
     toggleReportModal () {
       this.reportModal = !this.reportModal
+    },
+    onTrackCreated () {
+      this.toggleAddModal()
+      this.loadReports()
     }
   }
 }
