@@ -39,6 +39,8 @@
           >
             <input type="text" placeholder="Name" v-model="value.name" @input="value.key = slugify(value.name)" />
             <input type="text" placeholder="Value" v-model="value.value" />
+
+            <button class="remover" type="button" @click="removeSelectValue(field, i)">Remove</button>
           </div>
           <button type="button" @click="addValue(field)">Add Value</button>
 
@@ -82,6 +84,13 @@ export default {
         value: null
       })
     },
+    removeSelectValue (field, index) {
+      field.input.parameters.values.splice(index, 1)
+      // ensure positions are correct
+      field.input.parameters.values.forEach((value, index) => {
+        value.position = index
+      })
+    },
     slugify (str) {
       str = str.replace(/^\s+|\s+$/g, '') // trim
       str = str.toLowerCase()
@@ -117,6 +126,12 @@ export default {
   .value {
     .row(flex-start, space-between);
     margin: 0.5rem 0;
+
+    .remover {
+      width: auto;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
+    }
     input {
       margin: 0 1rem 0 0;
 
