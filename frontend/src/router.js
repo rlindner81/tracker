@@ -10,15 +10,15 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
+      path: '/auth',
       component: PublicLayout,
       children: [
-        { path: '/', component: () => import(/* webpackChunkName: "login" */ './views/Login.vue') },
-        { path: '/register', component: () => import(/* webpackChunkName: "register" */ './views/Register.vue') }
+        { path: 'login', component: () => import(/* webpackChunkName: "login" */ './views/Login.vue') },
+        { path: 'register', component: () => import(/* webpackChunkName: "register" */ './views/Register.vue') }
       ]
     },
     {
-      path: '/tracker',
+      path: '/',
       component: ProtectedLayout,
       children: [
         { path: '/', component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue') },

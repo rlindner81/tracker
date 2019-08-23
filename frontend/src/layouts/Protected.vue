@@ -3,7 +3,7 @@
     <div class="letter-box">
       <nav :data-open="mobileNavVisible">
         <router-link
-          to="/tracker"
+          to="/"
         >Dashboard</router-link>
 
         <h1>Tracks</h1>
@@ -11,7 +11,7 @@
         <router-link
           v-for="track in tracks"
           :key="track._id"
-          :to="`/tracker/${track._id}`"
+          :to="`/${track._id}`"
         >{{ track.name }}</router-link>
 
         <div class="toggle" @click="toggleMobileNav">
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   data () {
@@ -40,7 +40,7 @@ export default {
     this.load()
       .catch(() => {
         this.clear()
-        this.$router.push('/login')
+        this.$router.push('/auth/login')
       })
       .then(() => {
         return this.loadTracks()
@@ -53,7 +53,8 @@ export default {
     ...mapState('track', { tracks: 'data' })
   },
   methods: {
-    ...mapActions('user', { load: 'init', clear: 'clear' }),
+    ...mapActions('user', { load: 'init' }),
+    ...mapMutations('user', ['clear']),
     ...mapActions('track', { loadTracks: 'load' }),
     toggleMobileNav () {
       this.mobileNavVisible = !this.mobileNavVisible

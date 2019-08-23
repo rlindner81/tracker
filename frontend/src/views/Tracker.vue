@@ -79,6 +79,7 @@ export default {
     }
   },
   created () {
+    this.clearTrack()
     this.clear()
     this.setCurrent(this.$route.params.track)
     this.load()
@@ -92,7 +93,7 @@ export default {
   },
   methods: {
     ...mapActions('track', { report: 'report' }),
-    ...mapMutations('track', { setCurrent: 'setCurrent' }),
+    ...mapMutations('track', { setCurrent: 'setCurrent', clearTrack: 'clearCurrent' }),
     ...mapActions('step', { load: 'load' }),
     ...mapMutations('step', { clear: 'clear' }),
     ...mapActions('report', { loadReports: 'load' }),
