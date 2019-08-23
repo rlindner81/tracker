@@ -7,7 +7,7 @@
         class="track"
         v-for="track in tracks"
         :key="track._id"
-        :to="`/tracker/${track._id}`"
+        :to="`/${track._id}`"
       >
         <h2>{{ track.name }}</h2>
         <span>{{ track.stepCount }} steps</span>

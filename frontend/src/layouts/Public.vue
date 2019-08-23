@@ -20,7 +20,7 @@ export default {
     this.load()
       .then(() => {
         // if already logged in
-        this.$router.replace('/tracker')
+        this.$router.replace('/')
       })
   },
   computed: {

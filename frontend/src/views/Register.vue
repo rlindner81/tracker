@@ -25,7 +25,7 @@ export default {
     submit () {
       this.register()
         .then(() => {
-          this.$router.push('/tracker')
+          this.$router.replace('/')
         })
     }
   }

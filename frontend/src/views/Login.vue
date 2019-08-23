@@ -23,7 +23,7 @@ export default {
     submit () {
       this.login()
         .then(() => {
-          this.$router.push('/tracker')
+          this.$router.push('/')
         })
     }
   }

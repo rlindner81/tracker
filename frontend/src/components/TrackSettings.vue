@@ -44,7 +44,7 @@ export default {
     remove () {
       this.deleteTrack()
         .then(() => {
-          this.$router.replace('/tracker')
+          this.$router.replace('/')
         })
     },
     toggleDeleteModal () {
