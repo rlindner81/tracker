@@ -12,8 +12,9 @@
           :key="key"
         >
           <label>{{ track.fields.find(field => field.key === key).name }}</label>
-          <span v-if="getInputIdentifier(key) !== 'SELECT'">{{ value }}</span>
-          <span v-if="getInputIdentifier(key) === 'SELECT'">{{ getField(key).input.parameters.values.find(v => v.value.toString() === value.toString()).name }}</span>
+          <span v-if="value === undefined || value === null">n/a</span>
+          <span v-if="value && getInputIdentifier(key) !== 'SELECT'">{{ value }}</span>
+          <span v-if="value && getInputIdentifier(key) === 'SELECT'">{{ getField(key).input.parameters.values.find(v => v.value.toString() === value.toString()).name }}</span>
         </div>
       </div>
       <div class="master-data">
