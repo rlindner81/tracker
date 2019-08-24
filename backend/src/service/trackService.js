@@ -71,16 +71,11 @@ function updateTrack(session, trackId, track) {
       if (dbTrack === null) {
         throw new ApplicationError(404, `Cannot find track ${trackId}`)
       }
-      track = _.mergeWith(
-        dbTrack,
-        track,
-        { _id: trackId, userId: session.userId },
-        (objValue, srcValue, key) => {
-          if (["position", "key"].includes(key) && objValue !== undefined && objValue !== null) {
-            return objValue
-          }
+      track = _.mergeWith(dbTrack, track, { _id: trackId, userId: session.userId }, (objValue, srcValue, key) => {
+        if (["position", "key"].includes(key) && objValue !== undefined && objValue !== null) {
+          return objValue
         }
-      )
+      })
       return dbTracks.updateAsync({ _id: trackId }, track)
     })
     .then(updateCount => {
@@ -248,8 +243,8 @@ function exportSteps(session, trackId) {
       throw new ApplicationError(404, `Track ${trackId} not found`)
     }
     const columns = track.fields.map(field => ({ key: field.key, header: field.name }))
-    columns.push({key: "createdAt", header: "Tracked At"})
-    return csvStringify(steps.map(step => ({...step.values, createdAt: step.createdAt.toISOString()})), {
+    columns.push({ key: "createdAt", header: "Tracked At" })
+    return csvStringify(steps.map(step => ({ ...step.values, createdAt: step.createdAt.toISOString() })), {
       header: true,
       columns
     }).then(data => [track.name, data])
@@ -297,7 +292,7 @@ function updateStep(session, trackId, stepId, step) {
         throw new ApplicationError(404, `Cannot find step ${stepId} on track ${trackId}`)
       }
 
-      step = _.merge({}, dbStep, step, { _id: stepId, userId: session.userId, trackId: trackId })
+      step = _.merge(dbStep, step, { _id: stepId, userId: session.userId, trackId: trackId })
       return dbSteps.updateAsync({ _id: stepId }, step)
     })
     .then(updateCount => {
