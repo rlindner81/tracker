@@ -248,7 +248,8 @@ function exportSteps(session, trackId) {
       throw new ApplicationError(404, `Track ${trackId} not found`)
     }
     const columns = track.fields.map(field => ({ key: field.key, header: field.name }))
-    return csvStringify(steps.map(step => step.values), {
+    columns.push({key: "createdAt", header: "Tracked At"})
+    return csvStringify(steps.map(step => ({...step.values, createdAt: step.createdAt.toISOString()})), {
       header: true,
       columns
     }).then(data => [track.name, data])
