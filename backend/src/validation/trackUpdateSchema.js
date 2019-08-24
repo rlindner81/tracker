@@ -27,14 +27,8 @@ const fieldSchema = {
   frequency: frequencyType,
   type: joi.alternatives().try(fieldType, joi.object().keys(typeSchema)),
   input: joi.alternatives().try(inputType, joi.object().keys(inputSchema)),
-  generator: joi
-    .alternatives()
-    .try(generatorType, joi.object().keys(generatorSchema))
-    ,
-  display: joi
-    .alternatives()
-    .try(displayType, joi.object().keys(displaySchema))
-    
+  generator: joi.alternatives().try(generatorType, joi.object().keys(generatorSchema)),
+  display: joi.alternatives().try(displayType, joi.object().keys(displaySchema))
 }
 const trackUpdateSchema = {
   name: string,

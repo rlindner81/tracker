@@ -1,5 +1,7 @@
+const { promisify } = require("util")
 const _ = require("lodash")
 const moment = require("moment")
+const csvStringify = promisify(require("csv").stringify)
 const { ApplicationError } = require("../error")
 const { isNull } = require("../util")
 const dbTracks = require("./dataService").tracks
@@ -69,11 +71,16 @@ function updateTrack(session, trackId, track) {
       if (dbTrack === null) {
         throw new ApplicationError(404, `Cannot find track ${trackId}`)
       }
-      track = _.mergeWith(dbTrack, track, { _id: trackId, userId: session.userId }, (objValue, srcValue, key, object, source, stack) => {
-        if (["position", "key"].includes(key) && objValue !== undefined && objValue !== null) {
-          return objValue
+      track = _.mergeWith(
+        dbTrack,
+        track,
+        { _id: trackId, userId: session.userId },
+        (objValue, srcValue, key, object, source, stack) => {
+          if (["position", "key"].includes(key) && objValue !== undefined && objValue !== null) {
+            return objValue
+          }
         }
-      })
+      )
       return dbTracks.updateAsync({ _id: trackId }, track)
     })
     .then(updateCount => {
@@ -240,9 +247,11 @@ function exportSteps(session, trackId) {
     if (track === null) {
       throw new ApplicationError(404, `Track ${trackId} not found`)
     }
-
-    // throw new ApplicationError(500, "Not implemented yet")
-    // return [track.name, JSON.stringify(steps, null, 2)]
+    const columns = track.fields.map(field => ({ key: field.key, header: field.name }))
+    return csvStringify(steps.map(step => step.values), {
+      header: true,
+      columns
+    }).then(data => [track.name, data])
   })
 }
 module.exports.exportSteps = exportSteps

@@ -17,6 +17,7 @@ You will need at least [NodeJS](https://nodejs.org) 10.x.
 * [UUID](https://www.npmjs.com/package/uuid) for generating version 4 UUIDs
 * [moment](https://www.npmjs.com/package/moment) for getting relative times
 * [lodash](https://www.npmjs.com/package/lodash) for regexp escaping and deep merge
+* [csv](https://www.npmjs.com/package/csv) for csv export
 
 ## Codestyle
 
