@@ -38,6 +38,8 @@ const fieldSchema = {
 }
 const trackSchema = {
   name: string,
+  public: joi.boolean().optional(),
+  frequency: frequencyType.optional(),
   fields: joi
     .array()
     .min(1)

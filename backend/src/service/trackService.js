@@ -69,7 +69,11 @@ function updateTrack(session, trackId, track) {
       if (dbTrack === null) {
         throw new ApplicationError(404, `Cannot find track ${trackId}`)
       }
-      track = _.merge({}, dbTrack, track, { _id: trackId, userId: session.userId })
+      track = _.mergeWith(dbTrack, track, { _id: trackId, userId: session.userId }, (objValue, srcValue, key, object, source, stack) => {
+        if (["position", "key"].includes(key) && objValue !== undefined && objValue !== null) {
+          return objValue
+        }
+      })
       return dbTracks.updateAsync({ _id: trackId }, track)
     })
     .then(updateCount => {
