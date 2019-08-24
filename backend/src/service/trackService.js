@@ -75,7 +75,7 @@ function updateTrack(session, trackId, track) {
         dbTrack,
         track,
         { _id: trackId, userId: session.userId },
-        (objValue, srcValue, key, object, source, stack) => {
+        (objValue, srcValue, key) => {
           if (["position", "key"].includes(key) && objValue !== undefined && objValue !== null) {
             return objValue
           }
