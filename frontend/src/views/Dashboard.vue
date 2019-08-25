@@ -10,7 +10,7 @@
         :to="`/${track._id}`"
       >
         <h2>{{ track.name }}</h2>
-        <span>{{ track.stepCount }} steps</span>
+        <span>{{ !track.stepCount ? "new" : track.stepCount === 1 ? `${track.stepCount} step` : `${track.stepCount} steps` }}</span>
       </router-link>
     </Tiles>
 

@@ -109,6 +109,7 @@ export default {
     .row(center);
 
     input {
+      -webkit-tap-highlight-color: transparent;
       margin: 0;
       &:last-child {
         width: 100px;
