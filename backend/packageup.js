@@ -1,7 +1,7 @@
 const { execSync } = require("child_process")
 const package = require("./package.json")
-const dependencies = Object.keys(package.dependencies).filter(dep => dep.startsWith("^"))
-const devDependencies = Object.keys(package.devDependencies).filter(dep => dep.startsWith("^"))
+const dependencies = Object.entries(package.dependencies).filter(([key, value]) => value.startsWith("^")).map(([key]) => key)
+const devDependencies = Object.entries(package.devDependencies).filter(([key, value]) => value.startsWith("^")).map(([key]) => key)
 
 const run = cmd => {
   console.log(cmd)
