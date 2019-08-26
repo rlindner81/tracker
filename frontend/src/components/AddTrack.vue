@@ -1,97 +1,143 @@
 <template>
-  <form @submit.prevent="create" class="component add-track">
-    <div class="general">
-      <label>Name</label>
-      <input type="text" v-model="track.name" placeholder="Enter a name ...">
-    </div>
-    <div class="fields">
-      <div
-        class="field"
-        v-for="(field, i) in track.fields"
-        :key="i"
-      >
-        <label>Field Name</label>
-        <input
-          type="text"
-          v-model="field.name"
-          placeholder="Enter a name ..."
-          @input="field.key = slugify($event.target.value)"
+  <Modal>
+    <form @submit.prevent="submit" class="component add-track" v-if="relevant">
+      <div class="general">
+        <label>Name</label>
+        <input type="text" v-model="relevant.name" placeholder="Enter a name ...">
+      </div>
+      <div class="fields">
+        <div
+          class="field"
+          v-for="(field, i) in relevant.fields"
+          :key="i"
         >
-
-        <label>Field Key</label>
-        <input type="text" :value="field.key" :disabled="true">
-
-        <label>Type</label>
-        <select v-model="field.type" @change="cleanUpInputType(field)">
-          <option v-for="type in types" :key="type" :value="type">{{ type }}</option>
-        </select>
-
-        <label>Input Type</label>
-        <select v-model="field.input.identifier">
-          <option v-for="type in getSelectableInputs(field)" :key="type" :value="type">{{ type }}</option>
-        </select>
-
-        <div class="slider" v-if="field.input.identifier === 'SLIDER'">
-          <label>Min Value</label>
-          <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.min">
-          <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.min">
-
-          <label>Max Value</label>
-          <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.max">
-          <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.max">
-
-          <label>Step Size</label>
-          <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.step">
-          <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.step">
-        </div>
-
-        <div class="select" v-if="field.input.identifier === 'SELECT'">
-          <div
-            class="value"
-            v-for="(value, i) in field.input.parameters.values"
-            :key="i"
+          <label>Field Name</label>
+          <input
+            type="text"
+            v-model="field.name"
+            placeholder="Enter a name ..."
+            @input="field.key = slugify($event.target.value)"
           >
-            <input type="text" placeholder="Name" v-model="value.name" @input="value.key = slugify(value.name)" />
-            <input type="text" placeholder="Value" v-model="value.value" />
 
-            <button class="remover" type="button" @click="removeSelectValue(field, i)">Remove</button>
-          </div>
-          <button type="button" @click="addValue(field)">Add Value</button>
+          <label>Field Key</label>
+          <input type="text" :value="field.key" :disabled="true">
 
-          <label>Default Selection</label>
-          <select v-model="field.input.parameters.selected">
-            <option :value="null"></option>
-            <option
-              v-for="option in field.input.parameters.values"
-              :key="option.key"
-              :value="option.value"
-            >{{ option.name }}</option>
+          <label>Type</label>
+          <select v-model="field.type" @change="cleanUpInputType(field)">
+            <option v-for="type in types" :key="type" :value="type">{{ type }}</option>
           </select>
+
+          <label>Input Type</label>
+          <select v-model="field.input.identifier">
+            <option v-for="type in getSelectableInputs(field)" :key="type" :value="type">{{ type }}</option>
+          </select>
+
+          <div class="slider" v-if="field.input.identifier === 'SLIDER'">
+            <label>Min Value</label>
+            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.min">
+            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.min">
+
+            <label>Max Value</label>
+            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.max">
+            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.max">
+
+            <label>Step Size</label>
+            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.step">
+            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.step">
+          </div>
+
+          <div class="select" v-if="field.input.identifier === 'SELECT'">
+            <div
+              class="value"
+              v-for="(value, i) in field.input.parameters.values"
+              :key="i"
+            >
+              <input type="text" placeholder="Name" v-model="value.name" @input="value.key = slugify(value.name)" />
+              <input type="text" placeholder="Value" v-model="value.value" />
+
+              <button class="remover" type="button" @click="removeSelectValue(field, i)">Remove</button>
+            </div>
+            <button type="button" @click="addValue(field)">Add Value</button>
+
+            <label>Default Selection</label>
+            <select v-model="field.input.parameters.selected">
+              <option :value="null"></option>
+              <option
+                v-for="option in field.input.parameters.values"
+                :key="option.key"
+                :value="option.value"
+              >{{ option.name }}</option>
+            </select>
+          </div>
+
+          <button type="button" class="remove" @click="removeField(i)">Remove Field</button>
         </div>
 
-        <button type="button" class="remove" @click="removeField(i)">Remove Field</button>
+        <button class="add-field" type="button" @click="addField">Add Field</button>
       </div>
 
-      <button class="add-field" type="button" @click="addField">Add Field</button>
-    </div>
-
-    <LoadingButton>Create Track</LoadingButton>
-  </form>
+      <div class="button-row">
+        <button class="inverted" type="button" @click="$emit('close')">Cancel</button>
+        <LoadingButton>{{ edit ? 'Update' : 'Create Track' }}</LoadingButton>
+      </div>
+    </form>
+  </Modal>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import LoadingButton from './LoadingButton'
+import Modal from './Modal'
+
 export default {
   components: {
-    LoadingButton
+    LoadingButton, Modal
+  },
+  props: {
+    edit: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
-    ...mapState('track', { track: 'new', types: 'types', inputs: 'inputs' })
+    ...mapState('track', { track: 'new', types: 'types', inputs: 'inputs' }),
+    ...mapGetters('track', ['current']),
+    relevant () {
+      return this.edit ? this.current : this.track
+    }
   },
   methods: {
-    ...mapActions('track', { create: 'create' }),
-    ...mapMutations('track', { addField: 'addField', removeField: 'removeField' }),
+    ...mapActions('track', { create: 'create', update: 'update' }),
+    addField () {
+      this.relevant.fields.push({
+        position: this.relevant.fields.length,
+        key: null,
+        name: null,
+        type: 'TEXT',
+        input: {
+          identifier: 'FIELD',
+          parameters: {
+            selected: null,
+            min: null,
+            max: null,
+            step: null,
+            values: []
+          }
+        }
+      })
+    },
+    removeField (index) {
+      this.relevant.fields.splice(index, 1)
+    },
+    submit () {
+      if (this.edit) {
+        this.update()
+          .then(this.$emit.bind(this, 'close'))
+      } else {
+        this.create()
+          .then(this.$emit.bind(this, 'close'))
+      }
+    },
     addValue (field) {
       field.input.parameters.values.push({
         name: null,
@@ -151,6 +197,17 @@ export default {
     padding: 1rem;
   }
 
+  .button-row {
+    .row();
+
+    > * {
+      margin: 0;
+      &:first-child {
+        margin-right: 1rem;
+      }
+    }
+  }
+
   .value {
     .row(flex-start, space-between);
     margin: 0.5rem 0;
@@ -166,6 +223,45 @@ export default {
       &:last-child {
         margin: 0;
       }
+    }
+  }
+
+  .fields {
+    .column(flex-end);
+
+    input, select, label, .field {
+      width: 100%;
+
+      &[disabled] {
+        background: #efefef;
+        cursor: not-allowed;
+      }
+    }
+
+    .field {
+      .shadow();
+      margin: 1rem auto;
+      padding: 1rem;
+      background: @white;
+      position: relative;
+
+      .remove {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.1rem 0.3rem;
+        width: auto;
+        margin: 0;
+        font-size: 0.8rem;
+      }
+    }
+
+    .add-field {
+      width: 150px;
+      margin: 0.5rem 0;
+      border: 1px solid @highlight;
+      background: @white;
+      color: @highlight;
     }
   }
 }

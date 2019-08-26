@@ -34,6 +34,8 @@ export default {
       background: @white;
       padding: 1.5rem;
       max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
     }
   }
 }

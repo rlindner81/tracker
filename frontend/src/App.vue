@@ -99,5 +99,11 @@ button {
   background: @highlight;
   color: @white;
   cursor: pointer;
+
+  &.inverted {
+    border: 1px solid @highlight;
+    background: @white;
+    color: @highlight;
+  }
 }
 </style>

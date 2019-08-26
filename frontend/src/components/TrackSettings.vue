@@ -1,17 +1,12 @@
 <template>
   <div class="component track-settings">
-    <h2>Update Track</h2>
-    <form @submit.prevent="update">
-      <label>Name</label>
-      <input
-        type="text"
-        v-model="track.name">
-
-      <LoadingButton>Update</LoadingButton>
-    </form>
+    <h2>Track</h2>
+    <button @click="toggleEditModal">Edit Track</button>
 
     <h2>Danger Zone</h2>
     <button @click="toggleDeleteModal">Delete Track</button>
+
+    <AddTrack :edit="true" v-show="editModal" @close="toggleEditModal"></AddTrack>
 
     <Modal v-show="deleteModal">
       <p>Do you really want to delete this track?</p>
@@ -27,13 +22,16 @@
 import { mapGetters, mapActions } from 'vuex'
 import LoadingButton from './LoadingButton'
 import Modal from './Modal'
+import AddTrack from './AddTrack'
+
 export default {
   components: {
-    LoadingButton, Modal
+    LoadingButton, Modal, AddTrack
   },
   data () {
     return {
-      deleteModal: false
+      deleteModal: false,
+      editModal: false
     }
   },
   computed: {
@@ -49,6 +47,9 @@ export default {
     },
     toggleDeleteModal () {
       this.deleteModal = !this.deleteModal
+    },
+    toggleEditModal () {
+      this.editModal = !this.editModal
     }
   }
 }
@@ -57,12 +58,4 @@ export default {
 <style lang="less">
 @import "../less/variables";
 @import "../less/helpers";
-
-.component.track-settings {
-  form {
-    .shadow();
-    background: @white;
-    padding: 1rem;
-  }
-}
 </style>

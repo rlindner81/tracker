@@ -44,27 +44,6 @@ export default {
       state.data = state.data.filter(track => {
         return track._id !== id
       })
-    },
-    addField (state) {
-      state.new.fields.push({
-        position: state.new.fields.length,
-        key: null,
-        name: null,
-        type: 'TEXT',
-        input: {
-          identifier: 'FIELD',
-          parameters: {
-            selected: null,
-            min: null,
-            max: null,
-            step: null,
-            values: []
-          }
-        }
-      })
-    },
-    removeField (state, index) {
-      state.new.fields.splice(index, 1)
     }
   },
   getters: {
@@ -93,9 +72,13 @@ export default {
         })
     },
     update ({ getters }) {
-      return axios.patch(`/api/track/${getters.current._id}`, {
-        name: getters.current.name
-      })
+      let patchable = JSON.parse(JSON.stringify(getters.current))
+      delete patchable._id
+      delete patchable.userId
+      delete patchable.createdAt
+      delete patchable.updatedAt
+      delete patchable.stepCount
+      return axios.patch(`/api/track/${getters.current._id}`, patchable)
     },
     delete ({ commit, getters }) {
       return axios.delete(`/api/track/${getters.current._id}`)

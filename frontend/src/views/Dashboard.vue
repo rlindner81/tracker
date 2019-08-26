@@ -14,9 +14,9 @@
       </router-link>
     </Tiles>
 
-    <h2>{{ tracks.length === 0 ? 'Add your first track' : 'Add a track' }}</h2>
+    <button @click="toggleAddTrack">{{ tracks.length === 0 ? 'Add your first track' : 'Add a track' }}</button>
 
-    <AddTrack></AddTrack>
+    <AddTrack v-show="showAddTrack" @close="toggleAddTrack"></AddTrack>
   </div>
 </template>
 
@@ -26,6 +26,11 @@ import Tiles from '../components/Tiles'
 import AddTrack from '../components/AddTrack'
 
 export default {
+  data () {
+    return {
+      showAddTrack: false
+    }
+  },
   components: {
     Tiles, AddTrack
   },
@@ -33,7 +38,10 @@ export default {
     ...mapState('track', { tracks: 'data', types: 'types' })
   },
   methods: {
-    ...mapActions('track', { create: 'create' })
+    ...mapActions('track', { create: 'create' }),
+    toggleAddTrack () {
+      this.showAddTrack = !this.showAddTrack
+    }
   }
 }
 </script>
@@ -60,45 +68,6 @@ export default {
 
   > h2 {
     margin: 1rem 0;
-  }
-
-  .fields {
-    .column(flex-end);
-
-    input, select, label, .field {
-      width: 100%;
-
-      &[disabled] {
-        background: #efefef;
-        cursor: not-allowed;
-      }
-    }
-
-    .field {
-      .shadow();
-      margin: 1rem auto;
-      padding: 1rem;
-      background: @white;
-      position: relative;
-
-      .remove {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        padding: 0.1rem 0.3rem;
-        width: auto;
-        margin: 0;
-        font-size: 0.8rem;
-      }
-    }
-
-    .add-field {
-      width: 150px;
-      margin: 0.5rem 0;
-      border: 1px solid @highlight;
-      background: @white;
-      color: @highlight;
-    }
   }
 }
 </style>
