@@ -3,6 +3,8 @@
     <h2>Track</h2>
     <button @click="toggleEditModal">Edit Track</button>
 
+    <button @click="exportTrack">Export Tack</button>
+
     <h2>Danger Zone</h2>
     <button @click="toggleDeleteModal">Delete Track</button>
 
@@ -50,6 +52,9 @@ export default {
     },
     toggleEditModal () {
       this.editModal = !this.editModal
+    },
+    exportTrack () {
+      window.open(`/api/track/${this.track._id}/step/$export`, '_blank')
     }
   }
 }
