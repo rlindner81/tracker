@@ -35,6 +35,7 @@
           v-for="report in reports"
           :key="report.id"
         >
+          <h2>{{ report.name }}</h2>
           <GenericReport :report="report"></GenericReport>
           <button @click="showDeleteModal(report)">Delete</button>
         </div>
@@ -167,6 +168,13 @@ export default {
 
     > div {
       .size(100%, 300px);
+    }
+
+    h2 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
     }
 
     button {

@@ -2,7 +2,9 @@
 import { Line, mixins } from 'vue-chartjs'
 
 import axios from 'axios'
-import momemt from 'moment'
+import moment from 'moment'
+
+import { mapGetters } from 'vuex'
 
 const { reactiveData } = mixins
 
@@ -16,13 +18,9 @@ export default {
       default: null
     }
   },
-  data () {
-    return {
-
-    }
-  },
 
   computed: {
+    ...mapGetters('track', { track: 'current' }),
     options () {
       return {
         responsive: true,
@@ -73,15 +71,18 @@ export default {
         axios.get(`/api/track/${this.report.trackId}/report/${this.report._id}/$evaluate`)
           .then(response => {
             labels = response.data.aggregations.map(result => {
-              return momemt(result.startAt).utc()
+              return moment(result.startAt).utc()
             })
+
             datasets = this.report.aggregations.map(aggregation => {
+              let field = this.track.fields.find(field => field.key === aggregation.field)
+              let name = `${aggregation.type} ${field ? field.name : aggregation.field}`
               return {
-                label: this.report ? this.report.name : 'Amount of Steps',
+                label: this.report ? name : 'Amount of Steps',
                 backgroundColor: '#49D49D',
                 data: response.data.aggregations.map(result => {
                   return {
-                    t: momemt(result.startAt).utc(),
+                    t: moment(result.startAt).utc(),
                     y: result[aggregation.key]
                   }
                 })

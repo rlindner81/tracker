@@ -1,6 +1,8 @@
 <script>
 import { mapState } from 'vuex'
 import { Bar, mixins } from 'vue-chartjs'
+import moment from 'moment'
+
 const { reactiveData } = mixins
 export default {
   name: 'ActivityChart',
@@ -44,7 +46,7 @@ export default {
     report: {
       handler () {
         this.chartData = {
-          labels: !this.report ? [] : this.report.map(entry => { return entry.startAt }),
+          labels: !this.report ? [] : this.report.map(entry => { return moment(entry.startAt).utc().format('DD.MM.YYYY') }),
           datasets: [
             {
               label: 'Amount of Steps',
