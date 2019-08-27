@@ -16,14 +16,14 @@
             type="text"
             v-model="field.name"
             placeholder="Enter a name ..."
-            @input="field.key = slugify($event.target.value)"
+            @input="!edit ? (field.key = slugify($event.target.value)) : field.key = field.key"
           >
 
           <label>Field Key</label>
           <input type="text" :value="field.key" :disabled="true">
 
           <label>Type</label>
-          <select v-model="field.type" @change="cleanUpInputType(field)">
+          <select :disabled="edit" v-model="field.type" @change="cleanUpInputType(field)">
             <option v-for="type in types" :key="type" :value="type">{{ type }}</option>
           </select>
 
@@ -52,7 +52,7 @@
               v-for="(value, i) in field.input.parameters.values"
               :key="i"
             >
-              <input type="text" placeholder="Name" v-model="value.name" @input="value.key = slugify(value.name)" />
+              <input type="text" placeholder="Name" v-model="value.name" @input="!edit ? (value.key = slugify(value.name)) : (value.key = value.key)" />
               <input type="text" placeholder="Value" v-model="value.value" />
 
               <button class="remover" type="button" @click="removeSelectValue(field, i)">Remove</button>
@@ -70,10 +70,10 @@
             </select>
           </div>
 
-          <button type="button" class="remove" @click="removeField(i)">Remove Field</button>
+          <button v-if="!edit" type="button" class="remove" @click="removeField(i)">Remove Field</button>
         </div>
 
-        <button class="add-field" type="button" @click="addField">Add Field</button>
+        <button v-if="!edit" class="add-field" type="button" @click="addField">Add Field</button>
       </div>
 
       <div class="button-row">
