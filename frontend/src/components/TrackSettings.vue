@@ -54,7 +54,7 @@ export default {
       this.editModal = !this.editModal
     },
     exportTrack () {
-      window.open(`/api/track/${this.track._id}/step/$export`, '_blank')
+      window.open(`/api/track/${this.track._id}/step/$export`)
     }
   }
 }
