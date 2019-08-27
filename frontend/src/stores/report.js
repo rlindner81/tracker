@@ -5,6 +5,7 @@ export default {
   state: {
     data: [],
     trackId: null,
+    selected: null,
     new: {
       name: null,
       interval: null,
@@ -14,6 +15,9 @@ export default {
     aggregations: ['SUM', 'AVG', 'MIN', 'MAX']
   },
   mutations: {
+    select (state, id) {
+      state.selected = state.data.find(report => report._id === id)
+    },
     set (state, data) {
       state.data = data
     },
@@ -54,6 +58,12 @@ export default {
         .then(response => {
           commit('clearNew')
           commit('add', response.data)
+        })
+    },
+    delete ({ commit, rootGetters }, id) {
+      return axios.delete(`/api/track/${rootGetters['track/current']._id}/report/${id}`)
+        .then(() => {
+          commit('remove', id)
         })
     }
   }

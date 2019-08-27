@@ -36,6 +36,7 @@
           :key="report.id"
         >
           <GenericReport :report="report"></GenericReport>
+          <button @click="showDeleteModal(report)">Delete</button>
         </div>
       </Tab>
 
@@ -53,6 +54,15 @@
       <h2>Add a Report</h2>
       <AddReport @tracked="toggleReportModal" @closed="toggleReportModal"></AddReport>
     </Modal>
+
+    <Modal v-show="deleteModal" class="delete-modal">
+      <h2>Delete Report</h2>
+      <p v-if="selected">Are you sure you want to delete the report {{ selected.name }}</p>
+      <div class="button-row">
+        <button class="inverted" @click="deleteModal = false">Cancel</button>
+        <LoadingButton @click.native="onDelete">Delete</LoadingButton>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -67,15 +77,17 @@ import TrackList from '../components/TrackList'
 import TrackSettings from '../components/TrackSettings'
 import AddReport from '../components/AddReport'
 import GenericReport from '../components/GenericReport'
+import LoadingButton from '../components/LoadingButton'
 
 export default {
   components: {
-    ActivityChart, Modal, AddStep, Tabs, Tab, TrackList, TrackSettings, AddReport, GenericReport
+    ActivityChart, Modal, AddStep, Tabs, Tab, TrackList, TrackSettings, AddReport, GenericReport, LoadingButton
   },
   data () {
     return {
       addModal: false,
-      reportModal: false
+      reportModal: false,
+      deleteModal: false
     }
   },
   created () {
@@ -89,14 +101,15 @@ export default {
   computed: {
     ...mapState('step', { newStep: 'new', steps: 'data' }),
     ...mapGetters('track', { title: 'titleById', track: 'current' }),
-    ...mapState('report', { reports: 'data' })
+    ...mapState('report', { reports: 'data', selected: 'selected' })
   },
   methods: {
     ...mapActions('track', { report: 'report' }),
     ...mapMutations('track', { setCurrent: 'setCurrent', clearTrack: 'clearCurrent' }),
     ...mapActions('step', { load: 'load' }),
     ...mapMutations('step', { clear: 'clear' }),
-    ...mapActions('report', { loadReports: 'load' }),
+    ...mapActions('report', { loadReports: 'load', deleteReport: 'delete' }),
+    ...mapMutations('report', ['select']),
     toggleAddModal () {
       this.addModal = !this.addModal
     },
@@ -106,6 +119,16 @@ export default {
     onTrackCreated () {
       this.toggleAddModal()
       this.loadReports()
+    },
+    showDeleteModal (report) {
+      this.select(report._id)
+      this.deleteModal = true
+    },
+    onDelete () {
+      this.deleteReport(this.selected._id)
+        .then(() => {
+          this.deleteModal = false
+        })
     }
   }
 }
@@ -132,6 +155,7 @@ export default {
   .title-with-button {
     .row(center, space-between);
     margin-top: 1rem;
+    margin-bottom: 1rem;
     button {
       width: auto;
     }
@@ -139,9 +163,19 @@ export default {
 
   .report-wrap {
     .size(100%, 300px);
+    position: relative;
 
     > div {
       .size(100%, 300px);
+    }
+
+    button {
+      padding: 0.25rem 0.5rem;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: auto;
+      font-size: 0.8rem;
     }
   }
 
@@ -169,6 +203,17 @@ export default {
 
       &:first-child {
         margin-left: 0;
+      }
+    }
+  }
+
+  .delete-modal .button-row {
+    .row();
+    margin-top: 1rem;
+    button {
+      margin: 0;
+      &:first-child {
+        margin-right: 1rem;
       }
     }
   }
