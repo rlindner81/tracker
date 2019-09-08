@@ -1,7 +1,7 @@
-var express = require("express"),
-  validation = require("../validation"),
-  service = require("../service").track,
-  router = express.Router()
+const express = require("express")
+const validation = require("../validation")
+const service = require("../service").track
+const router = express.Router()
 
 /**
  * Tracks

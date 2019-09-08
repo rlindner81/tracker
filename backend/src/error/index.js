@@ -1,4 +1,4 @@
-var ApplicationError = require("./ApplicationError")
+const ApplicationError = require("./ApplicationError")
 
 module.exports.handler = require("./applicationErrorHandler")
 

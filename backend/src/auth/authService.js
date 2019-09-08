@@ -1,12 +1,12 @@
-var { promisify } = require("util"),
-  bcrypt = require("bcrypt"),
-  dbUsers = require("../service").data.users,
-  error = require("../error"),
-  AlreadyLoggedInError = error.AlreadyLoggedInError,
-  AlreadyLoggedOutError = error.AlreadyLoggedOutError,
-  UserNotFoundError = error.UserNotFoundError,
-  UserAlreadyExistsError = error.UserAlreadyExistsError,
-  WrongPasswordError = error.WrongPasswordError
+const { promisify } = require("util")
+const bcrypt = require("bcrypt")
+const dbUsers = require("../service").data.users
+const error = require("../error")
+const AlreadyLoggedInError = error.AlreadyLoggedInError
+const AlreadyLoggedOutError = error.AlreadyLoggedOutError
+const UserNotFoundError = error.UserNotFoundError
+const UserAlreadyExistsError = error.UserAlreadyExistsError
+const WrongPasswordError = error.WrongPasswordError
 
 function isLoggedIn(session) {
   return session.userId !== undefined
@@ -14,7 +14,7 @@ function isLoggedIn(session) {
 module.exports.isLoggedIn = isLoggedIn
 
 function login(session, fields) {
-  var user
+  let user
   if (isLoggedIn(session)) {
     throw new AlreadyLoggedInError()
   }
@@ -50,7 +50,7 @@ function logout(session) {
 module.exports.logout = logout
 
 function register(session, fields) {
-  var user = fields
+  let user = fields
   if (isLoggedIn(session)) {
     throw new AlreadyLoggedInError()
   }

@@ -97,11 +97,11 @@ module.exports.deleteTrack = deleteTrack
  */
 
 function generateValue(track, steps, field) {
-  var generator = field.generator,
-    parameters = generator && generator.parameters,
-    identifier = typeof generator === "string" ? generator : generator.identifier,
-    now = moment(),
-    previous
+  let generator = field.generator
+  let parameters = generator && generator.parameters
+  let identifier = typeof generator === "string" ? generator : generator.identifier
+  let now = moment()
+  let previous
 
   switch (identifier) {
     case "STATIC":
@@ -199,8 +199,8 @@ function convertFieldInputToType(field, inputValues) {
 }
 
 function prepareStep(step) {
-  var inputValues = step.values,
-    values = {}
+  let inputValues = step.values
+  let values = {}
 
   return Promise.all([
     dbTracks.findOneAsync({ _id: step.trackId }),

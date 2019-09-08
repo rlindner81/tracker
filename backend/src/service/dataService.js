@@ -1,9 +1,9 @@
-var session = require("express-session"),
-  Sessionstore = require("nedb-session-store")(session),
-  Datastore = require("nedb"),
-  Cursor = Datastore.prototype.find().constructor,
-  uuid = require("uuid/v4"),
-  promisifyAll = require("../util").promisifyAll
+const session = require("express-session")
+const Sessionstore = require("nedb-session-store")(session)
+const Datastore = require("nedb")
+const Cursor = Datastore.prototype.find().constructor
+const uuid = require("uuid/v4")
+const promisifyAll = require("../util").promisifyAll
 
 const inMemoryOnly = process.env.NODE_ENV === "test" ? true : false
 

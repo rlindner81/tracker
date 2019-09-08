@@ -7,9 +7,9 @@ plugins:
   - jest
   - prettier
 extends:
-  - 'eslint:recommended'
-  - 'plugin:jest/recommended'
-  - 'plugin:prettier/recommended'
+  - "eslint:recommended"
+  - "plugin:jest/recommended"
+  - "plugin:prettier/recommended"
 env:
   node: true
 globals:
@@ -57,8 +57,6 @@ rules:
   no-unused-expressions: error
   # https://eslint.org/docs/rules/no-underscore-dangle
   no-underscore-dangle: error
-  # https://eslint.org/docs/rules/one-var
-  one-var: [off]
   # https://eslint.org/docs/rules/no-catch-shadow
   no-catch-shadow: [off]
   # https://eslint.org/docs/rules/block-scoped-var
@@ -74,3 +72,7 @@ rules:
   # no-bitwise: [off]
   # https://eslint.org/docs/rules/require-atomic-updates
   require-atomic-updates: [off]
+  # http://eslint.org/docs/rules/one-var
+  one-var: [error, never]
+  # http://eslint.org/docs/rules/no-var
+  no-var: error

@@ -1,17 +1,17 @@
 process.env.TZ = "Etc/UTC"
 
-var express = require("express"),
-  session = require("express-session"),
-  bodyParser = require("body-parser"),
-  auth = require("./auth"),
-  error = require("./error"),
-  dataService = require("./service").data,
-  route = require("./route"),
-  config = require("./config"),
-  app = express(),
-  sessionConfig = Object.assign({}, config.session, {
-    store: dataService.sessions
-  })
+const express = require("express")
+const session = require("express-session")
+const bodyParser = require("body-parser")
+const auth = require("./auth")
+const error = require("./error")
+const dataService = require("./service").data
+const route = require("./route")
+const config = require("./config")
+const app = express()
+const sessionConfig = Object.assign({}, config.session, {
+  store: dataService.sessions
+})
 
 app.set("port", config.server.port)
 

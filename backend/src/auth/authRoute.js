@@ -1,8 +1,8 @@
-var express = require("express"),
-  service = require("./authService"),
-  authHandler = require("./authHandler"),
-  validation = require("../validation"),
-  router = express.Router()
+const express = require("express")
+const service = require("./authService")
+const authHandler = require("./authHandler")
+const validation = require("../validation")
+const router = express.Router()
 
 router.post("/login", validation.login, function(req, res, next) {
   service

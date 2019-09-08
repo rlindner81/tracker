@@ -1,5 +1,5 @@
-var promisify = require("util").promisify,
-  suffix = "Async"
+const promisify = require("util").promisify
+const suffix = "Async"
 
 function promisifyAll(target) {
   Object.keys(target).forEach(function(name) {
