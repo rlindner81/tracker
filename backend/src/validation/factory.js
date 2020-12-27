@@ -2,8 +2,8 @@ const joi = require("joi")
 
 module.exports = function(schema, req, res, next) {
   if (schema.body) {
-    return joi
-      .validate(req.body, schema.body, schema.options)
+    return schema.body
+      .validate(req.body, schema.options)
       .then(function(oResult) {
         // Write back changes made during the validation
         req.body = oResult
