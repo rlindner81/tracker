@@ -1,4 +1,4 @@
-const joi = require("@hapi/joi")
+const joi = require("joi")
 const string = joi.string().max(256)
 const stringNonEmpty = string.min(1)
 const token = stringNonEmpty.token()

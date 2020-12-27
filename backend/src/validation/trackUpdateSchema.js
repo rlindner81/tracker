@@ -1,4 +1,4 @@
-const joi = require("@hapi/joi")
+const joi = require("joi")
 const { string, token, fieldType, generatorType, inputType, displayType, frequencyType } = require("./common")
 const typeSchema = {
   identifier: fieldType,

@@ -1,4 +1,4 @@
-const joi = require("@hapi/joi")
+const joi = require("joi")
 const { string, token, frequencyType } = require("./common")
 const aggregationSchema = joi.alternatives().try(
   {

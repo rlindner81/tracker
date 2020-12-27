@@ -1,4 +1,4 @@
-const joi = require("@hapi/joi")
+const joi = require("joi")
 const { string } = require("./common")
 const loginSchema = {
   nameOrEmail: string,
