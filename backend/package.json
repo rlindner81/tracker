@@ -19,7 +19,7 @@
     "npm": "^6.0.0"
   },
   "devDependencies": {
-    "eslint": "7.28.0",
+    "eslint": "7.29.0",
     "eslint-config-prettier": "7.2.0",
     "eslint-plugin-jest": "24.3.6",
     "eslint-plugin-prettier": "3.4.0",
