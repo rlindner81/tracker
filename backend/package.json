@@ -12,7 +12,8 @@
   "scripts": {
     "start": "node src/server.js",
     "lint": "eslint . --fix",
-    "test": "jest"
+    "test": "jest",
+    "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock=true"
   },
   "engines": {
     "node": "^10.10.0",
