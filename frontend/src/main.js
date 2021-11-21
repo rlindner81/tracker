@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueCompositionAPI from '@vue/composition-api'
 import moment from 'moment'
 import App from './App.vue'
 import axios from './axios'
@@ -16,6 +17,8 @@ Vue.filter('date', value => {
 Vue.filter('relativeDate', value => {
   return value ? moment(value).fromNow() : null
 })
+
+Vue.use(VueCompositionAPI)
 
 new Vue({
   router,

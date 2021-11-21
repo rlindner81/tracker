@@ -18,7 +18,22 @@ export default {
       let newStep = {}
 
       track.fields.forEach(field => {
-        newStep[field.key] = field.input && field.input.parameters && field.input.parameters.selected ? field.input.parameters.selected : null
+        switch (field.input.identifier) {
+          case 'SLIDER': {
+            const halfPoint = (parseFloat(field.input.parameters.min) + parseFloat(field.input.parameters.max)) / 2.0
+            newStep[field.key] = halfPoint
+            break
+          }
+          case 'SELECT': {
+            const firstEntryValue = field.input.parameters.values[0].value
+            newStep[field.key] = firstEntryValue
+            break
+          }
+          default: {
+            newStep[field.key] = field.input && field.input.parameters && field.input.parameters.selected ? field.input.parameters.selected : null
+            break
+          }
+        }
       })
 
       state.new = newStep

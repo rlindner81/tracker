@@ -40,14 +40,15 @@
         class="slider"
         v-if="field.input.identifier === 'SLIDER'"
       >
-        <input
-          type="range"
-          :min="field.input.parameters.min ? parseFloat(field.input.parameters.min) : 0"
-          :max="field.input.parameters.max ? parseFloat(field.input.parameters.max) : 1000"
-          :step="field.input.parameters.step ? parseFloat(field.input.parameters.step) : 1"
-          v-model="newStep[field.key]"
-        >
-        <input
+        <div class="slider-container">
+          <Slider
+            :min="field.input.parameters.min ? parseFloat(field.input.parameters.min) : 0"
+            :max="field.input.parameters.max ? parseFloat(field.input.parameters.max) : 1000"
+            :step="field.input.parameters.step ? parseFloat(field.input.parameters.step) < 1 ? -1 : parseFloat(field.input.parameters.step) : 1"
+            v-model="newStep[field.key]"
+          />
+        </div>
+        <!-- <input
           type="number"
           step="0.00001"
           v-model="newStep[field.key]"
@@ -60,7 +61,7 @@
           v-model="newStep[field.key]"
           :placeholder="`Enter ${field.name}`"
           v-if="field.type === 'INTEGER'"
-        >
+        > -->
       </div>
     </div>
 
@@ -74,8 +75,10 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import LoadingButton from './LoadingButton'
+import Slider from '@vueform/slider/dist/slider.vue2.js'
 export default {
   components: {
+    Slider,
     LoadingButton
   },
   computed: {
@@ -96,6 +99,7 @@ export default {
 }
 </script>
 
+<style src="@vueform/slider/themes/default.css"></style>
 <style lang="less">
 @import "../less/variables";
 @import "../less/helpers";
@@ -105,18 +109,22 @@ export default {
     margin: 1rem 0;
   }
 
-  .slider {
-    .row(center);
-
-    input {
-      -webkit-tap-highlight-color: transparent;
-      margin: 0;
-      &:last-child {
-        width: 100px;
-        margin-left: 2rem;
-      }
-    }
+  .slider-container {
+    margin: 3rem 0 1rem 0;
   }
+    // .row(center);
+  // .slider {
+  //   // .row(center);
+
+  //   input {
+  //     -webkit-tap-highlight-color: transparent;
+  //     margin: 0;
+  //     &:last-child {
+  //       width: 100px;
+  //       margin-left: 2rem;
+  //     }
+  //   }
+  // }
 
   .button-row {
     .row();
