@@ -8,8 +8,8 @@
 
 <script>
 export default {
-  name: 'Tiles'
-}
+  name: "Tiles",
+};
 </script>
 
 <style lang="less">

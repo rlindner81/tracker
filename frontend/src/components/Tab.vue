@@ -6,36 +6,36 @@
 export default {
   props: {
     name: { required: true },
-    selected: { default: false }
+    selected: { default: false },
   },
-  data () {
+  data() {
     return {
-      isActive: false
-    }
+      isActive: false,
+    };
   },
-  created () {
-    this.tabs = this.$children
+  created() {
+    this.tabs = this.$children;
   },
-  mounted () {
+  mounted() {
     if (this.$route.hash) {
       if (this.$route.hash === this.href) {
-        this.isActive = true
+        this.isActive = true;
       }
     } else {
-      this.isActive = this.selected
+      this.isActive = this.selected;
     }
   },
   computed: {
-    href () {
-      return '#' + this.name.toLowerCase().replace(/ /g, '-')
-    }
+    href() {
+      return "#" + this.name.toLowerCase().replace(/ /g, "-");
+    },
   },
   methods: {
-    selectTab (selectedTab) {
-      this.tabs.forEach(tab => {
-        tab.isActive = (tab.name === selectedTab.name)
-      })
-    }
-  }
-}
+    selectTab(selectedTab) {
+      this.tabs.forEach((tab) => {
+        tab.isActive = tab.name === selectedTab.name;
+      });
+    },
+  },
+};
 </script>

@@ -1,67 +1,79 @@
 <script>
-import { mapState } from 'vuex'
-import { Bar, mixins } from 'vue-chartjs'
-import moment from 'moment'
+import { mapState } from "vuex";
+import { Bar, mixins } from "vue-chartjs";
+import { readableShortDateTime } from "../datetime";
 
-const { reactiveData } = mixins
+const { reactiveData } = mixins;
 export default {
-  name: 'ActivityChart',
+  name: "ActivityChart",
   extends: Bar,
   mixins: [reactiveData],
-  data () {
+  data() {
     return {
       options: {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
-          display: false
+          display: false,
         },
         scales: {
-          xAxes: [{
-            gridLines: {
-              display: false,
-              lineWidth: 1,
-              color: '#2c3e5050'
+          xAxes: [
+            {
+              gridLines: {
+                display: false,
+                lineWidth: 1,
+                color: "#2c3e5050",
+              },
+              ticks: {
+                display: false,
+              },
             },
-            ticks: {
-              display: false
-            }
-          }],
-          yAxes: [{
-            display: false,
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
-    }
+          ],
+          yAxes: [
+            {
+              display: false,
+              ticks: {
+                beginAtZero: true,
+              },
+            },
+          ],
+        },
+      },
+    };
   },
 
-  mounted () {
-    this.renderChart(this.chartdata, this.options)
+  mounted() {
+    this.renderChart(this.chartdata, this.options);
   },
 
   watch: {
     report: {
-      handler () {
+      handler() {
         this.chartData = {
-          labels: !this.report ? [] : this.report.map(entry => { return moment(entry.startAt).utc().format('DD.MM.YYYY') }),
+          labels: !this.report
+            ? []
+            : this.report.map((entry) => {
+                return readableShortDateTime(entry.startAt);
+              }),
           datasets: [
             {
-              label: 'Amount of Steps',
-              backgroundColor: '#49D49D',
-              data: !this.report ? [] : this.report.map(entry => { return entry.count })
-            }
-          ]
-        }
+              label: "Amount of Steps",
+              backgroundColor: "#49D49D",
+              data: !this.report
+                ? []
+                : this.report.map((entry) => {
+                    return entry.count;
+                  }),
+            },
+          ],
+        };
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   computed: {
-    ...mapState('track', { report: 'currentUsage' })
-  }
-}
+    ...mapState("track", { report: "currentUsage" }),
+  },
+};
 </script>

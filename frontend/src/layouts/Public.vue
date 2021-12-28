@@ -14,22 +14,21 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from "vuex";
 export default {
-  created () {
-    this.load()
-      .then(() => {
-        // if already logged in
-        this.$router.replace('/')
-      })
+  created() {
+    this.load().then(() => {
+      // if already logged in
+      this.$router.replace("/");
+    });
   },
   computed: {
-    ...mapState('track', { tracks: 'data' })
+    ...mapState("track", { tracks: "data" }),
   },
   methods: {
-    ...mapActions('user', { load: 'init', clear: 'clear' })
-  }
-}
+    ...mapActions("user", { load: "init", clear: "clear" }),
+  },
+};
 </script>
 
 <style lang="less">
@@ -39,7 +38,7 @@ export default {
 .layout.public {
   .size(100%, 100%);
   .row(center, center);
-  background: url('~@/assets/paper.png') repeat;
+  background: url("~@/assets/paper.png") repeat;
 
   .flex-aligner {
     .column();

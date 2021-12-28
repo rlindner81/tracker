@@ -1,53 +1,67 @@
 <template>
   <div class="component track-list steps" v-if="steps && steps.length > 0">
-    <div
-      class="step"
-      v-for="step in steps"
-      :key="step._id"
-    >
+    <div class="step" v-for="step in steps" :key="step._id">
       <div class="values">
-        <div
-          class="value"
-          v-for="(value, key) in step.values"
-          :key="key"
-        >
-          <label>{{ track.fields.find(field => field.key === key).name }}</label>
+        <div class="value" v-for="(value, key) in step.values" :key="key">
+          <label>{{
+            track.fields.find((field) => field.key === key).name
+          }}</label>
           <span v-if="value === undefined || value === null">n/a</span>
-          <span v-if="value !== undefined && value !== null && getInputIdentifier(key) !== 'SELECT'">{{ value }}</span>
-          <span v-if="value !== undefined && value !== null && getInputIdentifier(key) === 'SELECT'">{{ getField(key).input.parameters.values.find(v => String(v.value) === String(value)).name }}</span>
+          <span
+            v-if="
+              value !== undefined &&
+              value !== null &&
+              getInputIdentifier(key) !== 'SELECT'
+            "
+            >{{ value }}</span
+          >
+          <span
+            v-if="
+              value !== undefined &&
+              value !== null &&
+              getInputIdentifier(key) === 'SELECT'
+            "
+            >{{
+              getField(key).input.parameters.values.find(
+                (v) => String(v.value) === String(value)
+              ).name
+            }}</span
+          >
         </div>
       </div>
       <div class="master-data">
         <label>Tracked at</label>
-        <span :title="step.createdAt | date">{{ step.createdAt | relativeDate }}</span>
+        <span :title="step.createdAt | date">{{
+          step.createdAt | relativeDate
+        }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapState('step', { steps: 'data' }),
-    ...mapGetters('track', { track: 'current' })
+    ...mapState("step", { steps: "data" }),
+    ...mapGetters("track", { track: "current" }),
   },
   methods: {
-    getInputIdentifier (key) {
-      let field = this.getField(key)
+    getInputIdentifier(key) {
+      let field = this.getField(key);
 
-      return field ? field.input.identifier : null
+      return field ? field.input.identifier : null;
     },
-    getType (key) {
-      let field = this.getField(key)
+    getType(key) {
+      let field = this.getField(key);
 
-      return field ? field.type : null
+      return field ? field.type : null;
     },
-    getField (key) {
-      return this.track.fields.find(field => field.key === key)
-    }
-  }
-}
+    getField(key) {
+      return this.track.fields.find((field) => field.key === key);
+    },
+  },
+};
 </script>
 
 <style lang="less">

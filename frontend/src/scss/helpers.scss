@@ -1,0 +1,33 @@
+@mixin flex ($align: flex-start, $justify: flex-start, $wrap: nowrap, $flex: row) {
+  display: flex;
+  flex-direction: $flex;
+  align-items: $align;
+  justify-content: $justify;
+  flex-wrap: $wrap;
+}
+
+@mixin row ($align: flex-start, $justify: flex-start, $wrap: nowrap) {
+  @include flex($align, $justify, $wrap)
+}
+
+@mixin column ($align: flex-start, $justify: flex-start, $wrap: nowrap) {
+  @include flex($align, $justify, $wrap, column)
+}
+
+@mixin size ($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin max ($width) {
+  width: 100%;
+  max-width: $width;
+}
+
+@mixin shadow () {
+  box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    box-shadow: 0 2px 15px 0px rgba(0, 0, 0, 0.15);
+  }
+}

@@ -1,38 +1,37 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
 
     <div class="errors">
-      <div
-        class="error"
-        v-for="error in errors"
-        :key="error._id"
-      >{{ error.message }}</div>
+      <div class="error" v-for="error in errors" :key="error._id">
+        {{ error.message }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
   computed: {
-    ...mapState('error', ['errors'])
-  }
-}
+    ...mapState("error", ["errors"]),
+  },
+};
 </script>
 
 <style lang="less">
-@import (css) url('https://fonts.googleapis.com/css?family=Fira+Sans&display=swap');
+@import (css) url("https://fonts.googleapis.com/css?family=Lato");
 @import "less/variables";
 @import "less/helpers";
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
 }
 
 body * {
-  font-family: 'Fira Sans', sans-serif;
+  font-family: "Fira Sans", sans-serif;
 
   color: @font-color;
   box-sizing: border-box;
@@ -67,7 +66,10 @@ body * {
   }
 }
 
-input:not([type="range"]), select, textarea, button {
+input:not([type="range"]),
+select,
+textarea,
+button {
   width: 100%;
   background: none;
   border: none;
@@ -83,7 +85,7 @@ input[type="range"] {
   width: 100%;
   position: relative;
   &:after {
-    content: ' ';
+    content: " ";
     position: absolute;
     top: 50%;
     left: 0;

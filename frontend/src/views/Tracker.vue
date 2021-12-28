@@ -30,11 +30,7 @@
           <p>You don't have any reports defined yet.</p>
         </div>
 
-        <div
-          class="report-wrap"
-          v-for="report in reports"
-          :key="report.id"
-        >
+        <div class="report-wrap" v-for="report in reports" :key="report.id">
           <h2>{{ report.name }}</h2>
           <GenericReport :report="report"></GenericReport>
           <button @click="showDeleteModal(report)">Delete</button>
@@ -53,12 +49,17 @@
 
     <Modal v-show="reportModal">
       <h2>Add a Report</h2>
-      <AddReport @tracked="toggleReportModal" @closed="toggleReportModal"></AddReport>
+      <AddReport
+        @tracked="toggleReportModal"
+        @closed="toggleReportModal"
+      ></AddReport>
     </Modal>
 
     <Modal v-show="deleteModal" class="delete-modal">
       <h2>Delete Report</h2>
-      <p v-if="selected">Are you sure you want to delete the report {{ selected.name }}</p>
+      <p v-if="selected">
+        Are you sure you want to delete the report {{ selected.name }}
+      </p>
       <div class="button-row">
         <button class="inverted" @click="deleteModal = false">Cancel</button>
         <LoadingButton @click.native="onDelete">Delete</LoadingButton>
@@ -68,71 +69,82 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
-import ActivityChart from '../components/ActivityChart'
-import Modal from '../components/Modal'
-import AddStep from '../components/AddStep'
-import Tabs from '../components/Tabs'
-import Tab from '../components/Tab'
-import TrackList from '../components/TrackList'
-import TrackSettings from '../components/TrackSettings'
-import AddReport from '../components/AddReport'
-import GenericReport from '../components/GenericReport'
-import LoadingButton from '../components/LoadingButton'
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import ActivityChart from "../components/ActivityChart";
+import Modal from "../components/Modal";
+import AddStep from "../components/AddStep";
+import Tabs from "../components/Tabs";
+import Tab from "../components/Tab";
+import TrackList from "../components/TrackList";
+import TrackSettings from "../components/TrackSettings";
+import AddReport from "../components/AddReport";
+import GenericReport from "../components/GenericReport";
+import LoadingButton from "../components/LoadingButton";
 
 export default {
   components: {
-    ActivityChart, Modal, AddStep, Tabs, Tab, TrackList, TrackSettings, AddReport, GenericReport, LoadingButton
+    ActivityChart,
+    Modal,
+    AddStep,
+    Tabs,
+    Tab,
+    TrackList,
+    TrackSettings,
+    AddReport,
+    GenericReport,
+    LoadingButton,
   },
-  data () {
+  data() {
     return {
       addModal: false,
       reportModal: false,
-      deleteModal: false
-    }
+      deleteModal: false,
+    };
   },
-  created () {
-    this.clearTrack()
-    this.clear()
-    this.setCurrent(this.$route.params.track)
-    this.load()
-    this.loadReports()
-    this.report()
+  created() {
+    this.clearTrack();
+    this.clear();
+    this.setCurrent(this.$route.params.track);
+    this.load();
+    this.loadReports();
+    this.report();
   },
   computed: {
-    ...mapState('step', { newStep: 'new', steps: 'data' }),
-    ...mapGetters('track', { title: 'titleById', track: 'current' }),
-    ...mapState('report', { reports: 'data', selected: 'selected' })
+    ...mapState("step", { newStep: "new", steps: "data" }),
+    ...mapGetters("track", { title: "titleById", track: "current" }),
+    ...mapState("report", { reports: "data", selected: "selected" }),
   },
   methods: {
-    ...mapActions('track', { report: 'report' }),
-    ...mapMutations('track', { setCurrent: 'setCurrent', clearTrack: 'clearCurrent' }),
-    ...mapActions('step', { load: 'load' }),
-    ...mapMutations('step', { clear: 'clear' }),
-    ...mapActions('report', { loadReports: 'load', deleteReport: 'delete' }),
-    ...mapMutations('report', ['select']),
-    toggleAddModal () {
-      this.addModal = !this.addModal
+    ...mapActions("track", { report: "report" }),
+    ...mapMutations("track", {
+      setCurrent: "setCurrent",
+      clearTrack: "clearCurrent",
+    }),
+    ...mapActions("step", { load: "load" }),
+    ...mapMutations("step", { clear: "clear" }),
+    ...mapActions("report", { loadReports: "load", deleteReport: "delete" }),
+    ...mapMutations("report", ["select"]),
+    toggleAddModal() {
+      this.addModal = !this.addModal;
     },
-    toggleReportModal () {
-      this.reportModal = !this.reportModal
+    toggleReportModal() {
+      this.reportModal = !this.reportModal;
     },
-    onTrackCreated () {
-      this.toggleAddModal()
-      this.loadReports()
+    onTrackCreated() {
+      this.toggleAddModal();
+      this.loadReports();
     },
-    showDeleteModal (report) {
-      this.select(report._id)
-      this.deleteModal = true
+    showDeleteModal(report) {
+      this.select(report._id);
+      this.deleteModal = true;
     },
-    onDelete () {
-      this.deleteReport(this.selected._id)
-        .then(() => {
-          this.deleteModal = false
-        })
-    }
-  }
-}
+    onDelete() {
+      this.deleteReport(this.selected._id).then(() => {
+        this.deleteModal = false;
+      });
+    },
+  },
+};
 </script>
 
 <style lang="less">
