@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@vueform/slider": "2.0.8",
-    "axios": "0.24.0",
+    "axios": "0.25.0",
     "chart.js": "2.9.4",
     "core-js": "2.6.12",
     "moment": "2.29.1",
