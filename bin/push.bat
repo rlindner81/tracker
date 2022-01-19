@@ -7,11 +7,11 @@ SET SSH=plink -load "goodnogood.org"
   cd /var/www/tracker ^&^& ^
   git pull ^&^& ^
   cd /var/www/tracker/frontend ^&^& ^
-  npm ci ^&^& ^
+  npm ci --package-lock ^&^& ^
   npm run build ^&^& ^
   supervisorctl stop tracker ^&^& ^
   cd /var/www/tracker/backend ^&^& ^
-  npm ci --only=production ^&^& ^
+  npm ci --package-lock --only=production ^&^& ^
   supervisorctl start tracker
 
 ENDLOCAL
