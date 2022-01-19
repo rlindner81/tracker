@@ -305,7 +305,7 @@ function updateStep(session, trackId, stepId, step) {
 module.exports.updateStep = updateStep
 
 function deleteStep(session, trackId, stepId) {
-  return dbTracks.removeAsync({ _id: stepId })
+  return dbSteps.removeAsync({ _id: stepId })
 }
 module.exports.deleteStep = deleteStep
 
