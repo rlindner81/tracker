@@ -19,7 +19,10 @@ export default {
     },
   },
   actions: {
-    async loadSessionUser({ commit }) {
+    async loadSessionUser({ commit, getters }) {
+      if (getters.isLoggedIn) {
+        return;
+      }
       const response = await fetchResponse("/api/auth/me");
       response.ok && commit("set", await response.json());
     },
