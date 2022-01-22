@@ -3,7 +3,7 @@
     <router-view />
 
     <div class="errors">
-      <div class="error" v-for="error in errors" :key="error._id">
+      <div class="error" v-for="(error, index) in errors" :key="index">
         {{ error.message }}
       </div>
     </div>

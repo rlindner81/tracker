@@ -9,7 +9,7 @@ export default {
     async responseNotOk(state, response: Response) {
       const error = {
         _type: "responseNotOk",
-        data: await response.text(),
+        message: await response.text(),
       };
 
       const errorIndex = state.errors.push(error) - 1;
