@@ -62,9 +62,8 @@ export default {
       });
     },
     create({ commit, state }) {
-      return guardedFetchJson(<RequestInfo>{
+      return guardedFetchJson("/api/track", <RequestInit>{
         method: "POST",
-        url: "/api/track",
         body: <any>JSON.stringify(state.new),
       }).then((track) => {
         if (!track) return;
@@ -80,16 +79,18 @@ export default {
       delete patchable.createdAt;
       delete patchable.updatedAt;
       delete patchable.stepCount;
-      return guardedFetchResponse(<RequestInfo>{
+      return guardedFetchResponse(`/api/track/${getters.current._id}`, <
+        RequestInit
+      >{
         method: "PATCH",
-        url: `/api/track/${getters.current._id}`,
         body: <any>JSON.stringify(patchable),
       });
     },
     delete({ commit, getters }) {
-      return guardedFetchResponse(<RequestInfo>{
+      return guardedFetchResponse(`/api/track/${getters.current._id}`, <
+        RequestInit
+      >{
         method: "DELETE",
-        url: `/api/track/${getters.current._id}`,
       }).then((response) => {
         if (!response) return;
         const id = getters.current._id;
@@ -98,14 +99,16 @@ export default {
       });
     },
     report({ commit, getters }) {
-      return guardedFetchJson(<RequestInfo>{
-        method: "POST",
-        url: `/api/track/${getters.current._id}/report/$dynamic`,
-        body: <any>JSON.stringify({
-          aggregations: [{ key: "count", type: "COUNT" }],
-          interval: "DAY",
-        }),
-      }).then((data) => {
+      return guardedFetchJson(
+        `/api/track/${getters.current._id}/report/$dynamic`,
+        <RequestInit>{
+          method: "POST",
+          body: <any>JSON.stringify({
+            aggregations: [{ key: "count", type: "COUNT" }],
+            interval: "DAY",
+          }),
+        }
+      ).then((data) => {
         data && commit("setCurrentUsage", data.aggregations);
       });
     },

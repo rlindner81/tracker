@@ -1,50 +1,50 @@
-import { guardedFetchJson } from "@/fetchWrapper";
+import { fetchJson, fetchResponse, guardedFetchText } from "@/fetchWrapper";
 
 export default {
   namespaced: true,
   state: {
-    data: null,
-    login: {
-      nameOrEmail: null,
-      password: null,
-    },
-    register: {
-      name: null,
-      email: null,
-      password: null,
-    },
+    user: null,
   },
   mutations: {
     set(state, data) {
-      state.data = data;
+      state.user = data;
     },
     clear(state) {
-      state.data = null;
+      state.user = null;
     },
   },
-  getters: {},
+  getters: {
+    isLoggedIn(state) {
+      return state.user !== null;
+    },
+  },
   actions: {
-    init({ commit }) {
+    async loadSessionUser({ commit }) {
+      const response = await fetchResponse("/api/auth/me");
+      response.ok && commit("set", await response.json());
+    },
+    async login({ commit }, loginUser) {
+      const data = await guardedFetchText("/api/auth/login", <RequestInit>{
+        method: "POST",
+        body: <any>JSON.stringify(loginUser),
+      });
       debugger;
-      return guardedFetchJson("/api/auth/me").then((user) => {
-        user && commit("set", user);
-      });
+      data && commit("set", loginUser);
     },
-    login({ commit }) {
-      return guardedFetchJson(<RequestInfo>{
+    async logout({ commit }) {
+      const data = await guardedFetchText("/api/auth/logout", <RequestInit>{
         method: "POST",
-        url: "/api/auth/login",
-      }).then((user) => {
-        user && commit("set", user);
       });
+      debugger;
+      data && commit("clear");
     },
-    register({ commit }) {
-      return guardedFetchJson(<RequestInfo>{
+    async register({ commit }, registerUser) {
+      const data = await guardedFetchText("/api/auth/register", <RequestInit>{
         method: "POST",
-        url: "/api/auth/register",
-      }).then((user) => {
-        user && commit("set", user);
+        body: <any>JSON.stringify(registerUser),
       });
+      debugger;
+      data && commit("set", registerUser);
     },
   },
 };

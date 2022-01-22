@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   data() {
@@ -37,26 +37,20 @@ export default {
       mobileNavVisible: false,
     };
   },
-  created() {
-    debugger;
-    this.load()
-      .catch(() => {
-        this.clear();
-        this.$router.push("/auth/login");
-      })
-      .then(() => {
-        return this.loadTracks();
-      })
-      .then(() => {
-        this.initialized = true;
-      });
+  async created() {
+    await this.loadSessionUser();
+    if (!this.isLoggedIn()) {
+      return this.$router.push("/auth/login");
+    }
+    await this.loadTracks();
+    this.initialized = true;
   },
   computed: {
     ...mapState("track", { tracks: "data" }),
   },
   methods: {
-    ...mapActions("user", { load: "init" }),
-    ...mapMutations("user", ["clear"]),
+    ...mapGetters("user", ["isLoggedIn"]),
+    ...mapActions("user", ["loadSessionUser"]),
     ...mapActions("track", { loadTracks: "load" }),
     toggleMobileNav() {
       this.mobileNavVisible = !this.mobileNavVisible;

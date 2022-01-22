@@ -13,21 +13,29 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { toRaw } from "vue";
+import { mapActions, mapGetters } from "vuex";
 import LoadingButton from "../components/LoadingButton";
 export default {
   components: {
     LoadingButton,
   },
-  computed: {
-    ...mapState("user", { user: "login" }),
+  data() {
+    return {
+      user: {
+        nameOrEmail: null,
+        password: null,
+      },
+    };
   },
   methods: {
+    ...mapGetters("user", ["isLoggedIn"]),
     ...mapActions("user", ["login"]),
-    submit() {
-      this.login().then(() => {
-        this.$router.push("/");
-      });
+    async submit() {
+      await this.login(toRaw(this.user));
+      if (this.isLoggedIn()) {
+        return this.$router.push("/");
+      }
     },
   },
 };

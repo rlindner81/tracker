@@ -13,24 +13,6 @@
   </div>
 </template>
 
-<script>
-import { mapState, mapActions } from "vuex";
-export default {
-  created() {
-    this.load().then(() => {
-      // if already logged in
-      this.$router.replace("/");
-    });
-  },
-  computed: {
-    ...mapState("track", { tracks: "data" }),
-  },
-  methods: {
-    ...mapActions("user", { load: "init", clear: "clear" }),
-  },
-};
-</script>
-
 <style lang="less">
 @import "../less/variables";
 @import "../less/helpers";
