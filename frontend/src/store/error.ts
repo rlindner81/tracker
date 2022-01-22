@@ -15,11 +15,6 @@ export default {
       setTimeout(() => {
         const errorIndex = state.errors.indexOf(error);
         errorIndex >= 0 && state.errors.splice(errorIndex, 1);
-        console.log(
-          "removed error at index %i, remaining errors %i",
-          errorIndex,
-          state.errors.length
-        );
       }, ERROR_REMOVAL_DELAY);
     },
 
