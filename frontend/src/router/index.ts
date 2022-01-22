@@ -29,9 +29,9 @@ const routes: Array<RouteRecordRaw> = [
           import(/* webpackChunkName: "dashboard" */ "../views/Dashboard.vue"),
       },
       {
-        path: ":track",
+        path: "/:track",
         component: () =>
-          import(/* webpackChunkName: "tracker" */ "../views/Tracker.vue"),
+          import(/* webpackChunkName: "track" */ "../views/Tracker.vue"),
       },
     ],
   },

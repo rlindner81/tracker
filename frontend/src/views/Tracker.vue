@@ -70,7 +70,6 @@
 
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-// import ActivityChart from "../components/ActivityChart";
 import Modal from "../components/Modal";
 import AddStep from "../components/AddStep";
 import Tabs from "../components/Tabs";
@@ -78,12 +77,10 @@ import Tab from "../components/Tab";
 import TrackList from "../components/TrackList";
 import TrackSettings from "../components/TrackSettings";
 import AddReport from "../components/AddReport";
-// import GenericReport from "../components/GenericReport";
 import LoadingButton from "../components/LoadingButton";
 
 export default {
   components: {
-    // ActivityChart,
     Modal,
     AddStep,
     Tabs,
@@ -91,7 +88,6 @@ export default {
     TrackList,
     TrackSettings,
     AddReport,
-    // GenericReport,
     LoadingButton,
   },
   data() {
@@ -102,17 +98,18 @@ export default {
     };
   },
   created() {
+    debugger;
     this.clearTrack();
     this.clear();
     this.setCurrent(this.$route.params.track);
     this.load();
-    this.loadReports();
-    this.report();
+    // this.loadReports();
+    // this.report();
   },
   computed: {
     ...mapState("step", { newStep: "new", steps: "data" }),
     ...mapGetters("track", { title: "titleById", track: "current" }),
-    ...mapState("report", { reports: "data", selected: "selected" }),
+    // ...mapState("report", { reports: "data", selected: "selected" }),
   },
   methods: {
     ...mapActions("track", { report: "report" }),
@@ -122,8 +119,8 @@ export default {
     }),
     ...mapActions("step", { load: "load" }),
     ...mapMutations("step", { clear: "clear" }),
-    ...mapActions("report", { loadReports: "load", deleteReport: "delete" }),
-    ...mapMutations("report", ["select"]),
+    // ...mapActions("report", { loadReports: "load", deleteReport: "delete" }),
+    // ...mapMutations("report", ["select"]),
     toggleAddModal() {
       this.addModal = !this.addModal;
     },
