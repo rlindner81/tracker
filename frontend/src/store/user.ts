@@ -31,14 +31,12 @@ export default {
         method: "POST",
         body: <any>JSON.stringify(loginUser),
       });
-      debugger;
       data && commit("set", loginUser);
     },
     async logout({ commit }) {
       const data = await guardedFetchText("/api/auth/logout", <RequestInit>{
         method: "POST",
       });
-      debugger;
       data && commit("clear");
     },
     async register({ commit }, registerUser) {
@@ -46,7 +44,6 @@ export default {
         method: "POST",
         body: <any>JSON.stringify(registerUser),
       });
-      debugger;
       data && commit("set", registerUser);
     },
   },
