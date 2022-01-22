@@ -47,24 +47,24 @@
       <AddStep @tracked="onTrackCreated" @closed="toggleAddModal"></AddStep>
     </Modal>
 
-    <Modal v-show="reportModal">
-      <h2>Add a Report</h2>
-      <AddReport
-        @tracked="toggleReportModal"
-        @closed="toggleReportModal"
-      ></AddReport>
-    </Modal>
+    <!--    <Modal v-show="reportModal">-->
+    <!--      <h2>Add a Report</h2>-->
+    <!--      <AddReport-->
+    <!--        @tracked="toggleReportModal"-->
+    <!--        @closed="toggleReportModal"-->
+    <!--      ></AddReport>-->
+    <!--    </Modal>-->
 
-    <Modal v-show="deleteModal" class="delete-modal">
-      <h2>Delete Report</h2>
-      <p v-if="selected">
-        Are you sure you want to delete the report {{ selected.name }}
-      </p>
-      <div class="button-row">
-        <button class="inverted" @click="deleteModal = false">Cancel</button>
-        <LoadingButton @click="onDelete">Delete</LoadingButton>
-      </div>
-    </Modal>
+    <!--    <Modal v-show="deleteModal" class="delete-modal">-->
+    <!--      <h2>Delete Report</h2>-->
+    <!--      <p v-if="selected">-->
+    <!--        Are you sure you want to delete the report {{ selected.name }}-->
+    <!--      </p>-->
+    <!--      <div class="button-row">-->
+    <!--        <button class="inverted" @click="deleteModal = false">Cancel</button>-->
+    <!--        <LoadingButton @click="onDelete">Delete</LoadingButton>-->
+    <!--      </div>-->
+    <!--    </Modal>-->
   </div>
 </template>
 
@@ -76,8 +76,8 @@ import Tabs from "../components/Tabs";
 import Tab from "../components/Tab";
 import TrackList from "../components/TrackList";
 import TrackSettings from "../components/TrackSettings";
-import AddReport from "../components/AddReport";
-import LoadingButton from "../components/LoadingButton";
+// import AddReport from "../components/AddReport";
+// import LoadingButton from "../components/LoadingButton";
 
 export default {
   components: {
@@ -87,8 +87,8 @@ export default {
     Tab,
     TrackList,
     TrackSettings,
-    AddReport,
-    LoadingButton,
+    // AddReport,
+    // LoadingButton,
   },
   data() {
     return {
@@ -98,7 +98,6 @@ export default {
     };
   },
   created() {
-    debugger;
     this.clearTrack();
     this.clear();
     this.setCurrent(this.$route.params.track);
@@ -135,11 +134,11 @@ export default {
       this.select(report._id);
       this.deleteModal = true;
     },
-    onDelete() {
-      this.deleteReport(this.selected._id).then(() => {
-        this.deleteModal = false;
-      });
-    },
+    // onDelete() {
+    //   this.deleteReport(this.selected._id).then(() => {
+    //     this.deleteModal = false;
+    //   });
+    // },
   },
 };
 </script>
