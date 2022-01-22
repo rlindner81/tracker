@@ -73,6 +73,8 @@ export default {
         guardedFetch(
           `/api/track/${this.report.trackId}/report/${this.report._id}/$evaluate`
         ).then((response) => {
+          if (!response) return;
+
           labels = response.data.aggregations.map((result) => {
             return readableShortDateTime(result.startAt);
           });

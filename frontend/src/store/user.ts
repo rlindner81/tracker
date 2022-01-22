@@ -1,4 +1,4 @@
-import { guardedFetch } from "@/fetchWrapper";
+import { guardedFetchJson } from "@/fetchWrapper";
 
 export default {
   namespaced: true,
@@ -25,25 +25,24 @@ export default {
   getters: {},
   actions: {
     init({ commit }) {
-      return guardedFetch("/api/auth/me").then((response) => {
-        debugger;
-        commit("set", response.json);
+      return guardedFetchJson("/api/auth/me").then((user) => {
+        user && commit("set", user);
       });
     },
     login({ commit }) {
-      return guardedFetch(<RequestInfo>{
-        method: "post",
+      return guardedFetchJson(<RequestInfo>{
+        method: "POST",
         url: "/api/auth/login",
-      }).then((response) => {
-        commit("set", response.json);
+      }).then((user) => {
+        user && commit("set", user);
       });
     },
     register({ commit }) {
-      return guardedFetch(<RequestInfo>{
-        method: "post",
+      return guardedFetchJson(<RequestInfo>{
+        method: "POST",
         url: "/api/auth/register",
-      }).then((response) => {
-        commit("set", response.json);
+      }).then((user) => {
+        user && commit("set", user);
       });
     },
   },

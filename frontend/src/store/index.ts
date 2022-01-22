@@ -1,7 +1,7 @@
 import { createStore } from "vuex";
 // import BusyStore from './stores/busy'
 import UserStore from "./user";
-// import TrackStore from './stores/track'
+import TrackStore from "./track";
 // import StepStore from './stores/step'
 import ErrorStore from "./error";
 // import ReportStore from './stores/report'
@@ -12,6 +12,7 @@ export default createStore({
   actions: {},
   modules: {
     user: UserStore,
+    track: TrackStore,
     error: ErrorStore,
   },
 });

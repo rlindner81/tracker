@@ -1,9 +1,24 @@
+const ERROR_REMOVAL_DELAY = 3000;
+
 export default {
   namespaced: true,
   state: {
     errors: [],
   },
   mutations: {
+    async responseNotOk(state, response: Response) {
+      const error = {
+        _type: "responseNotOk",
+        data: await response.text(),
+      };
+
+      const errorIndex = state.errors.push(error) - 1;
+
+      setTimeout(() => {
+        state.errors.splice(errorIndex, 1);
+      }, ERROR_REMOVAL_DELAY);
+    },
+
     raw(state, error) {
       debugger;
       let messages = [];

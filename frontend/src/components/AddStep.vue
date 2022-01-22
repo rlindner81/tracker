@@ -102,7 +102,7 @@ export default {
     ...mapActions("step", { create: "create" }),
     ...mapActions("track", { report: "report" }),
     submit() {
-      this.create().then((response) => {
+      this.create().then(() => {
         this.$emit("tracked");
         this.report();
       });
