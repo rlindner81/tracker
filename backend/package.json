@@ -13,11 +13,11 @@
     "start": "node src/server.js",
     "lint": "eslint . --fix",
     "test": "jest",
-    "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock=true"
+    "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock"
   },
   "engines": {
-    "node": "^10.10.0",
-    "npm": "^6.0.0"
+    "node": ">=12.0.0",
+    "npm": ">=6.0.0"
   },
   "devDependencies": {
     "eslint": "7.32.0",

@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock=true"
+    "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock"
   },
   "dependencies": {
     "@vueform/slider": "2.0.8",
