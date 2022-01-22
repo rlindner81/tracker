@@ -38,6 +38,7 @@ export default {
     };
   },
   created() {
+    debugger;
     this.load()
       .catch(() => {
         this.clear();

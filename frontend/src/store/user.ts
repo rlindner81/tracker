@@ -25,6 +25,7 @@ export default {
   getters: {},
   actions: {
     init({ commit }) {
+      debugger;
       return guardedFetchJson("/api/auth/me").then((user) => {
         user && commit("set", user);
       });

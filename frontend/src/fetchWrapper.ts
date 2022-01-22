@@ -3,7 +3,10 @@ import store from "./store";
 export const guardedFetchResponse = async (info: RequestInfo) => {
   const response = await fetch(info);
   if (!response.ok) {
-    store.commit("error/responseNotOk", response);
+    const error = {
+      message: await response.text(),
+    };
+    store.dispatch("error/addTransientError", error);
     return null;
   }
   return response;
