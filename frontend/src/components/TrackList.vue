@@ -31,8 +31,8 @@
       </div>
       <div class="master-data">
         <label>Tracked at</label>
-        <span :title="step.createdAt | date">{{
-          step.createdAt | relativeDate
+        <span :title="$filters.readableDateTime(step.createdAt)">{{
+          $filters.readableRelativeDateTime(step.createdAt)
         }}</span>
       </div>
     </div>

@@ -17,7 +17,7 @@
     <Modal v-show="deleteModal">
       <p>Do you really want to delete this track?</p>
       <div class="buttons">
-        <LoadingButton @click.native="remove">Delete</LoadingButton>
+        <LoadingButton @click="remove">Delete</LoadingButton>
         <button @click="toggleDeleteModal">Cancel</button>
       </div>
     </Modal>

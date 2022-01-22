@@ -2,9 +2,9 @@
   <div class="view tracker">
     <h1>{{ title($route.params.track) }}</h1>
 
-    <div class="chart-container">
-      <ActivityChart></ActivityChart>
-    </div>
+    <!--    <div class="chart-container">-->
+    <!--      <ActivityChart></ActivityChart>-->
+    <!--    </div>-->
 
     <Tabs>
       <Tab name="Tracking" :selected="true">
@@ -20,22 +20,22 @@
         <TrackList></TrackList>
       </Tab>
 
-      <Tab name="Reporting">
-        <div class="title-with-button">
-          <h2>Reports</h2>
-          <button @click="toggleReportModal">Add Report</button>
-        </div>
+      <!--      <Tab name="Reporting">-->
+      <!--        <div class="title-with-button">-->
+      <!--          <h2>Reports</h2>-->
+      <!--          <button @click="toggleReportModal">Add Report</button>-->
+      <!--        </div>-->
 
-        <div class="info" v-if="reports && !reports.length">
-          <p>You don't have any reports defined yet.</p>
-        </div>
+      <!--        <div class="info" v-if="reports && !reports.length">-->
+      <!--          <p>You don't have any reports defined yet.</p>-->
+      <!--        </div>-->
 
-        <div class="report-wrap" v-for="report in reports" :key="report.id">
-          <h2>{{ report.name }}</h2>
-          <GenericReport :report="report"></GenericReport>
-          <button @click="showDeleteModal(report)">Delete</button>
-        </div>
-      </Tab>
+      <!--        <div class="report-wrap" v-for="report in reports" :key="report.id">-->
+      <!--          <h2>{{ report.name }}</h2>-->
+      <!--          <GenericReport :report="report"></GenericReport>-->
+      <!--          <button @click="showDeleteModal(report)">Delete</button>-->
+      <!--        </div>-->
+      <!--      </Tab>-->
 
       <Tab name="Settings">
         <TrackSettings></TrackSettings>
@@ -62,7 +62,7 @@
       </p>
       <div class="button-row">
         <button class="inverted" @click="deleteModal = false">Cancel</button>
-        <LoadingButton @click.native="onDelete">Delete</LoadingButton>
+        <LoadingButton @click="onDelete">Delete</LoadingButton>
       </div>
     </Modal>
   </div>
@@ -70,7 +70,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import ActivityChart from "../components/ActivityChart";
+// import ActivityChart from "../components/ActivityChart";
 import Modal from "../components/Modal";
 import AddStep from "../components/AddStep";
 import Tabs from "../components/Tabs";
@@ -78,12 +78,12 @@ import Tab from "../components/Tab";
 import TrackList from "../components/TrackList";
 import TrackSettings from "../components/TrackSettings";
 import AddReport from "../components/AddReport";
-import GenericReport from "../components/GenericReport";
+// import GenericReport from "../components/GenericReport";
 import LoadingButton from "../components/LoadingButton";
 
 export default {
   components: {
-    ActivityChart,
+    // ActivityChart,
     Modal,
     AddStep,
     Tabs,
@@ -91,7 +91,7 @@ export default {
     TrackList,
     TrackSettings,
     AddReport,
-    GenericReport,
+    // GenericReport,
     LoadingButton,
   },
   data() {
