@@ -19,27 +19,27 @@
     "node": ">=12.0.0",
     "npm": ">=6.0.0"
   },
+  "dependencies": {
+    "bcrypt": "5.0.1",
+    "body-parser": "1.19.1",
+    "csv": "6.0.5",
+    "express": "4.17.2",
+    "express-session": "1.17.2",
+    "joi": "17.5.0",
+    "lodash": "4.17.21",
+    "moment": "2.29.1",
+    "nedb": "1.8.0",
+    "nedb-session-store": "1.1.2",
+    "uuid": "8.3.2",
+    "winston": "3.4.0"
+  },
   "devDependencies": {
-    "eslint": "7.32.0",
-    "eslint-config-prettier": "7.2.0",
-    "eslint-plugin-jest": "24.7.0",
-    "eslint-plugin-prettier": "3.4.1",
-    "jest": "26.6.3",
+    "eslint": "8.7.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-jest": "25.7.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "jest": "27.4.7",
     "prettier": "2.5.1",
     "supertest": "6.2.2"
-  },
-  "dependencies": {
-    "bcrypt": "^5.0.0",
-    "body-parser": "^1.19.0",
-    "csv": "^5.3.2",
-    "express": "^4.17.1",
-    "express-session": "^1.17.1",
-    "joi": "^17.3.0",
-    "lodash": "^4.17.20",
-    "moment": "^2.29.1",
-    "nedb": "^1.8.0",
-    "nedb-session-store": "^1.1.2",
-    "uuid": "^8.3.2",
-    "winston": "^3.3.3"
   }
 }
