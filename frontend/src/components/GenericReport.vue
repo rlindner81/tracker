@@ -2,6 +2,7 @@
 import { mapGetters } from "vuex";
 import { Line, mixins } from "vue-chartjs";
 import { readableShortDateTime } from "../datetime";
+import { guardedFetch } from "../fetchWrapper";
 
 const { reactiveData } = mixins;
 
@@ -69,7 +70,7 @@ export default {
         let datasets = [];
         let labels = [];
 
-        fetch(
+        guardedFetch(
           `/api/track/${this.report.trackId}/report/${this.report._id}/$evaluate`
         ).then((response) => {
           labels = response.data.aggregations.map((result) => {

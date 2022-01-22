@@ -5,6 +5,7 @@ export default {
   },
   mutations: {
     raw(state, error) {
+      debugger;
       let messages = [];
 
       if (Array.isArray(error.response.data)) {
