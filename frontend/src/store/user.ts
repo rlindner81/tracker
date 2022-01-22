@@ -1,4 +1,4 @@
-import { fetchJson, fetchResponse, guardedFetchText } from "@/fetchWrapper";
+import { fetchResponse, guardedFetchText } from "@/fetchWrapper";
 
 export default {
   namespaced: true,
