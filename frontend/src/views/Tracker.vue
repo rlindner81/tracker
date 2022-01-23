@@ -128,7 +128,7 @@ export default {
     },
     onTrackCreated() {
       this.toggleAddModal();
-      this.loadReports();
+      // this.loadReports();
     },
     showDeleteModal(report) {
       this.select(report._id);
