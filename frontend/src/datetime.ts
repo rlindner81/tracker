@@ -8,7 +8,7 @@ const TIME_UNITS = Object.freeze({
   SECOND: "second",
 });
 
-const UNITS = {
+const TIME_UNIT_LIMITS = {
   [TIME_UNITS.YEAR]: 24 * 60 * 60 * 1000 * 365,
   [TIME_UNITS.MONTH]: (24 * 60 * 60 * 1000 * 365) / 12,
   [TIME_UNITS.DAY]: 24 * 60 * 60 * 1000,
@@ -19,7 +19,7 @@ const UNITS = {
 
 const _getRelativeDateTime = (d1, d2) => {
   const elapsed = d1 - d2;
-  for (const [unit, limit] of Object.entries(UNITS)) {
+  for (const [unit, limit] of Object.entries(TIME_UNIT_LIMITS)) {
     if (Math.abs(elapsed) > limit || unit === TIME_UNITS.SECOND) {
       const diff = Math.round(elapsed / limit);
       return {
