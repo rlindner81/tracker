@@ -1,56 +1,40 @@
-const TIME_UNITS = [
-  {
-    singular: "ms",
-    limit: 1000,
-  },
-  {
-    singular: "sec",
-    limit: 60,
-  },
-  {
-    singular: "min",
-    limit: 60,
-  },
-  {
-    singular: "hour",
-    plural: "hours",
-    limit: 24,
-  },
-  {
-    singular: "day",
-    plural: "days",
-    limit: 7,
-  },
-  {
-    singular: "week",
-    plural: "weeks",
-    limit: 52,
-  },
-  {
-    singular: "year",
-    plural: "years",
-    limit: Number.POSITIVE_INFINITY,
-  },
-];
+const NOW_TOLERANCE = 500;
+const TIME_UNITS = Object.freeze({
+  YEAR: "year",
+  MONTH: "month",
+  DAY: "day",
+  HOUR: "hour",
+  MINUTE: "minute",
+  SECOND: "second",
+});
 
-const _leadingZero2 = (value: number) => {
-  return ("0" + value).slice(-2);
+const UNITS = {
+  [TIME_UNITS.YEAR]: 24 * 60 * 60 * 1000 * 365,
+  [TIME_UNITS.MONTH]: (24 * 60 * 60 * 1000 * 365) / 12,
+  [TIME_UNITS.DAY]: 24 * 60 * 60 * 1000,
+  [TIME_UNITS.HOUR]: 60 * 60 * 1000,
+  [TIME_UNITS.MINUTE]: 60 * 1000,
+  [TIME_UNITS.SECOND]: 1000,
 };
 
-const _relativeDateValue = (value: number) => String(Math.ceil(value));
-
-const _timeDiff = (timeDiff: number) => {
-  for (const { singular, plural, limit } of TIME_UNITS) {
-    if (limit <= timeDiff) {
-      timeDiff = timeDiff / limit;
-    } else {
+const _getRelativeDateTime = (d1, d2) => {
+  const elapsed = d1 - d2;
+  for (const [unit, limit] of Object.entries(UNITS)) {
+    if (Math.abs(elapsed) > limit || unit === TIME_UNITS.SECOND) {
+      const diff = Math.round(elapsed / limit);
       return {
-        value: timeDiff,
-        unit: timeDiff === 1 ? singular : plural || singular,
+        unit,
+        diff,
+        relativeDateTime: new Intl.RelativeTimeFormat("en", {
+          numeric: "auto",
+        }).format(diff, <Intl.RelativeTimeFormatUnit>unit),
       };
     }
   }
-  return { value: 0, unit: "" };
+};
+
+const _leadingZero2 = (value: number) => {
+  return ("0" + value).slice(-2);
 };
 
 const _parseISOString = (dbDate: string): Date => {
@@ -87,14 +71,15 @@ export const readableShortDateTime = (dbDate: string): string => {
 export const readableRelativeDateTime = (dbDate: string): string => {
   if (!dbDate) return "";
   const value = _parseISOString(dbDate);
-  const relativeMillis = value.getTime() - Date.now();
-  if (500 < relativeMillis) {
-    const { value: diffValue, unit } = _timeDiff(relativeMillis);
-    return `in ${_relativeDateValue(diffValue)} ${unit}`;
-  } else if (-500 <= relativeMillis) {
+  const now = new Date();
+  const relativeMillis = value.getTime() - now.getTime();
+  if (-NOW_TOLERANCE <= relativeMillis && relativeMillis <= NOW_TOLERANCE) {
     return "now";
   } else {
-    const { value: diffValue, unit } = _timeDiff(-relativeMillis);
-    return `${_relativeDateValue(diffValue)} ${unit} ago`;
+    const { unit, diff, relativeDateTime } = _getRelativeDateTime(value, now);
+    return unit === TIME_UNITS.YEAR ||
+      (unit === TIME_UNITS.MONTH && Math.abs(diff) >= 2)
+      ? readableShortDateTime(dbDate)
+      : relativeDateTime;
   }
 };
