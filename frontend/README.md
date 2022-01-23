@@ -1,4 +1,4 @@
-# hello-vue3
+# Tracker Frontend
 
 ## Project setup
 ```

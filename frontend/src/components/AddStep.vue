@@ -124,19 +124,6 @@ export default {
   .slider-container {
     margin: 3rem 0 1rem 0;
   }
-  // .row(center);
-  // .slider {
-  //   // .row(center);
-
-  //   input {
-  //     -webkit-tap-highlight-color: transparent;
-  //     margin: 0;
-  //     &:last-child {
-  //       width: 100px;
-  //       margin-left: 2rem;
-  //     }
-  //   }
-  // }
 
   .button-row {
     .row();

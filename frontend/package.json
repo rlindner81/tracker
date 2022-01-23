@@ -1,12 +1,16 @@
 {
   "name": "tracker-frontend",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock"
+  },
+  "engines": {
+    "node": ">=12.0.0",
+    "npm": ">=6.0.0"
   },
   "dependencies": {
     "@vueform/slider": "^2.0.0",

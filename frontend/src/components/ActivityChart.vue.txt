@@ -1,7 +1,7 @@
 <script>
 import { mapState } from "vuex";
 import { Bar, mixins } from "vue-chartjs";
-import { readableShortDateTime } from "../datetime";
+import { readableShortDateTime } from "@/datetime";
 
 const { reactiveData } = mixins;
 export default {

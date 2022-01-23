@@ -4,7 +4,6 @@ import UserStore from "./user";
 import TrackStore from "./track";
 import StepStore from "./step";
 import ErrorStore from "./error";
-// import ReportStore from './stores/report'
 
 export default createStore({
   state: {},
@@ -15,7 +14,6 @@ export default createStore({
     user: UserStore,
     track: TrackStore,
     step: StepStore,
-    //     report: ReportStore,
     error: ErrorStore,
   },
 });
