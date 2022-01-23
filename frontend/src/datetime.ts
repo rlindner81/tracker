@@ -8,13 +8,27 @@ const TIME_UNITS = [
     limit: 60,
   },
   {
+    singular: "min",
+    limit: 60,
+  },
+  {
     singular: "hour",
     plural: "hours",
-    limit: 60,
+    limit: 24,
   },
   {
     singular: "day",
     plural: "days",
+    limit: 7,
+  },
+  {
+    singular: "week",
+    plural: "weeks",
+    limit: 52,
+  },
+  {
+    singular: "year",
+    plural: "years",
     limit: Number.POSITIVE_INFINITY,
   },
 ];
@@ -23,9 +37,7 @@ const _leadingZero2 = (value: number) => {
   return ("0" + value).slice(-2);
 };
 
-const _fraction1 = (value: number) => {
-  return value % 1 !== 0 ? value.toFixed(1) : String(value);
-};
+const _relativeDateValue = (value: number) => String(Math.ceil(value));
 
 const _timeDiff = (timeDiff: number) => {
   for (const { singular, plural, limit } of TIME_UNITS) {
@@ -55,8 +67,7 @@ const _parseISOString = (dbDate: string): Date => {
 export const readableDateTime = (dbDate: string): string => {
   if (!dbDate) return "";
   const value = _parseISOString(dbDate);
-  // debugger;
-  const day = _leadingZero2(value.getDay());
+  const day = _leadingZero2(value.getDate());
   const month = _leadingZero2(value.getMonth() + 1);
   const year = value.getFullYear();
   const hour = _leadingZero2(value.getHours());
@@ -67,8 +78,7 @@ export const readableDateTime = (dbDate: string): string => {
 export const readableShortDateTime = (dbDate: string): string => {
   if (!dbDate) return "";
   const value = _parseISOString(dbDate);
-  // debugger;
-  const day = _leadingZero2(value.getDay());
+  const day = _leadingZero2(value.getDate());
   const month = _leadingZero2(value.getMonth() + 1);
   const year = value.getFullYear();
   return `${day}.${month}.${year}`;
@@ -77,15 +87,14 @@ export const readableShortDateTime = (dbDate: string): string => {
 export const readableRelativeDateTime = (dbDate: string): string => {
   if (!dbDate) return "";
   const value = _parseISOString(dbDate);
-  // debugger;
   const relativeMillis = value.getTime() - Date.now();
   if (500 < relativeMillis) {
-    const { value, unit } = _timeDiff(relativeMillis);
-    return `in ${_fraction1(value)} ${unit}`;
+    const { value: diffValue, unit } = _timeDiff(relativeMillis);
+    return `in ${_relativeDateValue(diffValue)} ${unit}`;
   } else if (-500 <= relativeMillis) {
     return "now";
   } else {
-    const { value, unit } = _timeDiff(-relativeMillis);
-    return `${_fraction1(value)} ${unit} ago`;
+    const { value: diffValue, unit } = _timeDiff(-relativeMillis);
+    return `${_relativeDateValue(diffValue)} ${unit} ago`;
   }
 };
