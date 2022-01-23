@@ -160,13 +160,13 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
-import LoadingButton from "./LoadingButton";
 import Modal from "./Modal";
+import LoadingButton from "./LoadingButton";
 
 export default {
   components: {
-    LoadingButton,
     Modal,
+    LoadingButton,
   },
   props: {
     edit: {

@@ -26,14 +26,14 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import LoadingButton from "./LoadingButton";
 import Modal from "./Modal";
+import LoadingButton from "./LoadingButton";
 import AddTrack from "./AddTrack";
 
 export default {
   components: {
-    LoadingButton,
     Modal,
+    LoadingButton,
     AddTrack,
   },
   data() {

@@ -25,7 +25,6 @@
       <h2>Add a Step</h2>
       <AddStep @tracked="onTrackCreated" @closed="toggleAddModal"></AddStep>
     </Modal>
-
   </div>
 </template>
 
