@@ -41,8 +41,21 @@ const _timeDiff = (timeDiff: number) => {
   return { value: 0, unit: "" };
 };
 
-export const readableDateTime = (value: Date): string => {
-  if (!value) return "";
+const _parseISOString = (dbDate: string): Date => {
+  const [year, month, day, hour, minutes, seconds, milliseconds] =
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3})Z$/
+      .exec(dbDate)
+      .slice(1)
+      .map((a) => parseInt(a));
+  return new Date(
+    Date.UTC(year, month - 1, day, hour, minutes, seconds, milliseconds)
+  );
+};
+
+export const readableDateTime = (dbDate: string): string => {
+  if (!dbDate) return "";
+  const value = _parseISOString(dbDate);
+  // debugger;
   const day = _leadingZero2(value.getDay());
   const month = _leadingZero2(value.getMonth() + 1);
   const year = value.getFullYear();
@@ -51,24 +64,28 @@ export const readableDateTime = (value: Date): string => {
   return `${day}.${month}.${year} ${hour}:${minute}`;
 };
 
-export const readableShortDateTime = (value: Date): string => {
-  if (!value) return "";
+export const readableShortDateTime = (dbDate: string): string => {
+  if (!dbDate) return "";
+  const value = _parseISOString(dbDate);
+  // debugger;
   const day = _leadingZero2(value.getDay());
   const month = _leadingZero2(value.getMonth() + 1);
   const year = value.getFullYear();
   return `${day}.${month}.${year}`;
 };
 
-export const readableRelativeDateTime = (value: Date): string => {
-  if (!value) return "";
-  const relativeMillis = value.getDate() - Date.now();
+export const readableRelativeDateTime = (dbDate: string): string => {
+  if (!dbDate) return "";
+  const value = _parseISOString(dbDate);
+  // debugger;
+  const relativeMillis = value.getTime() - Date.now();
   if (500 < relativeMillis) {
     const { value, unit } = _timeDiff(relativeMillis);
-    return `in ${_fraction1(value)}${unit}`;
+    return `in ${_fraction1(value)} ${unit}`;
   } else if (-500 <= relativeMillis) {
     return "now";
   } else {
     const { value, unit } = _timeDiff(-relativeMillis);
-    return `${_fraction1(value)}${unit} ago`;
+    return `${_fraction1(value)} ${unit} ago`;
   }
 };
