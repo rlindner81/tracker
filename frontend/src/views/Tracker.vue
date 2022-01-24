@@ -3,7 +3,7 @@
     <h1>{{ title($route.params.track) }}</h1>
 
     <Tabs>
-      <Tab name="Tracking" :selected="true">
+      <Tab title="Tracking" :selected="true">
         <div class="title-with-button">
           <h2>Steps</h2>
           <button @click="toggleAddModal">Add Step</button>
@@ -16,7 +16,7 @@
         <TrackList></TrackList>
       </Tab>
 
-      <Tab name="Settings">
+      <Tab title="Settings">
         <TrackSettings></TrackSettings>
       </Tab>
     </Tabs>
