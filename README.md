@@ -5,7 +5,7 @@
 
 # todo
 
-after track delete you get this...
+- after track delete you get this...
 
 ```
 TrackList.vue?a1a1:6 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'fields')
@@ -20,3 +20,5 @@ at ReactiveEffect.run (reactivity.esm-bundler.js?a1e9:160:1)
 at callWithErrorHandling (runtime-core.esm-bundler.js?5c40:155:1)
 at flushJobs (runtime-core.esm-bundler.js?5c40:394:1)
 ```
+
+- close menu button on mobile interface not working
