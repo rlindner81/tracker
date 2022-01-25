@@ -31,7 +31,7 @@ body {
 }
 
 body * {
-  font-family: "Fira Sans", sans-serif;
+  font-family: "Lato", sans-serif;
 
   color: @font-color;
   box-sizing: border-box;
