@@ -1,15 +1,18 @@
 <template>
   <div class="component busy-indicator">
     <div class="indicator">
-      <div></div><div></div><div></div><div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'BusyIndicator'
-}
+  name: "BusyIndicator",
+};
 </script>
 
 <style lang="less">
@@ -30,13 +33,14 @@ export default {
     margin: 0 auto;
     position: absolute;
     top: 50%;
-    left: 0; right: 0;
+    left: 0;
+    right: 0;
     transform: translateY(-50%);
     height: 2rem;
 
     div {
       position: absolute;
-      top:  11px;
+      top: 11px;
       width: 11px;
       height: 11px;
       border-radius: 50%;
@@ -68,26 +72,26 @@ export default {
 
 @keyframes lds-ellipsis1 {
   0% {
-      transform: scale(0);
+    transform: scale(0);
   }
   100% {
-      transform: scale(1);
+    transform: scale(1);
   }
 }
 @keyframes lds-ellipsis3 {
   0% {
-      transform: scale(1);
+    transform: scale(1);
   }
   100% {
-      transform: scale(0);
+    transform: scale(0);
   }
 }
 @keyframes lds-ellipsis2 {
   0% {
-      transform: translate(0, 0);
+    transform: translate(0, 0);
   }
   100% {
-      transform: translate(19px, 0);
+    transform: translate(19px, 0);
   }
 }
 </style>

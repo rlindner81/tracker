@@ -3,47 +3,93 @@
     <form @submit.prevent="submit" class="component add-track" v-if="relevant">
       <div class="general">
         <label>Name</label>
-        <input type="text" v-model="relevant.name" placeholder="Enter a name ...">
+        <input
+          type="text"
+          v-model="relevant.name"
+          placeholder="Enter a name ..."
+        />
       </div>
       <div class="fields">
-        <div
-          class="field"
-          v-for="(field, i) in relevant.fields"
-          :key="i"
-        >
+        <div class="field" v-for="(field, i) in relevant.fields" :key="i">
           <label>Field Name</label>
           <input
             type="text"
             v-model="field.name"
             placeholder="Enter a name ..."
-            @input="!edit ? (field.key = slugify($event.target.value)) : field.key = field.key"
-          >
+            @input="
+              !edit
+                ? (field.key = slugify($event.target.value))
+                : (field.key = field.key)
+            "
+          />
 
           <label>Field Key</label>
-          <input type="text" :value="field.key" :disabled="true">
+          <input type="text" :value="field.key" :disabled="true" />
 
           <label>Type</label>
-          <select :disabled="edit" v-model="field.type" @change="cleanUpInputType(field)">
-            <option v-for="type in types" :key="type" :value="type">{{ type }}</option>
+          <select
+            :disabled="edit"
+            v-model="field.type"
+            @change="cleanUpInputType(field)"
+          >
+            <option v-for="type in types" :key="type" :value="type">
+              {{ type }}
+            </option>
           </select>
 
           <label>Input Type</label>
           <select v-model="field.input.identifier">
-            <option v-for="type in getSelectableInputs(field)" :key="type" :value="type">{{ type }}</option>
+            <option
+              v-for="type in getSelectableInputs(field)"
+              :key="type"
+              :value="type"
+            >
+              {{ type }}
+            </option>
           </select>
 
           <div class="slider" v-if="field.input.identifier === 'SLIDER'">
             <label>Min Value</label>
-            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.min">
-            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.min">
+            <input
+              v-if="field.type === 'FLOAT'"
+              type="number"
+              step="0.0000001"
+              v-model="field.input.parameters.min"
+            />
+            <input
+              v-if="field.type === 'INTEGER'"
+              type="number"
+              step="1"
+              v-model="field.input.parameters.min"
+            />
 
             <label>Max Value</label>
-            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.max">
-            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.max">
+            <input
+              v-if="field.type === 'FLOAT'"
+              type="number"
+              step="0.0000001"
+              v-model="field.input.parameters.max"
+            />
+            <input
+              v-if="field.type === 'INTEGER'"
+              type="number"
+              step="1"
+              v-model="field.input.parameters.max"
+            />
 
             <label>Step Size</label>
-            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.step">
-            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.step">
+            <input
+              v-if="field.type === 'FLOAT'"
+              type="number"
+              step="0.0000001"
+              v-model="field.input.parameters.step"
+            />
+            <input
+              v-if="field.type === 'INTEGER'"
+              type="number"
+              step="1"
+              v-model="field.input.parameters.step"
+            />
           </div>
 
           <div class="select" v-if="field.input.identifier === 'SELECT'">
@@ -52,10 +98,25 @@
               v-for="(value, i) in field.input.parameters.values"
               :key="i"
             >
-              <input type="text" placeholder="Name" v-model="value.name" @input="!edit ? (value.key = slugify(value.name)) : (value.key = value.key)" />
+              <input
+                type="text"
+                placeholder="Name"
+                v-model="value.name"
+                @input="
+                  !edit
+                    ? (value.key = slugify(value.name))
+                    : (value.key = value.key)
+                "
+              />
               <input type="text" placeholder="Value" v-model="value.value" />
 
-              <button class="remover" type="button" @click="removeSelectValue(field, i)">Remove</button>
+              <button
+                class="remover"
+                type="button"
+                @click="removeSelectValue(field, i)"
+              >
+                Remove
+              </button>
             </div>
             <button type="button" @click="addValue(field)">Add Value</button>
 
@@ -66,124 +127,145 @@
                 v-for="option in field.input.parameters.values"
                 :key="option.key"
                 :value="option.value"
-              >{{ option.name }}</option>
+              >
+                {{ option.name }}
+              </option>
             </select>
           </div>
 
-          <button v-if="!edit" type="button" class="remove" @click="removeField(i)">Remove Field</button>
+          <button
+            v-if="!edit"
+            type="button"
+            class="remove"
+            @click="removeField(i)"
+          >
+            Remove Field
+          </button>
         </div>
 
-        <button v-if="!edit" class="add-field" type="button" @click="addField">Add Field</button>
+        <button v-if="!edit" class="add-field" type="button" @click="addField">
+          Add Field
+        </button>
       </div>
 
       <div class="button-row">
-        <button class="inverted" type="button" @click="$emit('close')">Cancel</button>
-        <LoadingButton>{{ edit ? 'Update' : 'Create Track' }}</LoadingButton>
+        <button class="inverted" type="button" @click="$emit('close')">
+          Cancel
+        </button>
+        <LoadingButton>{{ edit ? "Update" : "Create Track" }}</LoadingButton>
       </div>
     </form>
   </Modal>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
-import LoadingButton from './LoadingButton'
-import Modal from './Modal'
+import { mapState, mapActions, mapGetters } from "vuex";
+import Modal from "./Modal";
+import LoadingButton from "./LoadingButton";
 
 export default {
   components: {
-    LoadingButton, Modal
+    Modal,
+    LoadingButton,
   },
   props: {
     edit: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
-    ...mapState('track', { track: 'new', types: 'types', inputs: 'inputs' }),
-    ...mapGetters('track', ['current']),
-    relevant () {
-      return this.edit ? this.current : this.track
-    }
+    ...mapState("track", { track: "new", types: "types", inputs: "inputs" }),
+    ...mapGetters("track", ["current"]),
+    relevant() {
+      return this.edit ? this.current : this.track;
+    },
   },
   methods: {
-    ...mapActions('track', { create: 'create', update: 'update' }),
-    addField () {
+    ...mapActions("track", { create: "create", update: "update" }),
+    addField() {
       this.relevant.fields.push({
         position: this.relevant.fields.length,
         key: null,
         name: null,
-        type: 'TEXT',
+        type: "TEXT",
         input: {
-          identifier: 'FIELD',
+          identifier: "FIELD",
           parameters: {
             selected: null,
             min: null,
             max: null,
             step: null,
-            values: []
-          }
-        }
-      })
+            values: [],
+          },
+        },
+      });
     },
-    removeField (index) {
-      this.relevant.fields.splice(index, 1)
+    removeField(index) {
+      this.relevant.fields.splice(index, 1);
     },
-    submit () {
+    submit() {
       if (this.edit) {
-        this.update()
-          .then(this.$emit.bind(this, 'close'))
+        this.update().then(this.$emit.bind(this, "close"));
       } else {
-        this.create()
-          .then(this.$emit.bind(this, 'close'))
+        this.create().then(this.$emit.bind(this, "close"));
       }
     },
-    addValue (field) {
+    addValue(field) {
       field.input.parameters.values.push({
         name: null,
-        value: null
-      })
+        value: null,
+      });
     },
-    removeSelectValue (field, index) {
-      field.input.parameters.values.splice(index, 1)
+    removeSelectValue(field, index) {
+      field.input.parameters.values.splice(index, 1);
       // ensure positions are correct
       field.input.parameters.values.forEach((value, index) => {
-        value.position = index
-      })
+        value.position = index;
+      });
     },
-    slugify (str) {
-      str = str.replace(/^\s+|\s+$/g, '') // trim
-      str = str.toLowerCase()
+    slugify(str) {
+      str = str.replace(/^\s+|\s+$/g, ""); // trim
+      str = str.toLowerCase();
 
       // remove accents, swap ñ for n, etc
-      var from = 'àáäâèéëêìíïîòóöôùúüûñç·/_,:;'
-      var to = 'aaaaeeeeiiiioooouuuunc______'
+      var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+      var to = "aaaaeeeeiiiioooouuuunc______";
       for (var i = 0, l = from.length; i < l; i++) {
-        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i))
+        str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
       }
 
-      str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-        .replace(/\s+/g, '_') // collapse whitespace and replace by -
-        .replace(/-+/g, '_') // collapse dashes
+      str = str
+        .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+        .replace(/\s+/g, "_") // collapse whitespace and replace by -
+        .replace(/-+/g, "_"); // collapse dashes
 
-      return str
+      return str;
     },
-    getSelectableInputs (field) {
-      return this.inputs.filter(input => {
-        if (input === 'SLIDER' && field.type !== 'FLOAT' && field.type !== 'INTEGER') {
-          return false
+    getSelectableInputs(field) {
+      return this.inputs.filter((input) => {
+        if (
+          input === "SLIDER" &&
+          field.type !== "FLOAT" &&
+          field.type !== "INTEGER"
+        ) {
+          return false;
         }
 
-        return true
-      })
+        return true;
+      });
     },
-    cleanUpInputType (field) {
-      if (field.input.identier === 'SLIDER' && field.type !== 'FLOAT' && field.type !== 'INTEGER') {
-        field.input.identifier = null
+    cleanUpInputType(field) {
+      if (
+        field.input.identier === "SLIDER" &&
+        field.type !== "FLOAT" &&
+        field.type !== "INTEGER"
+      ) {
+        field.input.identifier = null;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="less">
@@ -229,7 +311,10 @@ export default {
   .fields {
     .column(flex-end);
 
-    input, select, label, .field {
+    input,
+    select,
+    label,
+    .field {
       width: 100%;
 
       &[disabled] {

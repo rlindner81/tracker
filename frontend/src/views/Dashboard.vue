@@ -10,40 +10,49 @@
         :to="`/${track._id}`"
       >
         <h2>{{ track.name }}</h2>
-        <span>{{ !track.stepCount ? "new" : track.stepCount === 1 ? `${track.stepCount} step` : `${track.stepCount} steps` }}</span>
+        <span>{{
+          !track.stepCount
+            ? "new"
+            : track.stepCount === 1
+            ? `${track.stepCount} step`
+            : `${track.stepCount} steps`
+        }}</span>
       </router-link>
     </Tiles>
 
-    <button @click="toggleAddTrack">{{ tracks.length === 0 ? 'Add your first track' : 'Add a track' }}</button>
+    <button @click="toggleAddTrack">
+      {{ tracks.length === 0 ? "Add your first track" : "Add a track" }}
+    </button>
 
     <AddTrack v-show="showAddTrack" @close="toggleAddTrack"></AddTrack>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import Tiles from '../components/Tiles'
-import AddTrack from '../components/AddTrack'
+import { mapState, mapActions } from "vuex";
+import Tiles from "../components/Tiles";
+import AddTrack from "../components/AddTrack";
 
 export default {
-  data () {
+  data() {
     return {
-      showAddTrack: false
-    }
+      showAddTrack: false,
+    };
   },
   components: {
-    Tiles, AddTrack
+    Tiles,
+    AddTrack,
   },
   computed: {
-    ...mapState('track', { tracks: 'data', types: 'types' })
+    ...mapState("track", { tracks: "data", types: "types" }),
   },
   methods: {
-    ...mapActions('track', { create: 'create' }),
-    toggleAddTrack () {
-      this.showAddTrack = !this.showAddTrack
-    }
-  }
-}
+    ...mapActions("track", { create: "create" }),
+    toggleAddTrack() {
+      this.showAddTrack = !this.showAddTrack;
+    },
+  },
+};
 </script>
 
 <style lang="less">

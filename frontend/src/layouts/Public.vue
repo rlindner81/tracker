@@ -14,22 +14,20 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from "vuex";
+
 export default {
-  created () {
-    this.load()
-      .then(() => {
-        // if already logged in
-        this.$router.replace('/')
-      })
-  },
-  computed: {
-    ...mapState('track', { tracks: 'data' })
+  async created() {
+    await this.loadSessionUser();
+    if (this.isLoggedIn()) {
+      return this.$router.push("/");
+    }
   },
   methods: {
-    ...mapActions('user', { load: 'init', clear: 'clear' })
-  }
-}
+    ...mapGetters("user", ["isLoggedIn"]),
+    ...mapActions("user", ["loadSessionUser"]),
+  },
+};
 </script>
 
 <style lang="less">
@@ -39,7 +37,7 @@ export default {
 .layout.public {
   .size(100%, 100%);
   .row(center, center);
-  background: url('~@/assets/paper.png') repeat;
+  background: url("~@/assets/paper.png") repeat;
 
   .flex-aligner {
     .column();

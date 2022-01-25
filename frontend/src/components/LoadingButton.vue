@@ -7,18 +7,18 @@
 </template>
 
 <script>
-import BusyIndicator from './BusyIndicator'
-import { mapGetters } from 'vuex'
+import BusyIndicator from "./BusyIndicator";
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'LoadingButton',
+  name: "LoadingButton",
   components: {
-    BusyIndicator
+    BusyIndicator,
   },
   computed: {
-    ...mapGetters('busy', ['busy'])
-  }
-}
+    ...mapGetters("busy", ["busy"]),
+  },
+};
 </script>
 
 <style lang="less">

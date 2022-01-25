@@ -1,33 +1,44 @@
 <template>
   <div class="view login">
     <form @submit.prevent="submit">
-      <input v-model="user.nameOrEmail" type="text" placeholder="Name or Email">
-      <input v-model="user.password" type="password" placeholder="Password">
+      <input
+        v-model="user.nameOrEmail"
+        type="text"
+        placeholder="Name or Email"
+      />
+      <input v-model="user.password" type="password" placeholder="Password" />
       <LoadingButton>Login</LoadingButton>
     </form>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import LoadingButton from '../components/LoadingButton'
+import { toRaw } from "vue";
+import { mapActions, mapGetters } from "vuex";
+import LoadingButton from "../components/LoadingButton";
 export default {
   components: {
-    LoadingButton
+    LoadingButton,
   },
-  computed: {
-    ...mapState('user', { user: 'login' })
+  data() {
+    return {
+      user: {
+        nameOrEmail: null,
+        password: null,
+      },
+    };
   },
   methods: {
-    ...mapActions('user', ['login']),
-    submit () {
-      this.login()
-        .then(() => {
-          this.$router.push('/')
-        })
-    }
-  }
-}
+    ...mapGetters("user", ["isLoggedIn"]),
+    ...mapActions("user", ["login"]),
+    async submit() {
+      await this.login(toRaw(this.user));
+      if (this.isLoggedIn()) {
+        return this.$router.push("/");
+      }
+    },
+  },
+};
 </script>
 
 <style lang="less">

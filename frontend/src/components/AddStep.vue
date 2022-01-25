@@ -1,31 +1,31 @@
 <template>
-  <form class="component add-step" @submit.prevent="submit" v-if="track && newStep">
-    <div
-      class="input"
-      v-for="field in track.fields"
-      :key="field._id"
-    >
+  <form
+    class="component add-step"
+    @submit.prevent="submit"
+    v-if="track && newStep"
+  >
+    <div class="input" v-for="field in track.fields" :key="field._id">
       <label>{{ field.name }}</label>
       <input
         type="text"
         v-model="newStep[field.key]"
         :placeholder="`Enter ${field.name}`"
         v-if="field.input.identifier === 'FIELD' && field.type === 'TEXT'"
-      >
+      />
       <input
         type="number"
         step="0.00001"
         v-model="newStep[field.key]"
         :placeholder="`Enter ${field.name}`"
         v-if="field.input.identifier === 'FIELD' && field.type === 'FLOAT'"
-      >
+      />
       <input
         type="number"
         step="1"
         v-model="newStep[field.key]"
         :placeholder="`Enter ${field.name}`"
         v-if="field.input.identifier === 'FIELD' && field.type === 'INTEGER'"
-      >
+      />
       <select
         v-if="field.input.identifier === 'SELECT'"
         v-model="newStep[field.key]"
@@ -34,17 +34,30 @@
           v-for="option in field.input.parameters.values"
           :key="option.key"
           :value="option.value"
-        >{{ option.name }}</option>
+        >
+          {{ option.name }}
+        </option>
       </select>
-      <div
-        class="slider"
-        v-if="field.input.identifier === 'SLIDER'"
-      >
+      <div class="slider" v-if="field.input.identifier === 'SLIDER'">
         <div class="slider-container">
           <Slider
-            :min="field.input.parameters.min ? parseFloat(field.input.parameters.min) : 0"
-            :max="field.input.parameters.max ? parseFloat(field.input.parameters.max) : 1000"
-            :step="field.input.parameters.step ? parseFloat(field.input.parameters.step) < 1 ? -1 : parseFloat(field.input.parameters.step) : 1"
+            :min="
+              field.input.parameters.min
+                ? parseFloat(field.input.parameters.min)
+                : 0
+            "
+            :max="
+              field.input.parameters.max
+                ? parseFloat(field.input.parameters.max)
+                : 1000
+            "
+            :step="
+              field.input.parameters.step
+                ? parseFloat(field.input.parameters.step) < 1
+                  ? -1
+                  : parseFloat(field.input.parameters.step)
+                : 1
+            "
             v-model="newStep[field.key]"
           />
         </div>
@@ -73,30 +86,29 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
-import LoadingButton from './LoadingButton'
-import Slider from '@vueform/slider/dist/slider.vue2.js'
+import { mapState, mapGetters, mapActions } from "vuex";
+import LoadingButton from "./LoadingButton";
+import Slider from "@vueform/slider";
 export default {
   components: {
     Slider,
-    LoadingButton
+    LoadingButton,
   },
   computed: {
-    ...mapState('step', { newStep: 'new' }),
-    ...mapGetters('track', { track: 'current' })
+    ...mapState("step", { newStep: "new" }),
+    ...mapGetters("track", { track: "current" }),
   },
   methods: {
-    ...mapActions('step', { create: 'create' }),
-    ...mapActions('track', { report: 'report' }),
-    submit () {
-      this.create()
-        .then(response => {
-          this.$emit('tracked')
-          this.report()
-        })
-    }
-  }
-}
+    ...mapActions("step", { create: "create" }),
+    ...mapActions("track", { report: "report" }),
+    submit() {
+      this.create().then(() => {
+        this.$emit("tracked");
+        this.report();
+      });
+    },
+  },
+};
 </script>
 
 <style src="@vueform/slider/themes/default.css"></style>
@@ -112,19 +124,6 @@ export default {
   .slider-container {
     margin: 3rem 0 1rem 0;
   }
-    // .row(center);
-  // .slider {
-  //   // .row(center);
-
-  //   input {
-  //     -webkit-tap-highlight-color: transparent;
-  //     margin: 0;
-  //     &:last-child {
-  //       width: 100px;
-  //       margin-left: 2rem;
-  //     }
-  //   }
-  // }
 
   .button-row {
     .row();

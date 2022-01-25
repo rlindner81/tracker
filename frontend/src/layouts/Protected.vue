@@ -2,9 +2,7 @@
   <div class="layout protected">
     <div class="letter-box">
       <nav :data-open="mobileNavVisible">
-        <router-link
-          to="/"
-        >Dashboard</router-link>
+        <router-link to="/">Dashboard</router-link>
 
         <h1>Tracks</h1>
 
@@ -12,10 +10,13 @@
           v-for="track in tracks"
           :key="track._id"
           :to="`/${track._id}`"
-        >{{ track.name }}</router-link>
+          >{{ track.name }}</router-link
+        >
 
         <div class="toggle" @click="toggleMobileNav">
-          <div></div><div></div><div></div>
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
       </nav>
 
@@ -27,40 +28,35 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
-  data () {
+  data() {
     return {
       initialized: false,
-      mobileNavVisible: false
-    }
+      mobileNavVisible: false,
+    };
   },
-  created () {
-    this.load()
-      .catch(() => {
-        this.clear()
-        this.$router.push('/auth/login')
-      })
-      .then(() => {
-        return this.loadTracks()
-      })
-      .then(() => {
-        this.initialized = true
-      })
+  async created() {
+    await this.loadSessionUser();
+    if (!this.isLoggedIn()) {
+      return this.$router.push("/auth/login");
+    }
+    await this.loadTracks();
+    this.initialized = true;
   },
   computed: {
-    ...mapState('track', { tracks: 'data' })
+    ...mapState("track", { tracks: "data" }),
   },
   methods: {
-    ...mapActions('user', { load: 'init' }),
-    ...mapMutations('user', ['clear']),
-    ...mapActions('track', { loadTracks: 'load' }),
-    toggleMobileNav () {
-      this.mobileNavVisible = !this.mobileNavVisible
-    }
-  }
-}
+    ...mapGetters("user", ["isLoggedIn"]),
+    ...mapActions("user", ["loadSessionUser"]),
+    ...mapActions("track", { loadTracks: "load" }),
+    toggleMobileNav() {
+      this.mobileNavVisible = !this.mobileNavVisible;
+    },
+  },
+};
 </script>
 
 <style lang="less">
@@ -72,7 +68,7 @@ export default {
   overflow-y: auto;
   padding: 8rem 4rem;
   position: relative;
-  background: url('~@/assets/paper.png') repeat;
+  background: url("~@/assets/paper.png") repeat;
 
   @media @medium {
     padding: 4rem 0;
@@ -104,7 +100,8 @@ export default {
       margin-top: 0.25rem;
       transition: all 0.1s ease;
 
-      &.router-link-active:not(:first-child), &.router-link-exact-active {
+      &.router-link-active:not(:first-child),
+      &.router-link-exact-active {
         color: @highlight;
         text-decoration: underline;
       }

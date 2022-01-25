@@ -1,41 +1,21 @@
 <template>
-  <div class="component tab" v-show="isActive"><slot></slot></div>
+  <div class="component tab" v-show="selectedTitle === title">
+    <slot></slot>
+  </div>
 </template>
 
 <script>
+import { inject } from "vue";
 export default {
   props: {
-    name: { required: true },
-    selected: { default: false }
+    title: { required: true },
+    selected: { default: false },
   },
-  data () {
+  setup() {
+    const selectedTitle = inject("selectedTitle");
     return {
-      isActive: false
-    }
+      selectedTitle,
+    };
   },
-  created () {
-    this.tabs = this.$children
-  },
-  mounted () {
-    if (this.$route.hash) {
-      if (this.$route.hash === this.href) {
-        this.isActive = true
-      }
-    } else {
-      this.isActive = this.selected
-    }
-  },
-  computed: {
-    href () {
-      return '#' + this.name.toLowerCase().replace(/ /g, '-')
-    }
-  },
-  methods: {
-    selectTab (selectedTab) {
-      this.tabs.forEach(tab => {
-        tab.isActive = (tab.name === selectedTab.name)
-      })
-    }
-  }
-}
+};
 </script>

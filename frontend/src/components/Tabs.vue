@@ -2,34 +2,52 @@
   <div class="component tabs">
     <div class="tabs">
       <ul>
-        <li v-for="(tab, i) in tabs" :class="{ 'is-active': tab.isActive }" :key="i">
-            <a :href="tab.href" @click="selectTab(tab)">{{ tab.name }}</a>
+        <li
+          v-for="(title, i) in tabTitles"
+          :class="{ 'is-active': selectedTitle === title }"
+          :key="i"
+        >
+          <a :href="hrefFromTitle(title)" @click="selectedTitle = title">
+            {{ title }}
+          </a>
         </li>
       </ul>
     </div>
 
     <div class="tabs-details">
-        <slot></slot>
+      <slot></slot>
     </div>
   </div>
 </template>
 
 <script>
+import { ref, provide } from "vue";
 export default {
-  data () {
-    return { tabs: [] }
+  setup(props, { slots }) {
+    const tabTitles = ref(slots.default().map((tab) => tab.props.title));
+    const selectedTitle = ref(
+      slots.default().find((tab) => tab.props.selected).props.title
+    );
+
+    provide("selectedTitle", selectedTitle);
+    return {
+      tabTitles,
+      selectedTitle,
+    };
   },
-  created () {
-    this.tabs = this.$children
+  mounted() {
+    const tabHrefs = this.tabTitles.map(this.hrefFromTitle.bind(this));
+    const hashIndex = tabHrefs.indexOf(this.$route.hash);
+    if (hashIndex >= 0) {
+      this.selectedTitle = this.tabTitles[hashIndex];
+    }
   },
   methods: {
-    selectTab (selectedTab) {
-      this.tabs.forEach(tab => {
-        tab.isActive = (tab.name === selectedTab.name)
-      })
-    }
-  }
-}
+    hrefFromTitle(title) {
+      return "#" + title.toLowerCase();
+    },
+  },
+};
 </script>
 
 <style lang="less">
