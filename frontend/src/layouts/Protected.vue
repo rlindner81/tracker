@@ -1,7 +1,7 @@
 <template>
   <div class="layout protected">
     <div class="letter-box">
-      <nav :data-open="mobileNavVisible">
+      <nav :data-open="mobileNavVisible || null">
         <router-link to="/">Dashboard</router-link>
 
         <h1>Tracks</h1>

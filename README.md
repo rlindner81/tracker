@@ -5,7 +5,7 @@
 
 # todo
 
-after track delete you get this...
+- after track delete you get this...
 
 ```
 TrackList.vue?a1a1:6 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'fields')
