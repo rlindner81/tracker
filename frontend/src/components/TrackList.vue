@@ -3,9 +3,7 @@
     <div class="step" v-for="step in steps" :key="step._id">
       <div class="values">
         <div class="value" v-for="(value, key) in step.values" :key="key">
-          <label>{{
-            track.fields.find((field) => field.key === key).name
-          }}</label>
+          <label>{{ getFieldName(key) }}</label>
           <span v-if="value === undefined || value === null">n/a</span>
           <span
             v-if="
@@ -21,11 +19,7 @@
               value !== null &&
               getInputIdentifier(key) === 'SELECT'
             "
-            >{{
-              getField(key).input.parameters.values.find(
-                (v) => String(v.value) === String(value)
-              ).name
-            }}</span
+            >{{ getInputParameterValueName(key, value) }}</span
           >
         </div>
       </div>
@@ -47,18 +41,32 @@ export default {
     ...mapGetters("track", { track: "current" }),
   },
   methods: {
-    getInputIdentifier(key) {
-      let field = this.getField(key);
-
-      return field ? field.input.identifier : null;
-    },
-    getType(key) {
-      let field = this.getField(key);
-
-      return field ? field.type : null;
-    },
     getField(key) {
-      return this.track.fields.find((field) => field.key === key);
+      return (
+        this.track &&
+        this.track.fields &&
+        this.track.fields.find((field) => field.key === key)
+      );
+    },
+    getFieldName(key) {
+      const field = this.getField(key);
+      return field && field.name;
+    },
+    getInputIdentifier(key) {
+      const field = this.getField(key);
+      return field && field.input && field.input.identifier;
+    },
+    getInputParameterValueName(key, value) {
+      const field = this.getField(key);
+      const matchingValue =
+        field &&
+        field.input &&
+        field.input.parameters &&
+        field.input.parameters.values &&
+        field.input.parameters.values.find(
+          (v) => String(v.value) === String(value)
+        );
+      return matchingValue && matchingValue.name;
     },
   },
 };
