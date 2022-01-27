@@ -7,7 +7,7 @@ const promisifyAll = require("../util").promisifyAll
 
 const inMemoryOnly = process.env.NODE_ENV === "test"
 
-Datastore.prototype.createNewId = uuid
+Datastore.prototype._createNewId = uuid
 
 promisifyAll(Datastore.prototype)
 promisifyAll(Cursor.prototype)
