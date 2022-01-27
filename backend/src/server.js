@@ -6,10 +6,10 @@ if (process.env.NODE_ENV === "development") {
   logger.debug("raised default log level to debug")
 }
 
-const server = app.listen(app.get("port"), function() {
+const server = app.listen(app.get("port"), function () {
   logger.info("Started server on port " + app.get("port"))
 })
-server.on("error", function(err) {
+server.on("error", function (err) {
   logger.error(err)
 })
 

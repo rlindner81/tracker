@@ -11,7 +11,9 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "lint": "eslint . --fix",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:eslint": "eslint --fix .",
+    "lint:prettier": "prettier --write --loglevel error .",
     "test": "jest",
     "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock"
   },
@@ -28,8 +30,7 @@
     "joi": "17.6.0",
     "lodash": "4.17.21",
     "moment": "2.29.1",
-    "nedb": "1.8.0",
-    "nedb-session-store": "1.1.2",
+    "@seald-io/nedb": "2.2.1",
     "uuid": "8.3.2",
     "winston": "3.4.0"
   },

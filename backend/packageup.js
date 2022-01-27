@@ -9,7 +9,7 @@ const pickCaret = ([, value]) => value.startsWith("^")
 const chooseLatest = ([key]) => key + "@latest"
 const chooseSame = ([key]) => key
 
-const run = cmd => {
+const run = (cmd) => {
   console.log(cmd)
   execSync(cmd, { stdio: "inherit" })
 }

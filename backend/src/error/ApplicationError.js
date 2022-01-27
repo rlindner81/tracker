@@ -9,7 +9,7 @@ function ApplicationError(status, defaultMessage) {
   const instance = Error.apply(null, errorArgs)
 
   Object.getOwnPropertyNames(instance).forEach(
-    function(key) {
+    function (key) {
       if (key !== "stack") {
         this[key] = instance[key]
       }

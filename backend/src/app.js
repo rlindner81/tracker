@@ -10,7 +10,7 @@ const route = require("./route")
 const config = require("./config")
 const app = express()
 const sessionConfig = Object.assign({}, config.session, {
-  store: dataService.sessions
+  store: dataService.sessions,
 })
 
 app.set("port", config.server.port)

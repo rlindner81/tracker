@@ -3,12 +3,12 @@ const { string } = require("./common")
 const registerSchema = {
   name: string,
   email: string.email(),
-  password: string
+  password: string,
 }
 
 module.exports = {
   options: {
-    presence: "required"
+    presence: "required",
   },
-  body: joi.object().keys(registerSchema)
+  body: joi.object().keys(registerSchema),
 }

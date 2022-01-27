@@ -16,7 +16,7 @@ const secure = !Object.prototype.hasOwnProperty.call(process.env, "SESSION_SECUR
 module.exports = {
   server: {
     port,
-    trustProxy
+    trustProxy,
   },
   session: {
     resave: false,
@@ -24,7 +24,7 @@ module.exports = {
     secret,
     cookie: {
       secure,
-      maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year
-    }
-  }
+      maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+    },
+  },
 }

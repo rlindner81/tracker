@@ -16,5 +16,5 @@ module.exports = {
   generatorType,
   inputType,
   displayType,
-  frequencyType
+  frequencyType,
 }

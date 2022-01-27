@@ -2,25 +2,25 @@ const http = require("http")
 const app = require("../src/app")
 const { user, request, getSessionCookie } = require("./helper")
 
-describe("Auth APIs", function() {
+describe("Auth APIs", function () {
   let server
   let sessionCookie
 
-  beforeAll(done => {
+  beforeAll((done) => {
     server = http.createServer(app)
     server.listen(() => {
-      return getSessionCookie(server).then(cookie => {
+      return getSessionCookie(server).then((cookie) => {
         sessionCookie = cookie
         done()
       })
     })
   })
 
-  afterAll(done => {
+  afterAll((done) => {
     server.close(done)
   })
 
-  it("GET /api/track", async function() {
+  it("GET /api/track", async function () {
     const res = await request(server)
       .get("/api/track")
       .set("Cookie", sessionCookie)

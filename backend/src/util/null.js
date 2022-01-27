@@ -6,7 +6,7 @@ module.exports.isNull = isNull
 function hasNull(arraylike) {
   return Array.prototype.reduce.call(
     arraylike,
-    function(prev, curr) {
+    function (prev, curr) {
       return prev || curr === null || curr === undefined
     },
     false
