@@ -21,20 +21,20 @@ function login(session, fields) {
 
   return dbUsers
     .findOneAsync({ $or: [{ name: fields.nameOrEmail }, { email: fields.nameOrEmail }] })
-    .then(function(dbUser) {
+    .then(function (dbUser) {
       if (dbUser === null) {
         throw new UserNotFoundError()
       }
       user = dbUser
       return bcrypt.compare(fields.password, user.password)
     })
-    .then(function(match) {
+    .then(function (match) {
       if (!match) {
         throw new WrongPasswordError()
       }
       session.userId = user["_id"]
     })
-    .catch(function(err) {
+    .catch(function (err) {
       delete session.userId
       throw err
     })
@@ -57,13 +57,13 @@ function register(session, fields) {
 
   return dbUsers
     .findOneAsync({ $or: [{ name: user.name }, { email: user.email }] })
-    .then(function(dbUser) {
+    .then(function (dbUser) {
       if (dbUser !== null) {
         throw new UserAlreadyExistsError(`User already exists name: ${dbUser.name} email: ${dbUser.email}`)
       }
       return promisify(bcrypt.hash)(user.password, 10)
     })
-    .then(password => {
+    .then((password) => {
       user.password = password
       return dbUsers.insertAsync(user)
     })

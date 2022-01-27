@@ -6,57 +6,67 @@ This is the Javascript backend for the ultimate tracker.
 
 You will need at least [NodeJS](https://nodejs.org) 10.x.
 
-* [Express](https://www.npmjs.com/package/express) for routering and low-level request handling
-  * [Body-Parser](https://www.npmjs.com/package/body-parser) to parse request bodies in `req.body` 
-  * [Express-Session](https://www.npmjs.com/package/express-session) for handling sessions via `req.session` 
-* [NeDB](https://www.npmjs.com/package/nedb) as an embedded document database
-  * [NeDB-Session-Store](https://www.npmjs.com/package/nedb-session-store) session NeDB backend
-* [Winston](https://www.npmjs.com/package/winston) for all logging
-* [BCrypt](https://www.npmjs.com/package/bcrypt) for secure password storage
-* [Joi](https://www.npmjs.com/package/@hapi/joi) for request validation
-* [UUID](https://www.npmjs.com/package/uuid) for generating version 4 UUIDs
-* [moment](https://www.npmjs.com/package/moment) for getting relative times
-* [lodash](https://www.npmjs.com/package/lodash) for regexp escaping and deep merge
-* [csv](https://www.npmjs.com/package/csv) for csv export
+- [Express](https://www.npmjs.com/package/express) for routering and low-level request handling
+  - [Body-Parser](https://www.npmjs.com/package/body-parser) to parse request bodies in `req.body`
+  - [Express-Session](https://www.npmjs.com/package/express-session) for handling sessions via `req.session`
+- [NeDB](https://www.npmjs.com/package/nedb) as an embedded document database
+  - [NeDB-Session-Store](https://www.npmjs.com/package/nedb-session-store) session NeDB backend
+- [Winston](https://www.npmjs.com/package/winston) for all logging
+- [BCrypt](https://www.npmjs.com/package/bcrypt) for secure password storage
+- [Joi](https://www.npmjs.com/package/@hapi/joi) for request validation
+- [UUID](https://www.npmjs.com/package/uuid) for generating version 4 UUIDs
+- [moment](https://www.npmjs.com/package/moment) for getting relative times
+- [lodash](https://www.npmjs.com/package/lodash) for regexp escaping and deep merge
+- [csv](https://www.npmjs.com/package/csv) for csv export
 
 ## Codestyle
 
-* Code will be in [ECMAScript 2018](http://www.ecma-international.org/ecma-262/9.0/)
-* Style rules are specfied in [ESLint](.eslintrc.yml)
+- Code will be in [ECMAScript 2018](http://www.ecma-international.org/ecma-262/9.0/)
+- Style rules are specfied in [ESLint](.eslintrc.yml)
 
 ## Indentifiers
+
 Marked with `?` means it could change/be removed.
 
 ### Field types
+
 Field type conversion happens when a step is saved. Expected inputs are all basic types JSON allows.
-* `INPUT` leave as is
-* `TEXT` convert to text
-* `INTEGER` convert with `parseInt`
-* `FLOAT` convert with `parseFloat`
-* `TIME` convert to ISO-formatted string `Date.toISOString()` output
+
+- `INPUT` leave as is
+- `TEXT` convert to text
+- `INTEGER` convert with `parseInt`
+- `FLOAT` convert with `parseFloat`
+- `TIME` convert to ISO-formatted string `Date.toISOString()` output
 
 ### Input types
+
 This defines the input interface for each step entry.
-* `FIELD`
-* `SELECT?`
+
+- `FIELD`
+- `SELECT?`
 
 ### Display types
+
 This defines the way the field information is displayed to the user.
 For example if we know a field to be currency, we could add a suffix here so that instead of just the number they see `123,00€`.
-* `CURRENCY?`
+
+- `CURRENCY?`
 
 ### Generator types
-* `STATIC` just pass through the `parameters.value` and don't even sweat
-* `TIME_NOW?` this could change as well. every step has an internal createdAt timestamp anyway...
-* `TIME_RELATIVE_PREVIOUS?` mostly for playing around for now
+
+- `STATIC` just pass through the `parameters.value` and don't even sweat
+- `TIME_NOW?` this could change as well. every step has an internal createdAt timestamp anyway...
+- `TIME_RELATIVE_PREVIOUS?` mostly for playing around for now
 
 ### Report
-* aggregations: `COUNT|MIN|MAX|AVG|SUM`
-* intervals: `YEAR|MONTH|WEEK|DAY|HOUR|MINUTE|SECOND`
+
+- aggregations: `COUNT|MIN|MAX|AVG|SUM`
+- intervals: `YEAR|MONTH|WEEK|DAY|HOUR|MINUTE|SECOND`
 
 ## API
 
 ### Track
+
 ```
 # Normal REST handling of tracks
 GET    /api/track
@@ -139,6 +149,7 @@ POST
 ```
 
 ### Track/Step
+
 ```
 GET    /api/track/:trackId/step
 POST   /api/track/:trackId/step
@@ -182,6 +193,7 @@ GET
 ```
 
 ### Track/Step/Paged
+
 ```
 GET    /api/track/:id/steps/$paged?limit=20&page=2
 {
@@ -194,12 +206,15 @@ GET    /api/track/:id/steps/$paged?limit=20&page=2
 ```
 
 ### Track/Step/Export
+
 ```
 GET    /api/track/:trackId/step/$export
 ```
+
 Sends a CSV file with all step data.
 
 ### Track/Report
+
 ```
 # Normal REST handling of report definitions
 GET    /api/track/:trackId/report
@@ -250,8 +265,7 @@ POST   /api/track/:trackId/report/$dynamic
 }
 ```
 
-
 ## TODO
 
-* Tests for Track/Step/Report
-* Maybe switch to expressions?
+- Tests for Track/Step/Report
+- Maybe switch to expressions?

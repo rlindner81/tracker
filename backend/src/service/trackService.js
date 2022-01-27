@@ -23,11 +23,11 @@ function searchTracks(session, options) {
     .find({ $or: [{ userId: session.userId }, { public: true }], name })
     .sort({ createdAt: -1 })
     .execAsync()
-    .then(result => {
+    .then((result) => {
       tracks = result
       return Promise.all(
-        tracks.map(track => {
-          return dbSteps.countAsync({ trackId: track["_id"] }).then(count => {
+        tracks.map((track) => {
+          return dbSteps.countAsync({ trackId: track["_id"] }).then((count) => {
             track.stepCount = count
             return track
           })
@@ -43,11 +43,11 @@ function getTracks(session) {
     .find({ userId: session.userId })
     .sort({ createdAt: -1 })
     .execAsync()
-    .then(result => {
+    .then((result) => {
       tracks = result
       return Promise.all(
-        tracks.map(track => {
-          return dbSteps.countAsync({ trackId: track["_id"] }).then(count => {
+        tracks.map((track) => {
+          return dbSteps.countAsync({ trackId: track["_id"] }).then((count) => {
             track.stepCount = count
             return track
           })
@@ -67,7 +67,7 @@ function updateTrack(session, trackId, track) {
   return dbTracks
     .findOne({ _id: trackId })
     .execAsync()
-    .then(dbTrack => {
+    .then((dbTrack) => {
       if (dbTrack === null) {
         throw new ApplicationError(404, `Cannot find track ${trackId}`)
       }
@@ -78,7 +78,7 @@ function updateTrack(session, trackId, track) {
       })
       return dbTracks.updateAsync({ _id: trackId }, track)
     })
-    .then(updateCount => {
+    .then((updateCount) => {
       if (updateCount === 0) {
         throw new ApplicationError(405, `Could not update track ${trackId}`)
       }
@@ -204,10 +204,7 @@ function prepareStep(step) {
 
   return Promise.all([
     dbTracks.findOneAsync({ _id: step.trackId }),
-    dbSteps
-      .find({ userId: step.userId, trackId: step.trackId })
-      .sort({ createdAt: -1 })
-      .execAsync()
+    dbSteps.find({ userId: step.userId, trackId: step.trackId }).sort({ createdAt: -1 }).execAsync(),
   ]).then(([track, steps]) => {
     if (track === null) {
       throw new ApplicationError(404, "Track not found")
@@ -224,30 +221,27 @@ function prepareStep(step) {
 }
 
 function getSteps(session, trackId) {
-  return dbSteps
-    .find({ userId: session.userId, trackId: trackId })
-    .sort({ createdAt: -1 })
-    .execAsync()
+  return dbSteps.find({ userId: session.userId, trackId: trackId }).sort({ createdAt: -1 }).execAsync()
 }
 module.exports.getSteps = getSteps
 
 function exportSteps(session, trackId) {
   return Promise.all([
     dbTracks.findOneAsync({ _id: trackId }),
-    dbSteps
-      .find({ userId: session.userId, trackId: trackId })
-      .sort({ createdAt: -1 })
-      .execAsync()
+    dbSteps.find({ userId: session.userId, trackId: trackId }).sort({ createdAt: -1 }).execAsync(),
   ]).then(([track, steps]) => {
     if (track === null) {
       throw new ApplicationError(404, `Track ${trackId} not found`)
     }
-    const columns = track.fields.map(field => ({ key: field.key, header: field.name }))
+    const columns = track.fields.map((field) => ({ key: field.key, header: field.name }))
     columns.push({ key: "createdAt", header: "Tracked At" })
-    return csvStringify(steps.map(step => ({ ...step.values, createdAt: step.createdAt.toISOString() })), {
-      header: true,
-      columns
-    }).then(data => [track.name, data])
+    return csvStringify(
+      steps.map((step) => ({ ...step.values, createdAt: step.createdAt.toISOString() })),
+      {
+        header: true,
+        columns,
+      }
+    ).then((data) => [track.name, data])
   })
 }
 module.exports.exportSteps = exportSteps
@@ -263,7 +257,7 @@ function getStepsPaged(session, trackId, options) {
       .skip(offset)
       .limit(limit)
       .sort({ createdAt: -1 })
-      .execAsync()
+      .execAsync(),
   ]).then(([count, data]) => {
     const pages = Math.trunc(count / limit) + 1
     return {
@@ -271,7 +265,7 @@ function getStepsPaged(session, trackId, options) {
       limit,
       pages,
       page,
-      data
+      data,
     }
   })
 }
@@ -287,7 +281,7 @@ function updateStep(session, trackId, stepId, step) {
   return dbSteps
     .findOne({ _id: stepId })
     .execAsync()
-    .then(dbStep => {
+    .then((dbStep) => {
       if (dbStep === null) {
         throw new ApplicationError(404, `Cannot find step ${stepId} on track ${trackId}`)
       }
@@ -295,7 +289,7 @@ function updateStep(session, trackId, stepId, step) {
       step = _.merge(dbStep, step, { _id: stepId, userId: session.userId, trackId: trackId })
       return dbSteps.updateAsync({ _id: stepId }, step)
     })
-    .then(updateCount => {
+    .then((updateCount) => {
       if (updateCount === 0) {
         throw new ApplicationError(405, `Could not update step ${stepId} on track ${trackId}`)
       }
@@ -366,10 +360,7 @@ function evaluateReport(session, trackId, reportId) {
   return Promise.all([
     dbTracks.findOneAsync({ _id: trackId }),
     dbReports.findOneAsync({ _id: reportId }),
-    dbSteps
-      .find({ userId: session.userId, trackId: trackId })
-      .sort({ createdAt: 1 })
-      .execAsync()
+    dbSteps.find({ userId: session.userId, trackId: trackId }).sort({ createdAt: 1 }).execAsync(),
   ]).then(([track, report, steps]) => {
     if (track === null) {
       throw new ApplicationError(404, `Track ${trackId} not found`)
@@ -382,7 +373,7 @@ function evaluateReport(session, trackId, reportId) {
       trackId,
       reportId,
       ...(Object.prototype.hasOwnProperty.call(report, "name") && { name: report.name }),
-      aggregations: computeAggregations(steps, report.interval, report.aggregations)
+      aggregations: computeAggregations(steps, report.interval, report.aggregations),
     }
   })
 }
@@ -391,10 +382,7 @@ module.exports.evaluateReport = evaluateReport
 function evaluateDynamicReport(session, trackId, report) {
   return Promise.all([
     dbTracks.findOneAsync({ _id: trackId }),
-    dbSteps
-      .find({ userId: session.userId, trackId: trackId })
-      .sort({ createdAt: 1 })
-      .execAsync()
+    dbSteps.find({ userId: session.userId, trackId: trackId }).sort({ createdAt: 1 }).execAsync(),
   ]).then(([track, steps]) => {
     if (track === null) {
       throw new ApplicationError(404, `Track ${trackId} not found`)
@@ -402,17 +390,14 @@ function evaluateDynamicReport(session, trackId, report) {
 
     return {
       trackId,
-      aggregations: computeAggregations(steps, report.interval, report.aggregations)
+      aggregations: computeAggregations(steps, report.interval, report.aggregations),
     }
   })
 }
 module.exports.evaluateDynamicReport = evaluateDynamicReport
 
 function getReports(session, trackId) {
-  return dbReports
-    .find({ userId: session.userId, trackId: trackId })
-    .sort({ createdAt: -1 })
-    .execAsync()
+  return dbReports.find({ userId: session.userId, trackId: trackId }).sort({ createdAt: -1 }).execAsync()
 }
 module.exports.getReports = getReports
 

@@ -1,11 +1,11 @@
 const joi = require("joi")
 const stepSchema = {
-  values: joi.object()
+  values: joi.object(),
 }
 
 module.exports = {
   options: {
-    presence: "required"
+    presence: "required",
   },
-  body: joi.object().keys(stepSchema)
+  body: joi.object().keys(stepSchema),
 }
