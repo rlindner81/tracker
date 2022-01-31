@@ -32,7 +32,7 @@
     "moment": "2.29.1",
     "@seald-io/nedb": "2.2.1",
     "uuid": "8.3.2",
-    "winston": "3.5.0"
+    "winston": "3.5.1"
   },
   "devDependencies": {
     "eslint": "8.8.0",
