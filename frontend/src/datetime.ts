@@ -1,4 +1,4 @@
-const NOW_TOLERANCE = 500;
+const NOW_TOLERANCE = 1000;
 const TIME_UNITS = Object.freeze({
   YEAR: "year",
   MONTH: "month",
