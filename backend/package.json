@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "bcrypt": "5.0.1",
-    "body-parser": "1.19.2",
+    "body-parser": "1.20.0",
     "csv": "6.0.5",
     "express": "4.17.3",
     "express-session": "1.17.2",
