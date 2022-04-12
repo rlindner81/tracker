@@ -15,7 +15,7 @@
   "dependencies": {
     "@vueform/slider": "2.0.9",
     "register-service-worker": "1.7.2",
-    "vue": "3.2.31",
+    "vue": "3.2.32",
     "vue-chart-3": "3.1.8",
     "vue-router": "4.0.14",
     "vuex": "4.0.2"
@@ -29,7 +29,7 @@
     "@vue/cli-plugin-typescript": "4.5.17",
     "@vue/cli-plugin-vuex": "4.5.17",
     "@vue/cli-service": "4.5.17",
-    "@vue/compiler-sfc": "3.2.31",
+    "@vue/compiler-sfc": "3.2.32",
     "@vue/eslint-config-prettier": "6.0.0",
     "@vue/eslint-config-typescript": "7.0.0",
     "eslint": "6.8.0",
