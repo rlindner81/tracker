@@ -4,13 +4,12 @@ This is the Javascript backend for the ultimate tracker.
 
 ## Dependencies
 
-You will need at least [NodeJS](https://nodejs.org) 10.x.
+You will need at least [NodeJS](https://nodejs.org) 12.x.
 
 - [Express](https://www.npmjs.com/package/express) for routering and low-level request handling
   - [Body-Parser](https://www.npmjs.com/package/body-parser) to parse request bodies in `req.body`
   - [Express-Session](https://www.npmjs.com/package/express-session) for handling sessions via `req.session`
-- [NeDB](https://www.npmjs.com/package/nedb) as an embedded document database
-  - [NeDB-Session-Store](https://www.npmjs.com/package/nedb-session-store) session NeDB backend
+- [NeDB](https://www.npmjs.com/package/@seald-io/nedb) as an embedded document database
 - [Winston](https://www.npmjs.com/package/winston) for all logging
 - [BCrypt](https://www.npmjs.com/package/bcrypt) for secure password storage
 - [Joi](https://www.npmjs.com/package/@hapi/joi) for request validation
@@ -21,10 +20,10 @@ You will need at least [NodeJS](https://nodejs.org) 10.x.
 
 ## Codestyle
 
-- Code will be in [ECMAScript 2018](http://www.ecma-international.org/ecma-262/9.0/)
-- Style rules are specfied in [ESLint](.eslintrc.yml)
+- Code will be in [ECMAScript 2020](http://www.ecma-international.org/ecma-262/9.0/)
+- Style rules are specified in [ESLint](.eslintrc.yml)
 
-## Indentifiers
+## Identifiers
 
 Marked with `?` means it could change/be removed.
 
@@ -43,7 +42,7 @@ Field type conversion happens when a step is saved. Expected inputs are all basi
 This defines the input interface for each step entry.
 
 - `FIELD`
-- `SELECT?`
+- `SELECT`
 
 ### Display types
 
