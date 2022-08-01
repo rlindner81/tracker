@@ -2,7 +2,7 @@
   <form
     class="component add-step"
     @submit.prevent="submit"
-    v-if="track && newStep"
+    v-if="track && newStep && newEnabled"
   >
     <div class="input" v-for="field in track.fields" :key="field._id">
       <div class="optional-wrapper">
@@ -12,12 +12,12 @@
         >
           <Toggle
             v-if="field.optional"
-            v-model="newStep._enabled[field.key]"
+            v-model="newEnabled[field.key]"
             @change="handleChange($event, field.key)"
           />
         </div>
         <div class="choice-wrapper">
-          <label :class="newStep._enabled[field.key] ? '' : 'disable'">{{
+          <label :class="newEnabled[field.key] ? '' : 'disable'">{{
             field.name
           }}</label>
           <input
@@ -25,7 +25,7 @@
             v-model="newStep[field.key]"
             :placeholder="`Enter ${field.name}`"
             v-if="field.input.identifier === 'FIELD' && field.type === 'TEXT'"
-            :disabled="!newStep._enabled[field.key]"
+            :disabled="!newEnabled[field.key]"
           />
           <input
             type="number"
@@ -33,7 +33,7 @@
             v-model="newStep[field.key]"
             :placeholder="`Enter ${field.name}`"
             v-if="field.input.identifier === 'FIELD' && field.type === 'FLOAT'"
-            :disabled="!newStep._enabled[field.key]"
+            :disabled="!newEnabled[field.key]"
           />
           <input
             type="number"
@@ -43,12 +43,12 @@
             v-if="
               field.input.identifier === 'FIELD' && field.type === 'INTEGER'
             "
-            :disabled="!newStep._enabled[field.key]"
+            :disabled="!newEnabled[field.key]"
           />
           <select
             v-if="field.input.identifier === 'SELECT'"
             v-model="newStep[field.key]"
-            :disabled="!newStep._enabled[field.key]"
+            :disabled="!newEnabled[field.key]"
           >
             <option
               v-for="option in field.input.parameters.values"
@@ -79,7 +79,7 @@
                     : 1
                 "
                 v-model="newStep[field.key]"
-                :disabled="!newStep._enabled[field.key]"
+                :disabled="!newEnabled[field.key]"
               />
             </div>
             <!-- <input
@@ -120,7 +120,7 @@ export default {
     LoadingButton,
   },
   computed: {
-    ...mapState("step", { newStep: "new" }),
+    ...mapState("step", { newStep: "new", newEnabled: "newEnabled" }),
     ...mapGetters("track", { track: "current" }),
   },
   methods: {

@@ -15,12 +15,11 @@ export default {
       state.trackId = id;
     },
     setNew(state, track) {
-      const newStep = {
-        _enabled: {},
-      };
+      const newStep = {};
+      const newEnabled = {};
 
       track.fields.forEach((field) => {
-        newStep._enabled[field.key] = true;
+        newEnabled[field.key] = true;
 
         switch (field.input.identifier) {
           case "SLIDER": {
@@ -49,11 +48,13 @@ export default {
       });
 
       state.new = newStep;
+      state.newEnabled = newEnabled;
     },
     clear(state) {
       state.data = null;
       state.trackId = null;
       state.new = null;
+      state.newEnabled = null;
     },
     add(state, data) {
       state.data.unshift(data);
