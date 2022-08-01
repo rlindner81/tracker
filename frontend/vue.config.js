@@ -1,6 +1,5 @@
 module.exports = {
   devServer: {
-    contentBase: "./public",
     proxy: {
       "/api": {
         target: "http://0.0.0.0:8000",
@@ -13,10 +12,5 @@ module.exports = {
       skipWaiting: true,
       clientsClaim: true,
     },
-  },
-  chainWebpack: (config) => {
-    config.module.rule("eslint").use("eslint-loader").options({
-      fix: true,
-    });
   },
 };
