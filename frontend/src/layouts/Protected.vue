@@ -13,7 +13,7 @@
           >{{ track.name }}</router-link
         >
 
-        <div class="toggle" @click="toggleMobileNav">
+        <div class="toggle-nav" @click="toggleMobileNav">
           <div></div>
           <div></div>
           <div></div>
@@ -111,7 +111,7 @@ export default {
       }
     }
 
-    .toggle {
+    .toggle-nav {
       .column(space-between, space-between);
       transition: all 0.1s ease-in-out;
       width: 30px;
@@ -150,14 +150,14 @@ export default {
         font-size: 2.5rem;
       }
 
-      .toggle {
+      .toggle-nav {
         display: flex;
       }
 
       &[data-open] {
         transform: translateY(0);
 
-        .toggle > div {
+        .toggle-nav > div {
           &:nth-child(1) {
             transform: translateY(11px) rotate(45deg);
           }
