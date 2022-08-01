@@ -15,9 +15,13 @@ export default {
       state.trackId = id;
     },
     setNew(state, track) {
-      const newStep = {};
+      const newStep = {
+        _enabled: {},
+      };
 
       track.fields.forEach((field) => {
+        newStep._enabled[field.key] = true;
+
         switch (field.input.identifier) {
           case "SLIDER": {
             const halfPoint =

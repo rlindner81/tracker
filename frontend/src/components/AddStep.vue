@@ -8,17 +8,20 @@
       <div class="optional-wrapper">
         <div
           class="toggle-wrapper"
-          v-if="track.fields.some((field) => field.optional)"
+          v-if="track.fields.some(({ optional }) => optional)"
         >
-          <Toggle v-if="field.optional" />
+          <Toggle v-if="field.optional" v-model="newStep._enabled[field.key]" />
         </div>
         <div class="choice-wrapper">
-          <label>{{ field.name }}</label>
+          <label :class="newStep._enabled[field.key] ? '' : 'disable'">{{
+            field.name
+          }}</label>
           <input
             type="text"
             v-model="newStep[field.key]"
             :placeholder="`Enter ${field.name}`"
             v-if="field.input.identifier === 'FIELD' && field.type === 'TEXT'"
+            :disabled="!newStep._enabled[field.key]"
           />
           <input
             type="number"
@@ -26,6 +29,7 @@
             v-model="newStep[field.key]"
             :placeholder="`Enter ${field.name}`"
             v-if="field.input.identifier === 'FIELD' && field.type === 'FLOAT'"
+            :disabled="!newStep._enabled[field.key]"
           />
           <input
             type="number"
@@ -35,10 +39,12 @@
             v-if="
               field.input.identifier === 'FIELD' && field.type === 'INTEGER'
             "
+            :disabled="!newStep._enabled[field.key]"
           />
           <select
             v-if="field.input.identifier === 'SELECT'"
             v-model="newStep[field.key]"
+            :disabled="!newStep._enabled[field.key]"
           >
             <option
               v-for="option in field.input.parameters.values"
@@ -69,6 +75,7 @@
                     : 1
                 "
                 v-model="newStep[field.key]"
+                :disabled="!newStep._enabled[field.key]"
               />
             </div>
             <!-- <input
@@ -132,6 +139,10 @@ export default {
 @import "../less/helpers";
 
 .component.add-step {
+  label.disable {
+    color: #9ca3af;
+  }
+
   .optional-wrapper {
     .row();
 
