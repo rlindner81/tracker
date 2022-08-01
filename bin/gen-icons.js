@@ -37,6 +37,7 @@ gen_png("msapplication-icon-144x144 ",144)
 gen_png("mstile-150x150 ",150)
 
 // SVG
+copyFileSync(source, path.join(target, "favicon.svg"))
 copyFileSync(source, path.join(target, "safari-pinned-tab.svg"))
 
 // ICO
