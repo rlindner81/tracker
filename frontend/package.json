@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "vue-plugin-upgrade": "npx @vue/cli upgrade",
     "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock"
   },
   "engines": {
