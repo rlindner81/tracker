@@ -266,11 +266,11 @@ export default {
 @import "../less/variables";
 @import "../less/helpers";
 
-.toggle {
-  --toggle-width: 3.5rem;
-}
-
 .component.add-track {
+  .toggle {
+    --toggle-width: 3.5rem;
+  }
+
   .general {
     .shadow();
     background: @white;
