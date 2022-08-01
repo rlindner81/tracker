@@ -16,11 +16,7 @@
             type="text"
             v-model="field.name"
             placeholder="Enter a name ..."
-            @input="
-              !edit
-                ? (field.key = slugify($event.target.value))
-                : (field.key = field.key)
-            "
+            @input="!edit && (field.key = slugify($event.target.value))"
           />
 
           <label>Field Key</label>
@@ -47,6 +43,9 @@
               {{ type }}
             </option>
           </select>
+
+          <label>Entry is optional</label>
+          <Toggle v-model="field.optional" on-label="Yes" off-label="No" />
 
           <div class="slider" v-if="field.input.identifier === 'SLIDER'">
             <label>Min Value</label>
@@ -102,11 +101,7 @@
                 type="text"
                 placeholder="Name"
                 v-model="value.name"
-                @input="
-                  !edit
-                    ? (value.key = slugify(value.name))
-                    : (value.key = value.key)
-                "
+                @input="!edit && (value.key = slugify(value.name))"
               />
               <input type="text" placeholder="Value" v-model="value.value" />
 
@@ -159,12 +154,14 @@
 </template>
 
 <script>
+import Toggle from "@vueform/toggle";
 import { mapState, mapActions, mapGetters } from "vuex";
 import Modal from "./Modal";
 import LoadingButton from "./LoadingButton";
 
 export default {
   components: {
+    Toggle,
     Modal,
     LoadingButton,
   },
@@ -189,6 +186,7 @@ export default {
         key: null,
         name: null,
         type: "TEXT",
+        optional: false,
         input: {
           identifier: "FIELD",
           parameters: {
@@ -243,17 +241,12 @@ export default {
       return str;
     },
     getSelectableInputs(field) {
-      return this.inputs.filter((input) => {
-        if (
-          input === "SLIDER" &&
-          field.type !== "FLOAT" &&
-          field.type !== "INTEGER"
-        ) {
-          return false;
-        }
-
-        return true;
-      });
+      return this.inputs.filter(
+        (input) =>
+          input !== "SLIDER" ||
+          field.type === "FLOAT" ||
+          field.type === "INTEGER"
+      );
     },
     cleanUpInputType(field) {
       if (
@@ -268,9 +261,14 @@ export default {
 };
 </script>
 
+<style src="@vueform/toggle/themes/default.css"></style>
 <style lang="less">
 @import "../less/variables";
 @import "../less/helpers";
+
+.toggle {
+  --toggle-width: 3.5rem;
+}
 
 .component.add-track {
   .general {

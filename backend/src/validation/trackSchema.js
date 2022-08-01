@@ -1,5 +1,5 @@
 const joi = require("joi")
-const { string, token, fieldType, generatorType, inputType, displayType, frequencyType } = require("./common")
+const { string, token, fieldType, generatorType, inputType, displayType, frequencyType, sharingType } = require("./common")
 const typeSchema = {
   identifier: fieldType,
   parameters: joi.object().optional(),
@@ -20,8 +20,7 @@ const fieldSchema = {
   position: joi.number().integer().min(0),
   key: token,
   name: string,
-  public: joi.boolean().optional(),
-  frequency: frequencyType.optional(),
+  optional: joi.boolean().optional(),
   type: joi.alternatives().try(fieldType, joi.object().keys(typeSchema)),
   input: joi.alternatives().try(inputType, joi.object().keys(inputSchema)),
   generator: joi.alternatives().try(generatorType, joi.object().keys(generatorSchema)).optional(),
@@ -29,7 +28,7 @@ const fieldSchema = {
 }
 const trackSchema = {
   name: string,
-  public: joi.boolean().optional(),
+  sharing: sharingType.optional(),
   frequency: frequencyType.optional(),
   fields: joi.array().min(1).items(fieldSchema),
 }

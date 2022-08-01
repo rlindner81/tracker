@@ -7,6 +7,7 @@ const generatorType = joi.string().valid("STATIC", "TIME_NOW", "TIME_RELATIVE_PR
 const inputType = token.uppercase() // joi.string().valid("FIELD", "SELECT")
 const displayType = token.uppercase() // joi.string().valid("CURRENCY")
 const frequencyType = joi.string().valid("YEAR", "MONTH", "WEEK", "DAY", "HOUR", "MINUTE", "SECOND")
+const sharingType = joi.string().valid("PERSONAL", "GROUP", "OPEN")
 
 module.exports = {
   string,
@@ -17,4 +18,5 @@ module.exports = {
   inputType,
   displayType,
   frequencyType,
+  sharingType
 }
