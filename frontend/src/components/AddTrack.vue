@@ -22,6 +22,11 @@
           <label>Field Key</label>
           <input type="text" :value="field.key" :disabled="true" />
 
+          <label>Entry is optional</label>
+          <div class="toggle-wrapper">
+            <Toggle v-model="field.optional" on-label="Yes" off-label="No" />
+          </div>
+
           <label>Type</label>
           <select
             :disabled="edit"
@@ -43,9 +48,6 @@
               {{ type }}
             </option>
           </select>
-
-          <label>Entry is optional</label>
-          <Toggle v-model="field.optional" on-label="Yes" off-label="No" />
 
           <div class="slider" v-if="field.input.identifier === 'SLIDER'">
             <label>Min Value</label>
@@ -269,6 +271,10 @@ export default {
 .component.add-track {
   .toggle {
     --toggle-width: 3.5rem;
+  }
+
+  .toggle-wrapper {
+    margin: 0 0 1rem 0;
   }
 
   .general {
