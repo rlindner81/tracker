@@ -10,7 +10,11 @@
           class="toggle-wrapper"
           v-if="track.fields.some(({ optional }) => optional)"
         >
-          <Toggle v-if="field.optional" v-model="newStep._enabled[field.key]" />
+          <Toggle
+            v-if="field.optional"
+            v-model="newStep._enabled[field.key]"
+            @change="handleChange($event, field.key)"
+          />
         </div>
         <div class="choice-wrapper">
           <label :class="newStep._enabled[field.key] ? '' : 'disable'">{{
@@ -127,6 +131,9 @@ export default {
         this.$emit("tracked");
         this.report();
       });
+    },
+    handleChange(enabled, fieldKey) {
+      !enabled && (this.newStep[fieldKey] = undefined);
     },
   },
 };
