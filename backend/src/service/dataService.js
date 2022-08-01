@@ -1,21 +1,16 @@
 const session = require("express-session")
-const Sessionstore = require("../session-store")(session)
-const Datastore = require("@seald-io/nedb")
-const Cursor = Datastore.prototype.find().constructor
+const SessionStore = require("../session-store")(session)
+const DataStore = require("@seald-io/nedb")
 const uuid = require("uuid").v4
-const promisifyAll = require("../util").promisifyAll
 
 const inMemoryOnly = process.env.NODE_ENV === "test"
 
-Datastore.prototype._createNewId = uuid
-
-promisifyAll(Datastore.prototype)
-promisifyAll(Cursor.prototype)
+DataStore.prototype._createNewId = uuid
 
 module.exports = {
-  sessions: new Sessionstore({ filename: "data/sessions.db", autoCompactInterval: null, inMemoryOnly }),
-  users: new Datastore({ filename: "data/users.db", autoload: true, timestampData: true, inMemoryOnly }),
-  tracks: new Datastore({ filename: "data/tracks.db", autoload: true, timestampData: true, inMemoryOnly }),
-  steps: new Datastore({ filename: "data/steps.db", autoload: true, timestampData: true, inMemoryOnly }),
-  reports: new Datastore({ filename: "data/reports.db", autoload: true, timestampData: true, inMemoryOnly }),
+  sessions: new SessionStore({ filename: "data/sessions.db", autoCompactInterval: null, inMemoryOnly }),
+  users: new DataStore({ filename: "data/users.db", autoload: true, timestampData: true, inMemoryOnly }),
+  tracks: new DataStore({ filename: "data/tracks.db", autoload: true, timestampData: true, inMemoryOnly }),
+  steps: new DataStore({ filename: "data/steps.db", autoload: true, timestampData: true, inMemoryOnly }),
+  reports: new DataStore({ filename: "data/reports.db", autoload: true, timestampData: true, inMemoryOnly }),
 }
