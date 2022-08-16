@@ -1,4 +1,18 @@
-import { fetchResponse, guardedFetchText } from "@/fetchWrapper";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword,
+  User,
+} from "firebase/auth";
+import { auth } from "@/firebase";
+import router from "@/router";
+
+let isUserInitialized = false;
+let resolveUserInitialized;
+const userInitializedPromise = new Promise(
+  (resolve) => (resolveUserInitialized = resolve)
+);
 
 export default {
   namespaced: true,
@@ -6,45 +20,77 @@ export default {
     user: null,
   },
   mutations: {
-    set(state, data) {
-      state.user = data;
-    },
-    clear(state) {
-      state.user = null;
+    setUser(state, payload: User | null) {
+      state.user = payload;
     },
   },
   getters: {
-    isLoggedIn(state) {
+    isLoggedIn(state): boolean {
       return state.user !== null;
+    },
+    getUser(state): User | null {
+      return state.user;
     },
   },
   actions: {
-    async loadSessionUser({ commit, getters }) {
-      if (getters.isLoggedIn) {
-        return;
+    observeAuthChanges({ commit }) {
+      onAuthStateChanged(auth, async (user) => {
+        commit("setUser", user || null);
+        if (!isUserInitialized) {
+          resolveUserInitialized();
+          isUserInitialized = true;
+        }
+        if (
+          user &&
+          router.currentRoute.value.matched.some(
+            (route) => route.name === "Unprotected"
+          )
+        ) {
+          await router.replace({ name: "Home" });
+        }
+        if (
+          !user &&
+          router.currentRoute.value.matched.some(
+            (route) => route.name === "Protected"
+          )
+        ) {
+          await router.replace({ name: "Login" });
+        }
+      });
+    },
+
+    async loadSessionUser() {
+      await userInitializedPromise;
+    },
+
+    async login({ commit, dispatch }, { email, password }) {
+      commit("busy/increase", null, { root: true });
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        dispatch("error/addTransientError", err.message, { root: true });
       }
-      const response = await fetchResponse("/api/auth/me");
-      response.ok && commit("set", await response.json());
+      commit("busy/decrease", null, { root: true });
     },
-    async login({ commit }, loginUser) {
-      const data = await guardedFetchText("/api/auth/login", <RequestInit>{
-        method: "POST",
-        body: <any>JSON.stringify(loginUser),
-      });
-      data && commit("set", loginUser);
+
+    async logout({ commit, dispatch }) {
+      commit("busy/increase", null, { root: true });
+      try {
+        await signOut(auth);
+      } catch (err) {
+        dispatch("error/addTransientError", err.message, { root: true });
+      }
+      commit("busy/decrease", null, { root: true });
     },
-    async logout({ commit }) {
-      const data = await guardedFetchText("/api/auth/logout", <RequestInit>{
-        method: "POST",
-      });
-      data && commit("clear");
-    },
-    async register({ commit }, registerUser) {
-      const data = await guardedFetchText("/api/auth/register", <RequestInit>{
-        method: "POST",
-        body: <any>JSON.stringify(registerUser),
-      });
-      data && commit("set", registerUser);
+
+    async register({ commit, dispatch }, { email, password }) {
+      commit("busy/increase", null, { root: true });
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        dispatch("error/addTransientError", err.message, { root: true });
+      }
+      commit("busy/decrease", null, { root: true });
     },
   },
 };

@@ -4,15 +4,15 @@ export default {
     busy: 0,
   },
   mutations: {
-    start(state) {
+    increase(state) {
       state.busy++;
     },
-    end(state) {
+    decrease(state) {
       state.busy--;
     },
   },
   getters: {
-    busy(state) {
+    isBusy(state) {
       return state.busy > 0;
     },
   },

@@ -49,7 +49,7 @@ export default {
     ...mapActions("track", { deleteTrack: "delete", update: "update" }),
     remove() {
       this.deleteTrack().then(() => {
-        this.$router.replace("/");
+        this.$router.replace({ name: "Home" });
       });
     },
     toggleDeleteModal() {

@@ -2,10 +2,7 @@ import store from "./store";
 
 const _guardResponse = async (response) => {
   if (!response.ok) {
-    const error = {
-      message: await response.text(),
-    };
-    store.dispatch("error/addTransientError", error);
+    store.dispatch("error/addTransientError", await response.text());
     return null;
   }
   return response;

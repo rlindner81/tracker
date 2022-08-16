@@ -13,6 +13,11 @@
           >{{ track.name }}</router-link
         >
 
+        <p v-if="user">
+          Logged in as {{ user.email }}
+          <LoadingButton @click.prevent="logout()">Logout</LoadingButton>
+        </p>
+
         <div class="toggle-nav" @click="toggleMobileNav">
           <div></div>
           <div></div>
@@ -28,9 +33,11 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
+import LoadingButton from "@/components/LoadingButton";
 
 export default {
+  components: { LoadingButton },
   data() {
     return {
       initialized: false,
@@ -39,18 +46,15 @@ export default {
   },
   async created() {
     await this.loadSessionUser();
-    if (!this.isLoggedIn()) {
-      return this.$router.push("/auth/login");
-    }
     await this.loadTracks();
     this.initialized = true;
   },
   computed: {
     ...mapState("track", { tracks: "data" }),
+    ...mapState("user", { user: "user" }),
   },
   methods: {
-    ...mapGetters("user", ["isLoggedIn"]),
-    ...mapActions("user", ["loadSessionUser"]),
+    ...mapActions("user", ["loadSessionUser", "logout"]),
     ...mapActions("track", { loadTracks: "load" }),
     toggleMobileNav() {
       this.mobileNavVisible = !this.mobileNavVisible;

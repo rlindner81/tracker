@@ -13,22 +13,7 @@
   </div>
 </template>
 
-<script>
-import { mapGetters, mapActions } from "vuex";
-
-export default {
-  async created() {
-    await this.loadSessionUser();
-    if (this.isLoggedIn()) {
-      return this.$router.push("/");
-    }
-  },
-  methods: {
-    ...mapGetters("user", ["isLoggedIn"]),
-    ...mapActions("user", ["loadSessionUser"]),
-  },
-};
-</script>
+<script></script>
 
 <style lang="less">
 @import "../less/variables";
