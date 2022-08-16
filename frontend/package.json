@@ -16,6 +16,7 @@
   "dependencies": {
     "@vueform/slider": "^2.1.2",
     "@vueform/toggle": "^2.1.1",
+    "firebase": "^9.9.2",
     "register-service-worker": "^1.7.2",
     "vue": "^3.2.37",
     "vue-chart-3": "^3.1.8",
@@ -23,8 +24,8 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.31.0",
-    "@typescript-eslint/parser": "^5.31.0",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
     "@vue/cli-plugin-eslint": "^5.0.8",
     "@vue/cli-plugin-pwa": "^5.0.8",
     "@vue/cli-plugin-router": "^5.0.8",
@@ -34,7 +35,7 @@
     "@vue/compiler-sfc": "3.2.37",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
-    "eslint": "^8.20.0",
+    "eslint": "^8.22.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.3.0",
     "less": "^4.1.3",
