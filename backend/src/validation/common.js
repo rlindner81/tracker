@@ -18,5 +18,5 @@ module.exports = {
   inputType,
   displayType,
   frequencyType,
-  sharingType
+  sharingType,
 }

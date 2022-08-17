@@ -1,5 +1,14 @@
 const joi = require("joi")
-const { string, token, fieldType, generatorType, inputType, displayType, frequencyType, sharingType } = require("./common")
+const {
+  string,
+  token,
+  fieldType,
+  generatorType,
+  inputType,
+  displayType,
+  frequencyType,
+  sharingType,
+} = require("./common")
 const typeSchema = {
   identifier: fieldType,
   parameters: joi.object().optional(),
