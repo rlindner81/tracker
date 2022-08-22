@@ -24,7 +24,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("user", ["register"]),
+    ...mapActions("common", ["register"]),
   },
 };
 </script>

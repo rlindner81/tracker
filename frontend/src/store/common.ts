@@ -9,6 +9,8 @@ import {
 import { auth } from "@/firebase";
 import router from "@/router";
 
+const TRANSIENT_ERROR_DELAY = 3000;
+
 let isUserInitialized = false;
 let resolveUserInitialized;
 const userInitializedPromise = new Promise(
@@ -18,22 +20,42 @@ const userInitializedPromise = new Promise(
 export default {
   namespaced: true,
   state: {
+    busy: 0,
+    errors: [],
     user: null,
   },
   mutations: {
+    increaseBusy(state) {
+      state.busy++;
+    },
+    decreaseBusy(state) {
+      state.busy--;
+    },
+    addError(state, error) {
+      state.errors.push(error);
+    },
+    removeError(state, error) {
+      const errorIndex = state.errors.indexOf(error);
+      errorIndex >= 0 && state.errors.splice(errorIndex, 1);
+    },
     setUser(state, payload: User | null) {
       state.user = payload;
     },
   },
   getters: {
+    isBusy(state) {
+      return state.busy > 0;
+    },
     isLoggedIn(state): boolean {
       return state.user !== null;
     },
-    getUser(state): User | null {
-      return state.user;
-    },
   },
   actions: {
+    addTransientError({ commit }, error) {
+      commit("addError", error);
+      setTimeout(() => commit("removeError", error), TRANSIENT_ERROR_DELAY);
+    },
+
     observeAuthChanges({ commit }) {
       onAuthStateChanged(auth, async (user) => {
         commit("setUser", user || null);
@@ -65,7 +87,7 @@ export default {
     },
 
     async login({ commit, dispatch }, { email, password }) {
-      commit("busy/increase", null, { root: true });
+      commit("increaseBusy");
       try {
         await Promise.all([
           signInWithEmailAndPassword(auth, email, password),
@@ -75,13 +97,13 @@ export default {
           }),
         ]);
       } catch (err) {
-        dispatch("error/addTransientError", err.message, { root: true });
+        dispatch("addTransientError", err.message);
       }
-      commit("busy/decrease", null, { root: true });
+      commit("decreaseBusy");
     },
 
     async logout({ commit, dispatch }) {
-      commit("busy/increase", null, { root: true });
+      commit("increaseBusy");
       try {
         await Promise.all([
           signOut(auth),
@@ -90,13 +112,13 @@ export default {
           }),
         ]);
       } catch (err) {
-        dispatch("error/addTransientError", err.message, { root: true });
+        dispatch("addTransientError", err.message);
       }
-      commit("busy/decrease", null, { root: true });
+      commit("decreaseBusy");
     },
 
     async register({ commit, dispatch }, { email, password }) {
-      commit("busy/increase", null, { root: true });
+      commit("increaseBusy");
       try {
         await Promise.all([
           createUserWithEmailAndPassword(auth, email, password),
@@ -106,9 +128,9 @@ export default {
           }),
         ]);
       } catch (err) {
-        dispatch("error/addTransientError", err.message, { root: true });
+        dispatch("addTransientError", err.message);
       }
-      commit("busy/decrease", null, { root: true });
+      commit("decreaseBusy");
     },
   },
 };

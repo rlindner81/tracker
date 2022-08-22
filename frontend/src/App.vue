@@ -17,10 +17,10 @@ export default {
     this.observeAuthChanges();
   },
   computed: {
-    ...mapState("error", ["errors"]),
+    ...mapState("common", ["errors"]),
   },
   methods: {
-    ...mapActions("user", ["observeAuthChanges"]),
+    ...mapActions("common", ["observeAuthChanges"]),
   },
 };
 </script>

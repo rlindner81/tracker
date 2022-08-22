@@ -23,7 +23,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("user", ["login"]),
+    ...mapActions("common", ["login"]),
   },
 };
 </script>

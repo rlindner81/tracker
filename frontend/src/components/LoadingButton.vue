@@ -16,7 +16,7 @@ export default {
     BusyIndicator,
   },
   computed: {
-    ...mapGetters("busy", ["isBusy"]),
+    ...mapGetters("common", ["isBusy"]),
   },
 };
 </script>

@@ -51,10 +51,10 @@ export default {
   },
   computed: {
     ...mapState("track", { tracks: "data" }),
-    ...mapState("user", { user: "user" }),
+    ...mapState("common", { user: "user" }),
   },
   methods: {
-    ...mapActions("user", ["loadSessionUser", "logout"]),
+    ...mapActions("common", ["loadSessionUser", "logout"]),
     ...mapActions("track", { loadTracks: "load" }),
     toggleMobileNav() {
       this.mobileNavVisible = !this.mobileNavVisible;
