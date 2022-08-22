@@ -19,11 +19,13 @@ const userInitializedPromise = new Promise(
 
 export default {
   namespaced: true,
+
   state: {
     busy: 0,
     errors: [],
     user: null,
   },
+
   mutations: {
     increaseBusy(state) {
       state.busy++;
@@ -42,6 +44,7 @@ export default {
       state.user = payload;
     },
   },
+
   getters: {
     isBusy(state) {
       return state.busy > 0;
@@ -50,6 +53,7 @@ export default {
       return state.user !== null;
     },
   },
+
   actions: {
     addTransientError({ commit }, error) {
       commit("addError", error);
