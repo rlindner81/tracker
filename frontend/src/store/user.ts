@@ -1,3 +1,4 @@
+import { guardedFetchText } from "@/fetchWrapper";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -66,7 +67,13 @@ export default {
     async login({ commit, dispatch }, { email, password }) {
       commit("busy/increase", null, { root: true });
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        await Promise.all([
+          signInWithEmailAndPassword(auth, email, password),
+          guardedFetchText("/api/auth/login", <RequestInit>{
+            method: "POST",
+            body: <any>JSON.stringify({ nameOrEmail: email, password }),
+          }),
+        ]);
       } catch (err) {
         dispatch("error/addTransientError", err.message, { root: true });
       }
@@ -76,7 +83,12 @@ export default {
     async logout({ commit, dispatch }) {
       commit("busy/increase", null, { root: true });
       try {
-        await signOut(auth);
+        await Promise.all([
+          signOut(auth),
+          guardedFetchText("/api/auth/logout", <RequestInit>{
+            method: "POST",
+          }),
+        ]);
       } catch (err) {
         dispatch("error/addTransientError", err.message, { root: true });
       }
@@ -86,7 +98,13 @@ export default {
     async register({ commit, dispatch }, { email, password }) {
       commit("busy/increase", null, { root: true });
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        await Promise.all([
+          createUserWithEmailAndPassword(auth, email, password),
+          guardedFetchText("/api/auth/register", <RequestInit>{
+            method: "POST",
+            body: <any>JSON.stringify({ name: email, email, password }),
+          }),
+        ]);
       } catch (err) {
         dispatch("error/addTransientError", err.message, { root: true });
       }
