@@ -9,7 +9,7 @@ import {
 import { auth } from "@/firebase";
 import router from "@/router";
 
-const TRANSIENT_ERROR_DELAY = 3000;
+const TRANSIENT_ERROR_DELAY = 5000;
 
 let isUserInitialized = false;
 let resolveUserInitialized;
