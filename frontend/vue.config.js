@@ -14,4 +14,10 @@ module.exports = {
       clientsClaim: true,
     },
   },
+  configureWebpack: {
+    performance: {
+      maxAssetSize: 400000,
+      maxEntrypointSize: 400000,
+    },
+  },
 };
