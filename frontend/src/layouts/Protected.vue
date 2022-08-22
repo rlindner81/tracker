@@ -13,7 +13,7 @@
           >{{ track.name }}</router-link
         >
 
-        <p v-if="user">
+        <p v-if="user" class="logout">
           Logged in as {{ user.email }}
           <LoadingButton @click.prevent="logout()">Logout</LoadingButton>
         </p>
@@ -130,6 +130,10 @@ export default {
         height: 3px;
         background: @font-color;
       }
+    }
+
+    .logout {
+      margin: 1rem 0;
     }
 
     @media @small {

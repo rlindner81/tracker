@@ -4,5 +4,5 @@
 {"name":"E_Test","email":"Test@web.de","password":"$2b$10$klg30wRIuTjSQq..Fh.2But0kl089QKoRdLHlLFMmE93BeFvsRl32","_id":"87dee0b3-b815-45da-8795-d0bd977e3eb7","createdAt":{"$$date":1566829646380},"updatedAt":{"$$date":1566829646380}}
 {"name":"Wiebke","email":"kleinfeldt.wiebke@gmail.com","password":"$2b$10$Bc/AWVaJGQx175ehdnZyzOG9TZ7IU69gbcJLEeieBRv9KWxR.QEbS","_id":"ace72a7f-0850-4a22-b3f6-d925483e4cfc","createdAt":{"$$date":1566666079278},"updatedAt":{"$$date":1566666079278}}
 {"name":"Paolo Sfilio","email":"paolo.sfilio@sap.com","password":"$2b$10$2SVyVXMM3uLe0G6aCVSp0Op0pOB/GQraRsCgF590vl2nDGBJZ4s7K","_id":"c7918ed4-6b78-4dbb-a7b9-f121c3074bf1","createdAt":{"$$date":1638877212618},"updatedAt":{"$$date":1638877212618}}
-{"_id":"ecd066d4-0e2a-4bc1-9833-934f6b1981e5","name":"navi","email":"navi@home.com","password":"$2a$10$N7q.JQFTABpDJPiArC7n/uBBeaX.N0SIa6Zc/ewqrckA7eIguEpqW"}
+{"name":"sommernavi@gmail.com","email":"sommernavi@gmail.com","password":"$2a$10$tTI22xz1okS5.FPVR/hUGuolXj0nhErCZy64eTfdfvFnLP/e/PsWW","_id":"ecd066d4-0e2a-4bc1-9833-934f6b1981e5"}
 {"name":"Knerzbert","email":"knerzbert@gmail.com","password":"$2b$10$vUzDfpIe6bzV4Z4.i5J6se99WvKhcSYwWchsbFGApQQmjGQR1QlhS","_id":"f478d38f-174d-4e65-b512-155e66c2fa0d","createdAt":{"$$date":1566413266842},"updatedAt":{"$$date":1566413266842}}
