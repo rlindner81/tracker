@@ -37,10 +37,10 @@ export default {
       state.currentId = null;
       state.currentUsage = [];
     },
-    addError(state, data) {
+    add(state, data) {
       state.data.push(data);
     },
-    removeError(state, id) {
+    remove(state, id) {
       state.data = state.data.filter((track) => {
         return track._id !== id;
       });

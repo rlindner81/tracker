@@ -56,10 +56,10 @@ export default {
       state.new = null;
       state.newEnabled = null;
     },
-    addError(state, data) {
+    add(state, data) {
       state.data.unshift(data);
     },
-    removeError(state, id) {
+    remove(state, id) {
       state.data = state.data.filter((step) => {
         return step._id !== id;
       });
