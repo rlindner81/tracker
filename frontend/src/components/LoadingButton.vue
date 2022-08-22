@@ -1,8 +1,8 @@
 <template>
   <button class="component loading-button">
-    <BusyIndicator v-show="busy"></BusyIndicator>
-    <span v-show="!busy"><slot></slot></span>
-    <span v-show="busy" class="hidden">Loading ...</span>
+    <BusyIndicator v-show="isBusy"></BusyIndicator>
+    <span v-show="!isBusy"><slot></slot></span>
+    <span v-show="isBusy" class="hidden">Loading ...</span>
   </button>
 </template>
 
@@ -16,7 +16,7 @@ export default {
     BusyIndicator,
   },
   computed: {
-    ...mapGetters("busy", ["busy"]),
+    ...mapGetters("common", ["isBusy"]),
   },
 };
 </script>

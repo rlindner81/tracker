@@ -1,3 +1,4 @@
+// https://cli.vuejs.org/config/
 module.exports = {
   devServer: {
     proxy: {

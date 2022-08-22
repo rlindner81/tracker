@@ -4,17 +4,23 @@
 
     <div class="errors">
       <div class="error" v-for="(error, index) in errors" :key="index">
-        {{ error.message }}
+        {{ error }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
+  mounted() {
+    this.observeAuthChanges();
+  },
   computed: {
-    ...mapState("error", ["errors"]),
+    ...mapState("common", ["errors"]),
+  },
+  methods: {
+    ...mapActions("common", ["observeAuthChanges"]),
   },
 };
 </script>
