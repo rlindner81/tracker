@@ -1,6 +1,18 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+
 import PublicLayout from "../layouts/Public.vue";
 import ProtectedLayout from "../layouts/Protected.vue";
+
+const Login = () =>
+  import(/* webpackChunkName: "login" */ "../views/Login.vue");
+const Register = () =>
+  import(/* webpackChunkName: "register" */ "../views/Register.vue");
+
+const Home = () =>
+  import(/* webpackChunkName: "home" */ "../views/Dashboard.vue");
+
+const Track = () =>
+  import(/* webpackChunkName: "track" */ "../views/Tracker.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -11,14 +23,12 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: "Login",
         path: "login",
-        component: () =>
-          import(/* webpackChunkName: "login" */ "../views/Login.vue"),
+        component: Login,
       },
       {
         name: "Register",
         path: "register",
-        component: () =>
-          import(/* webpackChunkName: "register" */ "../views/Register.vue"),
+        component: Register,
       },
     ],
   },
@@ -30,14 +40,12 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: "Home",
         path: "/",
-        component: () =>
-          import(/* webpackChunkName: "dashboard" */ "../views/Dashboard.vue"),
+        component: Home,
       },
       {
         name: "Track",
         path: ":track",
-        component: () =>
-          import(/* webpackChunkName: "track" */ "../views/Tracker.vue"),
+        component: Track,
       },
     ],
   },
