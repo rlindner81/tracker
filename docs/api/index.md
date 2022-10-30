@@ -145,7 +145,9 @@ Field value conversion happens when a new step is saved.
 
 ### Report Interval Type
 
-| `YEAR` | `MONTH` | `WEEK` | `DAY` | `HOUR` | `MINUTE` | `SECOND` |
+| `YEAR` | `MONTH` | `WEEK` | `DAY` |
+
+| `HOUR` | `MINUTE` | `SECOND` |
 
 <!--
 ### [TODO] Field Display Type
