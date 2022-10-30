@@ -141,21 +141,11 @@ Field value conversion happens when a new step is saved.
 
 ### Report Aggregation Type
 
-| `COUNT` |
-| `MIN` |
-| `MAX` |
-| `AVERAGE` |
-| `SUM` |
+| `COUNT` | `MIN` | `MAX` | `AVERAGE` | `SUM` |
 
 ### Report Interval Type
 
-| `YEAR` |
-| `MONTH` |
-| `WEEK` |
-| `DAY` |
-| `HOUR` |
-| `MINUTE` |
-| `SECOND` |
+| `YEAR` | `MONTH` | `WEEK` | `DAY` | `HOUR` | `MINUTE` | `SECOND` |
 
 <!--
 ### [TODO] Field Display Type
