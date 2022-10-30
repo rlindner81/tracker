@@ -19,9 +19,9 @@
 # in the templates via {{ site.myvariable }}.
 
 title: >-
-  Feature Toggles
+  TrackIt
 description: >-
-  Live feature toggles for BTP via Redis
+  Just track it
 
 # Build settings
 markdown: kramdown
@@ -54,14 +54,12 @@ search:
   tokenizer_separator: /[\s\-\.\(\)]+/
 
 aux_links:
-  "Feature Toggles on GitHub":
-    - "//github.wdf.sap.corp/cds-community/btp-feature-toggles"
+  "TrackIt on GitHub":
+    - "//github.com/rlindner81/tracker"
 
 # Back to top link
 back_to_top: true
 back_to_top_text: "Back to top"
-# Footer copyright
-# footer_content: 'Copyright &copy; 2021 SAP SE | <a href="https://www.sap.com/about/legal/privacy.html">SAP Privacy Statement</a>'
 
 # Footer last edited timestamp
 # last_edit_timestamp: true # show or hide edit time - page must have `last_modified_date` defined in the frontmatter
