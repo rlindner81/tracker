@@ -36,11 +36,12 @@ enum FieldValueType {
 
 interface TrackEntityFieldBase {
   position: number; // TODO why is this not implicit through array ordering?
-  key: string;
+  key: string; // TODO key and name seem redundant, just leave name
   name: string;
 }
 
 interface TrackEntityFieldSelectOption {
+  key: string; // TODO key and name seem redundant, just leave name
   name: string;
   value: string;
 }
@@ -48,6 +49,7 @@ interface TrackEntityFieldSelectOption {
 interface TrackEntityFieldSelect extends TrackEntityFieldBase {
   input: FieldInputControl.SELECT;
   type: FieldValueType.STRING | FieldValueType.INTEGER | FieldValueType.FLOAT;
+  selected: number;
   options: Array<TrackEntityFieldSelectOption>;
 }
 
