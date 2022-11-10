@@ -13,131 +13,120 @@ nav_order: 2
 - TOC
 {: toc}
 
-## API
+## User Entity
 
-### User Entity
+## Track Entity
 
-```
-{
-}
-```
+### Field Input Control Enum
 
-### Track Entity
-
-<!--
-| `GET /api/track` | Read all tracks (implicitly restricted to user-visible) |
-| `GET /api/track?limit=10&offset=0` | Paging for read all tracks |
-| `POST /api/track` | Create new track |
-| `PATCH /api/track/:trackId` | Update track |
-| `DELETE /api/track/:trackId` | Delete track |
--->
-
-```
-{
-  "name": "Willpower",
-  "fields": [
-    {
-      "position": 0,
-      "key": "motivation",
-      "name": "Motivation",
-      "input": "FIELD",
-      "type": "TEXT",
-      "generator": {
-        "identifier": "STATIC",
-        "parameters": {
-          "value": "Make a difference today"
-        }
-      }
-    },
-    {
-      "position": 1,
-      "key": "mood",
-      "name": "Mood",
-      "type": "INTEGER",
-      "input": {
-        "identifier": "SELECT",
-        "parameters": {
-          "selected": "1",
-          "values": [
-            {
-              "name": "Good",
-              "value": 1
-            },
-            {
-              "name": "Postive",
-              "value": 2
-            },
-            {
-              "name": "Bored",
-              "value": -1
-            },
-            {
-              "name": "Bad",
-              "value": -2
-            }
-          ]
-        }
-      },
-      "generator": {
-        "identifier": "STATIC",
-        "parameters": {
-          "value": 1
-        }
-      }
-    },
-    {
-      "position": 2,
-      "key": "createdAt",
-      "name": "Created At",
-      "type": "TIME",
-      "generator": "TIME_NOW"
-    },
-    {
-      "position": 3,
-      "key": "gap",
-      "name": "Gap",
-      "type": "TEXT",
-      "generator": "TIME_RELATIVE_PREVIOUS"
-    }
-  ]
-}
-```
-
-### Step Entity
-
-```
-{
-}
-```
-
-## Types
-
-### Track Settings Type
-
-This type is on the User entity and governs which settings are available during track creation.
-
-| `BASIC` | Only basic settings |
-| `FULL` | All production settings |
-| `EXPERIMENTAL` | All production and experimental settings |
-
-### Field Input Type
-
-This defines the input interface for each step entry.
+This defines the input control for each step entry.
 
 | `TEXT` | Text field |
 | `SELECT` | Drop-down selection of predetermined values |
 | `SLIDER` | A slider in a predetermined number range |
 | `TIMESTAMP` | Datetime picker |
 
-### Field Value Type
+### Field Value Type Enum
 
 Field value conversion happens when a new step is saved.
 
-| `INPUT` | Leave value as is |
-| `TEXT` | Convert to string with `String` |
+| `STRING` | Convert to string with `String` |
 | `INTEGER` | Convert to integer number with `parseInt` |
 | `FLOAT` | Convert to double precision floating point number with `parseFloat` |
 | `TIMESTAMP` | Convert to ISO-timestamp string with `Date.toISOString()` |
+
+### REST Interface
+
+| `GET /api/track` | Read all tracks (implicitly restricted to user-visible) |
+| `GET /api/track?limit=10&offset=0` | Paging for read all tracks |
+| `POST /api/track` | Create new track |
+| `PATCH /api/track/:trackId` | Update track |
+| `DELETE /api/track/:trackId` | Delete track |
+
+### Typescript interface
+
+```typescript
+enum FieldInputControl {
+  SELECT = "SELECT",
+  SLIDER = "SLIDER",
+  TEXT = "TEXT",
+  DATETIME = "DATETIME",
+}
+
+enum FieldValueType {
+  STRING = "STRING",
+  INTEGER = "INTEGER",
+  FLOAT = "FLOAT",
+  TIMESTAMP = "TIMESTAMP",
+}
+
+interface TrackEntityFieldBase {
+  position: number;
+  key: string;
+  name: string;
+}
+
+interface TrackEntityFieldSelectParameter {
+  name: string;
+  value: string;
+}
+
+interface TrackEntityFieldSelect extends TrackEntityFieldBase {
+  input: FieldInputControl.SELECT;
+  parameters: Array<TrackEntityFieldSelectParameter>;
+  type: FieldValueType.STRING | FieldValueType.INTEGER | FieldValueType.FLOAT;
+}
+
+interface TrackEntityFieldSliderParameter {
+  min: number;
+  max: number;
+  step: number;
+}
+
+interface TrackEntityFieldSlider extends TrackEntityFieldBase {
+  input: FieldInputControl.SLIDER;
+  parameters: Array<TrackEntityFieldSliderParameter>;
+  type: FieldValueType.INTEGER | FieldValueType.FLOAT;
+}
+
+interface TrackEntityFieldText extends TrackEntityFieldBase {
+  input: FieldInputControl.TEXT;
+  type: FieldValueType.STRING | FieldValueType.INTEGER | FieldValueType.FLOAT;
+}
+
+interface TrackEntityFieldTimestamp extends TrackEntityFieldBase {
+  input: FieldInputControl.DATETIME;
+  type: FieldValueType.TIMESTAMP;
+}
+
+type TrackEntityField =
+  | TrackEntityFieldSelect
+  | TrackEntityFieldSlider
+  | TrackEntityFieldText
+  | TrackEntityFieldTimestamp;
+
+export default interface TrackEntity {
+  name: string;
+  fields: Array<TrackEntityField>;
+}
+```
+
+## Step Entity
+
+```
+{
+}
+```
+
+## Legacy
+
+### Track Setting Enum
+
+This type is on the User entity and governs which settings are available during track creation.
+
+| `BASIC` | Only basic settings |
+| `FULL` | All production settings |
+| `EXPERIMENTAL` | All production and experimental settings |
 
 ### Report Aggregation Type
 
