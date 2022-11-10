@@ -17,6 +17,70 @@ nav_order: 2
 
 ## Track Entity
 
+### Typescript interface
+
+```typescript
+enum FieldInputControl {
+  SELECT = "SELECT",
+  SLIDER = "SLIDER",
+  TEXT_FIELD = "TEXT_FIELD",
+  DATETIME_PICKER = "DATETIME_PICKER",
+}
+
+enum FieldValueType {
+  STRING = "STRING",
+  INTEGER = "INTEGER",
+  FLOAT = "FLOAT",
+  TIMESTAMP = "TIMESTAMP",
+}
+
+interface TrackEntityFieldBase {
+  position: number; // TODO why is this not implicit through array ordering?
+  key: string;
+  name: string;
+}
+
+interface TrackEntityFieldSelectOption {
+  name: string;
+  value: string;
+}
+
+interface TrackEntityFieldSelect extends TrackEntityFieldBase {
+  input: FieldInputControl.SELECT;
+  type: FieldValueType.STRING | FieldValueType.INTEGER | FieldValueType.FLOAT;
+  options: Array<TrackEntityFieldSelectOption>;
+}
+
+interface TrackEntityFieldSlider extends TrackEntityFieldBase {
+  input: FieldInputControl.SLIDER;
+  type: FieldValueType.INTEGER | FieldValueType.FLOAT;
+  min: number;
+  max: number;
+  step: number;
+}
+
+interface TrackEntityFieldText extends TrackEntityFieldBase {
+  input: FieldInputControl.TEXT_FIELD;
+  type: FieldValueType.STRING | FieldValueType.INTEGER | FieldValueType.FLOAT;
+}
+
+interface TrackEntityFieldDateTime extends TrackEntityFieldBase {
+  input: FieldInputControl.DATETIME_PICKER;
+  type: FieldValueType.TIMESTAMP;
+}
+
+type TrackEntityField =
+  | TrackEntityFieldSelect
+  | TrackEntityFieldSlider
+  | TrackEntityFieldText
+  | TrackEntityFieldDateTime;
+
+export default interface TrackEntity {
+  name: string;
+  fields: Array<TrackEntityField>;
+}
+```
+
 ### Field Input Control Enum
 
 This defines the input control for each step entry.
@@ -42,74 +106,6 @@ Field value conversion happens when a new step is saved.
 | `POST /api/track` | Create new track |
 | `PATCH /api/track/:trackId` | Update track |
 | `DELETE /api/track/:trackId` | Delete track |
-
-### Typescript interface
-
-```typescript
-enum FieldInputControl {
-  SELECT = "SELECT",
-  SLIDER = "SLIDER",
-  TEXT = "TEXT",
-  DATETIME = "DATETIME",
-}
-
-enum FieldValueType {
-  STRING = "STRING",
-  INTEGER = "INTEGER",
-  FLOAT = "FLOAT",
-  TIMESTAMP = "TIMESTAMP",
-}
-
-interface TrackEntityFieldBase {
-  position: number;
-  key: string;
-  name: string;
-}
-
-interface TrackEntityFieldSelectParameter {
-  name: string;
-  value: string;
-}
-
-interface TrackEntityFieldSelect extends TrackEntityFieldBase {
-  input: FieldInputControl.SELECT;
-  parameters: Array<TrackEntityFieldSelectParameter>;
-  type: FieldValueType.STRING | FieldValueType.INTEGER | FieldValueType.FLOAT;
-}
-
-interface TrackEntityFieldSliderParameter {
-  min: number;
-  max: number;
-  step: number;
-}
-
-interface TrackEntityFieldSlider extends TrackEntityFieldBase {
-  input: FieldInputControl.SLIDER;
-  parameters: Array<TrackEntityFieldSliderParameter>;
-  type: FieldValueType.INTEGER | FieldValueType.FLOAT;
-}
-
-interface TrackEntityFieldText extends TrackEntityFieldBase {
-  input: FieldInputControl.TEXT;
-  type: FieldValueType.STRING | FieldValueType.INTEGER | FieldValueType.FLOAT;
-}
-
-interface TrackEntityFieldTimestamp extends TrackEntityFieldBase {
-  input: FieldInputControl.DATETIME;
-  type: FieldValueType.TIMESTAMP;
-}
-
-type TrackEntityField =
-  | TrackEntityFieldSelect
-  | TrackEntityFieldSlider
-  | TrackEntityFieldText
-  | TrackEntityFieldTimestamp;
-
-export default interface TrackEntity {
-  name: string;
-  fields: Array<TrackEntityField>;
-}
-```
 
 ## Step Entity
 

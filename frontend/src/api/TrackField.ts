@@ -1,8 +1,8 @@
 enum FieldInputControl {
   SELECT = "SELECT",
   SLIDER = "SLIDER",
-  TEXT = "TEXT",
-  DATETIME = "DATETIME",
+  TEXT_FIELD = "TEXT_FIELD",
+  DATETIME_PICKER = "DATETIME_PICKER",
 }
 
 enum FieldValueType {
@@ -13,41 +13,37 @@ enum FieldValueType {
 }
 
 interface TrackEntityFieldBase {
-  position: number;
+  position: number; // TODO why is this not implicit through array ordering?
   key: string;
   name: string;
 }
 
-interface TrackEntityFieldSelectParameter {
+interface TrackEntityFieldSelectOption {
   name: string;
   value: string;
 }
 
 interface TrackEntityFieldSelect extends TrackEntityFieldBase {
   input: FieldInputControl.SELECT;
-  parameters: Array<TrackEntityFieldSelectParameter>;
   type: FieldValueType.STRING | FieldValueType.INTEGER | FieldValueType.FLOAT;
+  options: Array<TrackEntityFieldSelectOption>;
 }
 
-interface TrackEntityFieldSliderParameter {
+interface TrackEntityFieldSlider extends TrackEntityFieldBase {
+  input: FieldInputControl.SLIDER;
+  type: FieldValueType.INTEGER | FieldValueType.FLOAT;
   min: number;
   max: number;
   step: number;
 }
 
-interface TrackEntityFieldSlider extends TrackEntityFieldBase {
-  input: FieldInputControl.SLIDER;
-  parameters: Array<TrackEntityFieldSliderParameter>;
-  type: FieldValueType.INTEGER | FieldValueType.FLOAT;
-}
-
 interface TrackEntityFieldText extends TrackEntityFieldBase {
-  input: FieldInputControl.TEXT;
+  input: FieldInputControl.TEXT_FIELD;
   type: FieldValueType.STRING | FieldValueType.INTEGER | FieldValueType.FLOAT;
 }
 
-interface TrackEntityFieldTimestamp extends TrackEntityFieldBase {
-  input: FieldInputControl.DATETIME;
+interface TrackEntityFieldDateTime extends TrackEntityFieldBase {
+  input: FieldInputControl.DATETIME_PICKER;
   type: FieldValueType.TIMESTAMP;
 }
 
@@ -55,7 +51,7 @@ type TrackEntityField =
   | TrackEntityFieldSelect
   | TrackEntityFieldSlider
   | TrackEntityFieldText
-  | TrackEntityFieldTimestamp;
+  | TrackEntityFieldDateTime;
 
 export default interface TrackEntity {
   name: string;
