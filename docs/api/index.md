@@ -20,67 +20,100 @@ nav_order: 2
 ### Typescript interface
 
 ```typescript
-enum FieldInputControl {
+enum TrackType {
+  PERSONAL = "PERSONAL",
+  GROUP = "GROUP",
+  OPEN = "OPEN",
+}
+
+enum TrackFieldInputControl {
   SELECT = "SELECT",
   SLIDER = "SLIDER",
   TEXT_FIELD = "TEXT_FIELD",
   DATETIME_PICKER = "DATETIME_PICKER",
 }
 
-enum FieldValueType {
+enum TrackFieldValueType {
   STRING = "STRING",
   INTEGER = "INTEGER",
   FLOAT = "FLOAT",
   TIMESTAMP = "TIMESTAMP",
 }
 
-interface TrackEntityFieldBase {
+interface TrackFieldBase {
   position: number; // TODO why is this not implicit through array ordering?
-  key: string; // TODO key and name seem redundant, just leave name
+  key: string;
   name: string;
 }
 
-interface TrackEntityFieldSelectOption {
-  key: string; // TODO key and name seem redundant, just leave name
+interface TrackFieldSelectOption {
   name: string;
   value: string;
 }
 
-interface TrackEntityFieldSelect extends TrackEntityFieldBase {
-  input: FieldInputControl.SELECT;
-  type: FieldValueType.STRING | FieldValueType.INTEGER | FieldValueType.FLOAT;
-  selected: number;
-  options: Array<TrackEntityFieldSelectOption>;
+interface TrackFieldSelect extends TrackFieldBase {
+  input: TrackFieldInputControl.SELECT;
+  type:
+    | TrackFieldValueType.STRING
+    | TrackFieldValueType.INTEGER
+    | TrackFieldValueType.FLOAT;
+  options: Array<TrackFieldSelectOption>;
 }
 
-interface TrackEntityFieldSlider extends TrackEntityFieldBase {
-  input: FieldInputControl.SLIDER;
-  type: FieldValueType.INTEGER | FieldValueType.FLOAT;
+interface TrackFieldSlider extends TrackFieldBase {
+  input: TrackFieldInputControl.SLIDER;
+  type: TrackFieldValueType.INTEGER | TrackFieldValueType.FLOAT;
   min: number;
   max: number;
   step: number;
 }
 
-interface TrackEntityFieldText extends TrackEntityFieldBase {
-  input: FieldInputControl.TEXT_FIELD;
-  type: FieldValueType.STRING | FieldValueType.INTEGER | FieldValueType.FLOAT;
+interface TrackFieldText extends TrackFieldBase {
+  input: TrackFieldInputControl.TEXT_FIELD;
+  type:
+    | TrackFieldValueType.STRING
+    | TrackFieldValueType.INTEGER
+    | TrackFieldValueType.FLOAT;
 }
 
-interface TrackEntityFieldDateTime extends TrackEntityFieldBase {
-  input: FieldInputControl.DATETIME_PICKER;
-  type: FieldValueType.TIMESTAMP;
+interface TrackFieldDateTime extends TrackFieldBase {
+  input: TrackFieldInputControl.DATETIME_PICKER;
+  type: TrackFieldValueType.TIMESTAMP;
 }
 
-type TrackEntityField =
-  | TrackEntityFieldSelect
-  | TrackEntityFieldSlider
-  | TrackEntityFieldText
-  | TrackEntityFieldDateTime;
+type TrackField =
+  | TrackFieldSelect
+  | TrackFieldSlider
+  | TrackFieldText
+  | TrackFieldDateTime;
 
-export default interface TrackEntity {
+interface TrackBase {
+  id: string; // TODO: there is no uuid type???
+  created_at: string; // TODO: reference to UserEntity?
+  created_by: string; // TODO: reference to session user or user entity?
+  updated_at: string; // TODO: reference to UserEntity?
+  updated_by: string; // TODO: reference to session user or user entity?
+  step_count: number;
   name: string;
-  fields: Array<TrackEntityField>;
+  fields: Array<TrackField>;
 }
+
+interface TrackPersonal extends TrackBase {
+  type: TrackType.PERSONAL;
+}
+
+interface TrackGroup extends TrackBase {
+  type: TrackType.GROUP;
+  members: Array<string>; // TODO: references to users
+}
+
+interface TrackOpen extends TrackBase {
+  type: TrackType.OPEN;
+}
+
+type TrackEntity = TrackPersonal | TrackGroup | TrackOpen;
+
+export default TrackEntity;
 ```
 
 ### Field Input Control Enum
@@ -111,9 +144,27 @@ Field value conversion happens when a new step is saved.
 
 ## Step Entity
 
-```
-{
+### Typescript interface
+
+```typescript
+interface StepValue {
+  key: string;
+  value: string | number;
 }
+
+interface StepEntity {
+  id: string; // TODO: there is no uuid type???
+  created_at: string; // TODO: reference to UserEntity?
+  created_by: string; // TODO: reference to session user or user entity?
+  updated_at: string; // TODO: reference to UserEntity?
+  updated_by: string; // TODO: reference to session user or user entity?
+  track_id: string;
+  posted_at: string;
+  posted_by: string;
+  values: Array<StepValue>; // implicitly matches order of track fields, this way key is not really needed
+}
+
+export default StepEntity;
 ```
 
 ## Legacy
