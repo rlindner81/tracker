@@ -23,6 +23,7 @@ You will need at least [NodeJS](https://nodejs.org) 12.x.
 - Code will be in [ECMAScript 2020](http://www.ecma-international.org/ecma-262/9.0/)
 - Style rules are specified in [ESLint](.eslintrc.yml)
 
+<!--
 ## Identifiers
 
 Marked with `?` means it could change/be removed.
@@ -268,3 +269,4 @@ POST   /api/track/:trackId/report/$dynamic
 
 - Tests for Track/Step/Report
 - Maybe switch to expressions?
+-->
