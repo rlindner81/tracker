@@ -45,4 +45,8 @@ export default defineConfig({
       },
     },
   },
+  // see https://github.com/firebase/firebase-js-sdk/issues/6926
+  optimizeDeps: {
+    exclude: ["firebase", "firebase/app", "firebase/auth", "firebase/firestore", "firebase/analytics"],
+  },
 });
