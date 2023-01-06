@@ -57,6 +57,6 @@ npm run lint
 
 ## Vue3 modernize migration
 
-- vue-cli => vite
+- vue-cli + webpack => vite
 - vue-chart-3 => removed for now, we currently don't have charts
 - vuex => [pinia](https://github.com/vuejs/pinia) // TODO
