@@ -84,7 +84,7 @@
 <script>
 import Toggle from "@vueform/toggle";
 import Slider from "@vueform/slider";
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "pinia";
 import LoadingButton from "./LoadingButton.vue";
 export default {
   components: {

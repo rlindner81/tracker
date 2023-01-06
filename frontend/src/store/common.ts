@@ -19,25 +19,6 @@ export default {
     user: null,
   },
 
-  mutations: {
-    increaseBusy(state) {
-      state.busy++;
-    },
-    decreaseBusy(state) {
-      state.busy--;
-    },
-    addError(state, error) {
-      state.errors.push(error);
-    },
-    removeError(state, error) {
-      const errorIndex = state.errors.indexOf(error);
-      errorIndex >= 0 && state.errors.splice(errorIndex, 1);
-    },
-    setUser(state, payload: User | null) {
-      state.user = payload;
-    },
-  },
-
   getters: {
     isBusy(state) {
       return state.busy > 0;
@@ -48,6 +29,23 @@ export default {
   },
 
   actions: {
+    increaseBusy({ state }) {
+      state.busy++;
+    },
+    decreaseBusy({ state }) {
+      state.busy--;
+    },
+    addError({ state }, error) {
+      state.errors.push(error);
+    },
+    removeError({ state }, error) {
+      const errorIndex = state.errors.indexOf(error);
+      errorIndex >= 0 && state.errors.splice(errorIndex, 1);
+    },
+    setUser({ state }, payload: User | null) {
+      state.user = payload;
+    },
+
     addTransientError({ commit }, error) {
       commit("addError", error);
       setTimeout(() => commit("removeError", error), TRANSIENT_ERROR_DELAY);

@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from "pinia";
 import Tiles from "@/components/Tiles.vue";
 import AddTrack from "@/components/AddTrack.vue";
 

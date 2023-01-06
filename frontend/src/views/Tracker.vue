@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import { mapState, mapGetters, mapActions } from "pinia";
 import Modal from "@/components/Modal.vue";
 import AddStep from "@/components/AddStep.vue";
 import Tabs from "@/components/Tabs.vue";
@@ -64,13 +64,12 @@ export default {
     ...mapGetters("track", { title: "titleById", track: "current" }),
   },
   methods: {
-    ...mapActions("track", { report: "report" }),
-    ...mapMutations("track", {
+    ...mapActions("track", {
+      report: "report",
       setCurrent: "setCurrent",
       clearTrack: "clearCurrent",
     }),
-    ...mapActions("step", { load: "load" }),
-    ...mapMutations("step", { clear: "clear" }),
+    ...mapActions("step", { load: "load", clear: "clear" }),
     toggleAddModal() {
       this.addModal = !this.addModal;
     },

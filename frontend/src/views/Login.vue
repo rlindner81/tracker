@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from "vuex";
+import { mapActions } from "pinia";
 import LoadingButton from "@/components/LoadingButton.vue";
 
 export default {

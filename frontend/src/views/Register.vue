@@ -11,7 +11,7 @@
 <script lang="ts">
 // TODO: second password field and minimal input validation
 
-import { mapActions } from "vuex";
+import { mapActions } from "pinia";
 import LoadingButton from "@/components/LoadingButton.vue";
 export default {
   components: {

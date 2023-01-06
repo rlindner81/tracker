@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from "pinia";
 export default {
   computed: {
     ...mapState("step", { steps: "data" }),

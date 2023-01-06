@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from "pinia";
 import Modal from "./Modal.vue";
 import LoadingButton from "./LoadingButton.vue";
 import AddTrack from "./AddTrack.vue";

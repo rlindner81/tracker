@@ -90,7 +90,7 @@
 
 <script lang="ts">
 import Toggle from "@vueform/toggle";
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters } from "pinia";
 import Modal from "./Modal.vue";
 import LoadingButton from "./LoadingButton.vue";
 

@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from "pinia";
 import LoadingButton from "@/components/LoadingButton.vue";
 
 export default {

@@ -14,38 +14,6 @@ export default {
     types: ["TEXT", "FLOAT", "INTEGER", "TIME"],
     inputs: ["SELECT", "FIELD", "SLIDER"],
   },
-  mutations: {
-    set(state, data) {
-      state.data = data;
-    },
-    setCurrent(state, id) {
-      state.currentId = id;
-    },
-    setCurrentUsage(state, data) {
-      state.currentUsage = data;
-    },
-    clear(state) {
-      state.data = null;
-    },
-    clearNew(state) {
-      state.new = {
-        name: null,
-        fields: [],
-      };
-    },
-    clearCurrent(state) {
-      state.currentId = null;
-      state.currentUsage = [];
-    },
-    add(state, data) {
-      state.data.push(data);
-    },
-    remove(state, id) {
-      state.data = state.data.filter((track) => {
-        return track._id !== id;
-      });
-    },
-  },
   getters: {
     titleById: (state) => (id) => {
       const entry = state.data.find((entry) => entry._id === id);
@@ -56,6 +24,36 @@ export default {
     },
   },
   actions: {
+    set({ state }, data) {
+      state.data = data;
+    },
+    setCurrent({ state }, id) {
+      state.currentId = id;
+    },
+    setCurrentUsage({ state }, data) {
+      state.currentUsage = data;
+    },
+    clear({ state }) {
+      state.data = null;
+    },
+    clearNew({ state }) {
+      state.new = {
+        name: null,
+        fields: [],
+      };
+    },
+    clearCurrent({ state }) {
+      state.currentId = null;
+      state.currentUsage = [];
+    },
+    add({ state }, data) {
+      state.data.push(data);
+    },
+    remove({ state }, id) {
+      state.data = state.data.filter((track) => {
+        return track._id !== id;
+      });
+    },
     load({ commit }) {
       return guardedFetchJson("/api/track").then((data) => {
         data && commit("set", data);

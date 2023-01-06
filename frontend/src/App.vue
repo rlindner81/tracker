@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from "pinia";
 export default {
   mounted() {
     this.observeAuthChanges();

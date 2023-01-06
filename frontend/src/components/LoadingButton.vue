@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import BusyIndicator from "./BusyIndicator.vue";
-import { mapGetters } from "vuex";
+import { mapGetters } from "pinia";
 
 export default {
   name: "LoadingButton",

@@ -7,14 +7,14 @@ export default {
     trackId: null,
     new: null, // has to be initialized by the relevant track
   },
-  mutations: {
-    set(state, data) {
+  actions: {
+    set({ state }, data) {
       state.data = data;
     },
-    setTrack(state, id) {
+    setTrack({ state }, id) {
       state.trackId = id;
     },
-    setNew(state, track) {
+    setNew({ state }, track) {
       const newStep = {};
       const newEnabled = {};
 
@@ -45,22 +45,20 @@ export default {
       state.new = newStep;
       state.newEnabled = newEnabled;
     },
-    clear(state) {
+    clear({ state }) {
       state.data = null;
       state.trackId = null;
       state.new = null;
       state.newEnabled = null;
     },
-    add(state, data) {
+    add({ state }, data) {
       state.data.unshift(data);
     },
-    remove(state, id) {
+    remove({ state }, id) {
       state.data = state.data.filter((step) => {
         return step._id !== id;
       });
     },
-  },
-  actions: {
     load({ commit, state, rootGetters }) {
       commit("setTrack", rootGetters["track/current"]._id);
       commit("setNew", rootGetters["track/current"]);
