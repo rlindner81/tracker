@@ -43,9 +43,7 @@ const _parseISOString = (dbDate: string): Date => {
       .exec(dbDate)
       .slice(1)
       .map((a) => parseInt(a));
-  return new Date(
-    Date.UTC(year, month - 1, day, hour, minutes, seconds, milliseconds)
-  );
+  return new Date(Date.UTC(year, month - 1, day, hour, minutes, seconds, milliseconds));
 };
 
 export const readableDateTime = (dbDate: string): string => {
@@ -77,8 +75,7 @@ export const readableRelativeDateTime = (dbDate: string): string => {
     return "now";
   } else {
     const { unit, diff, relativeDateTime } = _getRelativeDateTime(value, now);
-    return unit === TIME_UNITS.YEAR ||
-      (unit === TIME_UNITS.MONTH && Math.abs(diff) >= 2)
+    return unit === TIME_UNITS.YEAR || (unit === TIME_UNITS.MONTH && Math.abs(diff) >= 2)
       ? readableShortDateTime(dbDate)
       : relativeDateTime;
   }

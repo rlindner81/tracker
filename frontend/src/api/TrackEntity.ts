@@ -31,10 +31,7 @@ interface TrackFieldSelectOption {
 
 interface TrackFieldSelect extends TrackFieldBase {
   input: TrackFieldInputControl.SELECT;
-  type:
-    | TrackFieldValueType.STRING
-    | TrackFieldValueType.INTEGER
-    | TrackFieldValueType.FLOAT;
+  type: TrackFieldValueType.STRING | TrackFieldValueType.INTEGER | TrackFieldValueType.FLOAT;
   options: Array<TrackFieldSelectOption>;
 }
 
@@ -48,10 +45,7 @@ interface TrackFieldSlider extends TrackFieldBase {
 
 interface TrackFieldText extends TrackFieldBase {
   input: TrackFieldInputControl.TEXT_FIELD;
-  type:
-    | TrackFieldValueType.STRING
-    | TrackFieldValueType.INTEGER
-    | TrackFieldValueType.FLOAT;
+  type: TrackFieldValueType.STRING | TrackFieldValueType.INTEGER | TrackFieldValueType.FLOAT;
 }
 
 interface TrackFieldDateTime extends TrackFieldBase {
@@ -59,11 +53,7 @@ interface TrackFieldDateTime extends TrackFieldBase {
   type: TrackFieldValueType.TIMESTAMP;
 }
 
-type TrackField =
-  | TrackFieldSelect
-  | TrackFieldSlider
-  | TrackFieldText
-  | TrackFieldDateTime;
+type TrackField = TrackFieldSelect | TrackFieldSlider | TrackFieldText | TrackFieldDateTime;
 
 interface TrackBase {
   id: string; // TODO: there is no uuid type???

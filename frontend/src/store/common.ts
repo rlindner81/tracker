@@ -13,9 +13,7 @@ const TRANSIENT_ERROR_DELAY = 5000;
 
 let isUserInitialized = false;
 let resolveUserInitialized;
-const userInitializedPromise = new Promise(
-  (resolve) => (resolveUserInitialized = resolve)
-);
+const userInitializedPromise = new Promise((resolve) => (resolveUserInitialized = resolve));
 
 export default {
   namespaced: true,
@@ -67,20 +65,10 @@ export default {
           resolveUserInitialized();
           isUserInitialized = true;
         }
-        if (
-          user &&
-          router.currentRoute.value.matched.some(
-            (route) => route.name === "Unprotected"
-          )
-        ) {
+        if (user && router.currentRoute.value.matched.some((route) => route.name === "Unprotected")) {
           await router.replace({ name: "Home" });
         }
-        if (
-          !user &&
-          router.currentRoute.value.matched.some(
-            (route) => route.name === "Protected"
-          )
-        ) {
+        if (!user && router.currentRoute.value.matched.some((route) => route.name === "Protected")) {
           await router.replace({ name: "Login" });
         }
       });

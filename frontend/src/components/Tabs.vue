@@ -2,11 +2,7 @@
   <div class="component tabs">
     <div class="tabs">
       <ul>
-        <li
-          v-for="(title, i) in tabTitles"
-          :class="{ 'is-active': selectedTitle === title }"
-          :key="i"
-        >
+        <li v-for="(title, i) in tabTitles" :class="{ 'is-active': selectedTitle === title }" :key="i">
           <a :href="hrefFromTitle(title)" @click="selectedTitle = title">
             {{ title }}
           </a>
@@ -25,9 +21,7 @@ import { ref, provide } from "vue";
 export default {
   setup(props, { slots }) {
     const tabTitles = ref(slots.default().map((tab) => tab.props.title));
-    const selectedTitle = ref(
-      slots.default().find((tab) => tab.props.selected).props.title
-    );
+    const selectedTitle = ref(slots.default().find((tab) => tab.props.selected).props.title);
 
     provide("selectedTitle", selectedTitle);
     return {

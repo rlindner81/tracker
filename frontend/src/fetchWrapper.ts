@@ -25,8 +25,7 @@ const _initText = (init?) => ({
   },
 });
 
-export const fetchResponse = async (url, init?: RequestInit) =>
-  fetch(url, init);
+export const fetchResponse = async (url, init?: RequestInit) => fetch(url, init);
 
 export const fetchJson = async (url, init?: RequestInit) => {
   const response = await fetchResponse(url, _initJson(init));
@@ -38,19 +37,14 @@ export const fetchText = async (url, init?: RequestInit) => {
   return response ? response.text() : response;
 };
 
-export const guardedFetchResponse = async (url, init?: RequestInit) =>
-  _guardResponse(await fetchResponse(url, init));
+export const guardedFetchResponse = async (url, init?: RequestInit) => _guardResponse(await fetchResponse(url, init));
 
 export const guardedFetchJson = async (url, init?: RequestInit) => {
-  const response = await _guardResponse(
-    await fetchResponse(url, _initJson(init))
-  );
+  const response = await _guardResponse(await fetchResponse(url, _initJson(init)));
   return response ? response.json() : response;
 };
 
 export const guardedFetchText = async (url, init?: RequestInit) => {
-  const response = await _guardResponse(
-    await fetchResponse(url, _initText(init))
-  );
+  const response = await _guardResponse(await fetchResponse(url, _initText(init)));
   return response ? response.text() : response;
 };
