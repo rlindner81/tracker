@@ -12,7 +12,7 @@
 // TODO: second password field and minimal input validation
 
 import { mapActions } from "vuex";
-import LoadingButton from "../components/LoadingButton";
+import LoadingButton from "@/components/LoadingButton.vue";
 export default {
   components: {
     LoadingButton,

@@ -30,12 +30,12 @@
 
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import Modal from "../components/Modal";
-import AddStep from "../components/AddStep";
-import Tabs from "../components/Tabs";
-import Tab from "../components/Tab";
-import TrackList from "../components/TrackList";
-import TrackSettings from "../components/TrackSettings";
+import Modal from "@/components/Modal.vue";
+import AddStep from "@/components/AddStep.vue";
+import Tabs from "@/components/Tabs.vue";
+import Tab from "@/components/Tab.vue";
+import TrackList from "@/components/TrackList.vue";
+import TrackSettings from "@/components/TrackSettings.vue";
 
 export default {
   components: {

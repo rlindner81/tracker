@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import BusyIndicator from "./BusyIndicator";
+import BusyIndicator from "./BusyIndicator.vue";
 import { mapGetters } from "vuex";
 
 export default {

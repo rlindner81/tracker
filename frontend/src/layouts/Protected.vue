@@ -6,12 +6,7 @@
 
         <h1>Tracks</h1>
 
-        <router-link
-          v-for="track in tracks"
-          :key="track._id"
-          :to="`/${track._id}`"
-          >{{ track.name }}</router-link
-        >
+        <router-link v-for="track in tracks" :key="track._id" :to="`/${track._id}`">{{ track.name }}</router-link>
 
         <p v-if="user" class="logout">
           Logged in as {{ user.email }}
@@ -34,7 +29,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import LoadingButton from "@/components/LoadingButton";
+import LoadingButton from "@/components/LoadingButton.vue";
 
 export default {
   components: { LoadingButton },

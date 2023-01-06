@@ -10,7 +10,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import LoadingButton from "../components/LoadingButton";
+import LoadingButton from "@/components/LoadingButton.vue";
 
 export default {
   components: {

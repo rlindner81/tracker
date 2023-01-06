@@ -3,11 +3,7 @@
     <form @submit.prevent="submit" class="component add-track" v-if="relevant">
       <div class="general">
         <label>Name</label>
-        <input
-          type="text"
-          v-model="relevant.name"
-          placeholder="Enter a name ..."
-        />
+        <input type="text" v-model="relevant.name" placeholder="Enter a name ..." />
       </div>
       <div class="fields">
         <div class="field" v-for="(field, i) in relevant.fields" :key="i">
@@ -28,11 +24,7 @@
           </div>
 
           <label>Type</label>
-          <select
-            :disabled="edit"
-            v-model="field.type"
-            @change="cleanUpInputType(field)"
-          >
+          <select :disabled="edit" v-model="field.type" @change="cleanUpInputType(field)">
             <option v-for="type in types" :key="type" :value="type">
               {{ type }}
             </option>
@@ -40,65 +32,27 @@
 
           <label>Input Type</label>
           <select v-model="field.input.identifier">
-            <option
-              v-for="type in getSelectableInputs(field)"
-              :key="type"
-              :value="type"
-            >
+            <option v-for="type in getSelectableInputs(field)" :key="type" :value="type">
               {{ type }}
             </option>
           </select>
 
           <div class="slider" v-if="field.input.identifier === 'SLIDER'">
             <label>Min Value</label>
-            <input
-              v-if="field.type === 'FLOAT'"
-              type="number"
-              step="0.0000001"
-              v-model="field.input.parameters.min"
-            />
-            <input
-              v-if="field.type === 'INTEGER'"
-              type="number"
-              step="1"
-              v-model="field.input.parameters.min"
-            />
+            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.min" />
+            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.min" />
 
             <label>Max Value</label>
-            <input
-              v-if="field.type === 'FLOAT'"
-              type="number"
-              step="0.0000001"
-              v-model="field.input.parameters.max"
-            />
-            <input
-              v-if="field.type === 'INTEGER'"
-              type="number"
-              step="1"
-              v-model="field.input.parameters.max"
-            />
+            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.max" />
+            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.max" />
 
             <label>Step Size</label>
-            <input
-              v-if="field.type === 'FLOAT'"
-              type="number"
-              step="0.0000001"
-              v-model="field.input.parameters.step"
-            />
-            <input
-              v-if="field.type === 'INTEGER'"
-              type="number"
-              step="1"
-              v-model="field.input.parameters.step"
-            />
+            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.step" />
+            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.step" />
           </div>
 
           <div class="select" v-if="field.input.identifier === 'SELECT'">
-            <div
-              class="value"
-              v-for="(value, i) in field.input.parameters.values"
-              :key="i"
-            >
+            <div class="value" v-for="(value, i) in field.input.parameters.values" :key="i">
               <input
                 type="text"
                 placeholder="Name"
@@ -107,48 +61,27 @@
               />
               <input type="text" placeholder="Value" v-model="value.value" />
 
-              <button
-                class="remover"
-                type="button"
-                @click="removeSelectValue(field, i)"
-              >
-                Remove
-              </button>
+              <button class="remover" type="button" @click="removeSelectValue(field, i)">Remove</button>
             </div>
             <button type="button" @click="addValue(field)">Add Value</button>
 
             <label>Default Selection</label>
             <select v-model="field.input.parameters.selected">
               <option :value="null"></option>
-              <option
-                v-for="option in field.input.parameters.values"
-                :key="option.key"
-                :value="option.value"
-              >
+              <option v-for="option in field.input.parameters.values" :key="option.key" :value="option.value">
                 {{ option.name }}
               </option>
             </select>
           </div>
 
-          <button
-            v-if="!edit"
-            type="button"
-            class="remove"
-            @click="removeField(i)"
-          >
-            Remove Field
-          </button>
+          <button v-if="!edit" type="button" class="remove" @click="removeField(i)">Remove Field</button>
         </div>
 
-        <button v-if="!edit" class="add-field" type="button" @click="addField">
-          Add Field
-        </button>
+        <button v-if="!edit" class="add-field" type="button" @click="addField">Add Field</button>
       </div>
 
       <div class="button-row">
-        <button class="inverted" type="button" @click="$emit('close')">
-          Cancel
-        </button>
+        <button class="inverted" type="button" @click="$emit('close')">Cancel</button>
         <LoadingButton>{{ edit ? "Update" : "Create Track" }}</LoadingButton>
       </div>
     </form>
@@ -158,8 +91,8 @@
 <script>
 import Toggle from "@vueform/toggle";
 import { mapState, mapActions, mapGetters } from "vuex";
-import Modal from "./Modal";
-import LoadingButton from "./LoadingButton";
+import Modal from "./Modal.vue";
+import LoadingButton from "./LoadingButton.vue";
 
 export default {
   components: {
@@ -243,19 +176,10 @@ export default {
       return str;
     },
     getSelectableInputs(field) {
-      return this.inputs.filter(
-        (input) =>
-          input !== "SLIDER" ||
-          field.type === "FLOAT" ||
-          field.type === "INTEGER"
-      );
+      return this.inputs.filter((input) => input !== "SLIDER" || field.type === "FLOAT" || field.type === "INTEGER");
     },
     cleanUpInputType(field) {
-      if (
-        field.input.identier === "SLIDER" &&
-        field.type !== "FLOAT" &&
-        field.type !== "INTEGER"
-      ) {
+      if (field.input.identier === "SLIDER" && field.type !== "FLOAT" && field.type !== "INTEGER") {
         field.input.identifier = null;
       }
     },

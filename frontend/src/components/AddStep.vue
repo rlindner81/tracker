@@ -1,25 +1,12 @@
 <template>
-  <form
-    class="component add-step"
-    @submit.prevent="submit"
-    v-if="track && newStep && newEnabled"
-  >
+  <form class="component add-step" @submit.prevent="submit" v-if="track && newStep && newEnabled">
     <div class="input" v-for="field in track.fields" :key="field._id">
       <div class="optional-wrapper">
-        <div
-          class="toggle-wrapper"
-          v-if="track.fields.some(({ optional }) => optional)"
-        >
-          <Toggle
-            v-if="field.optional"
-            v-model="newEnabled[field.key]"
-            @change="handleChange($event, field.key)"
-          />
+        <div class="toggle-wrapper" v-if="track.fields.some(({ optional }) => optional)">
+          <Toggle v-if="field.optional" v-model="newEnabled[field.key]" @change="handleChange($event, field.key)" />
         </div>
         <div class="choice-wrapper">
-          <label :class="newEnabled[field.key] ? '' : 'disable'">{{
-            field.name
-          }}</label>
+          <label :class="newEnabled[field.key] ? '' : 'disable'">{{ field.name }}</label>
           <input
             type="text"
             v-model="newStep[field.key]"
@@ -40,9 +27,7 @@
             step="1"
             v-model="newStep[field.key]"
             :placeholder="`Enter ${field.name}`"
-            v-if="
-              field.input.identifier === 'FIELD' && field.type === 'INTEGER'
-            "
+            v-if="field.input.identifier === 'FIELD' && field.type === 'INTEGER'"
             :disabled="!newEnabled[field.key]"
           />
           <select
@@ -50,27 +35,15 @@
             v-model="newStep[field.key]"
             :disabled="!newEnabled[field.key]"
           >
-            <option
-              v-for="option in field.input.parameters.values"
-              :key="option.key"
-              :value="option.value"
-            >
+            <option v-for="option in field.input.parameters.values" :key="option.key" :value="option.value">
               {{ option.name }}
             </option>
           </select>
           <div class="slider" v-if="field.input.identifier === 'SLIDER'">
             <div class="slider-container">
               <Slider
-                :min="
-                  field.input.parameters.min
-                    ? parseFloat(field.input.parameters.min)
-                    : 0
-                "
-                :max="
-                  field.input.parameters.max
-                    ? parseFloat(field.input.parameters.max)
-                    : 1000
-                "
+                :min="field.input.parameters.min ? parseFloat(field.input.parameters.min) : 0"
+                :max="field.input.parameters.max ? parseFloat(field.input.parameters.max) : 1000"
                 :step="
                   field.input.parameters.step
                     ? parseFloat(field.input.parameters.step) < 1
@@ -112,7 +85,7 @@
 import Toggle from "@vueform/toggle";
 import Slider from "@vueform/slider";
 import { mapState, mapGetters, mapActions } from "vuex";
-import LoadingButton from "./LoadingButton";
+import LoadingButton from "./LoadingButton.vue";
 export default {
   components: {
     Toggle,
