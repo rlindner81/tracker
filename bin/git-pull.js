@@ -1,27 +1,44 @@
 #!/usr/bin/env node
-const path = require("path")
-const { execSync, copyFileSync, unlinkSync } = require("child_process")
+const { execSync } = require("child_process");
 
-const project = Object.prototype.hasOwnProperty.call(process.env, "PROJECT") ? process.env.PROJECT : "project"
-const inkscape = Object.prototype.hasOwnProperty.call(process.env, "INKSCAPE") ? process.env.INKSCAPE : "inkscape"
-const convert = Object.prototype.hasOwnProperty.call(process.env, "CONVERT") ? process.env.CONVERT : "convert"
-const source = Object.prototype.hasOwnProperty.call(process.env, "SOURCE") ? process.env.SOURCE : path.join(__dirname, "..", "assets", `${project}.svg`)
-const target = Object.prototype.hasOwnProperty.call(process.env, "TARGET") ? process.env.TARGET : path.join(__dirname, "..", "frontend", "public", "img", "icons")
+const run = (commands) => {
+  const command = commands
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .join(" && \\\n");
+  console.log(command);
+  execSync(command, { stdio: "inherit" });
+};
 
-const run = cmds => {
-  const cmd = cmds.split("\n").map(cmd => cmd.trim()).filter(cmd => cmd.length > 0).join(" && \\\n")
-  console.log(cmd)
-  execSync(cmd, { stdio: "inherit" })
-}
+const args = process.argv.slice(2);
+const doUpdateGit = true;
+const doUpdateFrontend =
+  args.length === 0 || args.some((arg) => /front/gi.test(arg));
+const doUpdateBackend =
+  args.length === 0 || args.some((arg) => /back/gi.test(arg));
 
-run(`
-  cd /var/www/tracker
-  git pull
-  cd /var/www/tracker/frontend
-  npm ci --package-lock
-  npm run build
-  supervisorctl stop tracker
-  cd /var/www/tracker/backend
-  npm ci --package-lock --only=production
-  supervisorctl start tracker
-`)
+let shellCommands =
+  (doUpdateGit
+    ? `
+    cd /var/www/tracker
+    git pull
+  `
+    : "") +
+  (doUpdateFrontend
+    ? `
+    cd /var/www/tracker/frontend
+    npm ci --package-lock
+    npm run build
+  `
+    : "") +
+  (doUpdateBackend
+    ? `
+    supervisorctl stop tracker
+    cd /var/www/tracker/backend
+    npm ci --package-lock --only=production
+    supervisorctl start tracker
+  `
+    : "");
+
+run(shellCommands);
