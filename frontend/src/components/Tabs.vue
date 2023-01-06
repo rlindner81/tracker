@@ -2,11 +2,7 @@
   <div class="component tabs">
     <div class="tabs">
       <ul>
-        <li
-          v-for="(title, i) in tabTitles"
-          :class="{ 'is-active': selectedTitle === title }"
-          :key="i"
-        >
+        <li v-for="(title, i) in tabTitles" :class="{ 'is-active': selectedTitle === title }" :key="i">
           <a :href="hrefFromTitle(title)" @click="selectedTitle = title">
             {{ title }}
           </a>
@@ -20,14 +16,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, provide } from "vue";
 export default {
   setup(props, { slots }) {
-    const tabTitles = ref(slots.default().map((tab) => tab.props.title));
-    const selectedTitle = ref(
-      slots.default().find((tab) => tab.props.selected).props.title
-    );
+    const tabTitles = ref(slots.default?.().map((tab) => tab.props?.title));
+    const selectedTitle = ref(slots.default?.().find((tab) => tab.props?.selected)?.props?.title);
 
     provide("selectedTitle", selectedTitle);
     return {
@@ -36,10 +30,10 @@ export default {
     };
   },
   mounted() {
-    const tabHrefs = this.tabTitles.map(this.hrefFromTitle.bind(this));
-    const hashIndex = tabHrefs.indexOf(this.$route.hash);
-    if (hashIndex >= 0) {
-      this.selectedTitle = this.tabTitles[hashIndex];
+    const tabHrefs = this.tabTitles?.map?.(this.hrefFromTitle.bind(this));
+    const hashIndex = tabHrefs?.indexOf(this.$route.hash);
+    if (hashIndex !== undefined && hashIndex >= 0) {
+      this.selectedTitle = this.tabTitles?.[hashIndex];
     }
   },
   methods: {

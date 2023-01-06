@@ -8,11 +8,7 @@
     <h2>Danger Zone</h2>
     <button @click="toggleDeleteModal">Delete Track</button>
 
-    <AddTrack
-      :edit="true"
-      v-show="editModal"
-      @close="toggleEditModal"
-    ></AddTrack>
+    <AddTrack :edit="true" v-show="editModal" @close="toggleEditModal"></AddTrack>
 
     <Modal v-show="deleteModal">
       <p>Do you really want to delete this track?</p>
@@ -24,11 +20,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions } from "vuex";
-import Modal from "./Modal";
-import LoadingButton from "./LoadingButton";
-import AddTrack from "./AddTrack";
+import Modal from "./Modal.vue";
+import LoadingButton from "./LoadingButton.vue";
+import AddTrack from "./AddTrack.vue";
 
 export default {
   components: {

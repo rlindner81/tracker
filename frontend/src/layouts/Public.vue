@@ -13,8 +13,6 @@
   </div>
 </template>
 
-<script></script>
-
 <style lang="less">
 @import "../less/variables";
 @import "../less/helpers";
@@ -22,7 +20,7 @@
 .layout.public {
   .size(100%, 100%);
   .row(center, center);
-  background: url("~@/assets/paper.png") repeat;
+  background: url("@/assets/paper.png") repeat;
 
   .flex-aligner {
     .column();

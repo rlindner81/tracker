@@ -79,17 +79,13 @@ export default {
       delete patchable.createdAt;
       delete patchable.updatedAt;
       delete patchable.stepCount;
-      return guardedFetchResponse(`/api/track/${getters.current._id}`, <
-        RequestInit
-      >{
+      return guardedFetchResponse(`/api/track/${getters.current._id}`, <RequestInit>{
         method: "PATCH",
         body: <any>JSON.stringify(patchable),
       });
     },
     delete({ commit, getters }) {
-      return guardedFetchResponse(`/api/track/${getters.current._id}`, <
-        RequestInit
-      >{
+      return guardedFetchResponse(`/api/track/${getters.current._id}`, <RequestInit>{
         method: "DELETE",
       }).then((response) => {
         if (!response) return;
@@ -99,16 +95,13 @@ export default {
       });
     },
     report({ commit, getters }) {
-      return guardedFetchJson(
-        `/api/track/${getters.current._id}/report/$dynamic`,
-        <RequestInit>{
-          method: "POST",
-          body: <any>JSON.stringify({
-            aggregations: [{ key: "count", type: "COUNT" }],
-            interval: "DAY",
-          }),
-        }
-      ).then((data) => {
+      return guardedFetchJson(`/api/track/${getters.current._id}/report/$dynamic`, <RequestInit>{
+        method: "POST",
+        body: <any>JSON.stringify({
+          aggregations: [{ key: "count", type: "COUNT" }],
+          interval: "DAY",
+        }),
+      }).then((data) => {
         data && commit("setCurrentUsage", data.aggregations);
       });
     },

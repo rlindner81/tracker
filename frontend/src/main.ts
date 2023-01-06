@@ -1,7 +1,6 @@
 import "./firebase";
 import { createApp } from "vue";
 import App from "./App.vue";
-import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import { readableDateTime, readableRelativeDateTime } from "./datetime";
@@ -14,3 +13,10 @@ app.config.globalProperties.$filters = {
   readableDateTime,
   readableRelativeDateTime,
 };
+
+// see https://stackoverflow.com/questions/64175742/using-globalproperties-in-vue-3-and-typescript
+declare module "@vue/runtime-core" {
+  interface ComponentCustomProperties {
+    $filters: { readableDateTime; readableRelativeDateTime };
+  }
+}

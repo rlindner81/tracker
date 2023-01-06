@@ -6,8 +6,8 @@
   </button>
 </template>
 
-<script>
-import BusyIndicator from "./BusyIndicator";
+<script lang="ts">
+import BusyIndicator from "./BusyIndicator.vue";
 import { mapGetters } from "vuex";
 
 export default {

@@ -5,22 +5,10 @@
         <div class="value" v-for="(value, key) in step.values" :key="key">
           <label>{{ getFieldName(key) }}</label>
           <span v-if="value === undefined || value === null">n/a</span>
-          <span
-            v-if="
-              value !== undefined &&
-              value !== null &&
-              getInputIdentifier(key) !== 'SELECT'
-            "
-            >{{ value }}</span
-          >
-          <span
-            v-if="
-              value !== undefined &&
-              value !== null &&
-              getInputIdentifier(key) === 'SELECT'
-            "
-            >{{ getInputParameterValueName(key, value) }}</span
-          >
+          <span v-if="value !== undefined && value !== null && getInputIdentifier(key) !== 'SELECT'">{{ value }}</span>
+          <span v-if="value !== undefined && value !== null && getInputIdentifier(key) === 'SELECT'">{{
+            getInputParameterValueName(key, value)
+          }}</span>
         </div>
       </div>
       <div class="master-data">
@@ -33,7 +21,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState, mapGetters } from "vuex";
 export default {
   computed: {
@@ -42,11 +30,7 @@ export default {
   },
   methods: {
     getField(key) {
-      return (
-        this.track &&
-        this.track.fields &&
-        this.track.fields.find((field) => field.key === key)
-      );
+      return this.track && this.track.fields && this.track.fields.find((field) => field.key === key);
     },
     getFieldName(key) {
       const field = this.getField(key);
@@ -63,9 +47,7 @@ export default {
         field.input &&
         field.input.parameters &&
         field.input.parameters.values &&
-        field.input.parameters.values.find(
-          (v) => String(v.value) === String(value)
-        );
+        field.input.parameters.values.find((v) => String(v.value) === String(value));
       return matchingValue && matchingValue.name;
     },
   },

@@ -19,18 +19,21 @@ const TIME_UNIT_LIMITS = {
 
 const _getRelativeDateTime = (d1, d2) => {
   const elapsed = d1 - d2;
-  for (const [unit, limit] of Object.entries(TIME_UNIT_LIMITS)) {
+  let unit, limit, diff;
+  for (const unitLimitPair of Object.entries(TIME_UNIT_LIMITS)) {
+    [unit, limit] = unitLimitPair;
     if (Math.abs(elapsed) > limit || unit === TIME_UNITS.SECOND) {
-      const diff = Math.round(elapsed / limit);
-      return {
-        unit,
-        diff,
-        relativeDateTime: new Intl.RelativeTimeFormat("en", {
-          numeric: "auto",
-        }).format(diff, <Intl.RelativeTimeFormatUnit>unit),
-      };
+      diff = Math.round(elapsed / limit);
+      break;
     }
   }
+  return {
+    unit,
+    diff,
+    relativeDateTime: new Intl.RelativeTimeFormat("en", {
+      numeric: "auto",
+    }).format(diff, <Intl.RelativeTimeFormatUnit>unit),
+  };
 };
 
 const _leadingZero2 = (value: number) => {
@@ -41,11 +44,9 @@ const _parseISOString = (dbDate: string): Date => {
   const [year, month, day, hour, minutes, seconds, milliseconds] =
     /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3})Z$/
       .exec(dbDate)
-      .slice(1)
-      .map((a) => parseInt(a));
-  return new Date(
-    Date.UTC(year, month - 1, day, hour, minutes, seconds, milliseconds)
-  );
+      ?.slice?.(1)
+      .map?.((a) => parseInt(a)) ?? [];
+  return new Date(Date.UTC(year, month - 1, day, hour, minutes, seconds, milliseconds));
 };
 
 export const readableDateTime = (dbDate: string): string => {
@@ -76,9 +77,8 @@ export const readableRelativeDateTime = (dbDate: string): string => {
   if (-NOW_TOLERANCE <= relativeMillis && relativeMillis <= NOW_TOLERANCE) {
     return "now";
   } else {
-    const { unit, diff, relativeDateTime } = _getRelativeDateTime(value, now);
-    return unit === TIME_UNITS.YEAR ||
-      (unit === TIME_UNITS.MONTH && Math.abs(diff) >= 2)
+    const { unit, diff, relativeDateTime } = _getRelativeDateTime(value, now) ?? {};
+    return unit === TIME_UNITS.YEAR || (unit === TIME_UNITS.MONTH && Math.abs(diff) >= 2)
       ? readableShortDateTime(dbDate)
       : relativeDateTime;
   }

@@ -3,19 +3,10 @@
     <h1>Dashboard</h1>
 
     <Tiles>
-      <router-link
-        class="track"
-        v-for="track in tracks"
-        :key="track._id"
-        :to="`/${track._id}`"
-      >
+      <router-link class="track" v-for="track in tracks" :key="track._id" :to="`/${track._id}`">
         <h2>{{ track.name }}</h2>
         <span>{{
-          !track.stepCount
-            ? "new"
-            : track.stepCount === 1
-            ? `${track.stepCount} step`
-            : `${track.stepCount} steps`
+          !track.stepCount ? "new" : track.stepCount === 1 ? `${track.stepCount} step` : `${track.stepCount} steps`
         }}</span>
       </router-link>
     </Tiles>
@@ -28,10 +19,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState, mapActions } from "vuex";
-import Tiles from "../components/Tiles";
-import AddTrack from "../components/AddTrack";
+import Tiles from "@/components/Tiles.vue";
+import AddTrack from "@/components/AddTrack.vue";
 
 export default {
   data() {

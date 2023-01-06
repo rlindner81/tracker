@@ -6,12 +6,7 @@
 
         <h1>Tracks</h1>
 
-        <router-link
-          v-for="track in tracks"
-          :key="track._id"
-          :to="`/${track._id}`"
-          >{{ track.name }}</router-link
-        >
+        <router-link v-for="track in tracks" :key="track._id" :to="`/${track._id}`">{{ track.name }}</router-link>
 
         <p v-if="user" class="logout">
           Logged in as {{ user.email }}
@@ -32,9 +27,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState, mapActions } from "vuex";
-import LoadingButton from "@/components/LoadingButton";
+import LoadingButton from "@/components/LoadingButton.vue";
 
 export default {
   components: { LoadingButton },
@@ -72,7 +67,7 @@ export default {
   overflow-y: auto;
   padding: 8rem 4rem;
   position: relative;
-  background: url("~@/assets/paper.png") repeat;
+  background: url("@/assets/paper.png") repeat;
 
   @media @medium {
     padding: 4rem 0;

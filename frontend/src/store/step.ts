@@ -23,10 +23,7 @@ export default {
 
         switch (field.input.identifier) {
           case "SLIDER": {
-            const halfPoint =
-              (parseFloat(field.input.parameters.min) +
-                parseFloat(field.input.parameters.max)) /
-              2.0;
+            const halfPoint = (parseFloat(field.input.parameters.min) + parseFloat(field.input.parameters.max)) / 2.0;
             newStep[field.key] = halfPoint;
             break;
           }
@@ -37,9 +34,7 @@ export default {
           }
           default: {
             newStep[field.key] =
-              field.input &&
-              field.input.parameters &&
-              field.input.parameters.selected
+              field.input && field.input.parameters && field.input.parameters.selected
                 ? field.input.parameters.selected
                 : null;
             break;
@@ -69,20 +64,15 @@ export default {
     load({ commit, state, rootGetters }) {
       commit("setTrack", rootGetters["track/current"]._id);
       commit("setNew", rootGetters["track/current"]);
-      return guardedFetchJson(`/api/track/${state.trackId}/step`).then(
-        (data) => {
-          data && commit("set", data);
-        }
-      );
+      return guardedFetchJson(`/api/track/${state.trackId}/step`).then((data) => {
+        data && commit("set", data);
+      });
     },
     create({ commit, state, rootGetters }) {
-      return guardedFetchJson(
-        `/api/track/${rootGetters["track/current"]._id}/step`,
-        {
-          method: "POST",
-          body: JSON.stringify({ values: state.new }),
-        }
-      ).then((data) => {
+      return guardedFetchJson(`/api/track/${rootGetters["track/current"]._id}/step`, {
+        method: "POST",
+        body: JSON.stringify({ values: state.new }),
+      }).then((data) => {
         if (!data) return;
         commit("setNew", rootGetters["track/current"]);
         commit("add", data);
