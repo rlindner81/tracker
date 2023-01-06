@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import Modal from "@/components/Modal.vue";
 import AddStep from "@/components/AddStep.vue";

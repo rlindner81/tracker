@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState, mapActions } from "vuex";
 import LoadingButton from "@/components/LoadingButton.vue";
 

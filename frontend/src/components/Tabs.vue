@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, provide } from "vue";
 export default {
   setup(props, { slots }) {

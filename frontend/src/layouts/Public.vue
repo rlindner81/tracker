@@ -13,8 +13,6 @@
   </div>
 </template>
 
-<script></script>
-
 <style lang="less">
 @import "../less/variables";
 @import "../less/helpers";

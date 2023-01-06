@@ -6,7 +6,7 @@
   </button>
 </template>
 
-<script>
+<script lang="ts">
 import BusyIndicator from "./BusyIndicator.vue";
 import { mapGetters } from "vuex";
 

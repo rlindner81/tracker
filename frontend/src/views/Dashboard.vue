@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState, mapActions } from "vuex";
 import Tiles from "@/components/Tiles.vue";
 import AddTrack from "@/components/AddTrack.vue";

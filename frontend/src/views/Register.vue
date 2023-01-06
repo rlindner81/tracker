@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // TODO: second password field and minimal input validation
 
 import { mapActions } from "vuex";

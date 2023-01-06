@@ -88,7 +88,7 @@
   </Modal>
 </template>
 
-<script>
+<script lang="ts">
 import Toggle from "@vueform/toggle";
 import { mapState, mapActions, mapGetters } from "vuex";
 import Modal from "./Modal.vue";

@@ -81,7 +81,7 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 import Toggle from "@vueform/toggle";
 import Slider from "@vueform/slider";
 import { mapState, mapGetters, mapActions } from "vuex";

@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapActions } from "vuex";
 import Modal from "./Modal.vue";
 import LoadingButton from "./LoadingButton.vue";
