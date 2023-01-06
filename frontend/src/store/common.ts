@@ -1,11 +1,6 @@
+import type { User } from "firebase/auth";
 import { guardedFetchText } from "@/fetchWrapper";
-import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-  createUserWithEmailAndPassword,
-  User,
-} from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase";
 import router from "@/router";
 

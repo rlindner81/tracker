@@ -67,7 +67,7 @@ export default {
   overflow-y: auto;
   padding: 8rem 4rem;
   position: relative;
-  background: url("~@/assets/paper.png") repeat;
+  background: url("@/assets/paper.png") repeat;
 
   @media @medium {
     padding: 4rem 0;
