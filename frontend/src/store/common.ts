@@ -84,7 +84,7 @@ export default {
           }),
         ]);
       } catch (err) {
-        dispatch("addTransientError", err.message);
+        dispatch("addTransientError", (err as Error)?.message);
       }
       commit("decreaseBusy");
     },
@@ -99,7 +99,7 @@ export default {
           }),
         ]);
       } catch (err) {
-        dispatch("addTransientError", err.message);
+        dispatch("addTransientError", (err as Error)?.message);
       }
       commit("decreaseBusy");
     },
@@ -115,7 +115,7 @@ export default {
           }),
         ]);
       } catch (err) {
-        dispatch("addTransientError", err.message);
+        dispatch("addTransientError", (err as Error)?.message);
       }
       commit("decreaseBusy");
     },

@@ -12,7 +12,7 @@
             type="text"
             v-model="field.name"
             placeholder="Enter a name ..."
-            @input="!edit && (field.key = slugify($event.target.value))"
+            @input="onFieldNameChange($event, field)"
           />
 
           <label>Field Key</label>
@@ -182,6 +182,10 @@ export default {
       if (field.input.identier === "SLIDER" && field.type !== "FLOAT" && field.type !== "INTEGER") {
         field.input.identifier = null;
       }
+    },
+    onFieldNameChange(event, field) {
+      let target = event.target as HTMLInputElement;
+      return !this.edit && (field.key = this.slugify(target.value));
     },
   },
 };

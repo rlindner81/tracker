@@ -5,7 +5,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["node"],
+    "noImplicitAny": false,
+    "allowJs": true,
   },
 
   "references": [
