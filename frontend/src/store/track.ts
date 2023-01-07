@@ -12,8 +12,6 @@ interface State {
     fields: any[];
   } | null;
   newStep: {} | null;
-  types: ["TEXT", "FLOAT", "INTEGER", "TIME"];
-  inputs: ["SELECT", "FIELD", "SLIDER"];
 }
 
 export const useTrackStore = defineStore("track", {
@@ -26,8 +24,6 @@ export const useTrackStore = defineStore("track", {
       fields: [],
     },
     newStep: null, // has to be initialized by the relevant track
-    types: ["TEXT", "FLOAT", "INTEGER", "TIME"],
-    inputs: ["SELECT", "FIELD", "SLIDER"],
   }),
   getters: {
     titleById: (state) => (id) => {

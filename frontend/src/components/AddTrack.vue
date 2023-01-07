@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useTrackStore } from "@/store/track";
+import { TRACK_TYPE, TRACK_INPUT, TRACK_TYPE_INPUT } from "@/constants";
 import Toggle from "@vueform/toggle";
 import Modal from "./Modal.vue";
 import LoadingButton from "./LoadingButton.vue";
@@ -84,12 +85,14 @@ const slugify = (str) => {
   return str;
 };
 
-const getSelectableInputs = (field) => {
-  return trackStore.inputs.filter((input) => input !== "SLIDER" || field.type === "FLOAT" || field.type === "INTEGER");
-};
+const getInputs = (field) => TRACK_TYPE_INPUT[field.type];
 
-const cleanUpInputType = (field) => {
-  if (field.input.identifier === "SLIDER" && field.type !== "FLOAT" && field.type !== "INTEGER") {
+const clearInputType = (field) => {
+  if (
+    field.input.identifier === TRACK_INPUT.SLIDER &&
+    field.type !== TRACK_TYPE.FLOAT &&
+    field.type !== TRACK_TYPE.INTEGER
+  ) {
     field.input.identifier = null;
   }
 };
@@ -128,15 +131,15 @@ const onFieldNameChange = (event, field) => {
           </div>
 
           <label>Type</label>
-          <select :disabled="edit" v-model="field.type" @change="cleanUpInputType(field)">
-            <option v-for="type in trackStore.types" :key="type" :value="type">
+          <select :disabled="edit" v-model="field.type" @change="clearInputType(field)">
+            <option v-for="type in TRACK_TYPE" :key="type" :value="type">
               {{ type }}
             </option>
           </select>
 
           <label>Input Type</label>
           <select v-model="field.input.identifier">
-            <option v-for="(type, typeIndex) in getSelectableInputs(field)" :key="typeIndex" :value="type">
+            <option v-for="(type, typeIndex) in getInputs(field)" :key="typeIndex" :value="type">
               {{ type }}
             </option>
           </select>
