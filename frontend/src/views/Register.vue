@@ -1,3 +1,13 @@
+<script setup lang="ts">
+// TODO: second password field and minimal input validation
+import { ref } from "vue";
+import { register } from "@/firebase/auth";
+import LoadingButton from "@/components/LoadingButton.vue";
+
+let email = ref<string | null>(null);
+let password = ref<string | null>(null);
+</script>
+
 <template>
   <div class="view register">
     <form @submit.prevent="register({ email, password })">
@@ -7,29 +17,6 @@
     </form>
   </div>
 </template>
-
-<script lang="ts">
-// TODO: second password field and minimal input validation
-
-import LoadingButton from "@/components/LoadingButton.vue";
-import { register } from "@/firebase/auth";
-export default {
-  components: {
-    LoadingButton,
-  },
-  data() {
-    return {
-      email: null,
-      password: null,
-    };
-  },
-  methods: {
-    async register(options) {
-      return await register(options);
-    },
-  },
-};
-</script>
 
 <style lang="less">
 @import "../less/variables";

@@ -1,6 +1,35 @@
+<script setup lang="ts">
+import { useTrackStore } from "@/store/track";
+import { useStepStore } from "@/store/step";
+
+import Modal from "@/components/Modal.vue";
+import AddStep from "@/components/AddStep.vue";
+import Tabs from "@/components/Tabs.vue";
+import Tab from "@/components/Tab.vue";
+import TrackList from "@/components/TrackList.vue";
+import TrackSettings from "@/components/TrackSettings.vue";
+import { ref } from "vue";
+import { useRoute } from "vue-router";
+
+const trackStore = useTrackStore();
+const stepStore = useStepStore();
+const route = useRoute();
+
+let addModal = ref(false);
+
+trackStore.clearCurrent();
+trackStore.setCurrent(route.params.track);
+stepStore.clear();
+stepStore.load();
+
+const toggleAddModal = () => {
+  addModal.value = !addModal.value;
+};
+</script>
+
 <template>
   <div class="view tracker">
-    <h1>{{ title($route.params.track) }}</h1>
+    <h1>{{ trackStore.titleById($route.params.track) }}</h1>
 
     <Tabs>
       <Tab title="Tracking" :selected="true">
@@ -9,7 +38,7 @@
           <button @click="toggleAddModal">Add Step</button>
         </div>
 
-        <div class="info" v-if="steps && !steps.length">
+        <div class="info" v-if="stepStore.data && !stepStore.data.length">
           <p>You don't have any step tracked yet.</p>
         </div>
 
@@ -23,64 +52,10 @@
 
     <Modal v-show="addModal">
       <h2>Add a Step</h2>
-      <AddStep @tracked="onTrackCreated" @closed="toggleAddModal"></AddStep>
+      <AddStep @tracked="toggleAddModal" @closed="toggleAddModal"></AddStep>
     </Modal>
   </div>
 </template>
-
-<script lang="ts">
-import { mapState, mapActions } from "pinia";
-import Modal from "@/components/Modal.vue";
-import AddStep from "@/components/AddStep.vue";
-import Tabs from "@/components/Tabs.vue";
-import Tab from "@/components/Tab.vue";
-import TrackList from "@/components/TrackList.vue";
-import TrackSettings from "@/components/TrackSettings.vue";
-import { useStepStore } from "@/store/step";
-import { useTrackStore } from "@/store/track";
-
-export default {
-  components: {
-    Modal,
-    AddStep,
-    Tabs,
-    Tab,
-    TrackList,
-    TrackSettings,
-  },
-  data() {
-    return {
-      addModal: false,
-      reportModal: false,
-      deleteModal: false,
-    };
-  },
-  created() {
-    this.clearTrack();
-    this.clear();
-    this.setCurrent(this.$route.params.track);
-    this.load();
-  },
-  computed: {
-    ...mapState(useStepStore, { newStep: "new", steps: "data" }),
-    ...mapState(useTrackStore, { title: "titleById", track: "current" }),
-  },
-  methods: {
-    ...mapActions(useTrackStore, {
-      report: "report",
-      setCurrent: "setCurrent",
-      clearTrack: "clearCurrent",
-    }),
-    ...mapActions(useStepStore, { load: "load", clear: "clear" }),
-    toggleAddModal() {
-      this.addModal = !this.addModal;
-    },
-    onTrackCreated() {
-      this.toggleAddModal();
-    },
-  },
-};
-</script>
 
 <style lang="less">
 @import "../less/variables";
