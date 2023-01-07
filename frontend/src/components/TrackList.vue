@@ -1,6 +1,41 @@
+<script setup lang="ts">
+import { useStepStore } from "@/store/step";
+import { useTrackStore } from "@/store/track";
+
+const trackStore = useTrackStore();
+const stepStore = useStepStore();
+
+const getField = (key) => {
+  return (
+    trackStore.current && trackStore.current.fields && trackStore.current.fields.find((field) => field.key === key)
+  );
+};
+
+const getFieldName = (key) => {
+  const field = getField(key);
+  return field && field.name;
+};
+
+const getInputIdentifier = (key) => {
+  const field = getField(key);
+  return field && field.input && field.input.identifier;
+};
+
+const getInputParameterValueName = (key, value) => {
+  const field = getField(key);
+  const matchingValue =
+    field &&
+    field.input &&
+    field.input.parameters &&
+    field.input.parameters.values &&
+    field.input.parameters.values.find((v) => String(v.value) === String(value));
+  return matchingValue && matchingValue.name;
+};
+</script>
+
 <template>
-  <div class="component track-list steps" v-if="steps && steps.length > 0">
-    <div class="step" v-for="step in steps" :key="step._id">
+  <div class="component track-list steps" v-if="stepStore.data && stepStore.data.length > 0">
+    <div class="step" v-for="step in stepStore.data" :key="step._id">
       <div class="values">
         <div class="value" v-for="(value, key) in step.values" :key="key">
           <label>{{ getFieldName(key) }}</label>
@@ -20,41 +55,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { mapState } from "pinia";
-import { useStepStore } from "@/store/step";
-import { useTrackStore } from "@/store/track";
-export default {
-  computed: {
-    ...mapState(useStepStore, { steps: "data" }),
-    ...mapState(useTrackStore, { track: "current" }),
-  },
-  methods: {
-    getField(key) {
-      return this.track && this.track.fields && this.track.fields.find((field) => field.key === key);
-    },
-    getFieldName(key) {
-      const field = this.getField(key);
-      return field && field.name;
-    },
-    getInputIdentifier(key) {
-      const field = this.getField(key);
-      return field && field.input && field.input.identifier;
-    },
-    getInputParameterValueName(key, value) {
-      const field = this.getField(key);
-      const matchingValue =
-        field &&
-        field.input &&
-        field.input.parameters &&
-        field.input.parameters.values &&
-        field.input.parameters.values.find((v) => String(v.value) === String(value));
-      return matchingValue && matchingValue.name;
-    },
-  },
-};
-</script>
 
 <style lang="less">
 @import "../less/variables";

@@ -1,3 +1,28 @@
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
+import { useTrackStore } from "@/store/track";
+import { useCommonStore } from "@/store/common";
+import { loadSessionUser, logout } from "@/firebase/auth";
+import LoadingButton from "@/components/LoadingButton.vue";
+
+const commonStore = useCommonStore();
+const trackStore = useTrackStore();
+
+let initialized = ref(false);
+let mobileNavVisible = ref(false);
+
+const toggleMobileNav = () => {
+  mobileNavVisible.value = !mobileNavVisible.value;
+};
+
+onMounted(async () => {
+  await loadSessionUser();
+  await trackStore.load();
+
+  initialized.value = true;
+});
+</script>
+
 <template>
   <div class="layout protected">
     <div class="letter-box">
@@ -6,12 +31,15 @@
 
         <h1>Tracks</h1>
 
-        <router-link v-for="track in tracks" :key="track._id" :to="{ name: 'Track', params: { track: track._id } }">{{
-          track.name
-        }}</router-link>
+        <router-link
+          v-for="track in trackStore.data"
+          :key="track._id"
+          :to="{ name: 'Track', params: { track: track._id } }"
+          >{{ track.name }}</router-link
+        >
 
-        <p v-if="user" class="logout">
-          Logged in as {{ user.email }}
+        <p v-if="commonStore.user" class="logout">
+          Logged in as {{ commonStore.user?.email }}
           <LoadingButton @click.prevent="logout()">Logout</LoadingButton>
         </p>
 
@@ -28,42 +56,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { mapState, mapActions } from "pinia";
-import LoadingButton from "@/components/LoadingButton.vue";
-import { useTrackStore } from "@/store/track";
-import { useCommonStore } from "@/store/common";
-import { loadSessionUser, logout } from "@/firebase/auth";
-
-export default {
-  components: { LoadingButton },
-  data() {
-    return {
-      initialized: false,
-      mobileNavVisible: false,
-    };
-  },
-  async created() {
-    await loadSessionUser();
-    await this.loadTracks();
-    this.initialized = true;
-  },
-  computed: {
-    ...mapState(useCommonStore, { user: "user" }),
-    ...mapState(useTrackStore, { tracks: "data" }),
-  },
-  methods: {
-    ...mapActions(useTrackStore, { loadTracks: "load" }),
-    toggleMobileNav() {
-      this.mobileNavVisible = !this.mobileNavVisible;
-    },
-    async logout() {
-      return await logout();
-    },
-  },
-};
-</script>
 
 <style lang="less">
 @import "../less/variables";

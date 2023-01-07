@@ -6,12 +6,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: "Tiles",
-};
-</script>
-
 <style lang="less">
 @import "../less/variables";
 @import "../less/helpers";

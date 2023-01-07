@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { login } from "@/firebase/auth";
+import LoadingButton from "@/components/LoadingButton.vue";
+
+let email = ref<string | null>(null);
+let password = ref<string | null>(null);
+</script>
+
 <template>
   <div class="view login">
     <form @submit.prevent="login({ email, password })">
@@ -7,28 +16,6 @@
     </form>
   </div>
 </template>
-
-<script lang="ts">
-import LoadingButton from "@/components/LoadingButton.vue";
-import { login } from "@/firebase/auth";
-
-export default {
-  components: {
-    LoadingButton,
-  },
-  data() {
-    return {
-      email: null,
-      password: null,
-    };
-  },
-  methods: {
-    async login(options) {
-      return await login(options);
-    },
-  },
-};
-</script>
 
 <style lang="less">
 @import "../less/variables";

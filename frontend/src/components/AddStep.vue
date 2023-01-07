@@ -1,39 +1,72 @@
+<script setup>
+import { useTrackStore } from "@/store/track";
+import { useStepStore } from "@/store/step";
+import Toggle from "@vueform/toggle";
+import Slider from "@vueform/slider";
+import LoadingButton from "./LoadingButton.vue";
+
+const trackStore = useTrackStore();
+const stepStore = useStepStore();
+
+const emit = defineEmits(["tracked", "closed"]);
+
+const submit = async () => {
+  await stepStore.create();
+  emit("tracked");
+  await trackStore.report();
+};
+
+const handleChange = (enabled, fieldKey) => {
+  if (!enabled) {
+    stepStore.new[fieldKey] = undefined;
+  }
+};
+</script>
+
 <template>
-  <form class="component add-step" @submit.prevent="submit" v-if="track && newStep && newEnabled">
-    <div class="input" v-for="field in track.fields" :key="field._id">
+  <form
+    class="component add-step"
+    @submit.prevent="submit"
+    v-if="trackStore.current && stepStore.new && stepStore.newEnabled"
+  >
+    <div class="input" v-for="field in trackStore.current.fields" :key="field._id">
       <div class="optional-wrapper">
-        <div class="toggle-wrapper" v-if="track.fields.some(({ optional }) => optional)">
-          <Toggle v-if="field.optional" v-model="newEnabled[field.key]" @change="handleChange($event, field.key)" />
+        <div class="toggle-wrapper" v-if="trackStore.current.fields.some(({ optional }) => optional)">
+          <Toggle
+            v-if="field.optional"
+            v-model="stepStore.newEnabled[field.key]"
+            @change="handleChange($event, field.key)"
+          />
         </div>
         <div class="choice-wrapper">
-          <label :class="newEnabled[field.key] ? '' : 'disable'">{{ field.name }}</label>
+          <label :class="stepStore.newEnabled[field.key] ? '' : 'disable'">{{ field.name }}</label>
           <input
             type="text"
-            v-model="newStep[field.key]"
+            v-model="stepStore.new[field.key]"
             :placeholder="`Enter ${field.name}`"
             v-if="field.input.identifier === 'FIELD' && field.type === 'TEXT'"
-            :disabled="!newEnabled[field.key]"
+            :disabled="!stepStore.newEnabled[field.key]"
           />
           <input
             type="number"
             step="0.00001"
-            v-model="newStep[field.key]"
+            v-model="stepStore.new[field.key]"
             :placeholder="`Enter ${field.name}`"
             v-if="field.input.identifier === 'FIELD' && field.type === 'FLOAT'"
-            :disabled="!newEnabled[field.key]"
+            :disabled="!stepStore.newEnabled[field.key]"
           />
           <input
             type="number"
             step="1"
-            v-model="newStep[field.key]"
+            v-model="stepStore.new[field.key]"
             :placeholder="`Enter ${field.name}`"
             v-if="field.input.identifier === 'FIELD' && field.type === 'INTEGER'"
-            :disabled="!newEnabled[field.key]"
+            :disabled="!stepStore.newEnabled[field.key]"
           />
           <select
             v-if="field.input.identifier === 'SELECT'"
-            v-model="newStep[field.key]"
-            :disabled="!newEnabled[field.key]"
+            v-model="stepStore.new[field.key]"
+            :disabled="!stepStore.newEnabled[field.key]"
           >
             <option v-for="option in field.input.parameters.values" :key="option.key" :value="option.value">
               {{ option.name }}
@@ -51,8 +84,8 @@
                       : parseFloat(field.input.parameters.step)
                     : 1
                 "
-                v-model="newStep[field.key]"
-                :disabled="!newEnabled[field.key]"
+                v-model="stepStore.new[field.key]"
+                :disabled="!stepStore.newEnabled[field.key]"
               />
             </div>
             <!-- <input
@@ -80,39 +113,6 @@
     </div>
   </form>
 </template>
-
-<script>
-import Toggle from "@vueform/toggle";
-import Slider from "@vueform/slider";
-import { mapState, mapActions } from "pinia";
-import LoadingButton from "./LoadingButton.vue";
-import { useStepStore } from "@/store/step";
-import { useTrackStore } from "@/store/track";
-export default {
-  components: {
-    Toggle,
-    Slider,
-    LoadingButton,
-  },
-  computed: {
-    ...mapState(useStepStore, { newStep: "new", newEnabled: "newEnabled" }),
-    ...mapState(useTrackStore, { track: "current" }),
-  },
-  methods: {
-    ...mapActions(useStepStore, { create: "create" }),
-    ...mapActions(useTrackStore, { report: "report" }),
-    submit() {
-      this.create().then(() => {
-        this.$emit("tracked");
-        this.report();
-      });
-    },
-    handleChange(enabled, fieldKey) {
-      !enabled && (this.newStep[fieldKey] = undefined);
-    },
-  },
-};
-</script>
 
 <style src="@vueform/toggle/themes/default.css"></style>
 <style src="@vueform/slider/themes/default.css"></style>

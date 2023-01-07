@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import { useTrackStore } from "@/store/track";
+import Modal from "./Modal.vue";
+import LoadingButton from "./LoadingButton.vue";
+import AddTrack from "./AddTrack.vue";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const trackStore = useTrackStore();
+
+let deleteModal = ref(false);
+let editModal = ref(false);
+
+const remove = async () => {
+  await trackStore.delete();
+  router.replace({ name: "Home" });
+};
+
+const toggleDeleteModal = () => {
+  deleteModal.value = !deleteModal.value;
+};
+
+const toggleEditModal = () => {
+  editModal.value = !editModal.value;
+};
+
+const exportTrack = () => {
+  window.open(`/api/track/${trackStore.current._id}/step/$export`);
+};
+</script>
+
 <template>
   <div class="component track-settings">
     <h2>Track</h2>
@@ -19,48 +51,6 @@
     </Modal>
   </div>
 </template>
-
-<script lang="ts">
-import { mapState, mapActions } from "pinia";
-import Modal from "./Modal.vue";
-import LoadingButton from "./LoadingButton.vue";
-import AddTrack from "./AddTrack.vue";
-import { useTrackStore } from "@/store/track";
-
-export default {
-  components: {
-    Modal,
-    LoadingButton,
-    AddTrack,
-  },
-  data() {
-    return {
-      deleteModal: false,
-      editModal: false,
-    };
-  },
-  computed: {
-    ...mapState(useTrackStore, { track: "current" }),
-  },
-  methods: {
-    ...mapActions(useTrackStore, { deleteTrack: "delete", update: "update" }),
-    remove() {
-      this.deleteTrack().then(() => {
-        this.$router.replace({ name: "Home" });
-      });
-    },
-    toggleDeleteModal() {
-      this.deleteModal = !this.deleteModal;
-    },
-    toggleEditModal() {
-      this.editModal = !this.editModal;
-    },
-    exportTrack() {
-      window.open(`/api/track/${this.track._id}/step/$export`);
-    },
-  },
-};
-</script>
 
 <style lang="less">
 @import "../less/variables";
