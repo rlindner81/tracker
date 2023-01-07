@@ -13,7 +13,7 @@ let deleteModal = ref(false);
 let editModal = ref(false);
 
 const remove = async () => {
-  await trackStore.delete();
+  await trackStore.deleteTrack();
   router.replace({ name: "Home" });
 };
 

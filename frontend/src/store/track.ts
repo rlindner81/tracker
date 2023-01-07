@@ -3,120 +3,93 @@ import { defineStore } from "pinia";
 import { guardedFetchResponse, guardedFetchJson } from "@/fetchWrapper";
 
 interface State {
-  data: any[];
+  tracks: any[];
   currentId: string | null;
-  currentUsage: any[];
-  // TODO new == newTrack
-  new: {
-    name: string | null;
-    fields: any[];
-  } | null;
-  newStep: {} | null;
-  types: ["TEXT", "FLOAT", "INTEGER", "TIME"];
-  inputs: ["SELECT", "FIELD", "SLIDER"];
+  newTrack: {} | null;
 }
 
 export const useTrackStore = defineStore("track", {
   state: (): State => ({
-    data: [],
+    tracks: [],
     currentId: null,
-    currentUsage: [],
-    new: {
-      name: null,
-      fields: [],
-    },
-    newStep: null, // has to be initialized by the relevant track
-    types: ["TEXT", "FLOAT", "INTEGER", "TIME"],
-    inputs: ["SELECT", "FIELD", "SLIDER"],
+    newTrack: null,
   }),
   getters: {
     titleById: (state) => (id) => {
-      const entry = state.data.find((entry) => entry._id === id);
+      const entry = state.tracks.find((entry) => entry._id === id);
       return entry ? entry.name : null;
     },
     current(state) {
-      return state.data.find((track) => track._id === state.currentId);
+      return state.currentId ? state.tracks.find((track) => track._id === state.currentId) ?? null : null;
     },
   },
   actions: {
-    set(data) {
-      this.data = data;
+    setTracks(input) {
+      this.tracks = input;
     },
-    setCurrent(id) {
-      this.currentId = id;
+    setCurrentId(input) {
+      this.currentId = input;
     },
-    setCurrentUsage(data) {
-      this.currentUsage = data;
+    setNewTrack(input) {
+      this.newTrack = input;
     },
-    clear() {
-      this.data = [];
+    addTrack(track) {
+      this.tracks.push(track);
     },
-    clearNew() {
-      this.new = {
-        name: null,
-        fields: [],
-      };
+    removeTrack(trackId) {
+      this.tracks = this.tracks.filter((track) => track._id !== trackId);
     },
-    clearCurrent() {
-      this.currentId = null;
-      this.currentUsage = [];
+    async readTracks() {
+      const tracks = await guardedFetchJson("/api/track");
+      this.setTracks(tracks);
     },
-    add(data) {
-      this.data.push(data);
-    },
-    remove(id) {
-      this.data = this.data.filter((track) => {
-        return track._id !== id;
-      });
-    },
-    load() {
-      return guardedFetchJson("/api/track").then((data) => {
-        data && this.set(data);
-      });
-    },
-    create() {
-      return guardedFetchJson("/api/track", <RequestInit>{
+    async createTrack() {
+      if (!this.newTrack) return;
+      const track = await guardedFetchJson("/api/track", <RequestInit>{
         method: "POST",
-        body: <any>JSON.stringify(this.new),
-      }).then((track) => {
-        if (!track) return;
-        track.stepCount = 0;
-        this.add(track);
-        this.clearNew();
+        body: <any>JSON.stringify(this.newTrack),
       });
+      if (!track) return;
+      track.stepCount = 0;
+      this.addTrack(track);
+      this.setNewTrack(null);
     },
-    update() {
-      const patchable = JSON.parse(JSON.stringify(this.current));
-      delete patchable._id;
-      delete patchable.userId;
-      delete patchable.createdAt;
-      delete patchable.updatedAt;
-      delete patchable.stepCount;
-      return guardedFetchResponse(`/api/track/${this.current._id}`, <RequestInit>{
+    async updateTrack() {
+      if (!this.currentId) return;
+      const currentTrackClone = JSON.parse(JSON.stringify(this.current));
+      delete currentTrackClone._id;
+      delete currentTrackClone.userId;
+      delete currentTrackClone.createdAt;
+      delete currentTrackClone.updatedAt;
+      delete currentTrackClone.stepCount;
+      await guardedFetchResponse(`/api/track/${this.currentId}`, <RequestInit>{
         method: "PATCH",
-        body: <any>JSON.stringify(patchable),
+        body: <any>JSON.stringify(currentTrackClone),
       });
     },
-    delete() {
-      return guardedFetchResponse(`/api/track/${this.current._id}`, <RequestInit>{
+    async deleteTrack() {
+      if (!this.currentId) return;
+      const response = guardedFetchResponse(`/api/track/${this.currentId}`, <RequestInit>{
         method: "DELETE",
-      }).then((response) => {
-        if (!response) return;
-        const id = this.current._id;
-        this.clearCurrent();
-        this.remove(id);
       });
+      if (!response) {
+        return;
+      }
+      const oldId = this.current._id;
+      this.setCurrentId(null);
+      this.removeTrack(oldId);
     },
-    report() {
-      return guardedFetchJson(`/api/track/${this.current._id}/report/$dynamic`, <RequestInit>{
+    // TODO report is not thought through or hooked up for now
+    async report() {
+      if (!this.currentId) return;
+      const data = await guardedFetchJson(`/api/track/${this.currentId}/report/$dynamic`, <RequestInit>{
         method: "POST",
         body: <any>JSON.stringify({
           aggregations: [{ key: "count", type: "COUNT" }],
           interval: "DAY",
         }),
-      }).then((data) => {
-        data && this.setCurrentUsage(data.aggregations);
       });
+      if (!data) return;
     },
   },
 });

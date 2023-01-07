@@ -34,8 +34,8 @@ const getInputParameterValueName = (key, value) => {
 </script>
 
 <template>
-  <div class="component track-list steps" v-if="stepStore.data && stepStore.data.length > 0">
-    <div class="step" v-for="step in stepStore.data" :key="step._id">
+  <div class="component track-list steps" v-if="stepStore.steps && stepStore.steps.length > 0">
+    <div class="step" v-for="step in stepStore.steps" :key="step._id">
       <div class="values">
         <div class="value" v-for="(value, key) in step.values" :key="key">
           <label>{{ getFieldName(key) }}</label>
