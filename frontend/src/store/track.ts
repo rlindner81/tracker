@@ -6,7 +6,6 @@ interface State {
   tracks: any[];
   currentId: string | null;
   newTrack: {} | null;
-  newStep: {} | null;
 }
 
 export const useTrackStore = defineStore("track", {
@@ -14,7 +13,6 @@ export const useTrackStore = defineStore("track", {
     tracks: [],
     currentId: null,
     newTrack: null,
-    newStep: null, // has to be initialized by the relevant track
   }),
   getters: {
     titleById: (state) => (id) => {

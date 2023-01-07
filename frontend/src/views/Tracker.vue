@@ -18,8 +18,8 @@ const route = useRoute();
 let addModal = ref(false);
 
 trackStore.setCurrentId(route.params.track);
-stepStore.clear();
-stepStore.load();
+stepStore.reset();
+stepStore.readSteps();
 
 const toggleAddModal = () => {
   addModal.value = !addModal.value;
@@ -37,7 +37,7 @@ const toggleAddModal = () => {
           <button @click="toggleAddModal">Add Step</button>
         </div>
 
-        <div class="info" v-if="stepStore.data && !stepStore.data.length">
+        <div class="info" v-if="stepStore.steps && !stepStore.steps.length">
           <p>You don't have any step tracked yet.</p>
         </div>
 
