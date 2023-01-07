@@ -17,8 +17,7 @@ const route = useRoute();
 
 let addModal = ref(false);
 
-trackStore.clearCurrent();
-trackStore.setCurrent(route.params.track);
+trackStore.setCurrentId(route.params.track);
 stepStore.clear();
 stepStore.load();
 

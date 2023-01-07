@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useTrackStore } from "@/store/track";
 import { TRACK_TYPE, TRACK_INPUT, TRACK_TYPE_INPUT } from "@/constants";
 import Toggle from "@vueform/toggle";
@@ -16,7 +16,7 @@ const props = defineProps({
   },
 });
 
-const relevant = computed(() => (props.edit ? trackStore.current : trackStore.new));
+const relevant = computed(() => (props.edit ? trackStore.current : trackStore.newTrack));
 
 const addField = () => {
   relevant.value.fields.push({
@@ -44,9 +44,9 @@ const removeField = (index) => {
 
 const submit = async () => {
   if (props.edit) {
-    await trackStore.update();
+    await trackStore.updateTrack();
   } else {
-    await trackStore.create();
+    await trackStore.createTrack();
   }
   emit("close");
 };
@@ -103,6 +103,13 @@ const onFieldNameChange = (event, field) => {
     field.key = slugify(target.value);
   }
 };
+
+onMounted(() => {
+  if (!props.edit) {
+    // TODO this works, but feels inelegant... who should own this structure
+    trackStore.setNewTrack({ name: null, fields: [] });
+  }
+});
 </script>
 
 <template>

@@ -19,7 +19,7 @@ const toggleAddTrack = () => {
     <Tiles>
       <router-link
         class="track"
-        v-for="track in trackStore.data"
+        v-for="track in trackStore.tracks"
         :key="track._id"
         :to="{ name: 'Track', params: { track: track._id } }"
       >
@@ -31,7 +31,7 @@ const toggleAddTrack = () => {
     </Tiles>
 
     <button @click="toggleAddTrack">
-      {{ trackStore.data.length === 0 ? "Add your first track" : "Add a track" }}
+      {{ trackStore.tracks.length === 0 ? "Add your first track" : "Add a track" }}
     </button>
 
     <AddTrack v-show="showAddTrack" @close="toggleAddTrack"></AddTrack>

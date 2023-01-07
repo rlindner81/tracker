@@ -17,7 +17,7 @@ const toggleMobileNav = () => {
 
 onMounted(async () => {
   await loadSessionUser();
-  await trackStore.load();
+  await trackStore.readTracks();
 
   initialized.value = true;
 });
@@ -32,7 +32,7 @@ onMounted(async () => {
         <h1>Tracks</h1>
 
         <router-link
-          v-for="track in trackStore.data"
+          v-for="track in trackStore.tracks"
           :key="track._id"
           :to="{ name: 'Track', params: { track: track._id } }"
           >{{ track.name }}</router-link
