@@ -90,9 +90,10 @@
 
 <script lang="ts">
 import Toggle from "@vueform/toggle";
-import { mapState, mapActions, mapGetters } from "pinia";
+import { mapState, mapActions } from "pinia";
 import Modal from "./Modal.vue";
 import LoadingButton from "./LoadingButton.vue";
+import { useTrackStore } from "@/store/track";
 
 export default {
   components: {
@@ -107,8 +108,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("track", { track: "new", types: "types", inputs: "inputs" }),
-    ...mapGetters("track", ["current"]),
+    ...mapState(useTrackStore, { track: "new", types: "types", inputs: "inputs", current: "current" }),
     relevant() {
       return this.edit ? this.current : this.track;
     },

@@ -1,8 +1,9 @@
-import store from "./store";
+import { useCommonStore } from "@/store/common";
 
 const _guardResponse = async (response) => {
   if (!response.ok) {
-    store.dispatch("common/addTransientError", await response.text());
+    const commonStore = useCommonStore();
+    commonStore.addTransientError(await response.text());
     return null;
   }
   return response;

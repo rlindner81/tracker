@@ -30,6 +30,8 @@
 <script lang="ts">
 import { mapState, mapActions } from "pinia";
 import LoadingButton from "@/components/LoadingButton.vue";
+import { useTrackStore } from "@/store/track";
+import { useCommonStore } from "@/store/common";
 
 export default {
   components: { LoadingButton },
@@ -45,12 +47,12 @@ export default {
     this.initialized = true;
   },
   computed: {
-    ...mapState("track", { tracks: "data" }),
-    ...mapState("common", { user: "user" }),
+    ...mapState(useCommonStore, { user: "user" }),
+    ...mapState(useTrackStore, { tracks: "data" }),
   },
   methods: {
-    ...mapActions("common", ["loadSessionUser", "logout"]),
-    ...mapActions("track", { loadTracks: "load" }),
+    ...mapActions(useCommonStore, ["loadSessionUser", "logout"]),
+    ...mapActions(useTrackStore, { loadTracks: "load" }),
     toggleMobileNav() {
       this.mobileNavVisible = !this.mobileNavVisible;
     },

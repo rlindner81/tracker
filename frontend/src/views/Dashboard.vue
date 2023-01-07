@@ -23,6 +23,7 @@
 import { mapState, mapActions } from "pinia";
 import Tiles from "@/components/Tiles.vue";
 import AddTrack from "@/components/AddTrack.vue";
+import { useTrackStore } from "@/store/track";
 
 export default {
   data() {
@@ -35,10 +36,10 @@ export default {
     AddTrack,
   },
   computed: {
-    ...mapState("track", { tracks: "data", types: "types" }),
+    ...mapState(useTrackStore, { tracks: "data", types: "types" }),
   },
   methods: {
-    ...mapActions("track", { create: "create" }),
+    ...mapActions(useTrackStore, { create: "create" }),
     toggleAddTrack() {
       this.showAddTrack = !this.showAddTrack;
     },

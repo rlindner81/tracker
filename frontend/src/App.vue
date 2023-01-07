@@ -12,15 +12,16 @@
 
 <script lang="ts">
 import { mapState, mapActions } from "pinia";
+import { useCommonStore } from "@/store/common";
 export default {
   mounted() {
     this.observeAuthChanges();
   },
   computed: {
-    ...mapState("common", ["errors"]),
+    ...mapState(useCommonStore, ["errors"]),
   },
   methods: {
-    ...mapActions("common", ["observeAuthChanges"]),
+    ...mapActions(useCommonStore, ["observeAuthChanges"]),
   },
 };
 </script>

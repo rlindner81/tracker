@@ -22,11 +22,13 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapGetters } from "pinia";
+import { mapState } from "pinia";
+import { useStepStore } from "@/store/step";
+import { useTrackStore } from "@/store/track";
 export default {
   computed: {
-    ...mapState("step", { steps: "data" }),
-    ...mapGetters("track", { track: "current" }),
+    ...mapState(useStepStore, { steps: "data" }),
+    ...mapState(useTrackStore, { track: "current" }),
   },
   methods: {
     getField(key) {
