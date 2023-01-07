@@ -12,21 +12,21 @@ interface State {
 
 export const useCommonStore = defineStore("common", {
   state: (): State => ({
+    user: null,
     busy: 0,
     errors: [],
-    user: null,
   }),
 
   getters: {
     isBusy(state): boolean {
       return state.busy > 0;
     },
-    isLoggedIn(state): boolean {
-      return state.user !== null;
-    },
   },
 
   actions: {
+    setUser(payload: User | null) {
+      this.user = payload;
+    },
     increaseBusy() {
       this.busy++;
     },
@@ -40,10 +40,6 @@ export const useCommonStore = defineStore("common", {
       const errorIndex = this.errors.indexOf(error);
       errorIndex >= 0 && this.errors.splice(errorIndex, 1);
     },
-    setUser(payload: User | null) {
-      this.user = payload;
-    },
-
     addTransientError(error) {
       this.addError(error);
       setTimeout(() => this.removeError(error), TRANSIENT_ERROR_DELAY);
