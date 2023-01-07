@@ -8,7 +8,8 @@
 
 <script lang="ts">
 import BusyIndicator from "./BusyIndicator.vue";
-import { mapGetters } from "pinia";
+import { mapState } from "pinia";
+import { useCommonStore } from "@/store/common";
 
 export default {
   name: "LoadingButton",
@@ -16,7 +17,7 @@ export default {
     BusyIndicator,
   },
   computed: {
-    ...mapGetters("common", ["isBusy"]),
+    ...mapState(useCommonStore, ["isBusy"]),
   },
 };
 </script>

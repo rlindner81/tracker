@@ -13,8 +13,14 @@ let isUserInitialized = false;
 let resolveUserInitialized;
 const userInitializedPromise = new Promise((resolve) => (resolveUserInitialized = resolve));
 
+interface State {
+  busy: number;
+  errors: Error[];
+  user: User | null;
+}
+
 export const useCommonStore = defineStore("common", {
-  state: () => ({
+  state: (): State => ({
     busy: 0,
     errors: [],
     user: null,
