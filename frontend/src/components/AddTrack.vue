@@ -9,9 +9,13 @@ const trackStore = useTrackStore();
 
 const emit = defineEmits(["close"]);
 
-let edit = ref(false);
+const props = defineProps({
+  edit: {
+    default: false,
+  },
+});
 
-const relevant = computed(() => (edit.value ? trackStore.current : trackStore.new));
+const relevant = computed(() => (props.edit ? trackStore.current : trackStore.new));
 
 const addField = () => {
   relevant.value.fields.push({
@@ -38,7 +42,7 @@ const removeField = (index) => {
 };
 
 const submit = async () => {
-  if (edit.value) {
+  if (props.edit) {
     await trackStore.update();
   } else {
     await trackStore.create();
@@ -92,7 +96,7 @@ const cleanUpInputType = (field) => {
 
 const onFieldNameChange = (event, field) => {
   let target = event.target as HTMLInputElement;
-  if (!edit.value) {
+  if (!props.edit) {
     field.key = slugify(target.value);
   }
 };

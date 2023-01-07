@@ -9,12 +9,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: "BusyIndicator",
-};
-</script>
-
 <style lang="less">
 @import "./../less/variables";
 

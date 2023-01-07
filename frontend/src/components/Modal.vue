@@ -8,12 +8,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: "Modal",
-};
-</script>
-
 <style lang="less">
 @import "./../less/variables";
 

@@ -1,3 +1,28 @@
+<script setup lang="ts">
+import { ref, provide, onMounted, useSlots } from "vue";
+import { useRoute } from "vue-router";
+
+const slots = useSlots();
+const route = useRoute();
+
+const tabTitles = ref(slots.default?.().map((tab) => tab.props?.title));
+let selectedTitle = ref(slots.default?.().find((tab) => tab.props?.selected)?.props?.title);
+
+provide("selectedTitle", selectedTitle);
+
+const hrefFromTitle = (title) => {
+  return "#" + title.toLowerCase();
+};
+
+onMounted(() => {
+  const tabHrefs = tabTitles.value?.map?.(hrefFromTitle);
+  const hashIndex = tabHrefs?.indexOf(route.hash);
+  if (hashIndex !== undefined && hashIndex >= 0) {
+    selectedTitle.value = tabTitles.value?.[hashIndex];
+  }
+});
+</script>
+
 <template>
   <div class="component tabs">
     <div class="tabs">
@@ -15,34 +40,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { ref, provide } from "vue";
-export default {
-  setup(props, { slots }) {
-    const tabTitles = ref(slots.default?.().map((tab) => tab.props?.title));
-    const selectedTitle = ref(slots.default?.().find((tab) => tab.props?.selected)?.props?.title);
-
-    provide("selectedTitle", selectedTitle);
-    return {
-      tabTitles,
-      selectedTitle,
-    };
-  },
-  mounted() {
-    const tabHrefs = this.tabTitles?.map?.(this.hrefFromTitle.bind(this));
-    const hashIndex = tabHrefs?.indexOf(this.$route.hash);
-    if (hashIndex !== undefined && hashIndex >= 0) {
-      this.selectedTitle = this.tabTitles?.[hashIndex];
-    }
-  },
-  methods: {
-    hrefFromTitle(title) {
-      return "#" + title.toLowerCase();
-    },
-  },
-};
-</script>
 
 <style lang="less">
 @import "../less/variables";
