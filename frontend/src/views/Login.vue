@@ -11,6 +11,7 @@
 <script lang="ts">
 import { mapActions } from "pinia";
 import LoadingButton from "@/components/LoadingButton.vue";
+import { useCommonStore } from "@/store/common";
 
 export default {
   components: {
@@ -23,7 +24,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("common", ["login"]),
+    ...mapActions(useCommonStore, ["login"]),
   },
 };
 </script>
