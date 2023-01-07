@@ -66,12 +66,12 @@ export default {
     ...mapState(useTrackStore, { title: "titleById", track: "current" }),
   },
   methods: {
-    ...mapActions("track", {
+    ...mapActions(useTrackStore, {
       report: "report",
       setCurrent: "setCurrent",
       clearTrack: "clearCurrent",
     }),
-    ...mapActions("step", { load: "load", clear: "clear" }),
+    ...mapActions(useStepStore, { load: "load", clear: "clear" }),
     toggleAddModal() {
       this.addModal = !this.addModal;
     },

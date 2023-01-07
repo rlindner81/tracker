@@ -114,7 +114,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions("track", { create: "create", update: "update" }),
+    ...mapActions(useTrackStore, { create: "create", update: "update" }),
     addField() {
       this.relevant.fields.push({
         position: this.relevant.fields.length,
