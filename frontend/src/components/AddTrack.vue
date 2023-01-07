@@ -32,7 +32,7 @@
 
           <label>Input Type</label>
           <select v-model="field.input.identifier">
-            <option v-for="type in getSelectableInputs(field)" :key="type" :value="type">
+            <option v-for="(type, typeIndex) in getSelectableInputs(field)" :key="typeIndex" :value="type">
               {{ type }}
             </option>
           </select>
@@ -179,7 +179,7 @@ export default {
       return this.inputs.filter((input) => input !== "SLIDER" || field.type === "FLOAT" || field.type === "INTEGER");
     },
     cleanUpInputType(field) {
-      if (field.input.identier === "SLIDER" && field.type !== "FLOAT" && field.type !== "INTEGER") {
+      if (field.input.identifier === "SLIDER" && field.type !== "FLOAT" && field.type !== "INTEGER") {
         field.input.identifier = null;
       }
     },
