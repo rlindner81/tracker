@@ -1,3 +1,103 @@
+<script setup lang="ts">
+import { computed, ref } from "vue";
+import { useTrackStore } from "@/store/track";
+import Toggle from "@vueform/toggle";
+import Modal from "./Modal.vue";
+import LoadingButton from "./LoadingButton.vue";
+
+const trackStore = useTrackStore();
+
+const emit = defineEmits(["close"]);
+
+let edit = ref(false);
+
+const relevant = computed(() => (edit.value ? trackStore.current : trackStore.new));
+
+const addField = () => {
+  relevant.value.fields.push({
+    position: relevant.value.fields.length,
+    key: null,
+    name: null,
+    type: "TEXT",
+    optional: false,
+    input: {
+      identifier: "FIELD",
+      parameters: {
+        selected: null,
+        min: null,
+        max: null,
+        step: null,
+        values: [],
+      },
+    },
+  });
+};
+
+const removeField = (index) => {
+  relevant.value.fields.splice(index, 1);
+};
+
+const submit = async () => {
+  if (edit.value) {
+    await trackStore.update();
+  } else {
+    await trackStore.create();
+  }
+  emit("close");
+};
+
+const addValue = (field) => {
+  field.input.parameters.values.push({
+    name: null,
+    value: null,
+  });
+};
+
+const removeSelectValue = (field, index) => {
+  field.input.parameters.values.splice(index, 1);
+  // ensure positions are correct
+  field.input.parameters.values.forEach((value, index) => {
+    value.position = index;
+  });
+};
+
+const slugify = (str) => {
+  str = str.replace(/^\s+|\s+$/g, ""); // trim
+  str = str.toLowerCase();
+
+  // remove accents, swap ñ for n, etc
+  const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+  const to = "aaaaeeeeiiiioooouuuunc______";
+  for (let i = 0, l = from.length; i < l; i++) {
+    str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
+  }
+
+  str = str
+    .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+    .replace(/\s+/g, "_") // collapse whitespace and replace by -
+    .replace(/-+/g, "_"); // collapse dashes
+
+  return str;
+};
+
+const getSelectableInputs = (field) => {
+  return trackStore.inputs.filter((input) => input !== "SLIDER" || field.type === "FLOAT" || field.type === "INTEGER");
+};
+
+const cleanUpInputType = (field) => {
+  if (field.input.identifier === "SLIDER" && field.type !== "FLOAT" && field.type !== "INTEGER") {
+    field.input.identifier = null;
+  }
+};
+
+const onFieldNameChange = (event, field) => {
+  let target = event.target as HTMLInputElement;
+  if (!edit.value) {
+    field.key = slugify(target.value);
+  }
+};
+</script>
+
 <template>
   <Modal>
     <form @submit.prevent="submit" class="component add-track" v-if="relevant">
@@ -25,7 +125,7 @@
 
           <label>Type</label>
           <select :disabled="edit" v-model="field.type" @change="cleanUpInputType(field)">
-            <option v-for="type in types" :key="type" :value="type">
+            <option v-for="type in trackStore.types" :key="type" :value="type">
               {{ type }}
             </option>
           </select>
@@ -87,109 +187,6 @@
     </form>
   </Modal>
 </template>
-
-<script lang="ts">
-import Toggle from "@vueform/toggle";
-import { mapState, mapActions } from "pinia";
-import Modal from "./Modal.vue";
-import LoadingButton from "./LoadingButton.vue";
-import { useTrackStore } from "@/store/track";
-
-export default {
-  components: {
-    Toggle,
-    Modal,
-    LoadingButton,
-  },
-  props: {
-    edit: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  computed: {
-    ...mapState(useTrackStore, { track: "new", types: "types", inputs: "inputs", current: "current" }),
-    relevant() {
-      return this.edit ? this.current : this.track;
-    },
-  },
-  methods: {
-    ...mapActions(useTrackStore, { create: "create", update: "update" }),
-    addField() {
-      this.relevant.fields.push({
-        position: this.relevant.fields.length,
-        key: null,
-        name: null,
-        type: "TEXT",
-        optional: false,
-        input: {
-          identifier: "FIELD",
-          parameters: {
-            selected: null,
-            min: null,
-            max: null,
-            step: null,
-            values: [],
-          },
-        },
-      });
-    },
-    removeField(index) {
-      this.relevant.fields.splice(index, 1);
-    },
-    submit() {
-      if (this.edit) {
-        this.update().then(this.$emit.bind(this, "close"));
-      } else {
-        this.create().then(this.$emit.bind(this, "close"));
-      }
-    },
-    addValue(field) {
-      field.input.parameters.values.push({
-        name: null,
-        value: null,
-      });
-    },
-    removeSelectValue(field, index) {
-      field.input.parameters.values.splice(index, 1);
-      // ensure positions are correct
-      field.input.parameters.values.forEach((value, index) => {
-        value.position = index;
-      });
-    },
-    slugify(str) {
-      str = str.replace(/^\s+|\s+$/g, ""); // trim
-      str = str.toLowerCase();
-
-      // remove accents, swap ñ for n, etc
-      const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
-      const to = "aaaaeeeeiiiioooouuuunc______";
-      for (let i = 0, l = from.length; i < l; i++) {
-        str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
-      }
-
-      str = str
-        .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
-        .replace(/\s+/g, "_") // collapse whitespace and replace by -
-        .replace(/-+/g, "_"); // collapse dashes
-
-      return str;
-    },
-    getSelectableInputs(field) {
-      return this.inputs.filter((input) => input !== "SLIDER" || field.type === "FLOAT" || field.type === "INTEGER");
-    },
-    cleanUpInputType(field) {
-      if (field.input.identifier === "SLIDER" && field.type !== "FLOAT" && field.type !== "INTEGER") {
-        field.input.identifier = null;
-      }
-    },
-    onFieldNameChange(event, field) {
-      let target = event.target as HTMLInputElement;
-      return !this.edit && (field.key = this.slugify(target.value));
-    },
-  },
-};
-</script>
 
 <style src="@vueform/toggle/themes/default.css"></style>
 <style lang="less">
