@@ -29,7 +29,7 @@ let shellCommands =
     ? `
     cd /var/www/tracker/frontend
     npm ci --package-lock
-    npm run build-only
+    npm run build
   `
     : "") +
   (doUpdateBackend
