@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { loadSessionUser, logout } from "@/firebase/auth";
@@ -11,14 +11,16 @@ const trackStore = useTrackStore();
 let initialized = ref(false);
 let mobileNavVisible = ref(false);
 
-await loadSessionUser();
-await trackStore.load();
-
-initialized.value = true;
-
 const toggleMobileNav = () => {
   mobileNavVisible.value = !mobileNavVisible.value;
 };
+
+onMounted(async () => {
+  await loadSessionUser();
+  await trackStore.load();
+
+  initialized.value = true;
+});
 </script>
 
 <template>
