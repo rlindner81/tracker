@@ -6,8 +6,8 @@
       </main>
 
       <nav>
-        <router-link to="/auth/login">Login</router-link>
-        <router-link to="/auth/register">Register</router-link>
+        <router-link :to="{ name: 'Login' }">Login</router-link>
+        <router-link :to="{ name: 'Register' }">Register</router-link>
       </nav>
     </div>
   </div>

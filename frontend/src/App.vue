@@ -1,28 +1,26 @@
+<script setup lang="ts">
+import { onMounted } from "vue";
+import { useCommonStore } from "@/store/common";
+import { observeAuthChanges } from "@/firebase/auth";
+
+const commonStore = useCommonStore();
+
+onMounted(() => {
+  observeAuthChanges();
+});
+</script>
+
 <template>
   <div id="app">
     <router-view />
 
     <div class="errors">
-      <div class="error" v-for="(error, index) in errors" :key="index">
+      <div class="error" v-for="(error, index) in commonStore.errors" :key="index">
         {{ error }}
       </div>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { mapState } from "pinia";
-import { useCommonStore } from "@/store/common";
-import { observeAuthChanges } from "@/firebase/auth";
-export default {
-  mounted() {
-    observeAuthChanges();
-  },
-  computed: {
-    ...mapState(useCommonStore, ["errors"]),
-  },
-};
-</script>
 
 <style lang="less">
 @import (css) url("https://fonts.googleapis.com/css?family=Lato");

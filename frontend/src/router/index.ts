@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         name: "Track",
-        path: ":track",
+        path: "/track/:track",
         component: Track,
       },
     ],

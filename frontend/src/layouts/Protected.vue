@@ -2,11 +2,13 @@
   <div class="layout protected">
     <div class="letter-box">
       <nav :data-open="mobileNavVisible || null">
-        <router-link to="/">Dashboard</router-link>
+        <router-link :to="{ name: 'Home' }">Dashboard</router-link>
 
         <h1>Tracks</h1>
 
-        <router-link v-for="track in tracks" :key="track._id" :to="`/${track._id}`">{{ track.name }}</router-link>
+        <router-link v-for="track in tracks" :key="track._id" :to="{ name: 'Track', params: { track: track._id } }">{{
+          track.name
+        }}</router-link>
 
         <p v-if="user" class="logout">
           Logged in as {{ user.email }}

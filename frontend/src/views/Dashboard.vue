@@ -3,7 +3,12 @@
     <h1>Dashboard</h1>
 
     <Tiles>
-      <router-link class="track" v-for="track in tracks" :key="track._id" :to="`/${track._id}`">
+      <router-link
+        class="track"
+        v-for="track in tracks"
+        :key="track._id"
+        :to="{ name: 'Track', params: { track: track._id } }"
+      >
         <h2>{{ track.name }}</h2>
         <span>{{
           !track.stepCount ? "new" : track.stepCount === 1 ? `${track.stepCount} step` : `${track.stepCount} steps`

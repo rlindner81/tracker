@@ -1,0 +1,12 @@
+{
+  "name": "firestore-migration",
+  "version": "1.0.0",
+  "description": "migrate user data to firestore",
+  "scripts": {
+    "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock"
+  },
+  "dependencies": {
+    "@seald-io/nedb": "^3.1.0",
+    "firebase": "^9.15.0"
+  }
+}
