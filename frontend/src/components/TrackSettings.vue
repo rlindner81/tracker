@@ -21,10 +21,11 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "pinia";
 import Modal from "./Modal.vue";
 import LoadingButton from "./LoadingButton.vue";
 import AddTrack from "./AddTrack.vue";
+import { useTrackStore } from "@/store/track";
 
 export default {
   components: {
@@ -39,10 +40,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("track", { track: "current" }),
+    ...mapState(useTrackStore, { track: "current" }),
   },
   methods: {
-    ...mapActions("track", { deleteTrack: "delete", update: "update" }),
+    ...mapActions(useTrackStore, { deleteTrack: "delete", update: "update" }),
     remove() {
       this.deleteTrack().then(() => {
         this.$router.replace({ name: "Home" });

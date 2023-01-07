@@ -84,8 +84,10 @@
 <script>
 import Toggle from "@vueform/toggle";
 import Slider from "@vueform/slider";
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "pinia";
 import LoadingButton from "./LoadingButton.vue";
+import { useStepStore } from "@/store/step";
+import { useTrackStore } from "@/store/track";
 export default {
   components: {
     Toggle,
@@ -93,12 +95,12 @@ export default {
     LoadingButton,
   },
   computed: {
-    ...mapState("step", { newStep: "new", newEnabled: "newEnabled" }),
-    ...mapGetters("track", { track: "current" }),
+    ...mapState(useStepStore, { newStep: "new", newEnabled: "newEnabled" }),
+    ...mapState(useTrackStore, { track: "current" }),
   },
   methods: {
-    ...mapActions("step", { create: "create" }),
-    ...mapActions("track", { report: "report" }),
+    ...mapActions(useStepStore, { create: "create" }),
+    ...mapActions(useTrackStore, { report: "report" }),
     submit() {
       this.create().then(() => {
         this.$emit("tracked");

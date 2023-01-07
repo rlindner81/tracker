@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from "vuex";
 import LoadingButton from "@/components/LoadingButton.vue";
+import { login } from "@/firebase/auth";
 
 export default {
   components: {
@@ -23,7 +23,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions("common", ["login"]),
+    async login(options) {
+      return await login(options);
+    },
   },
 };
 </script>

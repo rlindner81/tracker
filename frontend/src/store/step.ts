@@ -1,20 +1,30 @@
+import { defineStore } from "pinia";
+
+import { useTrackStore } from "@/store/track";
 import { guardedFetchJson } from "@/fetchWrapper";
 
-export default {
-  namespaced: true,
-  state: {
+interface State {
+  data: any[];
+  trackId: string | null;
+  new: {} | null;
+  newEnabled: {} | null;
+}
+
+export const useStepStore = defineStore("step", {
+  state: (): State => ({
     data: [],
     trackId: null,
     new: null, // has to be initialized by the relevant track
-  },
-  mutations: {
-    set(state, data) {
-      state.data = data;
+    newEnabled: null,
+  }),
+  actions: {
+    set(data) {
+      this.data = data;
     },
-    setTrack(state, id) {
-      state.trackId = id;
+    setTrack(id) {
+      this.trackId = id;
     },
-    setNew(state, track) {
+    setNew(track) {
       const newStep = {};
       const newEnabled = {};
 
@@ -42,41 +52,41 @@ export default {
         }
       });
 
-      state.new = newStep;
-      state.newEnabled = newEnabled;
+      this.new = newStep;
+      this.newEnabled = newEnabled;
     },
-    clear(state) {
-      state.data = null;
-      state.trackId = null;
-      state.new = null;
-      state.newEnabled = null;
+    clear() {
+      this.data = [];
+      this.trackId = null;
+      this.new = null;
+      this.newEnabled = null;
     },
-    add(state, data) {
-      state.data.unshift(data);
+    add(data) {
+      this.data.unshift(data);
     },
-    remove(state, id) {
-      state.data = state.data.filter((step) => {
+    remove(id) {
+      this.data = this.data.filter((step) => {
         return step._id !== id;
       });
     },
-  },
-  actions: {
-    load({ commit, state, rootGetters }) {
-      commit("setTrack", rootGetters["track/current"]._id);
-      commit("setNew", rootGetters["track/current"]);
-      return guardedFetchJson(`/api/track/${state.trackId}/step`).then((data) => {
-        data && commit("set", data);
+    load() {
+      const trackStore = useTrackStore();
+      this.setTrack(trackStore.current._id);
+      this.setNew(trackStore.current);
+      return guardedFetchJson(`/api/track/${this.trackId}/step`).then((data) => {
+        data && this.set(data);
       });
     },
-    create({ commit, state, rootGetters }) {
-      return guardedFetchJson(`/api/track/${rootGetters["track/current"]._id}/step`, {
+    create() {
+      const trackStore = useTrackStore();
+      return guardedFetchJson(`/api/track/${trackStore.current._id}/step`, {
         method: "POST",
-        body: JSON.stringify({ values: state.new }),
+        body: JSON.stringify({ values: this.new }),
       }).then((data) => {
         if (!data) return;
-        commit("setNew", rootGetters["track/current"]);
-        commit("add", data);
+        this.setNew(trackStore.current);
+        this.add(data);
       });
     },
   },
-};
+});

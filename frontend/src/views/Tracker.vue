@@ -29,13 +29,15 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions } from "pinia";
 import Modal from "@/components/Modal.vue";
 import AddStep from "@/components/AddStep.vue";
 import Tabs from "@/components/Tabs.vue";
 import Tab from "@/components/Tab.vue";
 import TrackList from "@/components/TrackList.vue";
 import TrackSettings from "@/components/TrackSettings.vue";
+import { useStepStore } from "@/store/step";
+import { useTrackStore } from "@/store/track";
 
 export default {
   components: {
@@ -60,17 +62,16 @@ export default {
     this.load();
   },
   computed: {
-    ...mapState("step", { newStep: "new", steps: "data" }),
-    ...mapGetters("track", { title: "titleById", track: "current" }),
+    ...mapState(useStepStore, { newStep: "new", steps: "data" }),
+    ...mapState(useTrackStore, { title: "titleById", track: "current" }),
   },
   methods: {
-    ...mapActions("track", { report: "report" }),
-    ...mapMutations("track", {
+    ...mapActions(useTrackStore, {
+      report: "report",
       setCurrent: "setCurrent",
       clearTrack: "clearCurrent",
     }),
-    ...mapActions("step", { load: "load" }),
-    ...mapMutations("step", { clear: "clear" }),
+    ...mapActions(useStepStore, { load: "load", clear: "clear" }),
     toggleAddModal() {
       this.addModal = !this.addModal;
     },

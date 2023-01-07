@@ -11,8 +11,8 @@
 <script lang="ts">
 // TODO: second password field and minimal input validation
 
-import { mapActions } from "vuex";
 import LoadingButton from "@/components/LoadingButton.vue";
+import { register } from "@/firebase/auth";
 export default {
   components: {
     LoadingButton,
@@ -24,7 +24,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions("common", ["register"]),
+    async register(options) {
+      return await register(options);
+    },
   },
 };
 </script>
