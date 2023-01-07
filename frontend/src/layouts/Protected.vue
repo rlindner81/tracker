@@ -32,6 +32,7 @@ import { mapState, mapActions } from "pinia";
 import LoadingButton from "@/components/LoadingButton.vue";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
+import { loadSessionUser, logout } from "@/firebase/auth";
 
 export default {
   components: { LoadingButton },
@@ -42,7 +43,7 @@ export default {
     };
   },
   async created() {
-    await this.loadSessionUser();
+    await loadSessionUser();
     await this.loadTracks();
     this.initialized = true;
   },
@@ -51,10 +52,12 @@ export default {
     ...mapState(useTrackStore, { tracks: "data" }),
   },
   methods: {
-    ...mapActions(useCommonStore, ["loadSessionUser", "logout"]),
     ...mapActions(useTrackStore, { loadTracks: "load" }),
     toggleMobileNav() {
       this.mobileNavVisible = !this.mobileNavVisible;
+    },
+    async logout() {
+      return await logout();
     },
   },
 };

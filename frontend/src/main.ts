@@ -1,4 +1,4 @@
-import "./firebase";
+import "./firebase/app";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 
@@ -6,7 +6,7 @@ import App from "./App.vue";
 import router from "./router";
 import { readableDateTime, readableRelativeDateTime } from "./datetime";
 
-const app = createApp(App).use(createPinia).use(router);
+const app = createApp(App).use(createPinia()).use(router);
 app.mount("#app");
 
 // https://primitive.dev/blog/vue-3-global-filters/

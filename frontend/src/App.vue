@@ -11,17 +11,15 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapActions } from "pinia";
+import { mapState } from "pinia";
 import { useCommonStore } from "@/store/common";
+import { observeAuthChanges } from "@/firebase/auth";
 export default {
   mounted() {
-    this.observeAuthChanges();
+    observeAuthChanges();
   },
   computed: {
     ...mapState(useCommonStore, ["errors"]),
-  },
-  methods: {
-    ...mapActions(useCommonStore, ["observeAuthChanges"]),
   },
 };
 </script>

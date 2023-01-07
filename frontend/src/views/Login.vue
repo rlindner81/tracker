@@ -9,9 +9,8 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from "pinia";
 import LoadingButton from "@/components/LoadingButton.vue";
-import { useCommonStore } from "@/store/common";
+import { login } from "@/firebase/auth";
 
 export default {
   components: {
@@ -24,7 +23,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useCommonStore, ["login"]),
+    async login(options) {
+      return await login(options);
+    },
   },
 };
 </script>
