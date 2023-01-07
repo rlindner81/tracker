@@ -1,8 +1,9 @@
+// https://firebase.google.com/docs/reference/admin
+// https://firebase.google.com/docs/reference/admin/node/firebase-admin.firestore
 import admin from "firebase-admin";
 import { getApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { readFile } from 'fs/promises';
-
 
 const accountFilepath = new URL("../../temp/trackit-f1b79-firebase-adminsdk-5o81p-fff95050db.json", import.meta.url);
 
