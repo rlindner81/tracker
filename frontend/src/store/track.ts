@@ -2,8 +2,22 @@ import { defineStore } from "pinia";
 
 import { guardedFetchResponse, guardedFetchJson } from "@/fetchWrapper";
 
+interface State {
+  data: any[];
+  currentId: string | null;
+  currentUsage: any[];
+  // TODO new == newTrack
+  new: {
+    name: string | null;
+    fields: any[];
+  } | null;
+  newStep: {} | null;
+  types: ["TEXT", "FLOAT", "INTEGER", "TIME"];
+  inputs: ["SELECT", "FIELD", "SLIDER"];
+}
+
 export const useTrackStore = defineStore("track", {
-  state: () => ({
+  state: (): State => ({
     data: [],
     currentId: null,
     currentUsage: [],
@@ -35,7 +49,7 @@ export const useTrackStore = defineStore("track", {
       this.currentUsage = data;
     },
     clear() {
-      this.data = null;
+      this.data = [];
     },
     clearNew() {
       this.new = {

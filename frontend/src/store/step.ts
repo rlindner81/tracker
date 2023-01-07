@@ -3,11 +3,19 @@ import { defineStore } from "pinia";
 import { useTrackStore } from "@/store/track";
 import { guardedFetchJson } from "@/fetchWrapper";
 
+interface State {
+  data: any[];
+  trackId: string | null;
+  new: {} | null;
+  newEnabled: {} | null;
+}
+
 export const useStepStore = defineStore("step", {
-  state: () => ({
+  state: (): State => ({
     data: [],
     trackId: null,
     new: null, // has to be initialized by the relevant track
+    newEnabled: null,
   }),
   actions: {
     set(data) {
@@ -48,7 +56,7 @@ export const useStepStore = defineStore("step", {
       this.newEnabled = newEnabled;
     },
     clear() {
-      this.data = null;
+      this.data = [];
       this.trackId = null;
       this.new = null;
       this.newEnabled = null;
