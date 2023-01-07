@@ -10,6 +10,25 @@ interface State {
   newEnabled: {} | null;
 }
 
+const _getFallbackValueForField = (field) => {
+  switch (field.input.identifier) {
+    case TRACK_INPUT.SLIDER: {
+      return (parseFloat(field.input.parameters.min) + parseFloat(field.input.parameters.max)) / 2.0;
+    }
+    case TRACK_INPUT.SELECT: {
+      const defaultSelectValue = field.input.parameters.selected;
+      if (defaultSelectValue) return defaultSelectValue;
+      const firstSelectValue = field.input.parameters.values[0].value;
+      if (firstSelectValue) return firstSelectValue;
+      break;
+    }
+    case TRACK_INPUT.FIELD: {
+      return "";
+    }
+  }
+  return null;
+};
+
 export const useStepStore = defineStore("step", {
   state: (): State => ({
     steps: [],
@@ -30,29 +49,12 @@ export const useStepStore = defineStore("step", {
       const newStep = {};
       const newEnabled = {};
 
-      fields.forEach((field) => {
+      for (const field of fields) {
         newEnabled[field.key] = true;
 
-        switch (field.input.identifier) {
-          case TRACK_INPUT.SLIDER: {
-            const halfPoint = (parseFloat(field.input.parameters.min) + parseFloat(field.input.parameters.max)) / 2.0;
-            newStep[field.key] = halfPoint;
-            break;
-          }
-          case TRACK_INPUT.SELECT: {
-            const firstEntryValue = field.input.parameters.values[0].value;
-            newStep[field.key] = firstEntryValue;
-            break;
-          }
-          case TRACK_INPUT.FIELD: {
-            newStep[field.key] =
-              field.input && field.input.parameters && field.input.parameters.selected
-                ? field.input.parameters.selected
-                : null;
-            break;
-          }
-        }
-      });
+        const fallbackValue = _getFallbackValueForField(field);
+        newStep[field.key] = fallbackValue;
+      }
 
       this.newStep = newStep;
       this.newEnabled = newEnabled;

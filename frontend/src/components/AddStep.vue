@@ -13,7 +13,6 @@ const emit = defineEmits(["tracked", "closed"]);
 const submit = async () => {
   await stepStore.createStep();
   emit("tracked");
-  await trackStore.report();
 };
 
 const handleChange = (enabled, fieldKey) => {
