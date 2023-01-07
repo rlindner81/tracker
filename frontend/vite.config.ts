@@ -49,4 +49,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["firebase", "firebase/app", "firebase/auth", "firebase/firestore", "firebase/analytics"],
   },
+  build: {
+    sourcemap: true,
+  },
 });
