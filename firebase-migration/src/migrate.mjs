@@ -3,9 +3,12 @@ import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import dataService from './nedb-interface.cjs';
 
+// TODO this should really be in typescript
+// TODO this should use the firebase-admin api
+
 const MIGRATE_USER = {
   email: "sommernavi@gmail.com",
-  password: "test1234",
+  password: process.env.TRACKER_MIGRATION_PASSWORD,
 };
 
 let db;
