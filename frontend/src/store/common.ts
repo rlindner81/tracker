@@ -1,6 +1,9 @@
 import type { User } from "firebase/auth";
-import { guardedFetchText } from "@/fetchWrapper";
+
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from "firebase/auth";
+import { defineStore } from "pinia";
+
+import { guardedFetchText } from "@/fetchWrapper";
 import { auth } from "@/firebase";
 import router from "@/router";
 
@@ -10,17 +13,15 @@ let isUserInitialized = false;
 let resolveUserInitialized;
 const userInitializedPromise = new Promise((resolve) => (resolveUserInitialized = resolve));
 
-export default {
-  namespaced: true,
-
-  state: {
+export const useCommonStore = defineStore("common", {
+  state: () => ({
     busy: 0,
     errors: [],
     user: null,
-  },
+  }),
 
   getters: {
-    isBusy(state) {
+    isBusy(state): boolean {
       return state.busy > 0;
     },
     isLoggedIn(state): boolean {
@@ -29,31 +30,31 @@ export default {
   },
 
   actions: {
-    increaseBusy({ state }) {
-      state.busy++;
+    increaseBusy() {
+      this.busy++;
     },
-    decreaseBusy({ state }) {
-      state.busy--;
+    decreaseBusy() {
+      this.busy--;
     },
-    addError({ state }, error) {
-      state.errors.push(error);
+    addError(error) {
+      this.errors.push(error);
     },
-    removeError({ state }, error) {
-      const errorIndex = state.errors.indexOf(error);
-      errorIndex >= 0 && state.errors.splice(errorIndex, 1);
+    removeError(error) {
+      const errorIndex = this.errors.indexOf(error);
+      errorIndex >= 0 && this.errors.splice(errorIndex, 1);
     },
-    setUser({ state }, payload: User | null) {
-      state.user = payload;
-    },
-
-    addTransientError({ commit }, error) {
-      commit("addError", error);
-      setTimeout(() => commit("removeError", error), TRANSIENT_ERROR_DELAY);
+    setUser(payload: User | null) {
+      this.user = payload;
     },
 
-    observeAuthChanges({ commit }) {
+    addTransientError(error) {
+      this.addError(error);
+      setTimeout(() => this.removeError(error), TRANSIENT_ERROR_DELAY);
+    },
+
+    observeAuthChanges() {
       onAuthStateChanged(auth, async (user) => {
-        commit("setUser", user || null);
+        this.setUser(user || null);
         if (!isUserInitialized) {
           resolveUserInitialized();
           isUserInitialized = true;
@@ -71,8 +72,8 @@ export default {
       await userInitializedPromise;
     },
 
-    async login({ commit, dispatch }, { email, password }) {
-      commit("increaseBusy");
+    async login({ email, password }) {
+      this.increaseBusy();
       try {
         await Promise.all([
           signInWithEmailAndPassword(auth, email, password),
@@ -82,13 +83,13 @@ export default {
           }),
         ]);
       } catch (err) {
-        dispatch("addTransientError", (err as Error)?.message);
+        this.addTransientError((err as Error)?.message);
       }
-      commit("decreaseBusy");
+      this.decreaseBusy();
     },
 
-    async logout({ commit, dispatch }) {
-      commit("increaseBusy");
+    async logout() {
+      this.increaseBusy();
       try {
         await Promise.all([
           signOut(auth),
@@ -97,13 +98,13 @@ export default {
           }),
         ]);
       } catch (err) {
-        dispatch("addTransientError", (err as Error)?.message);
+        this.addTransientError((err as Error)?.message);
       }
-      commit("decreaseBusy");
+      this.decreaseBusy();
     },
 
-    async register({ commit, dispatch }, { email, password }) {
-      commit("increaseBusy");
+    async register({ email, password }) {
+      this.increaseBusy();
       try {
         await Promise.all([
           createUserWithEmailAndPassword(auth, email, password),
@@ -113,9 +114,9 @@ export default {
           }),
         ]);
       } catch (err) {
-        dispatch("addTransientError", (err as Error)?.message);
+        this.addTransientError((err as Error)?.message);
       }
-      commit("decreaseBusy");
+      this.decreaseBusy();
     },
   },
-};
+});

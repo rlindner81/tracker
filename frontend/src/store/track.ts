@@ -1,8 +1,9 @@
+import { defineStore } from "pinia";
+
 import { guardedFetchResponse, guardedFetchJson } from "@/fetchWrapper";
 
-export default {
-  namespaced: true,
-  state: {
+export const useTrackStore = defineStore("track", {
+  state: () => ({
     data: [],
     currentId: null,
     currentUsage: [],
@@ -13,7 +14,7 @@ export default {
     newStep: null, // has to be initialized by the relevant track
     types: ["TEXT", "FLOAT", "INTEGER", "TIME"],
     inputs: ["SELECT", "FIELD", "SLIDER"],
-  },
+  }),
   getters: {
     titleById: (state) => (id) => {
       const entry = state.data.find((entry) => entry._id === id);
@@ -24,84 +25,84 @@ export default {
     },
   },
   actions: {
-    set({ state }, data) {
-      state.data = data;
+    set(data) {
+      this.data = data;
     },
-    setCurrent({ state }, id) {
-      state.currentId = id;
+    setCurrent(id) {
+      this.currentId = id;
     },
-    setCurrentUsage({ state }, data) {
-      state.currentUsage = data;
+    setCurrentUsage(data) {
+      this.currentUsage = data;
     },
-    clear({ state }) {
-      state.data = null;
+    clear() {
+      this.data = null;
     },
-    clearNew({ state }) {
-      state.new = {
+    clearNew() {
+      this.new = {
         name: null,
         fields: [],
       };
     },
-    clearCurrent({ state }) {
-      state.currentId = null;
-      state.currentUsage = [];
+    clearCurrent() {
+      this.currentId = null;
+      this.currentUsage = [];
     },
-    add({ state }, data) {
-      state.data.push(data);
+    add(data) {
+      this.data.push(data);
     },
-    remove({ state }, id) {
-      state.data = state.data.filter((track) => {
+    remove(id) {
+      this.data = this.data.filter((track) => {
         return track._id !== id;
       });
     },
-    load({ commit }) {
+    load() {
       return guardedFetchJson("/api/track").then((data) => {
-        data && commit("set", data);
+        data && this.set(data);
       });
     },
-    create({ commit, state }) {
+    create() {
       return guardedFetchJson("/api/track", <RequestInit>{
         method: "POST",
-        body: <any>JSON.stringify(state.new),
+        body: <any>JSON.stringify(this.new),
       }).then((track) => {
         if (!track) return;
         track.stepCount = 0;
-        commit("add", track);
-        commit("clearNew");
+        this.add(track);
+        this.clearNew();
       });
     },
-    update({ getters }) {
-      const patchable = JSON.parse(JSON.stringify(getters.current));
+    update() {
+      const patchable = JSON.parse(JSON.stringify(this.current));
       delete patchable._id;
       delete patchable.userId;
       delete patchable.createdAt;
       delete patchable.updatedAt;
       delete patchable.stepCount;
-      return guardedFetchResponse(`/api/track/${getters.current._id}`, <RequestInit>{
+      return guardedFetchResponse(`/api/track/${this.current._id}`, <RequestInit>{
         method: "PATCH",
         body: <any>JSON.stringify(patchable),
       });
     },
-    delete({ commit, getters }) {
-      return guardedFetchResponse(`/api/track/${getters.current._id}`, <RequestInit>{
+    delete() {
+      return guardedFetchResponse(`/api/track/${this.current._id}`, <RequestInit>{
         method: "DELETE",
       }).then((response) => {
         if (!response) return;
-        const id = getters.current._id;
-        commit("clearCurrent");
-        commit("remove", id);
+        const id = this.current._id;
+        this.clearCurrent();
+        this.remove(id);
       });
     },
-    report({ commit, getters }) {
-      return guardedFetchJson(`/api/track/${getters.current._id}/report/$dynamic`, <RequestInit>{
+    report() {
+      return guardedFetchJson(`/api/track/${this.current._id}/report/$dynamic`, <RequestInit>{
         method: "POST",
         body: <any>JSON.stringify({
           aggregations: [{ key: "count", type: "COUNT" }],
           interval: "DAY",
         }),
       }).then((data) => {
-        data && commit("setCurrentUsage", data.aggregations);
+        data && this.setCurrentUsage(data.aggregations);
       });
     },
   },
-};
+});
