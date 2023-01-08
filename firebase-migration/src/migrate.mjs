@@ -5,6 +5,8 @@ import admin from "firebase-admin";
 import { getApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
+const MAX_WRITES_PER_BATCH = 500; /** https://cloud.google.com/firestore/quotas#writes_and_transactions */
+
 const accountFilepath = new URL(
   "../../temp/trackit-f1b79-firebase-adminsdk-5o81p-fff95050db.json",
   import.meta.url
@@ -12,30 +14,54 @@ const accountFilepath = new URL(
 const readJsonFile = async (filepath) =>
   JSON.parse(await readFile(filepath, "utf-8"));
 
-const deleteEmptyMessages = async () => {
-  const snapshot = await firestore
-    .collection("messages")
-    .where("text", "==", "")
-    .get();
-  const MAX_WRITES_PER_BATCH = 500; /** https://cloud.google.com/firestore/quotas#writes_and_transactions */
+const chunk = (input, chunkSize) => {
+  const result = [];
+  for (let i = 0; i < input.length; i += chunkSize) {
+    result.push(input.slice(i, i + chunkSize));
+  }
+  return result;
+};
 
-  /**
-   * `chunk` function splits the array into chunks up to the provided length.
-   * You can get it from either:
-   * - [Underscore.js](https://underscorejs.org/#chunk)
-   * - [lodash](https://lodash.com/docs/4.17.15#chunk)
-   * - Or one of [these answers](https://stackoverflow.com/questions/8495687/split-array-into-chunks#comment84212474_8495740)
-   */
+const deleteCollection = async (db, collection) => {
+  console.log("deleting collection '%s'", collection);
+  const snapshot = await db.collection(collection).get();
+  let records = 0;
+
   const batches = chunk(snapshot.docs, MAX_WRITES_PER_BATCH);
   const commitBatchPromises = [];
 
   batches.forEach((batch) => {
-    const writeBatch = firestore.batch();
-    batch.forEach((doc) => writeBatch.delete(doc.ref));
+    records += batch.length;
+    const writeBatch = db.batch();
+    batch.forEach((doc) => {
+      writeBatch.delete(doc.ref);
+    });
     commitBatchPromises.push(writeBatch.commit());
   });
 
   await Promise.all(commitBatchPromises);
+  console.log("deleted %i records", records);
+};
+
+const writeCollection = async (db, collection, data) => {
+  console.log("writing %i records to collection '%s'", data.length, collection);
+  const colRef = await db.collection(collection);
+  let records = 0;
+
+  const batches = chunk(data, MAX_WRITES_PER_BATCH);
+  const commitBatchPromises = [];
+
+  batches.forEach((batch) => {
+    records += batch.length;
+    const writeBatch = db.batch();
+    batch.forEach((record) => {
+      writeBatch.create(colRef.doc(), record);
+    });
+    commitBatchPromises.push(writeBatch.commit());
+  });
+
+  await Promise.all(commitBatchPromises);
+  console.log("written %i records", records);
 };
 
 const main = async () => {
@@ -46,8 +72,10 @@ const main = async () => {
     credential: admin.credential.cert(serviceAccount),
   });
   const app = getApp();
-  const database = getFirestore(app);
-  debugger;
+  const db = getFirestore(app);
+
+  // await deleteCollection(db, "tracks");
+  await writeCollection(db, "tracks", [{ name: "a" }, { name: "b" }]);
 };
 
 main();
