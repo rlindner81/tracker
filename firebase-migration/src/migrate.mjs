@@ -10,7 +10,6 @@ import { getFirestore } from "firebase-admin/firestore";
 import dataService from "./nedb-interface.cjs";
 
 const MAX_WRITES_PER_BATCH = 500; /** https://cloud.google.com/firestore/quotas#writes_and_transactions */
-const MIGRATE_USER = "sommernavi@gmail.com";
 
 class Batch {
   constructor(db) {
