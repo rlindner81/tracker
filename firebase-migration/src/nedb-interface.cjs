@@ -1,7 +1,7 @@
 const pathlib = require("path");
 const DataStore = require("@seald-io/nedb");
 
-const DATA_DIR = pathlib.join(__dirname, "../../backend/data");
+const DATA_DIR = pathlib.join(__dirname, "../../data");
 
 module.exports = {
   users: new DataStore({
