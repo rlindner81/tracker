@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "migrate user data to firestore",
   "scripts": {
-    "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock"
+    "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock",
+    "lint": "prettier . --write"
   },
   "dependencies": {
     "@seald-io/nedb": "^3.1.0",
     "firebase-admin": "^11.4.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.2"
   }
 }

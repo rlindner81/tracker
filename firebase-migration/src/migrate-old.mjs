@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import dataService from './nedb-interface.cjs';
+import dataService from "./nedb-interface.cjs";
 
 // TODO this should use the firebase-admin api
 
@@ -34,7 +34,7 @@ const initializeFirebase = async () => {
   );
   return async () => {
     await signOut(auth);
-  }
+  };
 };
 
 const loadTracksAndSteps = async () => {
@@ -45,12 +45,8 @@ const loadTracksAndSteps = async () => {
     .execAsync();
   idMap[userId] = auth.currentUser.uid;
 
-  const tracks = await dataService.tracks
-    .find({ userId })
-    .execAsync();
-  const steps = await dataService.steps
-    .find({ userId })
-    .execAsync();
+  const tracks = await dataService.tracks.find({ userId }).execAsync();
+  const steps = await dataService.steps.find({ userId }).execAsync();
 
   const tracksRef = collection(db, "tracks");
   const stepsRef = collection(db, "steps");
@@ -74,8 +70,7 @@ const loadTracksAndSteps = async () => {
       await addDoc(stepsRef, step);
     }
   }
-
-}
+};
 
 const main = async () => {
   console.log("initialize firebase");
