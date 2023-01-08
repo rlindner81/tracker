@@ -65,12 +65,12 @@ const createUserIdMap = async (app) => {
 };
 
 const _mapIdField = (field, object, map) => {
-  if (!map[object[field]].uid) {
+  if (!map[object[field]] || !map[object[field]].uid) {
     throw new Error(
       format(
-        "could not find matching uid for field %s %O",
+        "could not find matching uid for field %s id %s",
         field,
-        map[object[field]]
+        object[field]
       )
     );
   }
@@ -104,7 +104,7 @@ const transferTracks = async (app, userIdMap) => {
       throw Error("too many operations in batch");
     }
 
-    trackIdMap[oldTrack._id] = { uid: newTrackRef.uid, oldTrack, newTrack };
+    trackIdMap[oldTrack._id] = { uid: newTrackRef.id, oldTrack, newTrack };
   }
   await batch.commit();
   return trackIdMap;
@@ -126,6 +126,15 @@ const transferSteps = async (app, userIdMap, trackIdMap) => {
   let batchCount = 0;
 
   for (const oldStep of oldSteps) {
+    if (!trackIdMap[oldStep.trackId]) {
+      console.log(
+        "skipping step %s with no associated track %s",
+        oldStep._id,
+        oldStep.trackId
+      );
+      continue;
+    }
+
     const newStep = { ...oldStep };
     Reflect.deleteProperty(newStep, "_id");
     _mapIdField("userId", newStep, userIdMap);
@@ -138,7 +147,7 @@ const transferSteps = async (app, userIdMap, trackIdMap) => {
       throw Error("too many operations in batch");
     }
 
-    stepIdMap[oldStep._id] = { uid: newStepRef.uid, oldStep, newStep };
+    stepIdMap[oldStep._id] = { uid: newStepRef.id, oldStep, newStep };
   }
   await batch.commit();
   return stepIdMap;
