@@ -12,6 +12,33 @@ import dataService from "./nedb-interface.cjs";
 const MAX_WRITES_PER_BATCH = 500; /** https://cloud.google.com/firestore/quotas#writes_and_transactions */
 const MIGRATE_USER = "sommernavi@gmail.com";
 
+class Batch {
+  constructor(db) {
+    this.__db = db;
+    this.__batches = [this.__db.batch()];
+    this.__counts = [0];
+    this.__index = 0;
+  }
+  get batch() {
+    if (this.__counts[this.__index] >= MAX_WRITES_PER_BATCH) {
+      this.__batches.push(this.__db.batch());
+      this.__counts.push(0);
+      this.__index++;
+    }
+    this.__counts[this.__index] += 1;
+    return this.__batches[this.__index];
+  }
+  create(...args) {
+    return this.batch.create(...args);
+  }
+  delete(...args) {
+    return this.batch.delete(...args);
+  }
+  async commit() {
+    return await Promise.all(this.__batches.map((batch) => batch.commit()));
+  }
+}
+
 const accountFilepath = new URL(
   "../../temp/trackit-f1b79-firebase-adminsdk-5o81p-fff95050db.json",
   import.meta.url
@@ -30,22 +57,13 @@ const chunk = (input, chunkSize) => {
 const deleteCollection = async (db, colRef) => {
   console.log("deleting collection '%s'", colRef.id);
   const snapshot = await colRef.get();
-  let records = 0;
 
-  const batches = chunk(snapshot.docs, MAX_WRITES_PER_BATCH);
-  const commitBatchPromises = [];
-
-  batches.forEach((batch) => {
-    records += batch.length;
-    const writeBatch = db.batch();
-    batch.forEach((doc) => {
-      writeBatch.delete(doc.ref);
-    });
-    commitBatchPromises.push(writeBatch.commit());
-  });
-
-  await Promise.all(commitBatchPromises);
-  console.log("deleted %i records", records);
+  const batch = new Batch(db);
+  for (const doc of snapshot.docs) {
+    batch.delete(doc.ref);
+  }
+  await batch.commit();
+  console.log("deleted %i records", snapshot.docs.length);
 };
 
 const createUserIdMap = async (app) => {
@@ -89,8 +107,7 @@ const transferTracks = async (app, userIdMap) => {
     await deleteCollection(db, tracksColRef);
   }
 
-  const batch = db.batch();
-  let batchCount = 0;
+  const batch = new Batch(db);
 
   for (const oldTrack of oldTracks) {
     const newTrack = { ...oldTrack };
@@ -99,10 +116,6 @@ const transferTracks = async (app, userIdMap) => {
 
     const newTrackRef = tracksColRef.doc();
     batch.create(newTrackRef, newTrack);
-    batchCount++;
-    if (batchCount >= MAX_WRITES_PER_BATCH) {
-      throw Error("too many operations in batch");
-    }
 
     trackIdMap[oldTrack._id] = { uid: newTrackRef.id, oldTrack, newTrack };
   }
@@ -122,8 +135,7 @@ const transferSteps = async (app, userIdMap, trackIdMap) => {
     await deleteCollection(db, stepsColRef);
   }
 
-  const batch = db.batch();
-  let batchCount = 0;
+  const batch = new Batch(db);
 
   for (const oldStep of oldSteps) {
     if (!trackIdMap[oldStep.trackId]) {
@@ -142,10 +154,6 @@ const transferSteps = async (app, userIdMap, trackIdMap) => {
 
     const newStepRef = stepsColRef.doc();
     batch.create(newStepRef, newStep);
-    batchCount++;
-    if (batchCount >= MAX_WRITES_PER_BATCH) {
-      throw Error("too many operations in batch");
-    }
 
     stepIdMap[oldStep._id] = { uid: newStepRef.id, oldStep, newStep };
   }
