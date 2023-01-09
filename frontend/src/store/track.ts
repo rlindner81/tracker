@@ -9,15 +9,6 @@ interface State {
   newTrack: {} | null;
 }
 
-let areTracksLoading = false;
-let areTracksLoaded = false;
-let resolveTracksLoaded;
-const tracksLoadedPromise = new Promise((resolve) => (resolveTracksLoaded = resolve));
-
-export const ensureTracksLoaded = async () => {
-  await tracksLoadedPromise;
-};
-
 export const useTrackStore = defineStore("track", {
   state: (): State => ({
     tracks: [],
@@ -50,16 +41,9 @@ export const useTrackStore = defineStore("track", {
       this.newTrack = { name: null, fields: [] };
     },
     subscribeTracks() {
-      if (!areTracksLoaded && !areTracksLoading) {
-        areTracksLoading = true;
-        subscribeToTracks(useCommonStore().userId, (tracks) => {
-          this.setTracks(tracks);
-          if (!areTracksLoaded) {
-            resolveTracksLoaded();
-            areTracksLoaded = true;
-          }
-        });
-      }
+      subscribeToTracks(useCommonStore().userId, (tracks) => {
+        this.setTracks(tracks);
+      });
     },
     async createTrack() {
       if (!this.newTrack) return;
