@@ -8,7 +8,6 @@ import {
 
 import { app } from "@/firebase/app";
 import router from "@/router";
-import { guardedFetchText } from "@/fetchWrapper";
 import { useCommonStore } from "@/store/common";
 
 export const auth = getAuth(app);
@@ -25,6 +24,7 @@ export const observeAuthChanges = () => {
       resolveUserInitialized();
       isUserInitialized = true;
     }
+    // TODO trigger change of active user?
     if (user && router.currentRoute.value.matched.some((route) => route.name === "Unprotected")) {
       await router.replace({ name: "Home" });
     }
@@ -42,13 +42,7 @@ export const login = async ({ email, password }) => {
   const commonStore = useCommonStore();
   commonStore.increaseBusy();
   try {
-    await Promise.all([
-      signInWithEmailAndPassword(auth, email, password),
-      guardedFetchText("/api/auth/login", <RequestInit>{
-        method: "POST",
-        body: <any>JSON.stringify({ nameOrEmail: email, password }),
-      }),
-    ]);
+    await signInWithEmailAndPassword(auth, email, password);
   } catch (err) {
     commonStore.addTransientError((err as Error)?.message);
   }
@@ -59,12 +53,7 @@ export const logout = async () => {
   const commonStore = useCommonStore();
   commonStore.increaseBusy();
   try {
-    await Promise.all([
-      signOut(auth),
-      guardedFetchText("/api/auth/logout", <RequestInit>{
-        method: "POST",
-      }),
-    ]);
+    await signOut(auth);
   } catch (err) {
     commonStore.addTransientError((err as Error)?.message);
   }
@@ -75,13 +64,7 @@ export const register = async ({ email, password }) => {
   const commonStore = useCommonStore();
   commonStore.increaseBusy();
   try {
-    await Promise.all([
-      createUserWithEmailAndPassword(auth, email, password),
-      guardedFetchText("/api/auth/register", <RequestInit>{
-        method: "POST",
-        body: <any>JSON.stringify({ name: email, email, password }),
-      }),
-    ]);
+    await createUserWithEmailAndPassword(auth, email, password);
   } catch (err) {
     commonStore.addTransientError((err as Error)?.message);
   }
