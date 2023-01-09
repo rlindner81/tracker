@@ -4,6 +4,7 @@ import { TRACK_INPUT } from "@/constants";
 import { createStep, subscribeToSteps } from "@/firebase/db";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
+import { unref } from "vue";
 
 interface State {
   steps: any[];
@@ -75,7 +76,7 @@ export const useStepStore = defineStore("step", {
       this.prepareNewStepWithFields(trackStore.current?.fields);
     },
     async createStep() {
-      const data = await createStep(this.newStep);
+      const data = await createStep(unref(this.newStep));
       // TODO
       debugger;
       if (!data) return;

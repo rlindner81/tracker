@@ -33,20 +33,19 @@ const prepareObjectNode = (parent) => {
   return parent;
 };
 
-const prepareDocs = (docs) =>
-  docs.map((doc) => {
-    const result = prepareObjectNode(doc.data());
-    result._id = doc.id;
-    return result;
-  });
+const unpackSnapshotDoc = (doc) => {
+  const result = prepareObjectNode(doc.data());
+  result._id = doc.id;
+  return result;
+};
+const unpackSnapshotDocs = (docs) => docs.map(unpackSnapshotDoc);
 
 export const subscribeToTracks = (userId, callback) => {
   if (userId) {
     tracksUnsubscribe = onSnapshot(
       query(tracksRef, where("userId", "==", userId), orderBy("createdAt", "desc")),
       (querySnapshot) => {
-        const tracks = prepareDocs(querySnapshot.docs);
-        // debugger;
+        const tracks = unpackSnapshotDocs(querySnapshot.docs);
         callback(tracks);
       },
       (err) => {
@@ -61,16 +60,20 @@ export const subscribeToTracks = (userId, callback) => {
 
 export const createTrack = async (track) => {
   if (!track) return;
-  return await addDoc(tracksRef, track);
+  const trackRef = await addDoc(tracksRef, track);
+  track._id = trackRef.id;
+  return track;
 };
 export const updateTrack = async (trackId, track) => {
   if (!trackId || !track) return;
-  return await setDoc(doc(tracksRef, trackId), track);
+  const trackRef = doc(tracksRef, trackId);
+  await setDoc(trackRef, track);
 };
 
 export const deleteTrack = async (trackId) => {
   if (!trackId) return;
-  return await deleteDoc(doc(tracksRef, trackId));
+  const trackRef = doc(tracksRef, trackId);
+  await deleteDoc(trackRef);
 };
 
 export const subscribeToSteps = (userId, trackId, callback) => {
@@ -78,7 +81,7 @@ export const subscribeToSteps = (userId, trackId, callback) => {
     stepsUnsubscribe = onSnapshot(
       query(stepsRef, where("userId", "==", userId), where("trackId", "==", trackId), orderBy("createdAt", "desc")),
       (querySnapshot) => {
-        const steps = prepareDocs(querySnapshot.docs);
+        const steps = unpackSnapshotDocs(querySnapshot.docs);
         callback(steps);
       },
       (err) => {
@@ -92,5 +95,7 @@ export const subscribeToSteps = (userId, trackId, callback) => {
 
 export const createStep = async (step) => {
   if (!step) return;
-  return await addDoc(stepsRef, step);
+  const stepRef = await addDoc(stepsRef, step);
+  step._id = stepRef.id;
+  return step;
 };

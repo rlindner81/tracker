@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { createTrack, deleteTrack, subscribeToTracks, updateTrack } from "@/firebase/db";
 import { useCommonStore } from "@/store/common";
+import { unref } from "vue";
 
 interface State {
   tracks: any[];
@@ -44,17 +45,16 @@ export const useTrackStore = defineStore("track", {
     },
     async createTrack() {
       if (!this.newTrack) return;
-      const track = await createTrack(this.newTrack);
-      // TODO look at how we resolve this return value properly
-      debugger;
-      // if (!track) return;
+      const track = await createTrack(unref(this.newTrack));
+      if (!track) return;
       // track.stepCount = 0;
+      debugger;
       this.addTrack(track);
       this.setNewTrack(null);
     },
     async updateTrack() {
       if (!this.currentId) return;
-      const currentTrackClone = JSON.parse(JSON.stringify(this.current));
+      const currentTrackClone = JSON.parse(JSON.stringify(unref(this.current)));
       delete currentTrackClone._id;
       delete currentTrackClone.userId;
       delete currentTrackClone.createdAt;
@@ -65,6 +65,7 @@ export const useTrackStore = defineStore("track", {
     async deleteTrack() {
       if (!this.currentId) return;
       await deleteTrack(this.currentId);
+      debugger;
       const oldId = this.current._id;
       this.setCurrentId(null);
       this.removeTrack(oldId);
