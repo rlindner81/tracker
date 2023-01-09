@@ -28,7 +28,7 @@ const handleChange = (enabled, fieldKey) => {
     @submit.prevent="submit"
     v-if="trackStore.current && stepStore.newStepValues && stepStore.newStepEnabled"
   >
-    <div class="input" v-for="field in trackStore.current.fields" :key="field._id">
+    <div class="input" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
       <div class="optional-wrapper">
         <div class="toggle-wrapper" v-if="trackStore.current.fields.some(({ optional }) => optional)">
           <Toggle
