@@ -31,6 +31,15 @@ const _getFallbackValueForField = (field) => {
   return null;
 };
 
+const _filterUndefined = (obj) => {
+  return Object.entries(obj).reduce((result, [key, value]) => {
+    if (value !== undefined) {
+      result[key] = value;
+    }
+    return result;
+  }, {});
+};
+
 export const useStepStore = defineStore("step", {
   state: (): State => ({
     steps: [],
@@ -74,7 +83,9 @@ export const useStepStore = defineStore("step", {
       subscribeToSteps(useCommonStore().userId, useTrackStore().currentId, (steps) => this.setSteps(steps));
     },
     async createStep() {
-      await createStep(useCommonStore().userId, useTrackStore().currentId, { values: toRaw(this.newStepValues) });
+      await createStep(useCommonStore().userId, useTrackStore().currentId, {
+        values: _filterUndefined(toRaw(this.newStepValues)),
+      });
       this.resetNewStepValues();
     },
   },
