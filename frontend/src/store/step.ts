@@ -43,6 +43,7 @@ export const useStepStore = defineStore("step", {
     },
     addStep(step) {
       this.steps.unshift(step);
+      this.steps.unshift(step);
     },
     removeStep(id) {
       this.steps = this.steps.filter((step) => {
@@ -70,13 +71,10 @@ export const useStepStore = defineStore("step", {
       this.newEnabled = newEnabled;
     },
     subscribeSteps() {
-      const trackStore = useTrackStore();
-      subscribeToSteps(useCommonStore().userId, trackStore.currentId, (steps) => this.setSteps(steps));
+      subscribeToSteps(useCommonStore().userId, useTrackStore().currentId, (steps) => this.setSteps(steps));
     },
     async createStep() {
-      const step = await createStep(toRaw(this.newStep));
-      if (!step) return;
-      this.addStep(step);
+      await createStep(useCommonStore().userId, useTrackStore().currentId, toRaw(this.newStep));
       this.resetNewStep();
     },
   },

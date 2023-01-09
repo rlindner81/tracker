@@ -58,16 +58,24 @@ export const subscribeToTracks = (userId, callback) => {
   }
 };
 
-export const createTrack = async (track) => {
-  if (!track) return;
-  const trackRef = await addDoc(tracksRef, track);
-  track._id = trackRef.id;
-  return track;
+export const createTrack = async (userId, track) => {
+  if (!userId || !track) return;
+  const now = new Date();
+  await addDoc(tracksRef, {
+    ...track,
+    userId,
+    createdAt: now,
+    updatedAt: now,
+  });
 };
 export const updateTrack = async (trackId, track) => {
   if (!trackId || !track) return;
+  const now = new Date();
   const trackRef = doc(tracksRef, trackId);
-  await setDoc(trackRef, track);
+  await setDoc(trackRef, {
+    ...track,
+    updatedAt: now,
+  });
 };
 
 export const deleteTrack = async (trackId) => {
@@ -93,9 +101,14 @@ export const subscribeToSteps = (userId, trackId, callback) => {
   }
 };
 
-export const createStep = async (step) => {
-  if (!step) return;
-  const stepRef = await addDoc(stepsRef, step);
-  step._id = stepRef.id;
-  return step;
+export const createStep = async (userId, trackId, step) => {
+  if (!userId || !trackId || !step) return;
+  const now = new Date();
+  await addDoc(stepsRef, {
+    ...step,
+    userId,
+    trackId,
+    createdAt: now,
+    updatedAt: now,
+  });
 };

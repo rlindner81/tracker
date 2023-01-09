@@ -63,9 +63,7 @@ export const useTrackStore = defineStore("track", {
     },
     async createTrack() {
       if (!this.newTrack) return;
-      const track = await createTrack(toRaw(this.newTrack));
-      if (!track) return;
-      this.addTrack(track);
+      await createTrack(useCommonStore().userId, toRaw(this.newTrack));
       this.resetNewTrack();
     },
     async updateTrack() {
@@ -82,9 +80,8 @@ export const useTrackStore = defineStore("track", {
       if (!this.currentId) return;
       await deleteTrack(this.currentId);
       debugger;
-      const oldId = this.current._id;
+      // const oldId = this.current._id;
       this.setCurrentId(null);
-      this.removeTrack(oldId);
     },
     // TODO report is not thought through or hooked up for now
     // async report() {
