@@ -1,35 +1,14 @@
 <script setup lang="ts">
 import { useStepStore } from "@/store/step";
 import { useTrackStore } from "@/store/track";
+import { TRACK_INPUT } from "@/constants";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
 
-const getField = (key) => {
-  return (
-    trackStore.current && trackStore.current.fields && trackStore.current.fields.find((field) => field.key === key)
-  );
-};
-
-const getFieldName = (key) => {
-  const field = getField(key);
-  return field && field.name;
-};
-
-const getInputIdentifier = (key) => {
-  const field = getField(key);
-  return field && field.input && field.input.identifier;
-};
-
-const getInputParameterValueName = (key, value) => {
-  const field = getField(key);
-  const matchingValue =
-    field &&
-    field.input &&
-    field.input.parameters &&
-    field.input.parameters.values &&
-    field.input.parameters.values.find((v) => String(v.value) === String(value));
-  return matchingValue && matchingValue.name;
+const selectValue = (field, step) => {
+  const matchingSelection = field.input.parameters.values.find(({ value }) => value === step.values[field.key]);
+  return matchingSelection ? matchingSelection.name : "";
 };
 </script>
 
@@ -37,13 +16,23 @@ const getInputParameterValueName = (key, value) => {
   <div class="component track-list steps" v-if="stepStore.steps && stepStore.steps.length > 0">
     <div class="step" v-for="step in stepStore.steps" :key="step._id">
       <div class="values">
-        <div class="value" v-for="(value, key) in step.values" :key="key">
-          <label>{{ getFieldName(key) }}</label>
-          <span v-if="value === undefined || value === null">n/a</span>
-          <span v-if="value !== undefined && value !== null && getInputIdentifier(key) !== 'SELECT'">{{ value }}</span>
-          <span v-if="value !== undefined && value !== null && getInputIdentifier(key) === 'SELECT'">{{
-            getInputParameterValueName(key, value)
-          }}</span>
+        <div class="value" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
+          <label>{{ field.name }}</label>
+          <span v-if="step.values[field.key] === undefined || step.values[field.key] === null"></span>
+          <span
+            v-if="
+              (step.values[field.key] !== undefined || step.values[field.key] !== null) &&
+              field.input.identifier !== TRACK_INPUT.SELECT
+            "
+            >{{ step.values[field.key] }}</span
+          >
+          <span
+            v-if="
+              (step.values[field.key] !== undefined || step.values[field.key] !== null) &&
+              field.input.identifier === TRACK_INPUT.SELECT
+            "
+            >{{ selectValue(field, step) }}</span
+          >
         </div>
       </div>
       <div class="master-data">
