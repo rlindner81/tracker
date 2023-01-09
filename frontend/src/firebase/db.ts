@@ -72,10 +72,14 @@ export const updateTrack = async (trackId, track) => {
   if (!trackId || !track) return;
   const now = new Date();
   const trackRef = doc(tracksRef, trackId);
-  await setDoc(trackRef, {
-    ...track,
-    updatedAt: now,
-  });
+  await setDoc(
+    trackRef,
+    {
+      ...track,
+      updatedAt: now,
+    },
+    { merge: true }
+  );
 };
 
 export const deleteTrack = async (trackId) => {
