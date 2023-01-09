@@ -73,7 +73,11 @@ onMounted(async () => {
             v-model="stepStore.newStepValues[field.key]"
             :disabled="!stepStore.newStepEnabled[field.key]"
           >
-            <option v-for="option in field.input.parameters.values" :key="option.key" :value="option.value">
+            <option
+              v-for="(option, optionIndex) in field.input.parameters.values"
+              :key="optionIndex"
+              :value="option.value"
+            >
               {{ option.name }}
             </option>
           </select>

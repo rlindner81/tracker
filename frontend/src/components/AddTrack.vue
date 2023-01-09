@@ -165,23 +165,27 @@ onMounted(() => {
           </div>
 
           <div class="select" v-if="field.input.identifier === 'SELECT'">
-            <div class="value" v-for="(value, i) in field.input.parameters.values" :key="i">
+            <div class="value" v-for="(option, optionIndex) in field.input.parameters.values" :key="optionIndex">
               <input
                 type="text"
                 placeholder="Name"
-                v-model="value.name"
-                @input="!edit && (value.key = slugify(value.name))"
+                v-model="option.name"
+                @input="!edit && (option.key = slugify(option.name))"
               />
-              <input type="text" placeholder="Value" v-model="value.value" />
+              <input type="text" placeholder="Value" v-model="option.value" />
 
-              <button class="remover" type="button" @click="removeSelectValue(field, i)">Remove</button>
+              <button class="remover" type="button" @click="removeSelectValue(field, optionIndex)">Remove</button>
             </div>
             <button type="button" @click="addValue(field)">Add Value</button>
 
             <label>Default Selection</label>
             <select v-model="field.input.parameters.selected">
               <option :value="null"></option>
-              <option v-for="option in field.input.parameters.values" :key="option.key" :value="option.value">
+              <option
+                v-for="(option, optionIndex) in field.input.parameters.values"
+                :key="optionIndex"
+                :value="option.value"
+              >
                 {{ option.name }}
               </option>
             </select>

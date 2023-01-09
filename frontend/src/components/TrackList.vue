@@ -7,7 +7,7 @@ const trackStore = useTrackStore();
 const stepStore = useStepStore();
 
 const selectValue = (field, step) => {
-  const matchingSelection = field.input.parameters.values.find(({ value }) => value === step.values[field.key]);
+  const matchingSelection = field.input.parameters.values.find(({ value }) => value === String(step.values[field.key]));
   return matchingSelection ? matchingSelection.name : "";
 };
 </script>
