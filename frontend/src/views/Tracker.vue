@@ -25,7 +25,7 @@ onMounted(async () => {
   // await ensureTracksLoaded();
   trackStore.setCurrentId(route.params.track);
   stepStore.subscribeSteps();
-  stepStore.resetNewStep();
+  stepStore.resetNewStepValues();
 });
 </script>
 

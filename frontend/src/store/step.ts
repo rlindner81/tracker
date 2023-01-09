@@ -8,8 +8,8 @@ import { toRaw } from "vue";
 
 interface State {
   steps: any[];
-  newStep: {} | null;
-  newEnabled: {} | null;
+  newStepValues: {} | null;
+  newStepEnabled: {} | null;
 }
 
 const _getFallbackValueForField = (field) => {
@@ -34,8 +34,8 @@ const _getFallbackValueForField = (field) => {
 export const useStepStore = defineStore("step", {
   state: (): State => ({
     steps: [],
-    newStep: null,
-    newEnabled: null,
+    newStepValues: null,
+    newStepEnabled: null,
   }),
   actions: {
     setSteps(input) {
@@ -50,32 +50,32 @@ export const useStepStore = defineStore("step", {
         return step._id !== id;
       });
     },
-    resetNewStep() {
+    resetNewStepValues() {
       const fields = useTrackStore().current?.fields;
       if (!fields) {
-        this.newStep = null;
-        this.newEnabled = null;
+        this.newStepValues = null;
+        this.newStepEnabled = null;
         return;
       }
-      const newStep = {};
-      const newEnabled = {};
+      const newStepValues = {};
+      const newStepEnabled = {};
 
       for (const field of fields) {
-        newEnabled[field.key] = true;
+        newStepEnabled[field.key] = true;
 
         const fallbackValue = _getFallbackValueForField(field);
-        newStep[field.key] = fallbackValue;
+        newStepValues[field.key] = fallbackValue;
       }
 
-      this.newStep = newStep;
-      this.newEnabled = newEnabled;
+      this.newStepValues = newStepValues;
+      this.newStepEnabled = newStepEnabled;
     },
     subscribeSteps() {
       subscribeToSteps(useCommonStore().userId, useTrackStore().currentId, (steps) => this.setSteps(steps));
     },
     async createStep() {
-      await createStep(useCommonStore().userId, useTrackStore().currentId, toRaw(this.newStep));
-      this.resetNewStep();
+      await createStep(useCommonStore().userId, useTrackStore().currentId, { values: toRaw(this.newStepValues) });
+      this.resetNewStepValues();
     },
   },
 });
