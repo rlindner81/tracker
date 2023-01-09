@@ -18,8 +18,8 @@ const route = useRoute();
 let addModal = ref(false);
 
 trackStore.setCurrentId(route.params.track);
-stepStore.reset();
 stepStore.subscribeSteps();
+stepStore.resetNewStep();
 
 const toggleAddModal = () => {
   addModal.value = !addModal.value;

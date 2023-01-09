@@ -106,8 +106,7 @@ const onFieldNameChange = (event, field) => {
 
 onMounted(() => {
   if (!props.edit) {
-    // TODO this works, but feels inelegant... who should own this structure
-    trackStore.setNewTrack({ name: null, fields: [] });
+    trackStore.resetNewTrack();
   }
 });
 </script>

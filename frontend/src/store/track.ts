@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { createTrack, deleteTrack, subscribeToTracks, updateTrack } from "@/firebase/db";
 import { useCommonStore } from "@/store/common";
-import { unref } from "vue";
+import { toRaw } from "vue";
 
 interface State {
   tracks: any[];
@@ -28,33 +28,31 @@ export const useTrackStore = defineStore("track", {
     setTracks(input) {
       this.tracks = input;
     },
-    setCurrentId(input) {
-      this.currentId = input;
-    },
-    setNewTrack(input) {
-      this.newTrack = input;
-    },
     addTrack(track) {
       this.tracks.push(track);
     },
     removeTrack(trackId) {
       this.tracks = this.tracks.filter((track) => track._id !== trackId);
     },
+    setCurrentId(input) {
+      this.currentId = input;
+    },
+    resetNewTrack() {
+      this.newTrack = { name: null, fields: [] };
+    },
     subscribeTracks() {
       subscribeToTracks(useCommonStore().userId, (tracks) => this.setTracks(tracks));
     },
     async createTrack() {
       if (!this.newTrack) return;
-      const track = await createTrack(unref(this.newTrack));
+      const track = await createTrack(toRaw(this.newTrack));
       if (!track) return;
-      // track.stepCount = 0;
-      debugger;
       this.addTrack(track);
-      this.setNewTrack(null);
+      this.resetNewTrack();
     },
     async updateTrack() {
       if (!this.currentId) return;
-      const currentTrackClone = JSON.parse(JSON.stringify(unref(this.current)));
+      const currentTrackClone = JSON.parse(JSON.stringify(toRaw(this.current)));
       delete currentTrackClone._id;
       delete currentTrackClone.userId;
       delete currentTrackClone.createdAt;

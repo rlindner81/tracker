@@ -4,7 +4,7 @@ import { TRACK_INPUT } from "@/constants";
 import { createStep, subscribeToSteps } from "@/firebase/db";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
-import { unref } from "vue";
+import { toRaw } from "vue";
 
 interface State {
   steps: any[];
@@ -38,16 +38,24 @@ export const useStepStore = defineStore("step", {
     newEnabled: null,
   }),
   actions: {
-    reset() {
-      this.steps = [];
-      this.newStep = null;
-      this.newEnabled = null;
-    },
     setSteps(input) {
       this.steps = input;
     },
-    prepareNewStepWithFields(fields) {
-      if (!fields) return;
+    addStep(step) {
+      this.steps.unshift(step);
+    },
+    removeStep(id) {
+      this.steps = this.steps.filter((step) => {
+        return step._id !== id;
+      });
+    },
+    resetNewStep() {
+      const fields = useTrackStore().current?.fields;
+      if (!fields) {
+        this.newStep = null;
+        this.newEnabled = null;
+        return;
+      }
       const newStep = {};
       const newEnabled = {};
 
@@ -61,27 +69,15 @@ export const useStepStore = defineStore("step", {
       this.newStep = newStep;
       this.newEnabled = newEnabled;
     },
-    addStep(step) {
-      this.steps.unshift(step);
-    },
-    removeStep(id) {
-      this.steps = this.steps.filter((step) => {
-        return step._id !== id;
-      });
-    },
     subscribeSteps() {
       const trackStore = useTrackStore();
       subscribeToSteps(useCommonStore().userId, trackStore.currentId, (steps) => this.setSteps(steps));
-      // TODO this should happen when the current track changes
-      this.prepareNewStepWithFields(trackStore.current?.fields);
     },
     async createStep() {
-      const data = await createStep(unref(this.newStep));
-      // TODO
-      debugger;
-      if (!data) return;
-      this.prepareNewStepWithFields(useTrackStore().current?.fields);
-      this.addStep(data);
+      const step = await createStep(toRaw(this.newStep));
+      if (!step) return;
+      this.addStep(step);
+      this.resetNewStep();
     },
   },
 });
