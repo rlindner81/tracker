@@ -79,8 +79,6 @@ export const useTrackStore = defineStore("track", {
     async deleteTrack() {
       if (!this.currentId) return;
       await deleteTrack(this.currentId);
-      debugger;
-      // const oldId = this.current._id;
       this.setCurrentId(null);
     },
     // TODO report is not thought through or hooked up for now
