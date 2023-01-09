@@ -50,15 +50,6 @@ export const useStepStore = defineStore("step", {
     setSteps(input) {
       this.steps = input;
     },
-    addStep(step) {
-      this.steps.unshift(step);
-      this.steps.unshift(step);
-    },
-    removeStep(id) {
-      this.steps = this.steps.filter((step) => {
-        return step._id !== id;
-      });
-    },
     resetNewStepValues() {
       const fields = useTrackStore().current?.fields;
       if (!fields) {

@@ -32,12 +32,6 @@ export const useTrackStore = defineStore("track", {
     setTracks(input) {
       this.tracks = input;
     },
-    addTrack(track) {
-      this.tracks.push(track);
-    },
-    removeTrack(trackId) {
-      this.tracks = this.tracks.filter((track) => track._id !== trackId);
-    },
     setCurrentId(input) {
       this.currentId = input;
     },
