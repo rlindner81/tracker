@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { onBeforeMount, computed } from "vue";
 import { useTrackStore } from "@/store/track";
 import { TRACK_TYPE, TRACK_INPUT, TRACK_TYPE_INPUT } from "@/constants";
 import Toggle from "@vueform/toggle";
@@ -104,7 +104,7 @@ const onFieldNameChange = (event, field) => {
   }
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   if (!props.edit) {
     trackStore.resetNewTrack();
   }

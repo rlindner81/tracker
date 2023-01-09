@@ -4,7 +4,7 @@ import { useStepStore } from "@/store/step";
 import Toggle from "@vueform/toggle";
 import Slider from "@vueform/slider";
 import LoadingButton from "./LoadingButton.vue";
-import { onMounted } from "vue";
+import { onBeforeMount } from "vue";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
@@ -22,7 +22,7 @@ const handleChange = (enabled, fieldKey) => {
   }
 };
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await tracksLoadedPromise;
   stepStore.resetNewStepValues();
 });
