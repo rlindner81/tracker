@@ -17,7 +17,7 @@ const toggleMobileNav = () => {
 
 onMounted(async () => {
   await loadSessionUser();
-  await trackStore.readTracks();
+  trackStore.subscribeTracks();
 
   initialized.value = true;
 });

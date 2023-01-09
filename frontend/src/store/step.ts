@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
 
-import { useTrackStore } from "@/store/track";
-import { guardedFetchJson } from "@/fetchWrapper";
 import { TRACK_INPUT } from "@/constants";
+import { createStep, subscribeToSteps } from "@/firebase/store";
+import { useTrackStore } from "@/store/track";
+import { useCommonStore } from "@/store/common";
 
 interface State {
   steps: any[];
@@ -67,21 +68,18 @@ export const useStepStore = defineStore("step", {
         return step._id !== id;
       });
     },
-    async readSteps() {
+    subscribeSteps() {
       const trackStore = useTrackStore();
+      subscribeToSteps(useCommonStore().userId, trackStore.currentId, (steps) => this.setSteps(steps));
+      // TODO this should happen when the current track changes
       this.prepareNewStepWithFields(trackStore.current?.fields);
-      const data = await guardedFetchJson(`/api/track/${trackStore.currentId}/step`);
-      if (!data) return;
-      this.setSteps(data);
     },
     async createStep() {
-      const trackStore = useTrackStore();
-      const data = await guardedFetchJson(`/api/track/${trackStore.currentId}/step`, {
-        method: "POST",
-        body: JSON.stringify({ values: this.newStep }),
-      });
+      const data = await createStep(this.newStep);
+      // TODO
+      debugger;
       if (!data) return;
-      this.prepareNewStepWithFields(trackStore.current?.fields);
+      this.prepareNewStepWithFields(useTrackStore().current?.fields);
       this.addStep(data);
     },
   },

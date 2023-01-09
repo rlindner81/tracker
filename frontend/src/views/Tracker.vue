@@ -19,7 +19,7 @@ let addModal = ref(false);
 
 trackStore.setCurrentId(route.params.track);
 stepStore.reset();
-stepStore.readSteps();
+stepStore.subscribeSteps();
 
 const toggleAddModal = () => {
   addModal.value = !addModal.value;
