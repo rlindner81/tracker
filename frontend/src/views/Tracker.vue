@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useTrackStore } from "@/store/track";
+import { ensureTracksLoaded, useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
 
 import Modal from "@/components/Modal.vue";
@@ -8,7 +8,7 @@ import Tabs from "@/components/Tabs.vue";
 import Tab from "@/components/Tab.vue";
 import TrackList from "@/components/TrackList.vue";
 import TrackSettings from "@/components/TrackSettings.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 const trackStore = useTrackStore();
@@ -17,13 +17,16 @@ const route = useRoute();
 
 let addModal = ref(false);
 
-trackStore.setCurrentId(route.params.track);
-stepStore.subscribeSteps();
-stepStore.resetNewStep();
-
 const toggleAddModal = () => {
   addModal.value = !addModal.value;
 };
+
+onMounted(async () => {
+  // await ensureTracksLoaded();
+  trackStore.setCurrentId(route.params.track);
+  stepStore.subscribeSteps();
+  stepStore.resetNewStep();
+});
 </script>
 
 <template>

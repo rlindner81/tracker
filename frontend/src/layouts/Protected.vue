@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
-import { loadSessionUser, logout } from "@/firebase/auth";
+import { logout, loadSessionUser } from "@/firebase/auth";
 import LoadingButton from "@/components/LoadingButton.vue";
 
 const commonStore = useCommonStore();
