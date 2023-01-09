@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { createTrack, deleteTrack, subscribeToTracks, updateTrack } from "@/firebase/store";
+import { createTrack, deleteTrack, subscribeToTracks, updateTrack } from "@/firebase/db";
 import { useCommonStore } from "@/store/common";
 
 interface State {

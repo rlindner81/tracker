@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 
 import { TRACK_INPUT } from "@/constants";
-import { createStep, subscribeToSteps } from "@/firebase/store";
+import { createStep, subscribeToSteps } from "@/firebase/db";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 

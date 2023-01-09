@@ -36,7 +36,7 @@ const prepareObjectNode = (parent) => {
 const prepareDocs = (docs) =>
   docs.map((doc) => {
     const result = prepareObjectNode(doc.data());
-    result.id = doc.id;
+    result._id = doc.id;
     return result;
   });
 

@@ -51,5 +51,6 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
+    chunkSizeWarningLimit: 600000,
   },
 });

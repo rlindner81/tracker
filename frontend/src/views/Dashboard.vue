@@ -24,9 +24,10 @@ const toggleAddTrack = () => {
         :to="{ name: 'Track', params: { track: track._id } }"
       >
         <h2>{{ track.name }}</h2>
-        <span>{{
-          !track.stepCount ? "new" : track.stepCount === 1 ? `${track.stepCount} step` : `${track.stepCount} steps`
-        }}</span>
+        <!--        TODO re-add when this is implemented-->
+        <!--        <span>{{-->
+        <!--          !track.stepCount ? "new" : track.stepCount === 1 ? `${track.stepCount} step` : `${track.stepCount} steps`-->
+        <!--        }}</span>-->
       </router-link>
     </Tiles>
 
