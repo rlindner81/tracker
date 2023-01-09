@@ -14,7 +14,7 @@ export const auth = getAuth(app);
 
 let isUserInitialized = false;
 let resolveUserInitialized;
-const userInitializedPromise = new Promise((resolve) => (resolveUserInitialized = resolve));
+export const userInitializedPromise = new Promise((resolve) => (resolveUserInitialized = resolve));
 
 export const observeAuthChanges = () => {
   onAuthStateChanged(auth, async (user) => {
@@ -37,10 +37,6 @@ export const observeAuthChanges = () => {
       isUserInitialized = true;
     }
   });
-};
-
-export const loadSessionUser = async () => {
-  await userInitializedPromise;
 };
 
 export const login = async ({ email, password }) => {

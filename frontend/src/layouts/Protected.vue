@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
-import { loadSessionUser, logout } from "@/firebase/auth";
+import { userInitializedPromise, logout } from "@/firebase/auth";
 import LoadingButton from "@/components/LoadingButton.vue";
 
 const commonStore = useCommonStore();
@@ -16,7 +16,7 @@ const toggleMobileNav = () => {
 };
 
 onMounted(async () => {
-  await loadSessionUser();
+  await userInitializedPromise;
   trackStore.subscribeTracks();
 
   initialized.value = true;
