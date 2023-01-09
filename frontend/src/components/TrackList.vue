@@ -16,7 +16,7 @@ const selectValue = (field, step) => {
   <div class="component track-list steps" v-if="stepStore.steps && stepStore.steps.length > 0">
     <div class="step" v-for="step in stepStore.steps" :key="step._id">
       <div class="values">
-        <div class="value" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
+        <div class="value" v-for="(field, fieldIndex) in trackStore.current?.fields ?? []" :key="fieldIndex">
           <label>{{ field.name }}</label>
           <span v-if="step.values[field.key] === undefined || step.values[field.key] === null"></span>
           <span
