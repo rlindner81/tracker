@@ -9,6 +9,10 @@ interface State {
   newTrack: {} | null;
 }
 
+let tracksLoaded = false;
+let resolveTracksLoaded;
+export const tracksLoadedPromise = new Promise((resolve) => (resolveTracksLoaded = resolve));
+
 export const useTrackStore = defineStore("track", {
   state: (): State => ({
     tracks: [],
@@ -43,6 +47,10 @@ export const useTrackStore = defineStore("track", {
     subscribeTracks() {
       subscribeToTracks(useCommonStore().userId, (tracks) => {
         this.setTracks(tracks);
+        if (!tracksLoaded) {
+          tracksLoaded = true;
+          resolveTracksLoaded();
+        }
       });
     },
     async createTrack() {

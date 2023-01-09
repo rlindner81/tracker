@@ -86,7 +86,6 @@ export const useStepStore = defineStore("step", {
       await createStep(useCommonStore().userId, useTrackStore().currentId, {
         values: _filterUndefined(toRaw(this.newStepValues)),
       });
-      this.resetNewStepValues();
     },
   },
 });

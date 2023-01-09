@@ -1,9 +1,10 @@
 <script setup>
-import { useTrackStore } from "@/store/track";
+import { tracksLoadedPromise, useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
 import Toggle from "@vueform/toggle";
 import Slider from "@vueform/slider";
 import LoadingButton from "./LoadingButton.vue";
+import { onMounted } from "vue";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
@@ -20,6 +21,11 @@ const handleChange = (enabled, fieldKey) => {
     stepStore.newStepValues[fieldKey] = undefined;
   }
 };
+
+onMounted(async () => {
+  await tracksLoadedPromise;
+  stepStore.resetNewStepValues();
+});
 </script>
 
 <template>
@@ -35,6 +41,7 @@ const handleChange = (enabled, fieldKey) => {
             v-if="field.optional"
             v-model="stepStore.newStepEnabled[field.key]"
             @change="handleChange($event, field.key)"
+            :key="fieldIndex"
           />
         </div>
         <div class="choice-wrapper">
