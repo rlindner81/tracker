@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { tracksLoadedPromise, useTrackStore } from "@/store/track";
+import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
 
 import Modal from "@/components/Modal.vue";
