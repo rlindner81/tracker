@@ -41,7 +41,6 @@ onMounted(async () => {
             v-if="field.optional"
             v-model="stepStore.newStepEnabled[field.key]"
             @change="handleChange($event, field.key)"
-            :key="fieldIndex"
           />
         </div>
         <div class="choice-wrapper">
