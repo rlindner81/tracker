@@ -6,14 +6,27 @@ import { toRaw } from "vue";
 interface State {
   tracks: any[];
   currentId: string | null;
-  newTrack: {} | null;
+  newCreateTrack: {
+    name?: string | null;
+    fields?: any[];
+  };
+  newUpdateTrack: {
+    name?: string | null;
+    fields?: any[];
+    _id?: string;
+    userId?: string;
+    trackId?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+  };
 }
 
 export const useTrackStore = defineStore("track", {
   state: (): State => ({
     tracks: [],
     currentId: null,
-    newTrack: null,
+    newCreateTrack: {},
+    newUpdateTrack: {},
   }),
   getters: {
     titleById: (state) => (id) => {
@@ -31,8 +44,11 @@ export const useTrackStore = defineStore("track", {
     setCurrentId(input) {
       this.currentId = input;
     },
-    resetNewTrack() {
-      this.newTrack = { name: null, fields: [] };
+    prepareNewCreateTrack() {
+      this.newCreateTrack = { name: null, fields: [] };
+    },
+    prepareNewUpdateTrack() {
+      this.newUpdateTrack = JSON.parse(JSON.stringify(toRaw(this.current)));
     },
     subscribeTracks() {
       subscribeToTracks(useCommonStore().userId, (tracks) => {
@@ -40,18 +56,17 @@ export const useTrackStore = defineStore("track", {
       });
     },
     async createTrack() {
-      if (!this.newTrack) return;
-      await createTrack(useCommonStore().userId, toRaw(this.newTrack));
-      this.resetNewTrack();
+      if (!this.newCreateTrack) return;
+      await createTrack(useCommonStore().userId, toRaw(this.newCreateTrack));
+      this.prepareNewCreateTrack();
     },
     async updateTrack() {
       if (!this.currentId) return;
-      const currentTrackClone = JSON.parse(JSON.stringify(toRaw(this.current)));
+      const currentTrackClone = toRaw(this.newUpdateTrack);
       delete currentTrackClone._id;
       delete currentTrackClone.userId;
       delete currentTrackClone.createdAt;
       delete currentTrackClone.updatedAt;
-      delete currentTrackClone.stepCount;
       await updateTrack(this.currentId, currentTrackClone);
     },
     async deleteTrack() {

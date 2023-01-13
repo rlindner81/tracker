@@ -16,10 +16,10 @@ const props = defineProps({
   },
 });
 
-const relevant = computed(() => (props.edit ? trackStore.current : trackStore.newTrack));
+const relevant = computed(() => (props.edit ? trackStore.newUpdateTrack : trackStore.newCreateTrack));
 
 const addField = () => {
-  relevant.value.fields.push({
+  relevant.value.fields?.push({
     position: relevant.value.fields.length,
     key: null,
     name: null,
@@ -39,7 +39,7 @@ const addField = () => {
 };
 
 const removeField = (index) => {
-  relevant.value.fields.splice(index, 1);
+  relevant.value.fields?.splice(index, 1);
 };
 
 const submit = async () => {
@@ -105,8 +105,10 @@ const onFieldNameChange = (event, field) => {
 };
 
 onBeforeMount(() => {
-  if (!props.edit) {
-    trackStore.resetNewTrack();
+  if (props.edit) {
+    trackStore.prepareNewUpdateTrack();
+  } else {
+    trackStore.prepareNewCreateTrack();
   }
 });
 </script>
