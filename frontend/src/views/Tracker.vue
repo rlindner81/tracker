@@ -8,7 +8,7 @@ import Tabs from "@/components/Tabs.vue";
 import Tab from "@/components/Tab.vue";
 import TrackList from "@/components/TrackList.vue";
 import TrackSettings from "@/components/TrackSettings.vue";
-import { onMounted, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useRoute } from "vue-router";
 
 const trackStore = useTrackStore();
@@ -21,9 +21,10 @@ const toggleAddModal = () => {
   addModal.value = !addModal.value;
 };
 
-onMounted(async () => {
+onBeforeMount(async () => {
   trackStore.setCurrentId(route.params.track);
   stepStore.subscribeSteps();
+  stepStore.resetNewStepValues();
 });
 </script>
 
