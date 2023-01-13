@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import PublicLayout from "@/layouts/Public.vue";
 import ProtectedLayout from "@/layouts/Protected.vue";
+import { userInitializedPromise } from "@/firebase/auth";
+import { useCommonStore } from "@/store/common";
 
 const Login = () => import(/* webpackChunkName: "login" */ "@/views/Login.vue");
 const Register = () => import(/* webpackChunkName: "register" */ "@/views/Register.vue");
@@ -16,6 +18,12 @@ const routes: Array<RouteRecordRaw> = [
     name: "Unprotected",
     path: "/auth",
     component: PublicLayout,
+    async beforeEnter() {
+      await userInitializedPromise;
+      if (useCommonStore().user) {
+        return { name: "Home" };
+      }
+    },
     children: [
       {
         name: "Login",
@@ -33,6 +41,12 @@ const routes: Array<RouteRecordRaw> = [
     name: "Protected",
     path: "/",
     component: ProtectedLayout,
+    async beforeEnter() {
+      await userInitializedPromise;
+      if (!useCommonStore().user) {
+        return { name: "Login" };
+      }
+    },
     children: [
       {
         name: "Home",
