@@ -21,6 +21,9 @@ export const useCommonStore = defineStore("common", {
     isBusy(state): boolean {
       return state.busy > 0;
     },
+    userId(state) {
+      return state.user?.uid;
+    },
   },
 
   actions: {

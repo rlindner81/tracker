@@ -17,7 +17,7 @@ const submit = async () => {
 
 const handleChange = (enabled, fieldKey) => {
   if (!enabled) {
-    stepStore.newStep[fieldKey] = undefined;
+    stepStore.newStepValues[fieldKey] = undefined;
   }
 };
 </script>
@@ -26,48 +26,52 @@ const handleChange = (enabled, fieldKey) => {
   <form
     class="component add-step"
     @submit.prevent="submit"
-    v-if="trackStore.current && stepStore.newStep && stepStore.newEnabled"
+    v-if="trackStore.current && stepStore.newStepValues && stepStore.newStepEnabled"
   >
-    <div class="input" v-for="field in trackStore.current.fields" :key="field._id">
+    <div class="input" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
       <div class="optional-wrapper">
         <div class="toggle-wrapper" v-if="trackStore.current.fields.some(({ optional }) => optional)">
           <Toggle
             v-if="field.optional"
-            v-model="stepStore.newEnabled[field.key]"
+            v-model="stepStore.newStepEnabled[field.key]"
             @change="handleChange($event, field.key)"
           />
         </div>
         <div class="choice-wrapper">
-          <label :class="stepStore.newEnabled[field.key] ? '' : 'disable'">{{ field.name }}</label>
+          <label :class="stepStore.newStepEnabled[field.key] ? '' : 'disable'">{{ field.name }}</label>
           <input
             type="text"
-            v-model="stepStore.newStep[field.key]"
+            v-model="stepStore.newStepValues[field.key]"
             :placeholder="`Enter ${field.name}`"
             v-if="field.input.identifier === 'FIELD' && field.type === 'TEXT'"
-            :disabled="!stepStore.newEnabled[field.key]"
+            :disabled="!stepStore.newStepEnabled[field.key]"
           />
           <input
             type="number"
             step="0.00001"
-            v-model="stepStore.newStep[field.key]"
+            v-model="stepStore.newStepValues[field.key]"
             :placeholder="`Enter ${field.name}`"
             v-if="field.input.identifier === 'FIELD' && field.type === 'FLOAT'"
-            :disabled="!stepStore.newEnabled[field.key]"
+            :disabled="!stepStore.newStepEnabled[field.key]"
           />
           <input
             type="number"
             step="1"
-            v-model="stepStore.newStep[field.key]"
+            v-model="stepStore.newStepValues[field.key]"
             :placeholder="`Enter ${field.name}`"
             v-if="field.input.identifier === 'FIELD' && field.type === 'INTEGER'"
-            :disabled="!stepStore.newEnabled[field.key]"
+            :disabled="!stepStore.newStepEnabled[field.key]"
           />
           <select
             v-if="field.input.identifier === 'SELECT'"
-            v-model="stepStore.newStep[field.key]"
-            :disabled="!stepStore.newEnabled[field.key]"
+            v-model="stepStore.newStepValues[field.key]"
+            :disabled="!stepStore.newStepEnabled[field.key]"
           >
-            <option v-for="option in field.input.parameters.values" :key="option.key" :value="option.value">
+            <option
+              v-for="(option, optionIndex) in field.input.parameters.values"
+              :key="optionIndex"
+              :value="option.value"
+            >
               {{ option.name }}
             </option>
           </select>
@@ -83,21 +87,21 @@ const handleChange = (enabled, fieldKey) => {
                       : parseFloat(field.input.parameters.step)
                     : 1
                 "
-                v-model="stepStore.newStep[field.key]"
-                :disabled="!stepStore.newEnabled[field.key]"
+                v-model="stepStore.newStepValues[field.key]"
+                :disabled="!stepStore.newStepEnabled[field.key]"
               />
             </div>
             <!-- <input
               type="number"
               step="0.00001"
-              v-model="newStep[field.key]"
+              v-model="newStepValues[field.key]"
               :placeholder="`Enter ${field.name}`"
               v-if="field.type === 'FLOAT'"
             >
             <input
               type="number"
               step="1"
-              v-model="newStep[field.key]"
+              v-model="newStepValues[field.key]"
               :placeholder="`Enter ${field.name}`"
               v-if="field.type === 'INTEGER'"
             > -->

@@ -9,23 +9,29 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const trackStore = useTrackStore();
 
-let deleteModal = ref(false);
-let editModal = ref(false);
+let showDeleteModal = ref(false);
+let showEditModal = ref(false);
 
-const remove = async () => {
+const toggleShowDeleteModal = () => {
+  showDeleteModal.value = !showDeleteModal.value;
+};
+
+const toggleShowEditModal = () => {
+  showEditModal.value = !showEditModal.value;
+};
+
+const onEditTrackClicked = () => {
+  trackStore.prepareNewUpdateTrack();
+  showEditModal.value = true;
+};
+
+const onDeleteClicked = async () => {
   await trackStore.deleteTrack();
   router.replace({ name: "Home" });
 };
 
-const toggleDeleteModal = () => {
-  deleteModal.value = !deleteModal.value;
-};
-
-const toggleEditModal = () => {
-  editModal.value = !editModal.value;
-};
-
 const exportTrack = () => {
+  // TODO this does not work in Firefox
   window.open(`/api/track/${trackStore.current._id}/step/$export`);
 };
 </script>
@@ -33,20 +39,20 @@ const exportTrack = () => {
 <template>
   <div class="component track-settings">
     <h2>Track</h2>
-    <button @click="toggleEditModal">Edit Track</button>
+    <button @click="onEditTrackClicked">Edit Track</button>
 
     <button @click="exportTrack">Export Tack</button>
 
     <h2>Danger Zone</h2>
-    <button @click="toggleDeleteModal">Delete Track</button>
+    <button @click="toggleShowDeleteModal">Delete Track</button>
 
-    <AddTrack :edit="true" v-show="editModal" @close="toggleEditModal"></AddTrack>
+    <AddTrack :edit="true" v-show="showEditModal" @close="toggleShowEditModal"></AddTrack>
 
-    <Modal v-show="deleteModal">
+    <Modal v-show="showDeleteModal">
       <p>Do you really want to delete this track?</p>
       <div class="buttons">
-        <LoadingButton @click="remove">Delete</LoadingButton>
-        <button @click="toggleDeleteModal">Cancel</button>
+        <LoadingButton @click="onDeleteClicked">Delete</LoadingButton>
+        <button @click="toggleShowDeleteModal">Cancel</button>
       </div>
     </Modal>
   </div>

@@ -8,80 +8,56 @@ import {
 
 import { app } from "@/firebase/app";
 import router from "@/router";
-import { guardedFetchText } from "@/fetchWrapper";
 import { useCommonStore } from "@/store/common";
+import { unsubscribe } from "@/firebase/db";
 
 export const auth = getAuth(app);
 
 let isUserInitialized = false;
 let resolveUserInitialized;
-const userInitializedPromise = new Promise((resolve) => (resolveUserInitialized = resolve));
+export const userInitializedPromise = new Promise((resolve) => (resolveUserInitialized = resolve));
 
 export const observeAuthChanges = () => {
-  const commonStore = useCommonStore();
   onAuthStateChanged(auth, async (user) => {
-    commonStore.setUser(user || null);
+    useCommonStore().setUser(user || null);
     if (!isUserInitialized) {
       resolveUserInitialized();
       isUserInitialized = true;
     }
-    if (user && router.currentRoute.value.matched.some((route) => route.name === "Unprotected")) {
-      await router.replace({ name: "Home" });
-    }
-    if (!user && router.currentRoute.value.matched.some((route) => route.name === "Protected")) {
-      await router.replace({ name: "Login" });
-    }
   });
-};
-
-export const loadSessionUser = async () => {
-  await userInitializedPromise;
 };
 
 export const login = async ({ email, password }) => {
   const commonStore = useCommonStore();
   commonStore.increaseBusy();
   try {
-    await Promise.all([
-      signInWithEmailAndPassword(auth, email, password),
-      guardedFetchText("/api/auth/login", <RequestInit>{
-        method: "POST",
-        body: <any>JSON.stringify({ nameOrEmail: email, password }),
-      }),
-    ]);
+    await signInWithEmailAndPassword(auth, email, password);
   } catch (err) {
     commonStore.addTransientError((err as Error)?.message);
   }
   commonStore.decreaseBusy();
+  await router.replace({ name: "Home" });
 };
 
 export const logout = async () => {
   const commonStore = useCommonStore();
   commonStore.increaseBusy();
   try {
-    await Promise.all([
-      signOut(auth),
-      guardedFetchText("/api/auth/logout", <RequestInit>{
-        method: "POST",
-      }),
-    ]);
+    unsubscribe();
+    // NOTE the web-channel terminate calls will fail "blocked_by_client" if an ad-blocker is active
+    await signOut(auth);
   } catch (err) {
     commonStore.addTransientError((err as Error)?.message);
   }
   commonStore.decreaseBusy();
+  await router.replace({ name: "Login" });
 };
 
 export const register = async ({ email, password }) => {
   const commonStore = useCommonStore();
   commonStore.increaseBusy();
   try {
-    await Promise.all([
-      createUserWithEmailAndPassword(auth, email, password),
-      guardedFetchText("/api/auth/register", <RequestInit>{
-        method: "POST",
-        body: <any>JSON.stringify({ name: email, email, password }),
-      }),
-    ]);
+    await createUserWithEmailAndPassword(auth, email, password);
   } catch (err) {
     commonStore.addTransientError((err as Error)?.message);
   }

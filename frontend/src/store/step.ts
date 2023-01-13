@@ -1,13 +1,15 @@
 import { defineStore } from "pinia";
 
-import { useTrackStore } from "@/store/track";
-import { guardedFetchJson } from "@/fetchWrapper";
 import { TRACK_INPUT } from "@/constants";
+import { createStep, subscribeToSteps } from "@/firebase/db";
+import { useTrackStore } from "@/store/track";
+import { useCommonStore } from "@/store/common";
+import { toRaw } from "vue";
 
 interface State {
   steps: any[];
-  newStep: {} | null;
-  newEnabled: {} | null;
+  newStepValues: {} | null;
+  newStepEnabled: {} | null;
 }
 
 const _getFallbackValueForField = (field) => {
@@ -29,60 +31,52 @@ const _getFallbackValueForField = (field) => {
   return null;
 };
 
+const _filterUndefined = (obj) => {
+  return Object.entries(obj).reduce((result, [key, value]) => {
+    if (value !== undefined) {
+      result[key] = value;
+    }
+    return result;
+  }, {});
+};
+
 export const useStepStore = defineStore("step", {
   state: (): State => ({
     steps: [],
-    newStep: null,
-    newEnabled: null,
+    newStepValues: null,
+    newStepEnabled: null,
   }),
   actions: {
-    reset() {
-      this.steps = [];
-      this.newStep = null;
-      this.newEnabled = null;
-    },
     setSteps(input) {
       this.steps = input;
     },
-    prepareNewStepWithFields(fields) {
-      if (!fields) return;
-      const newStep = {};
-      const newEnabled = {};
+    resetNewStepValues() {
+      const fields = useTrackStore().current?.fields;
+      if (!fields) {
+        this.newStepValues = null;
+        this.newStepEnabled = null;
+        return;
+      }
+      const newStepValues = {};
+      const newStepEnabled = {};
 
       for (const field of fields) {
-        newEnabled[field.key] = true;
+        newStepEnabled[field.key] = true;
 
         const fallbackValue = _getFallbackValueForField(field);
-        newStep[field.key] = fallbackValue;
+        newStepValues[field.key] = fallbackValue;
       }
 
-      this.newStep = newStep;
-      this.newEnabled = newEnabled;
+      this.newStepValues = newStepValues;
+      this.newStepEnabled = newStepEnabled;
     },
-    addStep(step) {
-      this.steps.unshift(step);
-    },
-    removeStep(id) {
-      this.steps = this.steps.filter((step) => {
-        return step._id !== id;
-      });
-    },
-    async readSteps() {
-      const trackStore = useTrackStore();
-      this.prepareNewStepWithFields(trackStore.current?.fields);
-      const data = await guardedFetchJson(`/api/track/${trackStore.currentId}/step`);
-      if (!data) return;
-      this.setSteps(data);
+    subscribeSteps() {
+      subscribeToSteps(useCommonStore().userId, useTrackStore().currentId, (steps) => this.setSteps(steps));
     },
     async createStep() {
-      const trackStore = useTrackStore();
-      const data = await guardedFetchJson(`/api/track/${trackStore.currentId}/step`, {
-        method: "POST",
-        body: JSON.stringify({ values: this.newStep }),
+      await createStep(useCommonStore().userId, useTrackStore().currentId, {
+        values: _filterUndefined(toRaw(this.newStepValues)),
       });
-      if (!data) return;
-      this.prepareNewStepWithFields(trackStore.current?.fields);
-      this.addStep(data);
     },
   },
 });

@@ -27,7 +27,11 @@ onMounted(() => {
   <div class="component tabs">
     <div class="tabs">
       <ul>
-        <li v-for="(title, i) in tabTitles" :class="{ 'is-active': selectedTitle === title }" :key="i">
+        <li
+          v-for="(title, titleIndex) in tabTitles"
+          :class="{ 'is-active': selectedTitle === title }"
+          :key="titleIndex"
+        >
           <a :href="hrefFromTitle(title)" @click="selectedTitle = title">
             {{ title }}
           </a>

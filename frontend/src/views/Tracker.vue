@@ -8,22 +8,29 @@ import Tabs from "@/components/Tabs.vue";
 import Tab from "@/components/Tab.vue";
 import TrackList from "@/components/TrackList.vue";
 import TrackSettings from "@/components/TrackSettings.vue";
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useRoute } from "vue-router";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
 const route = useRoute();
 
-let addModal = ref(false);
+let showAddStepModal = ref(false);
 
-trackStore.setCurrentId(route.params.track);
-stepStore.reset();
-stepStore.readSteps();
-
-const toggleAddModal = () => {
-  addModal.value = !addModal.value;
+const toggleShowAddStepModal = () => {
+  showAddStepModal.value = !showAddStepModal.value;
 };
+
+const onAddStepClicked = () => {
+  stepStore.resetNewStepValues();
+  showAddStepModal.value = true;
+};
+
+onBeforeMount(async () => {
+  trackStore.setCurrentId(route.params.track);
+  stepStore.resetNewStepValues();
+  stepStore.subscribeSteps();
+});
 </script>
 
 <template>
@@ -34,7 +41,7 @@ const toggleAddModal = () => {
       <Tab title="Tracking" :selected="true">
         <div class="title-with-button">
           <h2>Steps</h2>
-          <button @click="toggleAddModal">Add Step</button>
+          <button @click="onAddStepClicked">Add Step</button>
         </div>
 
         <div class="info" v-if="stepStore.steps && !stepStore.steps.length">
@@ -49,9 +56,9 @@ const toggleAddModal = () => {
       </Tab>
     </Tabs>
 
-    <Modal v-show="addModal">
+    <Modal v-show="showAddStepModal">
       <h2>Add a Step</h2>
-      <AddStep @tracked="toggleAddModal" @closed="toggleAddModal"></AddStep>
+      <AddStep @tracked="toggleShowAddStepModal" @closed="toggleShowAddStepModal"></AddStep>
     </Modal>
   </div>
 </template>

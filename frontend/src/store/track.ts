@@ -1,18 +1,32 @@
 import { defineStore } from "pinia";
-
-import { guardedFetchResponse, guardedFetchJson } from "@/fetchWrapper";
+import { createTrack, deleteTrack, subscribeToTracks, updateTrack } from "@/firebase/db";
+import { useCommonStore } from "@/store/common";
+import { toRaw } from "vue";
 
 interface State {
   tracks: any[];
   currentId: string | null;
-  newTrack: {} | null;
+  newCreateTrack: {
+    name?: string | null;
+    fields?: any[];
+  };
+  newUpdateTrack: {
+    name?: string | null;
+    fields?: any[];
+    _id?: string;
+    userId?: string;
+    trackId?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+  };
 }
 
 export const useTrackStore = defineStore("track", {
   state: (): State => ({
     tracks: [],
     currentId: null,
-    newTrack: null,
+    newCreateTrack: {},
+    newUpdateTrack: {},
   }),
   getters: {
     titleById: (state) => (id) => {
@@ -30,66 +44,47 @@ export const useTrackStore = defineStore("track", {
     setCurrentId(input) {
       this.currentId = input;
     },
-    setNewTrack(input) {
-      this.newTrack = input;
+    prepareNewCreateTrack() {
+      this.newCreateTrack = { name: null, fields: [] };
     },
-    addTrack(track) {
-      this.tracks.push(track);
+    prepareNewUpdateTrack() {
+      this.newUpdateTrack = JSON.parse(JSON.stringify(toRaw(this.current)));
     },
-    removeTrack(trackId) {
-      this.tracks = this.tracks.filter((track) => track._id !== trackId);
-    },
-    async readTracks() {
-      const tracks = await guardedFetchJson("/api/track");
-      this.setTracks(tracks);
+    subscribeTracks() {
+      subscribeToTracks(useCommonStore().userId, (tracks) => {
+        this.setTracks(tracks);
+      });
     },
     async createTrack() {
-      if (!this.newTrack) return;
-      const track = await guardedFetchJson("/api/track", <RequestInit>{
-        method: "POST",
-        body: <any>JSON.stringify(this.newTrack),
-      });
-      if (!track) return;
-      track.stepCount = 0;
-      this.addTrack(track);
-      this.setNewTrack(null);
+      if (!this.newCreateTrack) return;
+      await createTrack(useCommonStore().userId, toRaw(this.newCreateTrack));
+      this.prepareNewCreateTrack();
     },
     async updateTrack() {
       if (!this.currentId) return;
-      const currentTrackClone = JSON.parse(JSON.stringify(this.current));
+      const currentTrackClone = toRaw(this.newUpdateTrack);
       delete currentTrackClone._id;
       delete currentTrackClone.userId;
       delete currentTrackClone.createdAt;
       delete currentTrackClone.updatedAt;
-      delete currentTrackClone.stepCount;
-      await guardedFetchResponse(`/api/track/${this.currentId}`, <RequestInit>{
-        method: "PATCH",
-        body: <any>JSON.stringify(currentTrackClone),
-      });
+      await updateTrack(this.currentId, currentTrackClone);
     },
     async deleteTrack() {
       if (!this.currentId) return;
-      const response = guardedFetchResponse(`/api/track/${this.currentId}`, <RequestInit>{
-        method: "DELETE",
-      });
-      if (!response) {
-        return;
-      }
-      const oldId = this.current._id;
+      await deleteTrack(this.currentId);
       this.setCurrentId(null);
-      this.removeTrack(oldId);
     },
     // TODO report is not thought through or hooked up for now
-    async report() {
-      if (!this.currentId) return;
-      const data = await guardedFetchJson(`/api/track/${this.currentId}/report/$dynamic`, <RequestInit>{
-        method: "POST",
-        body: <any>JSON.stringify({
-          aggregations: [{ key: "count", type: "COUNT" }],
-          interval: "DAY",
-        }),
-      });
-      if (!data) return;
-    },
+    // async report() {
+    //   if (!this.currentId) return;
+    //   const data = await guardedFetchJson(`/api/track/${this.currentId}/report/$dynamic`, <RequestInit>{
+    //     method: "POST",
+    //     body: <any>JSON.stringify({
+    //       aggregations: [{ key: "count", type: "COUNT" }],
+    //       interval: "DAY",
+    //     }),
+    //   });
+    //   if (!data) return;
+    // },
   },
 });

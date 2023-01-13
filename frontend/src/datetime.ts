@@ -40,18 +40,8 @@ const _leadingZero2 = (value: number) => {
   return ("0" + value).slice(-2);
 };
 
-const _parseISOString = (dbDate: string): Date => {
-  const [year, month, day, hour, minutes, seconds, milliseconds] =
-    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3})Z$/
-      .exec(dbDate)
-      ?.slice?.(1)
-      .map?.((a) => parseInt(a)) ?? [];
-  return new Date(Date.UTC(year, month - 1, day, hour, minutes, seconds, milliseconds));
-};
-
-export const readableDateTime = (dbDate: string): string => {
-  if (!dbDate) return "";
-  const value = _parseISOString(dbDate);
+export const readableDateTime = (value: Date): string => {
+  if (!value) return "";
   const day = _leadingZero2(value.getDate());
   const month = _leadingZero2(value.getMonth() + 1);
   const year = value.getFullYear();
@@ -60,18 +50,16 @@ export const readableDateTime = (dbDate: string): string => {
   return `${day}.${month}.${year} ${hour}:${minute}`;
 };
 
-export const readableShortDateTime = (dbDate: string): string => {
-  if (!dbDate) return "";
-  const value = _parseISOString(dbDate);
+export const readableShortDateTime = (value: Date): string => {
+  if (!value) return "";
   const day = _leadingZero2(value.getDate());
   const month = _leadingZero2(value.getMonth() + 1);
   const year = value.getFullYear();
   return `${day}.${month}.${year}`;
 };
 
-export const readableRelativeDateTime = (dbDate: string): string => {
-  if (!dbDate) return "";
-  const value = _parseISOString(dbDate);
+export const readableRelativeDateTime = (value: Date): string => {
+  if (!value) return "";
   const now = new Date();
   const relativeMillis = value.getTime() - now.getTime();
   if (-NOW_TOLERANCE <= relativeMillis && relativeMillis <= NOW_TOLERANCE) {
@@ -79,7 +67,7 @@ export const readableRelativeDateTime = (dbDate: string): string => {
   } else {
     const { unit, diff, relativeDateTime } = _getRelativeDateTime(value, now) ?? {};
     return unit === TIME_UNITS.YEAR || (unit === TIME_UNITS.MONTH && Math.abs(diff) >= 2)
-      ? readableShortDateTime(dbDate)
+      ? readableShortDateTime(value)
       : relativeDateTime;
   }
 };
