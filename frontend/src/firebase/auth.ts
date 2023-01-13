@@ -44,8 +44,7 @@ export const logout = async () => {
   commonStore.increaseBusy();
   try {
     unsubscribe();
-    // TODO still get an error here, like some listener is still active
-    // https://stackoverflow.com/questions/58305550/firestore-unsubscribe-finished-event
+    // NOTE the web-channel terminate calls will fail "blocked_by_client" if an ad-blocker is active
     await signOut(auth);
   } catch (err) {
     commonStore.addTransientError((err as Error)?.message);

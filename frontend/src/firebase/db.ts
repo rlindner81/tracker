@@ -44,15 +44,29 @@ const unpackSnapshotDoc = (doc) => {
 };
 const unpackSnapshotDocs = (docs) => docs.map(unpackSnapshotDoc);
 
+const unsubscribeSteps = () => {
+  if (stepsUnsubscribe) {
+    stepsUnsubscribe();
+    stepsUnsubscribe = undefined;
+  }
+};
+
+const unsubscribeTracks = () => {
+  if (tracksUnsubscribe) {
+    tracksUnsubscribe();
+    tracksUnsubscribe = undefined;
+  }
+};
+
 export const unsubscribe = () => {
-  stepsUnsubscribe && stepsUnsubscribe();
-  tracksUnsubscribe && tracksUnsubscribe();
+  unsubscribeSteps();
+  unsubscribeTracks();
 };
 
 export const subscribeToTracks = (userId, callback) => {
   if (!userId) {
-    stepsUnsubscribe && stepsUnsubscribe();
-    tracksUnsubscribe && tracksUnsubscribe();
+    unsubscribeSteps();
+    unsubscribeTracks();
   }
   tracksUnsubscribe = onSnapshot(
     query(tracksRef, where("userId", "==", userId), orderBy("createdAt", "desc")),
@@ -102,7 +116,7 @@ export const deleteTrack = async (trackId) => {
 
 export const subscribeToSteps = (userId, trackId, callback) => {
   if (!userId || !trackId) {
-    stepsUnsubscribe && stepsUnsubscribe();
+    unsubscribeSteps();
   }
   stepsUnsubscribe = onSnapshot(
     query(stepsRef, where("userId", "==", userId), where("trackId", "==", trackId), orderBy("createdAt", "desc")),

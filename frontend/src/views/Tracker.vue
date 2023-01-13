@@ -15,16 +15,21 @@ const trackStore = useTrackStore();
 const stepStore = useStepStore();
 const route = useRoute();
 
-let addModal = ref(false);
+let showAddStepModal = ref(false);
 
-const toggleAddModal = () => {
-  addModal.value = !addModal.value;
+const toggleShowAddStepModal = () => {
+  showAddStepModal.value = !showAddStepModal.value;
+};
+
+const onAddStepClicked = () => {
+  stepStore.resetNewStepValues();
+  showAddStepModal.value = true;
 };
 
 onBeforeMount(async () => {
   trackStore.setCurrentId(route.params.track);
-  stepStore.subscribeSteps();
   stepStore.resetNewStepValues();
+  stepStore.subscribeSteps();
 });
 </script>
 
@@ -36,7 +41,7 @@ onBeforeMount(async () => {
       <Tab title="Tracking" :selected="true">
         <div class="title-with-button">
           <h2>Steps</h2>
-          <button @click="toggleAddModal">Add Step</button>
+          <button @click="onAddStepClicked">Add Step</button>
         </div>
 
         <div class="info" v-if="stepStore.steps && !stepStore.steps.length">
@@ -51,9 +56,9 @@ onBeforeMount(async () => {
       </Tab>
     </Tabs>
 
-    <Modal v-show="addModal">
+    <Modal v-show="showAddStepModal">
       <h2>Add a Step</h2>
-      <AddStep @tracked="toggleAddModal" @closed="toggleAddModal"></AddStep>
+      <AddStep @tracked="toggleShowAddStepModal" @closed="toggleShowAddStepModal"></AddStep>
     </Modal>
   </div>
 </template>
