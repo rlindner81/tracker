@@ -50,7 +50,6 @@ export default defineConfig({
     exclude: ["firebase", "firebase/app", "firebase/auth", "firebase/firestore", "firebase/analytics"],
   },
   build: {
-    sourcemap: true,
     chunkSizeWarningLimit: 600000,
   },
 });
