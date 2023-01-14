@@ -11,8 +11,9 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "Personal Tracker",
-        short_name: "Tracker",
+        name: "TrackIt",
+        short_name: "TrackIt",
+        description: "TrackIt allows you to track interesting or curious events in your life in a structured way.",
         icons: [
           {
             src: "./img/icons/android-chrome-192x192.png",
@@ -27,7 +28,7 @@ export default defineConfig({
         ],
         start_url: "./",
         display: "standalone",
-        background_color: "#000000",
+        background_color: "#FFFFFF",
         theme_color: "#4DBA87",
       },
     }),
