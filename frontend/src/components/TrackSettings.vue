@@ -34,11 +34,7 @@ const onDeleteClicked = async () => {
 };
 
 const exportTrack = () => {
-  const data = stepStore.steps.map(({ values, createdAt: trackedAt, userId }) => ({
-    ...values,
-    userId,
-    trackedAt,
-  }));
+  const data = stepStore.stepsExportRows;
   const fileName = trackStore.current.name;
   const exportType = exportFromJSON.types["csv"];
   exportFromJSON({ data, fileName, exportType });

@@ -92,6 +92,22 @@ export const useStepStore = defineStore("step", {
       }
       return stepsDisplayRows;
     },
+    stepsExportRows(state) {
+      debugger;
+      const fields = useTrackStore().current?.fields;
+      if (!fields) return [];
+      const stepsDisplayRows: any[] = [];
+      for (const step of state.steps) {
+        const stepsExportRow = {};
+        for (const field of fields) {
+          stepsExportRow[field.key] = _computeStepValue(field, step);
+        }
+        stepsExportRow["createdAt"] = step.createdAt;
+        stepsExportRow["updatedAt"] = step.updatedAt;
+        stepsDisplayRows.push(stepsExportRow);
+      }
+      return stepsDisplayRows;
+    },
   },
   actions: {
     setSteps(input) {
