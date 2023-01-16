@@ -1,10 +1,11 @@
+import { toRaw } from "vue";
 import { defineStore } from "pinia";
 
 import { TRACK_INPUT } from "@/constants";
 import { createStep, subscribeToSteps } from "@/firebase/db";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
-import { toRaw } from "vue";
+import { readableRelativeDateTime } from "@/datetime";
 
 interface State {
   steps: any[];
@@ -40,12 +41,74 @@ const _filterUndefined = (obj) => {
   }, {});
 };
 
+const _computeStepValue = (field, step) => {
+  switch (field.input.identifier) {
+    case TRACK_INPUT.SELECT: {
+      const matchingSelection = field.input.parameters.values.find(
+        ({ value }) => value === String(step.values[field.key])
+      );
+      return matchingSelection ? matchingSelection.name : "";
+    }
+    default: {
+      return step.values[field.key] ?? "";
+    }
+  }
+};
+
+interface StepDisplayCell {
+  label: string;
+  value: string;
+}
+
+interface StepDisplayRow {
+  values: StepDisplayCell[];
+  meta: StepDisplayCell[];
+}
+
 export const useStepStore = defineStore("step", {
   state: (): State => ({
     steps: [],
     newStepValues: null,
     newStepEnabled: null,
   }),
+  getters: {
+    stepsDisplayRows(state) {
+      const fields = useTrackStore().current?.fields;
+      if (!fields) return [];
+      const stepsDisplayRows: StepDisplayRow[] = [];
+      for (const step of state.steps) {
+        const stepsDisplayRow: StepDisplayRow = { values: [], meta: [] };
+        for (const field of fields) {
+          stepsDisplayRow.values.push({
+            label: field.name,
+            value: _computeStepValue(field, step),
+          });
+        }
+        stepsDisplayRow.meta.push({
+          label: "Tracked At",
+          value: readableRelativeDateTime(step.createdAt),
+        });
+        stepsDisplayRows.push(stepsDisplayRow);
+      }
+      return stepsDisplayRows;
+    },
+    stepsExportRows(state) {
+      debugger;
+      const fields = useTrackStore().current?.fields;
+      if (!fields) return [];
+      const stepsDisplayRows: any[] = [];
+      for (const step of state.steps) {
+        const stepsExportRow = {};
+        for (const field of fields) {
+          stepsExportRow[field.key] = _computeStepValue(field, step);
+        }
+        stepsExportRow["createdAt"] = step.createdAt;
+        stepsExportRow["updatedAt"] = step.updatedAt;
+        stepsDisplayRows.push(stepsExportRow);
+      }
+      return stepsDisplayRows;
+    },
+  },
   actions: {
     setSteps(input) {
       this.steps = input;

@@ -1,45 +1,21 @@
 <script setup lang="ts">
 import { useStepStore } from "@/store/step";
-import { useTrackStore } from "@/store/track";
-import { TRACK_INPUT } from "@/constants";
 
-const trackStore = useTrackStore();
 const stepStore = useStepStore();
-
-const selectValue = (field, step) => {
-  const matchingSelection = field.input.parameters.values.find(({ value }) => value === String(step.values[field.key]));
-  return matchingSelection ? matchingSelection.name : "";
-};
 </script>
 
 <template>
-  <div class="component track-list steps" v-if="stepStore.steps && stepStore.steps.length > 0">
-    <div class="step" v-for="step in stepStore.steps" :key="step._id">
+  <div class="component track-list steps" v-if="stepStore.stepsDisplayRows && stepStore.stepsDisplayRows.length > 0">
+    <div class="step" v-for="(row, rowIndex) in stepStore.stepsDisplayRows" :key="rowIndex">
       <div class="values">
-        <div class="value" v-for="(field, fieldIndex) in trackStore.current?.fields ?? []" :key="fieldIndex">
-          <label>{{ field.name }}</label>
-          <span v-if="step.values[field.key] === undefined || step.values[field.key] === null"></span>
-          <span
-            v-if="
-              (step.values[field.key] !== undefined || step.values[field.key] !== null) &&
-              field.input.identifier !== TRACK_INPUT.SELECT
-            "
-            >{{ step.values[field.key] }}</span
-          >
-          <span
-            v-if="
-              (step.values[field.key] !== undefined || step.values[field.key] !== null) &&
-              field.input.identifier === TRACK_INPUT.SELECT
-            "
-            >{{ selectValue(field, step) }}</span
-          >
+        <div class="value" v-for="({ label, value }, valuesIndex) in row.values" :key="valuesIndex">
+          <label>{{ label }}</label>
+          <span>{{ value }}</span>
         </div>
       </div>
-      <div class="master-data">
-        <label>Tracked at</label>
-        <span :title="$filters.readableDateTime(step.createdAt)">{{
-          $filters.readableRelativeDateTime(step.createdAt)
-        }}</span>
+      <div class="master-data" v-for="({ label, value }, metaIndex) in row.meta" :key="metaIndex">
+        <label>{{ label }}</label>
+        <span :title="value">{{ value }}</span>
       </div>
     </div>
   </div>

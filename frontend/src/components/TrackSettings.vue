@@ -5,9 +5,12 @@ import LoadingButton from "./LoadingButton.vue";
 import AddTrack from "./AddTrack.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import exportFromJSON from "export-from-json";
+import { useStepStore } from "@/store/step";
 
 const router = useRouter();
 const trackStore = useTrackStore();
+const stepStore = useStepStore();
 
 let showDeleteModal = ref(false);
 let showEditModal = ref(false);
@@ -27,12 +30,14 @@ const onEditTrackClicked = () => {
 
 const onDeleteClicked = async () => {
   await trackStore.deleteTrack();
-  router.replace({ name: "Home" });
+  await router.replace({ name: "Home" });
 };
 
 const exportTrack = () => {
-  // TODO this does not work in Firefox
-  window.open(`/api/track/${trackStore.current._id}/step/$export`);
+  const data = stepStore.stepsExportRows;
+  const fileName = trackStore.current.name;
+  const exportType = exportFromJSON.types["csv"];
+  exportFromJSON({ data, fileName, exportType });
 };
 </script>
 
