@@ -30,7 +30,7 @@ const onEditTrackClicked = () => {
 
 const onDeleteClicked = async () => {
   await trackStore.deleteTrack();
-  router.replace({ name: "Home" });
+  await router.replace({ name: "Home" });
 };
 
 const exportTrack = () => {
