@@ -33,9 +33,19 @@ export default defineConfig({
       },
     }),
   ],
+  // https://github.com/vitejs/vite/issues/2204
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      ...(process.env.NODE_ENV === "production" && {
+        vue: "https://cdn.jsdelivr.net/npm/vue@3.2.45/+esm",
+        "vue-router": "https://cdn.jsdelivr.net/npm/vue-router@4.1.6/+esm",
+        pinia: "https://cdn.jsdelivr.net/npm/pinia@2.0.28/+esm",
+        "firebase/app": "https://cdn.jsdelivr.net/npm/firebase@9.16.0/app/+esm",
+        "firebase/auth": "https://cdn.jsdelivr.net/npm/firebase@9.16.0/auth/+esm",
+        "firebase/firestore": "https://cdn.jsdelivr.net/npm/firebase@9.16.0/firestore/+esm",
+        "export-from-json": "https://cdn.jsdelivr.net/npm/export-from-json@1.7.0/+esm",
+      }),
     },
   },
   server: {
@@ -48,9 +58,9 @@ export default defineConfig({
   },
   // see https://github.com/firebase/firebase-js-sdk/issues/6926
   optimizeDeps: {
-    exclude: ["firebase", "firebase/app", "firebase/auth", "firebase/firestore", "firebase/analytics"],
-  },
-  build: {
-    chunkSizeWarningLimit: 600000,
+    exclude:
+      process.env.NODE_ENV === "production"
+        ? ["vue", "vue-router", "pinia", "firebase/app", "firebase/auth", "firebase/firestore", "export-from-json"]
+        : ["firebase/app", "firebase/auth", "firebase/firestore"],
   },
 });
