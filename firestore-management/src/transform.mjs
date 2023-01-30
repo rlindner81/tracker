@@ -1,19 +1,14 @@
 // https://firebase.google.com/docs/reference/admin
 // https://firebase.google.com/docs/reference/admin/node/firebase-admin.firestore
 // https://firebase.google.com/docs/reference/admin/node/firebase-admin.auth
-import { getFirestore } from "firebase-admin/firestore";
-import {
-  initializeApp,
-  readBackup,
-  overwriteCollection,
-  writeBackup,
-} from "./firebase.mjs";
+import { readBackup, writeBackup } from "./firebase.mjs";
+import { validateTrack, validateStep } from "./validation/index.mjs";
 
 const TRANSFORM_COLLECTIONS = {
   "tracks.json": {
     newFilename: "new-tracks.json",
-    transform: (track) => {
-      return {
+    transform: async (track) => {
+      const result = {
         _created_at: track.createdAt,
         _created_by: track.userId,
         _updated_at: track.updatedAt,
@@ -47,6 +42,8 @@ const TRANSFORM_COLLECTIONS = {
           }),
         })),
       };
+      await validateTrack(result);
+      return result;
     },
   },
   "steps.json": { newFilename: "new-steps.json", transform: (step) => step },
@@ -57,10 +54,14 @@ const main = async () => {
     TRANSFORM_COLLECTIONS
   )) {
     const oldData = await readBackup(oldFilename);
-    const newData = Object.entries(oldData).reduce((result, [key, value]) => {
-      result[key] = transform(value);
-      return result;
-    }, {});
+    const newData = await Object.entries(oldData).reduce(
+      async (resultPromise, [key, value]) => {
+        const result = await resultPromise;
+        result[key] = await transform(value);
+        return result;
+      },
+      Promise.resolve({})
+    );
     await writeBackup(newFilename, newData);
   }
 };
