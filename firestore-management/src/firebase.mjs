@@ -9,6 +9,9 @@ const accountFilepath = new URL(
   import.meta.url
 );
 
+const backupFile = (filename) =>
+  new URL(`../backup/${filename}`, import.meta.url);
+
 export const orderedStringify = (value, replacer, space) => {
   const allKeys = Object.create(null);
   JSON.stringify(value, (k, v) => {
@@ -17,11 +20,15 @@ export const orderedStringify = (value, replacer, space) => {
   });
   return JSON.stringify(value, Object.keys(allKeys).sort(), space);
 };
-export const readJsonFile = async (filepath) =>
-  JSON.parse(await readFile(filepath, "utf-8"));
+export const readBackup = async (filename) =>
+  JSON.parse(await readFile(backupFile(filename), "utf-8"));
 
-export const writeJsonFile = async (filepath, data) =>
-  await writeFile(filepath, orderedStringify(data, null, 2) + "\n", "utf-8");
+export const writeBackup = async (filename, data) =>
+  await writeFile(
+    backupFile(filename),
+    orderedStringify(data, null, 2) + "\n",
+    "utf-8"
+  );
 
 export const isObject = (node) => typeof node === "object" && node !== null;
 
@@ -40,7 +47,7 @@ export const restoreTimestamps = (node) => {
 };
 
 export const initializeApp = async () => {
-  const serviceAccount = await readJsonFile(accountFilepath);
+  const serviceAccount = await readBackup(accountFilepath);
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
