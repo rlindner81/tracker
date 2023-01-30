@@ -18,7 +18,6 @@ const main = async () => {
 
     const documentsData = await readCollection(collectionRef);
     await writeBackup(filename, documentsData);
-    console.log("saved to '%s'", filename);
   }
 };
 

@@ -20,15 +20,21 @@ export const orderedStringify = (value, replacer, space) => {
   });
   return JSON.stringify(value, Object.keys(allKeys).sort(), space);
 };
-export const readBackup = async (filename) =>
-  JSON.parse(await readFile(backupFile(filename), "utf-8"));
+export const readBackup = async (filename) => {
+  const result = JSON.parse(await readFile(backupFile(filename), "utf-8"));
+  console.log("read from '%s'", filename);
+  return result;
+};
 
-export const writeBackup = async (filename, data) =>
-  await writeFile(
+export const writeBackup = async (filename, data) => {
+  const result = await writeFile(
     backupFile(filename),
     orderedStringify(data, null, 2) + "\n",
     "utf-8"
   );
+  console.log("saved to '%s'", filename);
+  return result;
+};
 
 export const isObject = (node) => typeof node === "object" && node !== null;
 

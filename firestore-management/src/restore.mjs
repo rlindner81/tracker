@@ -16,7 +16,6 @@ const main = async () => {
   for (const [filename, collectionId] of Object.entries(RESTORE_COLLECTIONS)) {
     const collectionRef = db.collection(collectionId);
     const data = await readBackup(filename);
-    console.log("read from '%s'", filename);
     await overwriteCollection(app, collectionRef, data);
   }
 };
