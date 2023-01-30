@@ -9,11 +9,19 @@ const accountFilepath = new URL(
   import.meta.url
 );
 
+export const orderedStringify = (value, replacer, space) => {
+  const allKeys = Object.create(null);
+  JSON.stringify(value, (k, v) => {
+    allKeys[k] = null;
+    return v;
+  });
+  return JSON.stringify(value, Object.keys(allKeys).sort(), space);
+};
 export const readJsonFile = async (filepath) =>
   JSON.parse(await readFile(filepath, "utf-8"));
 
 export const writeJsonFile = async (filepath, data) =>
-  await writeFile(filepath, JSON.stringify(data, null, 2) + "\n", "utf-8");
+  await writeFile(filepath, orderedStringify(data, null, 2) + "\n", "utf-8");
 
 export const isObject = (node) => typeof node === "object" && node !== null;
 
@@ -40,10 +48,17 @@ export const initializeApp = async () => {
 };
 
 export const readCollection = async (collectionRef) => {
-  return (await collectionRef.get()).docs.reduce((result, doc) => {
+  const docs = (await collectionRef.get()).docs;
+  const docsData = docs.reduce((result, doc) => {
     result[doc.id] = doc.data();
     return result;
   }, {});
+  console.log(
+    "read %i docs from collection '%s'",
+    docs.length,
+    collectionRef.id
+  );
+  return docsData;
 };
 
 export const batchWriteCollection = async (batch, collectionRef, data) => {
@@ -73,6 +88,6 @@ export const overwriteCollection = async (app, collectionRef, data) => {
     collectionRef.id
   );
   const writeCount = await batchWriteCollection(batch, collectionRef, data);
-  console.log("write %i docs to collection '%s'", writeCount, collectionRef.id);
+  console.log("wrote %i docs to collection '%s'", writeCount, collectionRef.id);
   await batch.commit();
 };
