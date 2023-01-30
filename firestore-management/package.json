@@ -4,7 +4,9 @@
   "description": "migrate user data to firestore",
   "scripts": {
     "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock",
-    "lint": "prettier . --write"
+    "lint": "prettier . --write",
+    "backup": "node src/backup.mjs",
+    "restore": "node src/restore.mjs"
   },
   "dependencies": {
     "@seald-io/nedb": "^3.1.0",
