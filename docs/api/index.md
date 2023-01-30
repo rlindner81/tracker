@@ -147,11 +147,6 @@ Field value conversion happens when a new step is saved.
 ### Typescript interface
 
 ```typescript
-interface StepValue {
-  key: string;
-  value: string | number;
-}
-
 interface StepEntity {
   id: string; // TODO: there is no uuid type???
   created_at: string; // TODO: reference to UserEntity?
@@ -161,7 +156,7 @@ interface StepEntity {
   track_id: string;
   posted_at: string;
   posted_by: string;
-  values: Array<StepValue>; // implicitly matches order of track fields, this way key is not really needed
+  values: Map<string, string | number>;
 }
 
 export default StepEntity;

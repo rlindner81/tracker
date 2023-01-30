@@ -12,7 +12,42 @@ import {
 const TRANSFORM_COLLECTIONS = {
   "tracks.json": {
     newFilename: "new-tracks.json",
-    transform: (track) => track,
+    transform: (track) => {
+      return {
+        _created_at: track.createdAt,
+        _created_by: track.userId,
+        _updated_at: track.updatedAt,
+        _updated_by: track.userId,
+        type: "PERSONAL",
+        owner_id: track.userId,
+        step_count: 0,
+        name: track.name,
+        fields: track.fields.map((field) => ({
+          key: field.key,
+          name: field.name,
+          type: field.type,
+          ...(field.input.identifier === "FIELD" && {
+            input: "TEXT_FIELD",
+          }),
+          ...(field.input.identifier === "SELECT" && {
+            input: "SELECT",
+            options: field.input.parameters.values.map(({ name, value }) => ({
+              name,
+              value,
+            })),
+            default_choice: field.input.parameters.values.findIndex(
+              ({ value }) => value === field.input.parameters.selected
+            ),
+          }),
+          ...(field.input.identifier === "SLIDER" && {
+            input: "SLIDER",
+            min: Number(field.input.parameters.min),
+            max: Number(field.input.parameters.max),
+            step: Number(field.input.parameters.step),
+          }),
+        })),
+      };
+    },
   },
   "steps.json": { newFilename: "new-steps.json", transform: (step) => step },
 };
