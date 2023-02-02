@@ -2,7 +2,7 @@
 // https://firebase.google.com/docs/reference/admin/node/firebase-admin.firestore
 // https://firebase.google.com/docs/reference/admin/node/firebase-admin.auth
 import { readBackup, writeBackup } from "./firebase.mjs";
-import { validateTrack, validateStep } from "./validation/index.mjs";
+import { validateTrack } from "./validation/index.mjs";
 
 const TRANSFORM_COLLECTIONS = {
   "tracks.json": {

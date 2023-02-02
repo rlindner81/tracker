@@ -1,62 +1,123 @@
 import joi from "joi";
-import {
-  string,
-  token,
-  fieldType,
-  generatorType,
-  inputType,
-  displayType,
-  frequencyType,
-  sharingType,
-} from "./common.mjs";
+import { stringNonEmpty, stringId, timestampSchema } from "./common.mjs";
 
-export const typeSchema = {
-  identifier: fieldType,
-  parameters: joi.object().optional(),
+const TRACK_TYPE = Object.freeze({
+  PERSONAL: "PERSONAL",
+  GROUP: "GROUP",
+  OPEN: "OPEN",
+});
+
+const TRACK_FIELD_INPUT_CONTROL = Object.freeze({
+  SELECT: "SELECT",
+  SLIDER: "SLIDER",
+  TEXT_FIELD: "TEXT_FIELD",
+  DATETIME_PICKER: "DATETIME_PICKER",
+});
+
+const TRACK_FIELD_VALUE_TYPE = Object.freeze({
+  STRING: "STRING",
+  INTEGER: "INTEGER",
+  FLOAT: "FLOAT",
+  TIMESTAMP: "TIMESTAMP",
+});
+
+const trackType = joi.valid(...Object.values(TRACK_TYPE));
+
+const trackFieldInputControl = joi.valid(
+  ...Object.values(TRACK_FIELD_INPUT_CONTROL)
+);
+
+const trackFieldValueType = joi.valid(...Object.values(TRACK_FIELD_VALUE_TYPE));
+
+const trackFieldBaseSchema = {
+  key: stringNonEmpty,
+  name: stringNonEmpty,
 };
 
-export const generatorSchema = {
-  identifier: generatorType,
-  parameters: joi.object().optional(),
+const trackFieldSelectOptionSchema = {
+  name: stringNonEmpty,
+  value: stringNonEmpty,
 };
 
-export const inputSchema = {
-  identifier: inputType,
-  parameters: joi.object().optional(),
+const trackFieldSelectSchema = {
+  ...trackFieldBaseSchema,
+  input: TRACK_FIELD_INPUT_CONTROL.SELECT,
+  type: joi.valid(
+    TRACK_FIELD_VALUE_TYPE.STRING,
+    TRACK_FIELD_VALUE_TYPE.INTEGER,
+    TRACK_FIELD_VALUE_TYPE.FLOAT
+  ),
+  options: joi.array().min(1).items(trackFieldSelectOptionSchema),
 };
 
-export const displaySchema = {
-  identifier: displayType,
-  parameters: joi.object().optional(),
+const trackFieldSliderSchema = {
+  ...trackFieldBaseSchema,
+  input: TRACK_FIELD_INPUT_CONTROL.SLIDER,
+  type: joi.valid(TRACK_FIELD_VALUE_TYPE.INTEGER, TRACK_FIELD_VALUE_TYPE.FLOAT),
+  min: joi.number(),
+  max: joi.number(),
+  step: joi.number(),
 };
 
-export const fieldSchema = {
-  position: joi.number().integer().min(0),
-  key: token,
-  name: string,
-  optional: joi.boolean().optional(),
-  type: joi.alternatives().try(fieldType, joi.object().keys(typeSchema)),
-  input: joi.alternatives().try(inputType, joi.object().keys(inputSchema)),
-  generator: joi
-    .alternatives()
-    .try(generatorType, joi.object().keys(generatorSchema))
-    .optional(),
-  display: joi
-    .alternatives()
-    .try(displayType, joi.object().keys(displaySchema))
-    .optional(),
+const trackFieldTextSchema = {
+  ...trackFieldBaseSchema,
+  input: TRACK_FIELD_INPUT_CONTROL.TEXT_FIELD,
+  type: joi.valid(
+    TRACK_FIELD_VALUE_TYPE.STRING,
+    TRACK_FIELD_VALUE_TYPE.INTEGER,
+    TRACK_FIELD_VALUE_TYPE.FLOAT
+  ),
 };
 
-export const trackSchema = {
-  name: string,
-  sharing: sharingType.optional(),
-  frequency: frequencyType.optional(),
-  fields: joi.array().min(1).items(fieldSchema),
+const trackFieldDateTimeSchema = {
+  ...trackFieldBaseSchema,
+  input: TRACK_FIELD_INPUT_CONTROL.DATETIME_PICKER,
+  type: TRACK_FIELD_VALUE_TYPE.TIMESTAMP,
 };
+
+const trackField = joi.valid(
+  trackFieldSelectSchema,
+  trackFieldSliderSchema,
+  trackFieldTextSchema,
+  trackFieldDateTimeSchema
+);
+
+const trackBaseSchema = {
+  id: stringId,
+  created_at: timestampSchema,
+  created_by: stringId,
+  updated_at: timestampSchema,
+  updated_by: stringId,
+  step_count: joi.number().optional(),
+  name: stringNonEmpty,
+  fields: joi.array().min(1).items(trackField),
+};
+
+const trackPersonalSchema = {
+  ...trackBaseSchema,
+  type: TRACK_TYPE.PERSONAL,
+};
+
+const trackGroupSchema = {
+  ...trackBaseSchema,
+  type: TRACK_TYPE.GROUP,
+  members: joi.array().min(1).items(stringId),
+};
+
+const trackOpenSchema = {
+  ...trackBaseSchema,
+  type: TRACK_TYPE.OPEN,
+};
+
+const trackEntity = joi.valid(
+  trackPersonalSchema,
+  trackGroupSchema,
+  trackOpenSchema
+);
 
 export default {
   options: {
     presence: "required",
   },
-  body: joi.object().keys(trackSchema),
+  body: trackEntity,
 };
