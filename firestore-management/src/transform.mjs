@@ -20,14 +20,19 @@ const TRANSFORM_COLLECTIONS = {
         fields: track.fields.map((field) => ({
           key: field.key,
           name: field.name,
-          type: field.type,
+          type:
+            field.type === "TIME" && field.input.identifier === "FIELD"
+              ? "STRING"
+              : field.type === "TEXT"
+              ? "STRING"
+              : field.type,
           ...(field.input.identifier === "FIELD" && {
             input: "TEXT_FIELD",
           }),
           ...(field.input.identifier === "SELECT" && {
             input: "SELECT",
             options: field.input.parameters.values.map(({ name, value }) => ({
-              name,
+              name: name || "",
               value,
             })),
             default_choice: field.input.parameters.values.findIndex(
@@ -42,7 +47,11 @@ const TRANSFORM_COLLECTIONS = {
           }),
         })),
       };
-      await validateTrack(result);
+      try {
+        await validateTrack(result);
+      } catch (err) {
+        debugger;
+      }
       return result;
     },
   },

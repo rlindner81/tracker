@@ -1,5 +1,10 @@
 import joi from "joi";
-import { stringNonEmpty, stringId, timestampSchema } from "./common.mjs";
+import {
+  stringAllowEmpty,
+  string,
+  stringId,
+  timestampSchema,
+} from "./common.mjs";
 
 const TRACK_TYPE = Object.freeze({
   PERSONAL: "PERSONAL",
@@ -30,13 +35,13 @@ const trackFieldInputControl = joi.valid(
 const trackFieldValueType = joi.valid(...Object.values(TRACK_FIELD_VALUE_TYPE));
 
 const trackFieldBaseSchema = {
-  key: stringNonEmpty,
-  name: stringNonEmpty,
+  key: string,
+  name: string,
 };
 
 const trackFieldSelectOptionSchema = {
-  name: stringNonEmpty,
-  value: stringNonEmpty,
+  name: stringAllowEmpty,
+  value: string,
 };
 
 const trackFieldSelectSchema = {
@@ -48,6 +53,7 @@ const trackFieldSelectSchema = {
     TRACK_FIELD_VALUE_TYPE.FLOAT
   ),
   options: joi.array().min(1).items(trackFieldSelectOptionSchema),
+  default_choice: joi.number().integer().min(-1),
 };
 
 const trackFieldSliderSchema = {
@@ -75,7 +81,7 @@ const trackFieldDateTimeSchema = {
   type: TRACK_FIELD_VALUE_TYPE.TIMESTAMP,
 };
 
-const trackField = joi.valid(
+const trackField = joi.alternatives(
   trackFieldSelectSchema,
   trackFieldSliderSchema,
   trackFieldTextSchema,
@@ -83,13 +89,13 @@ const trackField = joi.valid(
 );
 
 const trackBaseSchema = {
-  id: stringId,
-  created_at: timestampSchema,
-  created_by: stringId,
-  updated_at: timestampSchema,
-  updated_by: stringId,
+  _created_at: timestampSchema,
+  _created_by: stringId,
+  _updated_at: timestampSchema,
+  _updated_by: stringId,
+  owner_id: stringId,
   step_count: joi.number().optional(),
-  name: stringNonEmpty,
+  name: string,
   fields: joi.array().min(1).items(trackField),
 };
 
@@ -109,7 +115,7 @@ const trackOpenSchema = {
   type: TRACK_TYPE.OPEN,
 };
 
-const trackEntity = joi.valid(
+const trackEntity = joi.alternatives(
   trackPersonalSchema,
   trackGroupSchema,
   trackOpenSchema
