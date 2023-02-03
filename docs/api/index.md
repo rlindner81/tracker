@@ -88,11 +88,10 @@ type TrackField =
   | TrackFieldDateTime;
 
 interface TrackBase {
-  id: string; // TODO: there is no uuid type???
-  created_at: string; // TODO: reference to UserEntity?
-  created_by: string; // TODO: reference to session user or user entity?
-  updated_at: string; // TODO: reference to UserEntity?
-  updated_by: string; // TODO: reference to session user or user entity?
+  _created_at: string; // TODO: reference to UserEntity?
+  _created_by: string; // TODO: reference to session user or user entity?
+  _updated_at: string; // TODO: reference to UserEntity?
+  _updated_by: string; // TODO: reference to session user or user entity?
   step_count: number;
   name: string;
   fields: Array<TrackField>;
@@ -148,11 +147,10 @@ Field value conversion happens when a new step is saved.
 
 ```typescript
 interface StepEntity {
-  id: string; // TODO: there is no uuid type???
-  created_at: string; // TODO: reference to UserEntity?
-  created_by: string; // TODO: reference to session user or user entity?
-  updated_at: string; // TODO: reference to UserEntity?
-  updated_by: string; // TODO: reference to session user or user entity?
+  _created_at: string; // TODO: reference to UserEntity?
+  _created_by: string; // TODO: reference to session user or user entity?
+  _updated_at: string; // TODO: reference to UserEntity?
+  _updated_by: string; // TODO: reference to session user or user entity?
   track_id: string;
   posted_at: string;
   posted_by: string;

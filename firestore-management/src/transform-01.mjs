@@ -2,7 +2,7 @@
 // https://firebase.google.com/docs/reference/admin/node/firebase-admin.firestore
 // https://firebase.google.com/docs/reference/admin/node/firebase-admin.auth
 import { readBackup, writeBackup } from "./firebase.mjs";
-import { validateTrack } from "./validation/index.mjs";
+import { validateTrack, validateStep } from "./validation/index.mjs";
 
 const TRANSFORM_COLLECTIONS = {
   "tracks.json": {
@@ -55,7 +55,32 @@ const TRANSFORM_COLLECTIONS = {
       return result;
     },
   },
-  "steps.json": { newFilename: "new-steps.json", transform: (step) => step },
+  "steps.json": {
+    newFilename: "new-steps.json",
+    transform: async (step) => {
+      const result = {
+        _created_at: step.createdAt,
+        _created_by: step.userId,
+        _updated_at: step.updatedAt,
+        _updated_by: step.userId,
+        track_id: step.trackId,
+        posted_at: step.createdAt,
+        posted_by: step.userId,
+        values: Object.entries(step.values).reduce((result, [key, value]) => {
+          if (value !== null && value !== undefined) {
+            result[key] = value;
+          }
+          return result;
+        }, {}),
+      };
+      try {
+        await validateStep(result);
+      } catch (err) {
+        debugger;
+      }
+      return result;
+    },
+  },
 };
 
 const main = async () => {

@@ -4,8 +4,6 @@ export const string = joi.string().max(256);
 
 export const stringAllowEmpty = string.allow("");
 
-export const token = string.token();
-
 export const stringId = string.max(36).alphanum();
 
 export const timestampSchema = {
