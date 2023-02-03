@@ -26,6 +26,9 @@ export const readBackup = async (filename) => {
   return result;
 };
 
+const readJSON = async (filename) =>
+  JSON.parse(await readFile(filename, "utf-8"));
+
 export const writeBackup = async (filename, data) => {
   const result = await writeFile(
     backupFile(filename),
@@ -53,7 +56,7 @@ export const restoreTimestamps = (node) => {
 };
 
 export const initializeApp = async () => {
-  const serviceAccount = await readBackup(accountFilepath);
+  const serviceAccount = await readJSON(accountFilepath);
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
