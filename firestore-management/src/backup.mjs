@@ -2,15 +2,12 @@
 // https://firebase.google.com/docs/reference/admin/node/firebase-admin.firestore
 // https://firebase.google.com/docs/reference/admin/node/firebase-admin.auth
 import { getFirestore } from "firebase-admin/firestore";
-import { initializeApp, readCollection, writeJsonFile } from "./firebase.mjs";
+import { initializeApp, readCollection, writeBackup } from "./firebase.mjs";
 
 const BACKUP_COLLECTIONS = {
   tracks: "tracks.json",
   steps: "steps.json",
 };
-
-const backupFile = (filename) =>
-  new URL(`../backup/${filename}`, import.meta.url);
 
 const main = async () => {
   const app = await initializeApp();
@@ -20,8 +17,7 @@ const main = async () => {
     if (!collectionRef) continue;
 
     const documentsData = await readCollection(collectionRef);
-    await writeJsonFile(backupFile(filename), documentsData);
-    console.log("saved to '%s'", filename);
+    await writeBackup(filename, documentsData);
   }
 };
 

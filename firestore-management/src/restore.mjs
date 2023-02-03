@@ -2,19 +2,12 @@
 // https://firebase.google.com/docs/reference/admin/node/firebase-admin.firestore
 // https://firebase.google.com/docs/reference/admin/node/firebase-admin.auth
 import { getFirestore } from "firebase-admin/firestore";
-import {
-  initializeApp,
-  readJsonFile,
-  overwriteCollection,
-} from "./firebase.mjs";
+import { initializeApp, readBackup, overwriteCollection } from "./firebase.mjs";
 
 const RESTORE_COLLECTIONS = {
-  "tracks.json": "new-tracks",
-  "steps.json": "new-steps",
+  "new-tracks.json": "new-tracks",
+  "new-steps.json": "new-steps",
 };
-
-const backupFile = (filename) =>
-  new URL(`../backup/${filename}`, import.meta.url);
 
 const main = async () => {
   const app = await initializeApp();
@@ -22,8 +15,7 @@ const main = async () => {
 
   for (const [filename, collectionId] of Object.entries(RESTORE_COLLECTIONS)) {
     const collectionRef = db.collection(collectionId);
-    const data = await readJsonFile(backupFile(filename));
-    console.log("read from '%s'", filename);
+    const data = await readBackup(filename);
     await overwriteCollection(app, collectionRef, data);
   }
 };
