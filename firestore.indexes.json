@@ -1,7 +1,7 @@
 {
   "indexes": [
     {
-      "collectionGroup": "steps",
+      "collectionGroup": "old-steps",
       "queryScope": "COLLECTION",
       "fields": [
         {
@@ -19,7 +19,7 @@
       ]
     },
     {
-      "collectionGroup": "tracks",
+      "collectionGroup": "old-tracks",
       "queryScope": "COLLECTION",
       "fields": [
         {
