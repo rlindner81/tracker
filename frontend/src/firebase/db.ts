@@ -79,7 +79,8 @@ export const subscribeToTracks = (userId, callback) => {
       }
     },
     (err) => {
-      useCommonStore().addTransientError(err.message);
+      console.error(err.message);
+      useCommonStore().addTransientError("error during track subscribe");
     }
   );
 };
@@ -125,7 +126,8 @@ export const subscribeToSteps = (userId, trackId, callback) => {
       callback(steps);
     },
     (err) => {
-      useCommonStore().addTransientError(err.message);
+      console.error(err.message);
+      useCommonStore().addTransientError("error during step subscribe");
     }
   );
 };
