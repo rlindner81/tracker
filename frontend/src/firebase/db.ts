@@ -16,8 +16,8 @@ import { useCommonStore } from "@/store/common";
 
 export const db = getFirestore(app);
 
-const tracksRef = collection(db, "tracks");
-const stepsRef = collection(db, "steps");
+const tracksRef = collection(db, "old-tracks");
+const stepsRef = collection(db, "old-steps");
 
 let tracksUnsubscribe;
 let stepsUnsubscribe;
