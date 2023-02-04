@@ -5,8 +5,8 @@ import { readBackup, writeBackup } from "./firebase.mjs";
 import { validateTrack, validateStep } from "./validation/index.mjs";
 
 const TRANSFORM_COLLECTIONS = {
-  "tracks.json": {
-    newFilename: "new-tracks.json",
+  "old-tracks.json": {
+    newFilename: "tracks.json",
     transform: async (track) => {
       const result = {
         _created_at: track.createdAt,
@@ -55,8 +55,8 @@ const TRANSFORM_COLLECTIONS = {
       return result;
     },
   },
-  "steps.json": {
-    newFilename: "new-steps.json",
+  "old-steps.json": {
+    newFilename: "steps.json",
     transform: async (step) => {
       const result = {
         _created_at: step.createdAt,

@@ -5,8 +5,8 @@ import { getFirestore } from "firebase-admin/firestore";
 import { initializeApp, readBackup, overwriteCollection } from "./firebase.mjs";
 
 const RESTORE_COLLECTIONS = {
-  "new-tracks.json": "new-tracks",
-  "new-steps.json": "new-steps",
+  "tracks.json": "tracks",
+  "steps.json": "steps",
 };
 
 const main = async () => {
