@@ -173,13 +173,9 @@ onBeforeMount(() => {
             <button type="button" @click="addSelectValue(field)">Add Value</button>
 
             <label>Default Selection</label>
-            <select v-model="field.input.parameters.selected">
+            <select v-model="field.default_choice">
               <option :value="null"></option>
-              <option
-                v-for="(option, optionIndex) in field.input.parameters.values"
-                :key="optionIndex"
-                :value="option.value"
-              >
+              <option v-for="(option, optionIndex) in field.options" :key="optionIndex" :value="option.value">
                 {{ option.name }}
               </option>
             </select>
