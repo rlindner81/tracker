@@ -48,14 +48,14 @@ const submit = async () => {
 };
 
 const addSelectValue = (field) => {
-  field.choices.push({
+  field.options.push({
     name: null,
     value: null,
   });
 };
 
 const removeSelectValue = (field, index) => {
-  field.choices.splice(index, 1);
+  field.options.splice(index, 1);
 };
 
 const slugify = (str) => {
@@ -81,7 +81,7 @@ const getInputs = (field) => TRACK_TYPE_INPUT[field.type];
 
 const clearInputType = (field) => {
   if (
-    field.input.identifier === TRACK_FIELD_INPUT.SLIDER &&
+    field.input === TRACK_FIELD_INPUT.SLIDER &&
     field.type !== TRACK_FIELD_TYPE.FLOAT &&
     field.type !== TRACK_FIELD_TYPE.INTEGER
   ) {
@@ -159,7 +159,7 @@ onBeforeMount(() => {
           </div>
 
           <div class="select" v-if="field.input === TRACK_FIELD_INPUT.SELECT">
-            <div class="value" v-for="(option, optionIndex) in field.choices" :key="optionIndex">
+            <div class="value" v-for="(option, optionIndex) in field.options" :key="optionIndex">
               <input
                 type="text"
                 placeholder="Name"
@@ -173,9 +173,13 @@ onBeforeMount(() => {
             <button type="button" @click="addSelectValue(field)">Add Value</button>
 
             <label>Default Selection</label>
-            <select v-model="field.default_choice">
+            <select v-model="field.input.parameters.selected">
               <option :value="null"></option>
-              <option v-for="(option, optionIndex) in field.choices" :key="optionIndex" :value="option.value">
+              <option
+                v-for="(option, optionIndex) in field.input.parameters.values"
+                :key="optionIndex"
+                :value="option.value"
+              >
                 {{ option.name }}
               </option>
             </select>
