@@ -68,7 +68,7 @@ const handleChange = (enabled, fieldKey) => {
             v-model="stepStore.newStepValues[field.key]"
             :disabled="!stepStore.newStepEnabled[field.key]"
           >
-            <option v-for="(option, optionIndex) in field.options" :key="optionIndex" :value="option.value">
+            <option v-for="(option, optionIndex) in field.choices" :key="optionIndex" :value="option.value">
               {{ option.name }}
             </option>
           </select>
