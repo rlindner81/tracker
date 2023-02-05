@@ -81,7 +81,7 @@ const getInputs = (field) => TRACK_TYPE_INPUT[field.type];
 
 const clearInputType = (field) => {
   if (
-    field.input === TRACK_FIELD_INPUT.SLIDER &&
+    field.input.identifier === TRACK_FIELD_INPUT.SLIDER &&
     field.type !== TRACK_FIELD_TYPE.FLOAT &&
     field.type !== TRACK_FIELD_TYPE.INTEGER
   ) {

@@ -19,9 +19,7 @@ const _getFallbackValueForField = (field) => {
       return "";
     }
     case TRACK_FIELD_INPUT.SELECT: {
-      const { value } = field.choices[field.default_choice] || field.choices[0] || {};
-      if (value !== undefined) return value;
-      break;
+      return field.options[field.default_choice || 0];
     }
     case TRACK_FIELD_INPUT.SLIDER: {
       return (parseFloat(field.min) + parseFloat(field.max)) / 2.0;
@@ -42,7 +40,7 @@ const _filterUndefined = (obj) => {
 const _computeStepValue = (field, step) => {
   switch (field.input) {
     case TRACK_FIELD_INPUT.SELECT: {
-      const matchingSelection = field.choices.find(({ value }) => value === String(step.values[field.key]));
+      const matchingSelection = field.options.find(({ value }) => value === String(step.values[field.key]));
       return matchingSelection ? matchingSelection.name : "";
     }
     default: {
@@ -82,7 +80,7 @@ export const useStepStore = defineStore("step", {
         }
         stepsDisplayRow.meta.push({
           label: "Tracked At",
-          value: readableRelativeDateTime(step._created_at),
+          value: readableRelativeDateTime(step.createdAt),
         });
         stepsDisplayRows.push(stepsDisplayRow);
       }
@@ -98,8 +96,8 @@ export const useStepStore = defineStore("step", {
         for (const field of fields) {
           stepsExportRow[field.key] = _computeStepValue(field, step);
         }
-        stepsExportRow["createdAt"] = step._created_at;
-        stepsExportRow["updatedAt"] = step._updated_at;
+        stepsExportRow["createdAt"] = step.createdAt;
+        stepsExportRow["updatedAt"] = step.updatedAt;
         stepsDisplayRows.push(stepsExportRow);
       }
       return stepsDisplayRows;
