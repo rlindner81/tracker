@@ -19,7 +19,9 @@ const _getFallbackValueForField = (field) => {
       return "";
     }
     case TRACK_FIELD_INPUT.SELECT: {
-      return field.options[field.default_choice || 0];
+      const { value } = field.options[field.default_choice] || field.options[0] || {};
+      if (value !== undefined) return value;
+      break;
     }
     case TRACK_FIELD_INPUT.SLIDER: {
       return (parseFloat(field.min) + parseFloat(field.max)) / 2.0;
