@@ -23,9 +23,10 @@ const addField = () => {
     position: relevant.value.fields.length,
     key: null,
     name: null,
-    type: "TEXT",
+    input: TRACK_FIELD_INPUT.TEXT_FIELD,
+    type: TRACK_FIELD_TYPE.STRING,
     optional: false,
-    input: "FIELD",
+    // TODO this should be removed before the real data is submitted
     min: null,
     max: null,
     step: null,
