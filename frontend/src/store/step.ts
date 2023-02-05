@@ -19,7 +19,7 @@ const _getFallbackValueForField = (field) => {
       return "";
     }
     case TRACK_FIELD_INPUT.SELECT: {
-      const { value } = field.options[field.default_choice] || field.choices[0] || {};
+      const { value } = field.choices[field.default_choice] || field.choices[0] || {};
       if (value !== undefined) return value;
       break;
     }
