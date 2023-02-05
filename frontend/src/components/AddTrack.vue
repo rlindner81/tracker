@@ -30,7 +30,7 @@ const addField = () => {
     max: null,
     step: null,
     default_choice: null,
-    options: [],
+    choices: [],
   });
 };
 
