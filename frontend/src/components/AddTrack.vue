@@ -25,16 +25,12 @@ const addField = () => {
     name: null,
     type: "TEXT",
     optional: false,
-    input: {
-      identifier: "FIELD",
-      parameters: {
-        selected: null,
-        min: null,
-        max: null,
-        step: null,
-        values: [],
-      },
-    },
+    input: "FIELD",
+    min: null,
+    max: null,
+    step: null,
+    default_choice: null,
+    options: [],
   });
 };
 
@@ -51,19 +47,15 @@ const submit = async () => {
   emit("close");
 };
 
-const addValue = (field) => {
-  field.input.parameters.values.push({
+const addSelectValue = (field) => {
+  field.options.push({
     name: null,
     value: null,
   });
 };
 
 const removeSelectValue = (field, index) => {
-  field.input.parameters.values.splice(index, 1);
-  // ensure positions are correct
-  field.input.parameters.values.forEach((value, index) => {
-    value.position = index;
-  });
+  field.options.splice(index, 1);
 };
 
 const slugify = (str) => {
@@ -89,11 +81,11 @@ const getInputs = (field) => TRACK_TYPE_INPUT[field.type];
 
 const clearInputType = (field) => {
   if (
-    field.input.identifier === TRACK_FIELD_INPUT.SLIDER &&
+    field.input === TRACK_FIELD_INPUT.SLIDER &&
     field.type !== TRACK_FIELD_TYPE.FLOAT &&
     field.type !== TRACK_FIELD_TYPE.INTEGER
   ) {
-    field.input.identifier = null;
+    field.input = null;
   }
 };
 
@@ -146,28 +138,28 @@ onBeforeMount(() => {
           </select>
 
           <label>Input Type</label>
-          <select v-model="field.input.identifier">
+          <select v-model="field.input">
             <option v-for="(type, typeIndex) in getInputs(field)" :key="typeIndex" :value="type">
               {{ type }}
             </option>
           </select>
 
-          <div class="slider" v-if="field.input.identifier === 'SLIDER'">
+          <div class="slider" v-if="field.input === TRACK_FIELD_INPUT.SLIDER">
             <label>Min Value</label>
-            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.min" />
-            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.min" />
+            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.min" />
+            <input v-if="field.type === TRACK_FIELD_TYPE.FLOAT" type="number" step="0.0000001" v-model="field.min" />
 
             <label>Max Value</label>
-            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.max" />
-            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.max" />
+            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.max" />
+            <input v-if="field.type === TRACK_FIELD_TYPE.FLOAT" type="number" step="0.0000001" v-model="field.max" />
 
             <label>Step Size</label>
-            <input v-if="field.type === 'FLOAT'" type="number" step="0.0000001" v-model="field.input.parameters.step" />
-            <input v-if="field.type === 'INTEGER'" type="number" step="1" v-model="field.input.parameters.step" />
+            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.step" />
+            <input v-if="field.type === TRACK_FIELD_TYPE.FLOAT" type="number" step="0.0000001" v-model="field.step" />
           </div>
 
-          <div class="select" v-if="field.input.identifier === 'SELECT'">
-            <div class="value" v-for="(option, optionIndex) in field.input.parameters.values" :key="optionIndex">
+          <div class="select" v-if="field.input === TRACK_FIELD_INPUT.SELECT">
+            <div class="value" v-for="(option, optionIndex) in field.options" :key="optionIndex">
               <input
                 type="text"
                 placeholder="Name"
@@ -178,7 +170,7 @@ onBeforeMount(() => {
 
               <button class="remover" type="button" @click="removeSelectValue(field, optionIndex)">Remove</button>
             </div>
-            <button type="button" @click="addValue(field)">Add Value</button>
+            <button type="button" @click="addSelectValue(field)">Add Value</button>
 
             <label>Default Selection</label>
             <select v-model="field.input.parameters.selected">
