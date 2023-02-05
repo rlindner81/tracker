@@ -82,20 +82,6 @@ const handleChange = (enabled, fieldKey) => {
                 :disabled="!stepStore.newStepEnabled[field.key]"
               />
             </div>
-            <!-- <input
-              type="number"
-              step="0.00001"
-              v-model="newStepValues[field.key]"
-              :placeholder="`Enter ${field.name}`"
-              v-if="field.type === 'FLOAT'"
-            >
-            <input
-              type="number"
-              step="1"
-              v-model="newStepValues[field.key]"
-              :placeholder="`Enter ${field.name}`"
-              v-if="field.type === 'INTEGER'"
-            > -->
           </div>
         </div>
       </div>
