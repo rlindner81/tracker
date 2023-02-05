@@ -39,7 +39,7 @@ const trackFieldBaseSchema = {
   name: string,
 };
 
-const trackFieldSelectOptionSchema = {
+const trackFieldSelectChoiceSchema = {
   name: stringAllowEmpty,
   value: string,
 };
@@ -52,7 +52,7 @@ const trackFieldSelectSchema = {
     TRACK_FIELD_VALUE_TYPE.INTEGER,
     TRACK_FIELD_VALUE_TYPE.FLOAT
   ),
-  options: joi.array().min(1).items(trackFieldSelectOptionSchema),
+  choices: joi.array().min(1).items(trackFieldSelectChoiceSchema),
   default_choice: joi.number().integer().min(-1),
 };
 
