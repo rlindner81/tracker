@@ -1,8 +1,12 @@
+// https://firebase.google.com/docs/reference/admin
+// https://firebase.google.com/docs/reference/admin/node/firebase-admin.firestore
+// https://firebase.google.com/docs/reference/admin/node/firebase-admin.auth
 import admin from "firebase-admin";
 import { getApp } from "firebase-admin/app";
 import { readFile, writeFile } from "fs/promises";
 import { getFirestore, Timestamp } from "firebase-admin/firestore";
 import Batch from "./Batch.mjs";
+import { getAuth } from "firebase-admin/auth";
 
 const accountFilepath = new URL(
   "../../temp/trackit-f1b79-firebase-adminsdk-5o81p-fff95050db.json",
@@ -106,4 +110,23 @@ export const overwriteCollection = async (app, collectionRef, data) => {
   const writeCount = await batchWriteCollection(batch, collectionRef, data);
   console.log("wrote %i docs to collection '%s'", writeCount, collectionRef.id);
   await batch.commit();
+};
+
+export const readUsers = async (app) => {
+  const auth = getAuth(app);
+
+  const _listAllUsers = async (users = [], nextPageToken) => {
+    const { users: pageUsers, pageToken } = await auth.listUsers(
+      1000,
+      nextPageToken
+    );
+    users = users.concat(pageUsers);
+    pageToken && (await _listAllUsers(users, pageToken));
+    return users;
+  };
+  const usersRaw = await _listAllUsers();
+  return usersRaw.reduce((result, { uid, email }) => {
+    result[uid] = { email };
+    return result;
+  }, {});
 };
