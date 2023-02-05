@@ -16,8 +16,8 @@ import { useCommonStore } from "@/store/common";
 
 export const db = getFirestore(app);
 
-const tracksRef = collection(db, "old-tracks");
-const stepsRef = collection(db, "old-steps");
+const tracksRef = collection(db, "tracks");
+const stepsRef = collection(db, "steps");
 
 let tracksUnsubscribe;
 let stepsUnsubscribe;
@@ -69,7 +69,7 @@ export const subscribeToTracks = (userId, callback) => {
     unsubscribeTracks();
   }
   tracksUnsubscribe = onSnapshot(
-    query(tracksRef, where("userId", "==", userId), orderBy("createdAt", "desc")),
+    query(tracksRef, where("owner_id", "==", userId), orderBy("_created_at", "desc")),
     (querySnapshot) => {
       const tracks = unpackSnapshotDocs(querySnapshot.docs);
       callback(tracks);
@@ -90,20 +90,23 @@ export const createTrack = async (userId, track) => {
   const now = new Date();
   await addDoc(tracksRef, {
     ...track,
-    userId,
-    createdAt: now,
-    updatedAt: now,
+    owner_id: userId,
+    _created_at: now,
+    _created_by: userId,
+    _updated_at: now,
+    _updated_by: userId,
   });
 };
-export const updateTrack = async (trackId, track) => {
-  if (!trackId || !track) return;
+export const updateTrack = async (userId, trackId, track) => {
+  if (!userId || !trackId || !track) return;
   const now = new Date();
   const trackRef = doc(tracksRef, trackId);
   await setDoc(
     trackRef,
     {
       ...track,
-      updatedAt: now,
+      _updated_at: now,
+      _updated_by: userId,
     },
     { merge: true }
   );
@@ -120,7 +123,7 @@ export const subscribeToSteps = (userId, trackId, callback) => {
     unsubscribeSteps();
   }
   stepsUnsubscribe = onSnapshot(
-    query(stepsRef, where("userId", "==", userId), where("trackId", "==", trackId), orderBy("createdAt", "desc")),
+    query(stepsRef, where("posted_by", "==", userId), where("track_id", "==", trackId), orderBy("_created_at", "desc")),
     (querySnapshot) => {
       const steps = unpackSnapshotDocs(querySnapshot.docs);
       callback(steps);
@@ -137,9 +140,12 @@ export const createStep = async (userId, trackId, step) => {
   const now = new Date();
   await addDoc(stepsRef, {
     ...step,
-    userId,
-    trackId,
-    createdAt: now,
-    updatedAt: now,
+    posted_by: userId,
+    posted_at: now, // TODO this should be changeable in UI
+    track_id: trackId,
+    _created_at: now,
+    _created_by: userId,
+    _updated_at: now,
+    _updated_by: userId,
   });
 };

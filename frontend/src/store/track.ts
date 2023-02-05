@@ -67,7 +67,7 @@ export const useTrackStore = defineStore("track", {
       delete currentTrackClone.userId;
       delete currentTrackClone.createdAt;
       delete currentTrackClone.updatedAt;
-      await updateTrack(this.currentId, currentTrackClone);
+      await updateTrack(useCommonStore().userId, this.currentId, currentTrackClone);
     },
     async deleteTrack() {
       if (!this.currentId) return;
