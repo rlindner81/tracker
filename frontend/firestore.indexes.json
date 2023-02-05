@@ -9,10 +9,6 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "posted_by",
-          "order": "ASCENDING"
-        },
-        {
           "fieldPath": "_created_at",
           "order": "DESCENDING"
         }
