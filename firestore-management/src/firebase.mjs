@@ -45,7 +45,7 @@ export const restoreTimestamps = (node) => {
   if (!isObject(node)) return node;
   for (const [key, value] of Object.entries(node)) {
     if (isObject(value)) {
-      if (value._seconds && value._nanoseconds) {
+      if (value._seconds !== undefined && value._nanoseconds !== undefined) {
         node[key] = new Timestamp(value._seconds, value._nanoseconds);
       } else {
         node[key] = restoreTimestamps(value);

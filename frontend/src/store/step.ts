@@ -80,7 +80,7 @@ export const useStepStore = defineStore("step", {
         }
         stepsDisplayRow.meta.push({
           label: "Tracked At",
-          value: readableRelativeDateTime(step.createdAt),
+          value: readableRelativeDateTime(step._created_at),
         });
         stepsDisplayRows.push(stepsDisplayRow);
       }
@@ -96,8 +96,8 @@ export const useStepStore = defineStore("step", {
         for (const field of fields) {
           stepsExportRow[field.key] = _computeStepValue(field, step);
         }
-        stepsExportRow["createdAt"] = step.createdAt;
-        stepsExportRow["updatedAt"] = step.updatedAt;
+        stepsExportRow["createdAt"] = step._created_at;
+        stepsExportRow["updatedAt"] = step._updated_at;
         stepsDisplayRows.push(stepsExportRow);
       }
       return stepsDisplayRows;
