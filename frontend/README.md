@@ -55,6 +55,9 @@ npx firebase-tools firestore:indexes
 
 # write indexes
 npx firebase-tools deploy --only firestore:indexes
+
+# write rules
+npx firebase-tools deploy --only firestore:rules
 ```
 
 ## Migration notes

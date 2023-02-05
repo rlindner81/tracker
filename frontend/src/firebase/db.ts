@@ -123,7 +123,7 @@ export const subscribeToSteps = (userId, trackId, callback) => {
     unsubscribeSteps();
   }
   stepsUnsubscribe = onSnapshot(
-    query(stepsRef, where("posted_by", "==", userId), where("track_id", "==", trackId), orderBy("_created_at", "desc")),
+    query(stepsRef, where("track_id", "==", trackId), orderBy("_created_at", "desc")),
     (querySnapshot) => {
       const steps = unpackSnapshotDocs(querySnapshot.docs);
       callback(steps);
