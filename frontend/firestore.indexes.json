@@ -1,33 +1,33 @@
 {
   "indexes": [
     {
-      "collectionGroup": "old-steps",
+      "collectionGroup": "steps",
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "trackId",
+          "fieldPath": "track_id",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "userId",
+          "fieldPath": "posted_by",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "createdAt",
+          "fieldPath": "_created_at",
           "order": "DESCENDING"
         }
       ]
     },
     {
-      "collectionGroup": "old-tracks",
+      "collectionGroup": "tracks",
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "userId",
+          "fieldPath": "owner_id",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "createdAt",
+          "fieldPath": "_created_at",
           "order": "DESCENDING"
         }
       ]
