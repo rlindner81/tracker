@@ -45,6 +45,13 @@ npm run build
 npm run lint
 ```
 
+### Firebase Deploy
+
+```sh
+npx firebase-tools login
+npx firebase-tools deploy --only firestore:indexes
+```
+
 ## Migration notes
 
 ### Vue2 => Vue3 migration

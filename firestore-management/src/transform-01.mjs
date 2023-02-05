@@ -31,7 +31,7 @@ const TRANSFORM_COLLECTIONS = {
           }),
           ...(field.input.identifier === "SELECT" && {
             input: "SELECT",
-            options: field.input.parameters.values.map(({ name, value }) => ({
+            choices: field.input.parameters.values.map(({ name, value }) => ({
               name: name || "",
               value,
             })),

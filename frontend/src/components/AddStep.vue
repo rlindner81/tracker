@@ -4,6 +4,7 @@ import { useStepStore } from "@/store/step";
 import Toggle from "@vueform/toggle";
 import Slider from "@vueform/slider";
 import LoadingButton from "./LoadingButton.vue";
+import { TRACK_FIELD_INPUT, TRACK_FIELD_TYPE } from "@/constants";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
@@ -43,7 +44,7 @@ const handleChange = (enabled, fieldKey) => {
             type="text"
             v-model="stepStore.newStepValues[field.key]"
             :placeholder="`Enter ${field.name}`"
-            v-if="field.input.identifier === 'FIELD' && field.type === 'TEXT'"
+            v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.STRING"
             :disabled="!stepStore.newStepEnabled[field.key]"
           />
           <input
@@ -51,7 +52,7 @@ const handleChange = (enabled, fieldKey) => {
             step="0.00001"
             v-model="stepStore.newStepValues[field.key]"
             :placeholder="`Enter ${field.name}`"
-            v-if="field.input.identifier === 'FIELD' && field.type === 'FLOAT'"
+            v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.FLOAT"
             :disabled="!stepStore.newStepEnabled[field.key]"
           />
           <input
@@ -59,52 +60,28 @@ const handleChange = (enabled, fieldKey) => {
             step="1"
             v-model="stepStore.newStepValues[field.key]"
             :placeholder="`Enter ${field.name}`"
-            v-if="field.input.identifier === 'FIELD' && field.type === 'INTEGER'"
+            v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.INTEGER"
             :disabled="!stepStore.newStepEnabled[field.key]"
           />
           <select
-            v-if="field.input.identifier === 'SELECT'"
+            v-if="field.input === TRACK_FIELD_INPUT.SELECT"
             v-model="stepStore.newStepValues[field.key]"
             :disabled="!stepStore.newStepEnabled[field.key]"
           >
-            <option
-              v-for="(option, optionIndex) in field.input.parameters.values"
-              :key="optionIndex"
-              :value="option.value"
-            >
+            <option v-for="(option, optionIndex) in field.choices" :key="optionIndex" :value="option.value">
               {{ option.name }}
             </option>
           </select>
-          <div class="slider" v-if="field.input.identifier === 'SLIDER'">
+          <div class="slider" v-if="field.input === TRACK_FIELD_INPUT.SLIDER">
             <div class="slider-container">
               <Slider
-                :min="field.input.parameters.min ? parseFloat(field.input.parameters.min) : 0"
-                :max="field.input.parameters.max ? parseFloat(field.input.parameters.max) : 1000"
-                :step="
-                  field.input.parameters.step
-                    ? parseFloat(field.input.parameters.step) < 1
-                      ? -1
-                      : parseFloat(field.input.parameters.step)
-                    : 1
-                "
+                :min="field.min ? parseFloat(field.min) : 0"
+                :max="field.max ? parseFloat(field.max) : 1000"
+                :step="field.step ? (parseFloat(field.step) < 1 ? -1 : parseFloat(field.step)) : 1"
                 v-model="stepStore.newStepValues[field.key]"
                 :disabled="!stepStore.newStepEnabled[field.key]"
               />
             </div>
-            <!-- <input
-              type="number"
-              step="0.00001"
-              v-model="newStepValues[field.key]"
-              :placeholder="`Enter ${field.name}`"
-              v-if="field.type === 'FLOAT'"
-            >
-            <input
-              type="number"
-              step="1"
-              v-model="newStepValues[field.key]"
-              :placeholder="`Enter ${field.name}`"
-              v-if="field.type === 'INTEGER'"
-            > -->
           </div>
         </div>
       </div>

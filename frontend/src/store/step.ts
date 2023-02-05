@@ -1,7 +1,7 @@
 import { toRaw } from "vue";
 import { defineStore } from "pinia";
 
-import { TRACK_INPUT } from "@/constants";
+import { TRACK_FIELD_INPUT } from "@/constants";
 import { createStep, subscribeToSteps } from "@/firebase/db";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
@@ -14,19 +14,17 @@ interface State {
 }
 
 const _getFallbackValueForField = (field) => {
-  switch (field.input.identifier) {
-    case TRACK_INPUT.SLIDER: {
-      return (parseFloat(field.input.parameters.min) + parseFloat(field.input.parameters.max)) / 2.0;
+  switch (field.input) {
+    case TRACK_FIELD_INPUT.TEXT_FIELD: {
+      return "";
     }
-    case TRACK_INPUT.SELECT: {
-      const defaultSelectValue = field.input.parameters.selected;
-      if (defaultSelectValue) return defaultSelectValue;
-      const firstSelectValue = field.input.parameters.values[0].value;
-      if (firstSelectValue) return firstSelectValue;
+    case TRACK_FIELD_INPUT.SELECT: {
+      const { value } = field.choices[field.default_choice] || field.choices[0] || {};
+      if (value !== undefined) return value;
       break;
     }
-    case TRACK_INPUT.FIELD: {
-      return "";
+    case TRACK_FIELD_INPUT.SLIDER: {
+      return (parseFloat(field.min) + parseFloat(field.max)) / 2.0;
     }
   }
   return null;
@@ -42,11 +40,9 @@ const _filterUndefined = (obj) => {
 };
 
 const _computeStepValue = (field, step) => {
-  switch (field.input.identifier) {
-    case TRACK_INPUT.SELECT: {
-      const matchingSelection = field.input.parameters.values.find(
-        ({ value }) => value === String(step.values[field.key])
-      );
+  switch (field.input) {
+    case TRACK_FIELD_INPUT.SELECT: {
+      const matchingSelection = field.choices.find(({ value }) => value === String(step.values[field.key]));
       return matchingSelection ? matchingSelection.name : "";
     }
     default: {
@@ -86,7 +82,7 @@ export const useStepStore = defineStore("step", {
         }
         stepsDisplayRow.meta.push({
           label: "Tracked At",
-          value: readableRelativeDateTime(step.createdAt),
+          value: readableRelativeDateTime(step._created_at),
         });
         stepsDisplayRows.push(stepsDisplayRow);
       }
@@ -102,8 +98,8 @@ export const useStepStore = defineStore("step", {
         for (const field of fields) {
           stepsExportRow[field.key] = _computeStepValue(field, step);
         }
-        stepsExportRow["createdAt"] = step.createdAt;
-        stepsExportRow["updatedAt"] = step.updatedAt;
+        stepsExportRow["createdAt"] = step._created_at;
+        stepsExportRow["updatedAt"] = step._updated_at;
         stepsDisplayRows.push(stepsExportRow);
       }
       return stepsDisplayRows;
