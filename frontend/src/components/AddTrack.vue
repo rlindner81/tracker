@@ -48,14 +48,14 @@ const submit = async () => {
 };
 
 const addSelectValue = (field) => {
-  field.options.push({
+  field.choices.push({
     name: null,
     value: null,
   });
 };
 
 const removeSelectValue = (field, index) => {
-  field.options.splice(index, 1);
+  field.choices.splice(index, 1);
 };
 
 const slugify = (str) => {
@@ -159,7 +159,7 @@ onBeforeMount(() => {
           </div>
 
           <div class="select" v-if="field.input === TRACK_FIELD_INPUT.SELECT">
-            <div class="value" v-for="(option, optionIndex) in field.options" :key="optionIndex">
+            <div class="value" v-for="(option, optionIndex) in field.choices" :key="optionIndex">
               <input
                 type="text"
                 placeholder="Name"
@@ -175,7 +175,7 @@ onBeforeMount(() => {
             <label>Default Selection</label>
             <select v-model="field.default_choice">
               <option :value="null"></option>
-              <option v-for="(option, optionIndex) in field.options" :key="optionIndex" :value="option.value">
+              <option v-for="(option, optionIndex) in field.choices" :key="optionIndex" :value="option.value">
                 {{ option.name }}
               </option>
             </select>

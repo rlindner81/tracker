@@ -19,7 +19,7 @@ const _getFallbackValueForField = (field) => {
       return "";
     }
     case TRACK_FIELD_INPUT.SELECT: {
-      const { value } = field.options[field.default_choice] || field.options[0] || {};
+      const { value } = field.options[field.default_choice] || field.choices[0] || {};
       if (value !== undefined) return value;
       break;
     }
@@ -42,7 +42,7 @@ const _filterUndefined = (obj) => {
 const _computeStepValue = (field, step) => {
   switch (field.input) {
     case TRACK_FIELD_INPUT.SELECT: {
-      const matchingSelection = field.options.find(({ value }) => value === String(step.values[field.key]));
+      const matchingSelection = field.choices.find(({ value }) => value === String(step.values[field.key]));
       return matchingSelection ? matchingSelection.name : "";
     }
     default: {
