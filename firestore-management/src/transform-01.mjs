@@ -19,6 +19,7 @@ const TRANSFORM_COLLECTIONS = {
         fields: track.fields.map((field) => ({
           key: field.key,
           name: field.name,
+          optional: !!field.optional,
           type:
             field.type === "TIME" && field.input.identifier === "FIELD"
               ? "STRING"
@@ -50,6 +51,7 @@ const TRANSFORM_COLLECTIONS = {
         await validateTrack(result);
       } catch (err) {
         debugger;
+        throw err;
       }
       return result;
     },
@@ -76,6 +78,7 @@ const TRANSFORM_COLLECTIONS = {
         await validateStep(result);
       } catch (err) {
         debugger;
+        throw err;
       }
       return result;
     },
