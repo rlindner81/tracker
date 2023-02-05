@@ -69,7 +69,7 @@ export const subscribeToTracks = (userId, callback) => {
     unsubscribeTracks();
   }
   tracksUnsubscribe = onSnapshot(
-    query(tracksRef, where("owner_id", "==", userId), orderBy("_created_at", "desc")),
+    query(tracksRef, where("members", "array-contains", userId), orderBy("_created_at", "desc")),
     (querySnapshot) => {
       const tracks = unpackSnapshotDocs(querySnapshot.docs);
       callback(tracks);
@@ -90,7 +90,7 @@ export const createTrack = async (userId, track) => {
   const now = new Date();
   await addDoc(tracksRef, {
     ...track,
-    owner_id: userId,
+    members: [userId],
     _created_at: now,
     _created_by: userId,
     _updated_at: now,

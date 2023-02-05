@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeMount, computed } from "vue";
 import { useTrackStore } from "@/store/track";
-import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_TYPE_INPUT } from "@/constants";
+import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_INPUT_TYPE } from "@/constants";
 import Toggle from "@vueform/toggle";
 import Modal from "./Modal.vue";
 import LoadingButton from "./LoadingButton.vue";
@@ -30,7 +30,7 @@ const addField = () => {
     max: null,
     step: null,
     default_choice: null,
-    options: [],
+    choices: [],
   });
 };
 
@@ -77,15 +77,13 @@ const slugify = (str) => {
   return str;
 };
 
-const getInputs = (field) => TRACK_TYPE_INPUT[field.type];
+const getFieldTypes = (field) => TRACK_INPUT_TYPE[field.input];
 
-const clearInputType = (field) => {
-  if (
-    field.input === TRACK_FIELD_INPUT.SLIDER &&
-    field.type !== TRACK_FIELD_TYPE.FLOAT &&
-    field.type !== TRACK_FIELD_TYPE.INTEGER
-  ) {
-    field.input = null;
+const onChangeFieldInput = (field) => {
+  const matchingTypes = getFieldTypes(field);
+  if (matchingTypes.length === 0) return;
+  if (!field.type || !matchingTypes.includes(field.type)) {
+    field.type = matchingTypes[0];
   }
 };
 
@@ -130,16 +128,16 @@ onBeforeMount(() => {
             <Toggle v-model="field.optional" on-label="Yes" off-label="No" />
           </div>
 
-          <label>Type</label>
-          <select :disabled="edit" v-model="field.type" @change="clearInputType(field)">
-            <option v-for="type in TRACK_FIELD_TYPE" :key="type" :value="type">
-              {{ type }}
+          <label>Input Method</label>
+          <select :disabled="edit" v-model="field.input" @change="onChangeFieldInput(field)">
+            <option v-for="(input, inputIndex) in TRACK_FIELD_INPUT" :key="inputIndex" :value="input">
+              {{ input }}
             </option>
           </select>
 
-          <label>Input Type</label>
-          <select v-model="field.input">
-            <option v-for="(type, typeIndex) in getInputs(field)" :key="typeIndex" :value="type">
+          <label>Value Type</label>
+          <select :disabled="edit" v-model="field.type">
+            <option v-for="(type, typeIndex) in getFieldTypes(field)" :key="typeIndex" :value="type">
               {{ type }}
             </option>
           </select>
@@ -159,24 +157,24 @@ onBeforeMount(() => {
           </div>
 
           <div class="select" v-if="field.input === TRACK_FIELD_INPUT.SELECT">
-            <div class="value" v-for="(option, optionIndex) in field.choices" :key="optionIndex">
+            <div class="value" v-for="(choice, choiceIndex) in field.choices" :key="choiceIndex">
               <input
                 type="text"
                 placeholder="Name"
-                v-model="option.name"
-                @input="!edit && (option.key = slugify(option.name))"
+                v-model="choice.name"
+                @input="!edit && (choice.value = slugify(choice.name))"
               />
-              <input type="text" placeholder="Value" v-model="option.value" />
+              <input type="text" placeholder="Value" v-model="choice.value" />
 
-              <button class="remover" type="button" @click="removeSelectValue(field, optionIndex)">Remove</button>
+              <button class="remover" type="button" @click="removeSelectValue(field, choiceIndex)">Remove</button>
             </div>
             <button type="button" @click="addSelectValue(field)">Add Value</button>
 
             <label>Default Selection</label>
             <select v-model="field.default_choice">
               <option :value="null"></option>
-              <option v-for="(option, optionIndex) in field.choices" :key="optionIndex" :value="option.value">
-                {{ option.name }}
+              <option v-for="(choice, choiceIndex) in field.choices" :key="choiceIndex" :value="choice.value">
+                {{ choice.name }}
               </option>
             </select>
           </div>

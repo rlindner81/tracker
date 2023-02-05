@@ -23,8 +23,8 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "owner_id",
-          "order": "ASCENDING"
+          "fieldPath": "members",
+          "arrayConfig": "CONTAINS"
         },
         {
           "fieldPath": "_created_at",
