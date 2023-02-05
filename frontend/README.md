@@ -49,6 +49,11 @@ npm run lint
 
 ```sh
 npx firebase-tools login
+
+# read indexes
+npx firebase-tools firestore:indexes
+
+# write indexes
 npx firebase-tools deploy --only firestore:indexes
 ```
 

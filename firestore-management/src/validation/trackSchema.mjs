@@ -6,12 +6,6 @@ import {
   timestampSchema,
 } from "./common.mjs";
 
-const TRACK_TYPE = Object.freeze({
-  PERSONAL: "PERSONAL",
-  GROUP: "GROUP",
-  OPEN: "OPEN",
-});
-
 const TRACK_FIELD_INPUT_CONTROL = Object.freeze({
   SELECT: "SELECT",
   SLIDER: "SLIDER",
@@ -25,8 +19,6 @@ const TRACK_FIELD_VALUE_TYPE = Object.freeze({
   FLOAT: "FLOAT",
   TIMESTAMP: "TIMESTAMP",
 });
-
-const trackType = joi.valid(...Object.values(TRACK_TYPE));
 
 const trackFieldInputControl = joi.valid(
   ...Object.values(TRACK_FIELD_INPUT_CONTROL)
@@ -88,42 +80,20 @@ const trackField = joi.alternatives(
   trackFieldDateTimeSchema
 );
 
-const trackBaseSchema = {
+const trackSchema = {
   _created_at: timestampSchema,
   _created_by: stringId,
   _updated_at: timestampSchema,
   _updated_by: stringId,
-  owner_id: stringId,
+  members: joi.array().min(1).items(stringId),
   step_count: joi.number().optional(),
   name: string,
   fields: joi.array().min(1).items(trackField),
 };
 
-const trackPersonalSchema = {
-  ...trackBaseSchema,
-  type: TRACK_TYPE.PERSONAL,
-};
-
-const trackGroupSchema = {
-  ...trackBaseSchema,
-  type: TRACK_TYPE.GROUP,
-  members: joi.array().min(1).items(stringId),
-};
-
-const trackOpenSchema = {
-  ...trackBaseSchema,
-  type: TRACK_TYPE.OPEN,
-};
-
-const trackEntity = joi.alternatives(
-  trackPersonalSchema,
-  trackGroupSchema,
-  trackOpenSchema
-);
-
 export default {
   options: {
     presence: "required",
   },
-  body: trackEntity,
+  body: trackSchema,
 };

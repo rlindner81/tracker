@@ -13,8 +13,7 @@ const TRANSFORM_COLLECTIONS = {
         _created_by: track.userId,
         _updated_at: track.updatedAt,
         _updated_by: track.userId,
-        type: "PERSONAL",
-        owner_id: track.userId,
+        members: [track.userId],
         step_count: 0,
         name: track.name,
         fields: track.fields.map((field) => ({

@@ -14,7 +14,7 @@ interface State {
     _id?: string;
     name?: string | null;
     fields?: any[];
-    owner_id?: string;
+    members?: string[];
     track_id?: string;
     _created_at?: Date;
     _created_by?: string;
@@ -66,7 +66,7 @@ export const useTrackStore = defineStore("track", {
       if (!this.currentId) return;
       const currentTrackClone = toRaw(this.newUpdateTrack);
       delete currentTrackClone._id;
-      delete currentTrackClone.owner_id;
+      delete currentTrackClone.members;
       delete currentTrackClone._created_at;
       delete currentTrackClone._updated_at;
       await updateTrack(useCommonStore().userId, this.currentId, currentTrackClone);
