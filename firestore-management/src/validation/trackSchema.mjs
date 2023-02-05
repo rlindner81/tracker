@@ -27,6 +27,7 @@ const trackFieldInputControl = joi.valid(
 const trackFieldValueType = joi.valid(...Object.values(TRACK_FIELD_VALUE_TYPE));
 
 const trackFieldBaseSchema = {
+  optional: joi.boolean(),
   key: string,
   name: string,
 };
@@ -80,7 +81,7 @@ const trackField = joi.alternatives(
   trackFieldDateTimeSchema
 );
 
-const trackSchema = {
+const trackSchema = joi.object().keys({
   _created_at: timestampSchema,
   _created_by: stringId,
   _updated_at: timestampSchema,
@@ -89,7 +90,7 @@ const trackSchema = {
   step_count: joi.number().optional(),
   name: string,
   fields: joi.array().min(1).items(trackField),
-};
+});
 
 export default {
   options: {
