@@ -157,24 +157,24 @@ onBeforeMount(() => {
           </div>
 
           <div class="select" v-if="field.input === TRACK_FIELD_INPUT.SELECT">
-            <div class="value" v-for="(option, optionIndex) in field.choices" :key="optionIndex">
+            <div class="value" v-for="(choice, choiceIndex) in field.choices" :key="choiceIndex">
               <input
                 type="text"
                 placeholder="Name"
-                v-model="option.name"
-                @input="!edit && (option.key = slugify(option.name))"
+                v-model="choice.name"
+                @input="!edit && (choice.value = slugify(choice.name))"
               />
-              <input type="text" placeholder="Value" v-model="option.value" />
+              <input type="text" placeholder="Value" v-model="choice.value" />
 
-              <button class="remover" type="button" @click="removeSelectValue(field, optionIndex)">Remove</button>
+              <button class="remover" type="button" @click="removeSelectValue(field, choiceIndex)">Remove</button>
             </div>
             <button type="button" @click="addSelectValue(field)">Add Value</button>
 
             <label>Default Selection</label>
             <select v-model="field.default_choice">
               <option :value="null"></option>
-              <option v-for="(option, optionIndex) in field.choices" :key="optionIndex" :value="option.value">
-                {{ option.name }}
+              <option v-for="(choice, choiceIndex) in field.choices" :key="choiceIndex" :value="choice.value">
+                {{ choice.name }}
               </option>
             </select>
           </div>
