@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeMount, computed } from "vue";
 import { useTrackStore } from "@/store/track";
-import { TRACK_TYPE, TRACK_INPUT, TRACK_TYPE_INPUT } from "@/constants";
+import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_TYPE_INPUT } from "@/constants";
 import Toggle from "@vueform/toggle";
 import Modal from "./Modal.vue";
 import LoadingButton from "./LoadingButton.vue";
@@ -89,9 +89,9 @@ const getInputs = (field) => TRACK_TYPE_INPUT[field.type];
 
 const clearInputType = (field) => {
   if (
-    field.input.identifier === TRACK_INPUT.SLIDER &&
-    field.type !== TRACK_TYPE.FLOAT &&
-    field.type !== TRACK_TYPE.INTEGER
+    field.input.identifier === TRACK_FIELD_INPUT.SLIDER &&
+    field.type !== TRACK_FIELD_TYPE.FLOAT &&
+    field.type !== TRACK_FIELD_TYPE.INTEGER
   ) {
     field.input.identifier = null;
   }
@@ -140,7 +140,7 @@ onBeforeMount(() => {
 
           <label>Type</label>
           <select :disabled="edit" v-model="field.type" @change="clearInputType(field)">
-            <option v-for="type in TRACK_TYPE" :key="type" :value="type">
+            <option v-for="type in TRACK_FIELD_TYPE" :key="type" :value="type">
               {{ type }}
             </option>
           </select>

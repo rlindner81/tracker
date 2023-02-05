@@ -1,7 +1,7 @@
 import { toRaw } from "vue";
 import { defineStore } from "pinia";
 
-import { TRACK_INPUT } from "@/constants";
+import { TRACK_FIELD_INPUT } from "@/constants";
 import { createStep, subscribeToSteps } from "@/firebase/db";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
@@ -14,19 +14,15 @@ interface State {
 }
 
 const _getFallbackValueForField = (field) => {
-  switch (field.input.identifier) {
-    case TRACK_INPUT.SLIDER: {
-      return (parseFloat(field.input.parameters.min) + parseFloat(field.input.parameters.max)) / 2.0;
-    }
-    case TRACK_INPUT.SELECT: {
-      const defaultSelectValue = field.input.parameters.selected;
-      if (defaultSelectValue) return defaultSelectValue;
-      const firstSelectValue = field.input.parameters.values[0].value;
-      if (firstSelectValue) return firstSelectValue;
-      break;
-    }
-    case TRACK_INPUT.FIELD: {
+  switch (field.input) {
+    case TRACK_FIELD_INPUT.TEXT_FIELD: {
       return "";
+    }
+    case TRACK_FIELD_INPUT.SELECT: {
+      return field.options[field.default_choice || 0];
+    }
+    case TRACK_FIELD_INPUT.SLIDER: {
+      return (parseFloat(field.min) + parseFloat(field.max)) / 2.0;
     }
   }
   return null;
@@ -42,11 +38,9 @@ const _filterUndefined = (obj) => {
 };
 
 const _computeStepValue = (field, step) => {
-  switch (field.input.identifier) {
-    case TRACK_INPUT.SELECT: {
-      const matchingSelection = field.input.parameters.values.find(
-        ({ value }) => value === String(step.values[field.key])
-      );
+  switch (field.input) {
+    case TRACK_FIELD_INPUT.SELECT: {
+      const matchingSelection = field.options.find(({ value }) => value === String(step.values[field.key]));
       return matchingSelection ? matchingSelection.name : "";
     }
     default: {
