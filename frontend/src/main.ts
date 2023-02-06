@@ -1,10 +1,15 @@
 import "./firebase/app";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+// @ts-ignore
+import { registerSW } from "virtual:pwa-register";
 
 import App from "./App.vue";
 import router from "./router";
 import { readableDateTime, readableRelativeDateTime } from "./datetime";
+
+// https://vite-pwa-org.netlify.app/guide/auto-update.html
+registerSW({ immediate: true });
 
 const app = createApp(App).use(createPinia()).use(router);
 app.mount("#app");
