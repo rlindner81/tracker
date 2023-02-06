@@ -4,9 +4,11 @@ import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { logout } from "@/firebase/auth";
 import LoadingButton from "@/components/LoadingButton.vue";
-import { tracksLoadedPromise } from "@/firebase/db";
+import { tracksLoadedPromise, usersLoadedPromise } from "@/firebase/db";
+import { useUserStore } from "@/store/user";
 
 const commonStore = useCommonStore();
+const userStore = useUserStore();
 const trackStore = useTrackStore();
 
 let initialized = ref(false);
@@ -17,11 +19,14 @@ const toggleMobileNav = () => {
 };
 
 onMounted(async () => {
+  userStore.subscribeUsers();
   trackStore.subscribeTracks();
-  await tracksLoadedPromise;
+  // TODO this promise approach doesn't really work for the unmount case... is there a better way?
+  await Promise.all([usersLoadedPromise, tracksLoadedPromise]);
   initialized.value = true;
 });
 onUnmounted(() => {
+  userStore.subscribeUsers();
   trackStore.unsubscribeTracks();
   initialized.value = false;
 });
