@@ -130,3 +130,13 @@ export const readUsers = async (app) => {
     return result;
   }, {});
 };
+
+export const resetPassword = async (app, email, password) => {
+  const auth = getAuth(app);
+  const user = await auth.getUserByEmail(email);
+  await auth.updateUser(user.uid, {
+    email,
+    emailVerified: true,
+    password,
+  });
+};
