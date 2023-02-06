@@ -26,12 +26,7 @@ const addField = () => {
     input: TRACK_FIELD_INPUT.TEXT_FIELD,
     type: TRACK_FIELD_TYPE.STRING,
     optional: false,
-    // TODO this should be removed before the real data is submitted
-    min: null,
-    max: null,
-    step: null,
-    default_choice: null,
-    choices: [],
+    params: {},
   });
 };
 
@@ -49,14 +44,14 @@ const submit = async () => {
 };
 
 const addSelectValue = (field) => {
-  field.choices.push({
+  field.params.choices.push({
     name: null,
     value: null,
   });
 };
 
 const removeSelectValue = (field, index) => {
-  field.choices.splice(index, 1);
+  field.params.choices.splice(index, 1);
 };
 
 const slugify = (str) => {
@@ -80,12 +75,38 @@ const slugify = (str) => {
 
 const getFieldTypes = (field) => TRACK_INPUT_TYPE[field.input];
 
+const prepareFieldParams = (field) => {
+  switch (field.input) {
+    case TRACK_FIELD_INPUT.TEXT_FIELD:
+    case TRACK_FIELD_INPUT.DATETIME_PICKER: {
+      field.params = {};
+      return;
+    }
+    case TRACK_FIELD_INPUT.SELECT: {
+      field.params = {
+        choices: [],
+        default_choice: 0,
+      };
+      return;
+    }
+    case TRACK_FIELD_INPUT.SLIDER: {
+      field.params = {
+        min: 1,
+        max: 10,
+        step: 1,
+      };
+      return;
+    }
+  }
+};
+
 const onChangeFieldInput = (field) => {
   const matchingTypes = getFieldTypes(field);
   if (matchingTypes.length === 0) return;
   if (!field.type || !matchingTypes.includes(field.type)) {
     field.type = matchingTypes[0];
   }
+  prepareFieldParams(field);
 };
 
 const onFieldNameChange = (event, field) => {
@@ -145,20 +166,35 @@ onBeforeMount(() => {
 
           <div class="slider" v-if="field.input === TRACK_FIELD_INPUT.SLIDER">
             <label>Min Value</label>
-            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.min" />
-            <input v-if="field.type === TRACK_FIELD_TYPE.FLOAT" type="number" step="0.0000001" v-model="field.min" />
+            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.params.min" />
+            <input
+              v-if="field.type === TRACK_FIELD_TYPE.FLOAT"
+              type="number"
+              step="0.0000001"
+              v-model="field.params.min"
+            />
 
             <label>Max Value</label>
-            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.max" />
-            <input v-if="field.type === TRACK_FIELD_TYPE.FLOAT" type="number" step="0.0000001" v-model="field.max" />
+            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.params.max" />
+            <input
+              v-if="field.type === TRACK_FIELD_TYPE.FLOAT"
+              type="number"
+              step="0.0000001"
+              v-model="field.params.max"
+            />
 
             <label>Step Size</label>
-            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.step" />
-            <input v-if="field.type === TRACK_FIELD_TYPE.FLOAT" type="number" step="0.0000001" v-model="field.step" />
+            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.params.step" />
+            <input
+              v-if="field.type === TRACK_FIELD_TYPE.FLOAT"
+              type="number"
+              step="0.0000001"
+              v-model="field.params.step"
+            />
           </div>
 
           <div class="select" v-if="field.input === TRACK_FIELD_INPUT.SELECT">
-            <div class="value" v-for="(choice, choiceIndex) in field.choices" :key="choiceIndex">
+            <div class="value" v-for="(choice, choiceIndex) in field.params.choices" :key="choiceIndex">
               <input
                 type="text"
                 placeholder="Name"
@@ -172,9 +208,9 @@ onBeforeMount(() => {
             <button type="button" @click="addSelectValue(field)">Add Value</button>
 
             <label>Default Selection</label>
-            <select v-model="field.default_choice">
+            <select v-model="field.params.default_choice">
               <option :value="null"></option>
-              <option v-for="(choice, choiceIndex) in field.choices" :key="choiceIndex" :value="choice.value">
+              <option v-for="(choice, choiceIndex) in field.params.choices" :key="choiceIndex" :value="choice.value">
                 {{ choice.name }}
               </option>
             </select>

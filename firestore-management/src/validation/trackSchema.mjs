@@ -45,17 +45,21 @@ const trackFieldSelectSchema = {
     TRACK_FIELD_VALUE_TYPE.INTEGER,
     TRACK_FIELD_VALUE_TYPE.FLOAT
   ),
-  choices: joi.array().min(1).items(trackFieldSelectChoiceSchema),
-  default_choice: joi.number().integer().min(-1),
+  params: joi.object().keys({
+    choices: joi.array().min(1).items(trackFieldSelectChoiceSchema),
+    default_choice: joi.number().integer().min(-1),
+  }),
 };
 
 const trackFieldSliderSchema = {
   ...trackFieldBaseSchema,
   input: TRACK_FIELD_INPUT_CONTROL.SLIDER,
   type: joi.valid(TRACK_FIELD_VALUE_TYPE.INTEGER, TRACK_FIELD_VALUE_TYPE.FLOAT),
-  min: joi.number(),
-  max: joi.number(),
-  step: joi.number(),
+  params: joi.object().keys({
+    min: joi.number(),
+    max: joi.number(),
+    step: joi.number(),
+  }),
 };
 
 const trackFieldTextSchema = {
@@ -66,12 +70,14 @@ const trackFieldTextSchema = {
     TRACK_FIELD_VALUE_TYPE.INTEGER,
     TRACK_FIELD_VALUE_TYPE.FLOAT
   ),
+  params: joi.object().keys({}),
 };
 
 const trackFieldDateTimeSchema = {
   ...trackFieldBaseSchema,
   input: TRACK_FIELD_INPUT_CONTROL.DATETIME_PICKER,
   type: TRACK_FIELD_VALUE_TYPE.TIMESTAMP,
+  params: joi.object().keys({}),
 };
 
 const trackField = joi.alternatives(

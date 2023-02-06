@@ -68,16 +68,16 @@ const handleChange = (enabled, fieldKey) => {
             v-model="stepStore.newStepValues[field.key]"
             :disabled="!stepStore.newStepEnabled[field.key]"
           >
-            <option v-for="(option, optionIndex) in field.choices" :key="optionIndex" :value="option.value">
+            <option v-for="(option, optionIndex) in field.params.choices" :key="optionIndex" :value="option.value">
               {{ option.name }}
             </option>
           </select>
           <div class="slider" v-if="field.input === TRACK_FIELD_INPUT.SLIDER">
             <div class="slider-container">
               <Slider
-                :min="field.min ? parseFloat(field.min) : 0"
-                :max="field.max ? parseFloat(field.max) : 1000"
-                :step="field.step ? (parseFloat(field.step) < 1 ? -1 : parseFloat(field.step)) : 1"
+                :min="field.params.min ? parseFloat(field.params.min) : 0"
+                :max="field.params.max ? parseFloat(field.params.max) : 1000"
+                :step="field.params.step ? (parseFloat(field.params.step) < 1 ? -1 : parseFloat(field.params.step)) : 1"
                 v-model="stepStore.newStepValues[field.key]"
                 :disabled="!stepStore.newStepEnabled[field.key]"
               />

@@ -28,22 +28,27 @@ const TRANSFORM_COLLECTIONS = {
               : field.type,
           ...(field.input.identifier === "FIELD" && {
             input: "TEXT_FIELD",
+            params: {},
           }),
           ...(field.input.identifier === "SELECT" && {
             input: "SELECT",
-            choices: field.input.parameters.values.map(({ name, value }) => ({
-              name: name || "",
-              value,
-            })),
-            default_choice: field.input.parameters.values.findIndex(
-              ({ value }) => value === field.input.parameters.selected
-            ),
+            params: {
+              choices: field.input.parameters.values.map(({ name, value }) => ({
+                name: name || "",
+                value,
+              })),
+              default_choice: field.input.parameters.values.findIndex(
+                ({ value }) => value === field.input.parameters.selected
+              ),
+            },
           }),
           ...(field.input.identifier === "SLIDER" && {
             input: "SLIDER",
-            min: Number(field.input.parameters.min),
-            max: Number(field.input.parameters.max),
-            step: Number(field.input.parameters.step),
+            params: {
+              min: Number(field.input.parameters.min),
+              max: Number(field.input.parameters.max),
+              step: Number(field.input.parameters.step),
+            },
           }),
         })),
       };

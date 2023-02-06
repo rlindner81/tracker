@@ -19,12 +19,12 @@ const _getFallbackValueForField = (field) => {
       return "";
     }
     case TRACK_FIELD_INPUT.SELECT: {
-      const { value } = field.choices[field.default_choice] || field.choices[0] || {};
+      const { value } = field.params.choices[field.params.default_choice] || field.params.choices[0] || {};
       if (value !== undefined) return value;
       break;
     }
     case TRACK_FIELD_INPUT.SLIDER: {
-      return (parseFloat(field.min) + parseFloat(field.max)) / 2.0;
+      return (parseFloat(field.params.min) + parseFloat(field.params.max)) / 2.0;
     }
   }
   return null;
@@ -42,7 +42,7 @@ const _filterUndefined = (obj) => {
 const _computeStepValue = (field, step) => {
   switch (field.input) {
     case TRACK_FIELD_INPUT.SELECT: {
-      const matchingSelection = field.choices.find(({ value }) => value === String(step.values[field.key]));
+      const matchingSelection = field.params.choices.find(({ value }) => value === String(step.values[field.key]));
       return matchingSelection ? matchingSelection.name : "";
     }
     default: {
