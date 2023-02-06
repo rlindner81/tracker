@@ -4,6 +4,9 @@ service cloud.firestore {
     function signedIn() {
       return request.auth.uid != null;
     }
+    function memberOfResource(resource) {
+      return request.auth.uid in resource.data.members;
+    }
     function memberOfTrack(trackId) {
       return request.auth.uid in get(/databases/$(database)/documents/tracks/$(trackId)).data.members;
     }
@@ -16,20 +19,18 @@ service cloud.firestore {
     }
     match /tracks/{trackId} {
       allow read: if signedIn()
-        && request.auth.uid in resource.data.members
+        && memberOfResource(resource)
         ;
       allow create: if signedIn()
-        && request.resource.data.members.hasOnly([request.auth.uid])
+        && request.resource.data.members == [request.auth.uid]
         ;
       allow update: if signedIn()
-        && request.auth.uid in resource.data.members
-        && (
-             request.resource.data.members == resource.data.members
-          || request.resource.data.members == resource.data.members.removeAll([request.auth.uid])
-        )
+        && memberOfResource(resource)
+        && request.resource.data.members.size() >= 1
+        && request.resource.data.members.hasAll(resource.data.members.removeAll([request.auth.uid]))
         ;
       allow delete: if signedIn()
-        && resource.data.members.hasOnly([request.auth.uid])
+        && resource.data.members == [request.auth.uid]
         ;
     }
     match /steps/{stepId} {
