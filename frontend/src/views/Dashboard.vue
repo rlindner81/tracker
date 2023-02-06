@@ -71,8 +71,8 @@ const toggleAddTrack = () => {
   .subheading-container {
     margin: 0.15rem 0 0 0;
     > span {
+      text-align: center;
       font-size: smaller;
-      text-align: start;
     }
   }
 }
