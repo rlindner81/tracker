@@ -10,4 +10,7 @@ plugins:
   - jest
 extends:
   - "eslint:recommended"
+  - "plugin:jest/recommended"
   - prettier
+rules:
+  jest/no-done-callback: off
