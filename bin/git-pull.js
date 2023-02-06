@@ -15,8 +15,7 @@ const args = process.argv.slice(2);
 const doUpdateGit = true;
 const doUpdateFrontend =
   args.length === 0 || args.some((arg) => /front/gi.test(arg));
-const doUpdateBackend =
-  args.length === 0 || args.some((arg) => /back/gi.test(arg));
+const doUpdateBackend = args.some((arg) => /back/gi.test(arg));
 
 let shellCommands =
   (doUpdateGit
