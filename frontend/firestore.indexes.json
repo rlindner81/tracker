@@ -1,20 +1,6 @@
 {
   "indexes": [
     {
-      "collectionGroup": "steps",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "track_id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_created_at",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "tracks",
       "queryScope": "COLLECTION",
       "fields": [
@@ -24,6 +10,20 @@
         },
         {
           "fieldPath": "_created_at",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "steps",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "track_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "posted_at",
           "order": "DESCENDING"
         }
       ]
