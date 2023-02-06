@@ -25,8 +25,8 @@ const toggleAddTrack = () => {
       >
         <h2 class="heading">{{ track.name }}</h2>
         <div class="subheading-container">
-          <span>{{ track.members.length === 1 ? "personal" : `${track.members.length} 🕵🕵` }}</span>
-          <!--          <span>{{ track.step_count === 0 ? "new" : `${track.step_count} 👣` }}</span>-->
+          <span>{{ track.members.length === 1 ? `${track.members.length} 🕵` : `${track.members.length} 🕵🕵` }}</span>
+          <span>{{ track.step_count !== 0 ? `${track.step_count} 👣` : "" }}</span>
         </div>
         <!--        TODO re-add when this is implemented-->
         <!--        <span>{{-->

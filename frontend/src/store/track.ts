@@ -9,6 +9,7 @@ interface State {
   newCreateTrack: {
     name?: string | null;
     fields?: any[];
+    step_count?: number;
   };
   newUpdateTrack: {
     _id?: string;
@@ -47,7 +48,7 @@ export const useTrackStore = defineStore("track", {
       this.currentId = input;
     },
     prepareNewCreateTrack() {
-      this.newCreateTrack = { name: null, fields: [] };
+      this.newCreateTrack = { name: null, fields: [], step_count: 0 };
     },
     prepareNewUpdateTrack() {
       this.newUpdateTrack = JSON.parse(JSON.stringify(toRaw(this.current)));
