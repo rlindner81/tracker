@@ -6,8 +6,7 @@ env:
   es2020: true
 parserOptions:
   ecmaVersion: 2020
-plugins:
-  - jest
+  sourceType: module
 extends:
   - "eslint:recommended"
   - prettier
