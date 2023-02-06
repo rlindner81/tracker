@@ -58,7 +58,10 @@ interface StepDisplayCell {
 
 interface StepDisplayRow {
   values: StepDisplayCell[];
-  meta: StepDisplayCell[];
+  meta: {
+    postedAt: string;
+    postedBy: string;
+  };
 }
 
 export const useStepStore = defineStore("step", {
@@ -71,21 +74,17 @@ export const useStepStore = defineStore("step", {
     stepsDisplayRows(state) {
       const fields = useTrackStore().current?.fields;
       if (!fields) return [];
-      const stepsDisplayRows: StepDisplayRow[] = [];
-      for (const step of state.steps) {
-        const stepsDisplayRow: StepDisplayRow = { values: [], meta: [] };
-        for (const field of fields) {
-          stepsDisplayRow.values.push({
-            label: field.name,
-            value: _computeStepValue(field, step),
-          });
-        }
-        stepsDisplayRow.meta.push({
-          label: "Tracked At",
-          value: readableRelativeDateTime(step._created_at),
-        });
-        stepsDisplayRows.push(stepsDisplayRow);
-      }
+      const stepsDisplayRows: StepDisplayRow[] = state.steps.map((step) => {
+        const values = fields.map((field) => ({
+          label: field.name,
+          value: _computeStepValue(field, step),
+        }));
+        const meta = {
+          postedBy: step.posted_by,
+          postedAt: readableRelativeDateTime(step.posted_at),
+        };
+        return { values, meta };
+      });
       return stepsDisplayRows;
     },
     stepsExportRows(state) {

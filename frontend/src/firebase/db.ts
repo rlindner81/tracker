@@ -16,12 +16,17 @@ import { useCommonStore } from "@/store/common";
 
 export const db = getFirestore(app);
 
+const usersRef = collection(db, "users");
 const tracksRef = collection(db, "tracks");
 const stepsRef = collection(db, "steps");
 
+let usersUnsubscribe;
 let tracksUnsubscribe;
 let stepsUnsubscribe;
 
+let usersLoaded = false;
+let resolveUsersLoaded;
+export const usersLoadedPromise = new Promise((resolve) => (resolveUsersLoaded = resolve));
 let tracksLoaded = false;
 let resolveTracksLoaded;
 export const tracksLoadedPromise = new Promise((resolve) => (resolveTracksLoaded = resolve));
@@ -44,10 +49,10 @@ const unpackSnapshotDoc = (doc) => {
 };
 const unpackSnapshotDocs = (docs) => docs.map(unpackSnapshotDoc);
 
-export const unsubscribeSteps = () => {
-  if (stepsUnsubscribe) {
-    stepsUnsubscribe();
-    stepsUnsubscribe = undefined;
+export const unsubscribeUsers = () => {
+  if (usersUnsubscribe) {
+    usersUnsubscribe();
+    usersUnsubscribe = undefined;
   }
 };
 
@@ -58,15 +63,42 @@ export const unsubscribeTracks = () => {
   }
 };
 
+export const unsubscribeSteps = () => {
+  if (stepsUnsubscribe) {
+    stepsUnsubscribe();
+    stepsUnsubscribe = undefined;
+  }
+};
+
 export const unsubscribe = () => {
-  unsubscribeSteps();
+  unsubscribeUsers();
   unsubscribeTracks();
+  unsubscribeSteps();
+};
+
+export const subscribeToUsers = (callback) => {
+  unsubscribeUsers();
+  usersUnsubscribe = onSnapshot(
+    query(usersRef, orderBy("email")),
+    (querySnapshot) => {
+      const users = unpackSnapshotDocs(querySnapshot.docs);
+      callback(users);
+      if (!usersLoaded) {
+        usersLoaded = true;
+        resolveUsersLoaded();
+      }
+    },
+    (err) => {
+      console.error(err.message);
+      useCommonStore().addTransientError("error during user subscribe");
+    }
+  );
 };
 
 export const subscribeToTracks = (userId, callback) => {
   if (!userId) {
-    unsubscribeSteps();
     unsubscribeTracks();
+    unsubscribeSteps();
   }
   tracksUnsubscribe = onSnapshot(
     query(tracksRef, where("members", "array-contains", userId), orderBy("_created_at", "desc")),
