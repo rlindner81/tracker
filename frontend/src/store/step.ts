@@ -6,6 +6,7 @@ import { createStep, subscribeToSteps, unsubscribeSteps } from "@/firebase/db";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { readableRelativeDateTime } from "@/datetime";
+import { useUserStore } from "@/store/user";
 
 interface State {
   steps: any[];
@@ -88,7 +89,6 @@ export const useStepStore = defineStore("step", {
       return stepsDisplayRows;
     },
     stepsExportRows(state) {
-      debugger;
       const fields = useTrackStore().current?.fields;
       if (!fields) return [];
       const stepsDisplayRows: any[] = [];
@@ -97,8 +97,8 @@ export const useStepStore = defineStore("step", {
         for (const field of fields) {
           stepsExportRow[field.key] = _computeStepValue(field, step);
         }
-        stepsExportRow["createdAt"] = step._created_at;
-        stepsExportRow["updatedAt"] = step._updated_at;
+        stepsExportRow["postedBy"] = useUserStore().emailById(step.posted_by);
+        stepsExportRow["postedAt"] = step.posted_at;
         stepsDisplayRows.push(stepsExportRow);
       }
       return stepsDisplayRows;
