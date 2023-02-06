@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { createTrack, deleteTrack, subscribeToTracks, updateTrack } from "@/firebase/db";
+import { createTrack, deleteTrack, subscribeToTracks, unsubscribeTracks, updateTrack } from "@/firebase/db";
 import { useCommonStore } from "@/store/common";
 import { toRaw } from "vue";
 
@@ -56,6 +56,10 @@ export const useTrackStore = defineStore("track", {
       subscribeToTracks(useCommonStore().userId, (tracks) => {
         this.setTracks(tracks);
       });
+    },
+    unsubscribeTracks() {
+      unsubscribeTracks();
+      this.setTracks([]);
     },
     async createTrack() {
       if (!this.newCreateTrack) return;

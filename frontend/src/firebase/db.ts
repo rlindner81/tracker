@@ -44,14 +44,14 @@ const unpackSnapshotDoc = (doc) => {
 };
 const unpackSnapshotDocs = (docs) => docs.map(unpackSnapshotDoc);
 
-const unsubscribeSteps = () => {
+export const unsubscribeSteps = () => {
   if (stepsUnsubscribe) {
     stepsUnsubscribe();
     stepsUnsubscribe = undefined;
   }
 };
 
-const unsubscribeTracks = () => {
+export const unsubscribeTracks = () => {
   if (tracksUnsubscribe) {
     tracksUnsubscribe();
     tracksUnsubscribe = undefined;

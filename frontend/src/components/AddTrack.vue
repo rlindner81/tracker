@@ -92,7 +92,7 @@ const prepareFieldParams = (field) => {
     case TRACK_FIELD_INPUT.SLIDER: {
       field.params = {
         min: 1,
-        max: 10,
+        max: 9,
         step: 1,
       };
       return;

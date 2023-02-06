@@ -8,7 +8,7 @@ import Tabs from "@/components/Tabs.vue";
 import Tab from "@/components/Tab.vue";
 import TrackList from "@/components/TrackList.vue";
 import TrackSettings from "@/components/TrackSettings.vue";
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, onBeforeUnmount, ref } from "vue";
 import { useRoute } from "vue-router";
 
 const trackStore = useTrackStore();
@@ -26,10 +26,14 @@ const onAddStepClicked = () => {
   showAddStepModal.value = true;
 };
 
-onBeforeMount(async () => {
+onBeforeMount(() => {
   trackStore.setCurrentId(route.params.track);
   stepStore.resetNewStepValues();
   stepStore.subscribeSteps();
+});
+
+onBeforeUnmount(() => {
+  stepStore.unsubscribeSteps();
 });
 </script>
 

@@ -29,6 +29,7 @@ const onEditTrackClicked = () => {
 };
 
 const onDeleteClicked = async () => {
+  stepStore.unsubscribeSteps();
   await trackStore.deleteTrack();
   await router.replace({ name: "Home" });
 };

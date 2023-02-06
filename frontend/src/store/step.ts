@@ -2,7 +2,7 @@ import { toRaw } from "vue";
 import { defineStore } from "pinia";
 
 import { TRACK_FIELD_INPUT } from "@/constants";
-import { createStep, subscribeToSteps } from "@/firebase/db";
+import { createStep, subscribeToSteps, unsubscribeSteps } from "@/firebase/db";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { readableRelativeDateTime } from "@/datetime";
@@ -131,6 +131,10 @@ export const useStepStore = defineStore("step", {
     },
     subscribeSteps() {
       subscribeToSteps(useCommonStore().userId, useTrackStore().currentId, (steps) => this.setSteps(steps));
+    },
+    unsubscribeSteps() {
+      unsubscribeSteps();
+      this.setSteps([]);
     },
     async createStep() {
       await createStep(useCommonStore().userId, useTrackStore().currentId, {

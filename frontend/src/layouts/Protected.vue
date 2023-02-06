@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { logout } from "@/firebase/auth";
@@ -20,6 +20,10 @@ onMounted(async () => {
   trackStore.subscribeTracks();
   await tracksLoadedPromise;
   initialized.value = true;
+});
+onUnmounted(() => {
+  trackStore.unsubscribeTracks();
+  initialized.value = false;
 });
 </script>
 
