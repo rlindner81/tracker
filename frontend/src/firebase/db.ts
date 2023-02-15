@@ -10,6 +10,7 @@ import {
   addDoc,
   setDoc,
   deleteDoc,
+  limit,
 } from "firebase/firestore";
 import { app } from "@/firebase/app";
 import { useCommonStore } from "@/store/common";
@@ -101,7 +102,7 @@ export const subscribeToTracks = (userId, callback) => {
     unsubscribeSteps();
   }
   tracksUnsubscribe = onSnapshot(
-    query(tracksRef, where("members", "array-contains", userId), orderBy("_created_at", "desc")),
+    query(tracksRef, where("members", "array-contains", userId), orderBy("_created_at", "desc"), limit(100)),
     (querySnapshot) => {
       const tracks = unpackSnapshotDocs(querySnapshot.docs);
       callback(tracks);
@@ -155,7 +156,7 @@ export const subscribeToSteps = (userId, trackId, callback) => {
     unsubscribeSteps();
   }
   stepsUnsubscribe = onSnapshot(
-    query(stepsRef, where("track_id", "==", trackId), orderBy("posted_at", "desc")),
+    query(stepsRef, where("track_id", "==", trackId), orderBy("posted_at", "desc"), limit(100)),
     (querySnapshot) => {
       const steps = unpackSnapshotDocs(querySnapshot.docs);
       callback(steps);
