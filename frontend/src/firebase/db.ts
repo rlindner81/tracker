@@ -7,6 +7,7 @@ import {
   orderBy,
   Timestamp,
   doc,
+  getDocs,
   addDoc,
   setDoc,
   deleteDoc,
@@ -77,45 +78,48 @@ export const unsubscribe = () => {
   unsubscribeSteps();
 };
 
-export const subscribeToUsers = (callback) => {
+export const subscribeToUsers = async (callback) => {
   unsubscribeUsers();
-  usersUnsubscribe = onSnapshot(
-    query(usersRef, orderBy("email")),
-    (querySnapshot) => {
-      const users = unpackSnapshotDocs(querySnapshot.docs);
-      callback(users);
-      if (!usersLoaded) {
-        usersLoaded = true;
-        resolveUsersLoaded();
-      }
-    },
-    (err) => {
-      console.error(err.message);
-      useCommonStore().addTransientError("error during user subscribe");
+  const userQuery = query(usersRef, orderBy("email"));
+  const processSnapshot = (snapshot) => {
+    const users = unpackSnapshotDocs(snapshot.docs);
+    callback(users);
+    if (!usersLoaded) {
+      usersLoaded = true;
+      resolveUsersLoaded();
     }
-  );
+  };
+  processSnapshot(await getDocs(userQuery));
+  usersUnsubscribe = onSnapshot(userQuery, processSnapshot, (err) => {
+    console.error(err.message);
+    useCommonStore().addTransientError("error during user subscribe");
+  });
 };
 
-export const subscribeToTracks = (userId, callback) => {
+export const subscribeToTracks = async (userId, callback) => {
   if (!userId) {
     unsubscribeTracks();
     unsubscribeSteps();
   }
-  tracksUnsubscribe = onSnapshot(
-    query(tracksRef, where("members", "array-contains", userId), orderBy("_created_at", "desc"), limit(100)),
-    (querySnapshot) => {
-      const tracks = unpackSnapshotDocs(querySnapshot.docs);
-      callback(tracks);
-      if (!tracksLoaded) {
-        tracksLoaded = true;
-        resolveTracksLoaded();
-      }
-    },
-    (err) => {
-      console.error(err.message);
-      useCommonStore().addTransientError("error during track subscribe");
-    }
+  const trackQuery = query(
+    tracksRef,
+    where("members", "array-contains", userId),
+    orderBy("_created_at", "desc"),
+    limit(100)
   );
+  const processSnapshot = (snapshot) => {
+    const tracks = unpackSnapshotDocs(snapshot.docs);
+    callback(tracks);
+    if (!tracksLoaded) {
+      tracksLoaded = true;
+      resolveTracksLoaded();
+    }
+  };
+  processSnapshot(await getDocs(trackQuery));
+  tracksUnsubscribe = onSnapshot(trackQuery, processSnapshot, (err) => {
+    console.error(err.message);
+    useCommonStore().addTransientError("error during track subscribe");
+  });
 };
 
 export const createTrack = async (userId, track) => {
@@ -151,21 +155,20 @@ export const deleteTrack = async (trackId) => {
   await deleteDoc(trackRef);
 };
 
-export const subscribeToSteps = (userId, trackId, callback) => {
+export const subscribeToSteps = async (userId, trackId, callback) => {
   if (!userId || !trackId) {
     unsubscribeSteps();
   }
-  stepsUnsubscribe = onSnapshot(
-    query(stepsRef, where("track_id", "==", trackId), orderBy("posted_at", "desc"), limit(100)),
-    (querySnapshot) => {
-      const steps = unpackSnapshotDocs(querySnapshot.docs);
-      callback(steps);
-    },
-    (err) => {
-      console.error(err.message);
-      useCommonStore().addTransientError("error during step subscribe");
-    }
-  );
+  const stepQuery = query(stepsRef, where("track_id", "==", trackId), orderBy("posted_at", "desc"), limit(100));
+  const processSnapshot = (snapshot) => {
+    const steps = unpackSnapshotDocs(snapshot.docs);
+    callback(steps);
+  };
+  processSnapshot(await getDocs(stepQuery));
+  stepsUnsubscribe = onSnapshot(stepQuery, processSnapshot, (err) => {
+    console.error(err.message);
+    useCommonStore().addTransientError("error during step subscribe");
+  });
 };
 
 export const createStep = async (userId, trackId, step) => {
