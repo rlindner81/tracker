@@ -26,7 +26,6 @@ service cloud.firestore {
         ;
       allow update: if signedIn()
         && memberOfResource(resource)
-        && request.resource.data.members.size() >= 1
         && request.resource.data.members.hasAll(resource.data.members.removeAll([request.auth.uid]))
         ;
       allow delete: if signedIn()
