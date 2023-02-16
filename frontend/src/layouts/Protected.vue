@@ -26,7 +26,7 @@ onMounted(async () => {
   initialized.value = true;
 });
 onUnmounted(() => {
-  userStore.subscribeUsers();
+  userStore.unsubscribeUsers();
   trackStore.unsubscribeTracks();
   initialized.value = false;
 });
