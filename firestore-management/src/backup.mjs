@@ -5,8 +5,9 @@ import { getFirestore } from "firebase-admin/firestore";
 import { initializeApp, readCollection, writeBackup } from "./firebase.mjs";
 
 const BACKUP_COLLECTIONS = {
-  "old-tracks": "old-tracks.json",
-  "old-steps": "old-steps.json",
+  users: "users-01.json",
+  tracks: "tracks-01.json",
+  steps: "steps-01.json",
 };
 
 const main = async () => {
