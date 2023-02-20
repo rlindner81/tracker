@@ -1,27 +1,27 @@
 <template>
   <v-app>
-    <v-container fluid class="fill-height" id="login-page">
-      <v-layout class="align-center justify-center">
-        <v-flex style="width: 350px">
-          <v-card>
-            <v-card-text>
-              <div class="text-center mb-6">
-                <img src="../assets/logo.png" />
-              </div>
+    <v-container fluid class="outer fill-height">
+      <v-layout class="fill-height align-center justify-center" style="width: 350px">
+        <v-card class="px-4" style="width: 25rem">
+          <v-card-text>
+            <div class="text-center pb-6">
+              <img src="@/assets/logo.png" />
+            </div>
 
+            <router-view v-slot="{ Component }">
               <transition name="fade" mode="out-in">
-                <router-view></router-view>
+                <component :is="Component"></component>
               </transition>
-            </v-card-text>
-          </v-card>
-        </v-flex>
+            </router-view>
+          </v-card-text>
+        </v-card>
       </v-layout>
     </v-container>
   </v-app>
 </template>
 
 <style scoped>
-#login-page {
-  background-color: #34495e;
+.outer {
+  background: radial-gradient(circle, rgba(29, 56, 28, 1) 0%, rgba(71, 143, 68, 1) 100%);
 }
 </style>
