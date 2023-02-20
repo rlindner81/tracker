@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useTrackStore } from "@/store/track";
-import Tiles from "@/components/Tiles.vue";
-import AddTrack from "@/components/AddTrack.vue";
 
 const trackStore = useTrackStore();
 let showAddTrack = ref(false);
