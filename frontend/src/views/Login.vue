@@ -21,7 +21,7 @@ const doLogin = () => {
     <v-text-field label="Password" prepend-icon="mdi-lock" type="password" v-model="password" required></v-text-field>
 
     <div class="text-center">
-      <v-btn :loading="loading" color="primary" class="large text rounded" type="submit">Sign In</v-btn>
+      <v-btn :loading="loading" class="large text rounded" type="submit">Sign In</v-btn>
     </div>
     <div class="d-flex justify-end">
       <router-link :to="{ name: 'Register' }">Register</router-link>

@@ -16,7 +16,7 @@ let password = ref<string | null>(null);
     <v-text-field label="Password" prepend-icon="mdi-lock" type="password" v-model="password" required></v-text-field>
 
     <div class="text-center">
-      <v-btn color="primary" class="large text rounded" type="submit">Sign Up</v-btn>
+      <v-btn class="large text rounded" type="submit">Sign Up</v-btn>
     </div>
     <div class="d-flex justify-start">
       <router-link :to="{ name: 'Login' }">Login</router-link>
