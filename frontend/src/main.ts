@@ -18,18 +18,19 @@ import "@mdi/font/css/materialdesignicons.css";
 const myCustomLightTheme = {
   dark: false,
   colors: {
-    background: "#FFFFFF",
+    background: "#f8f9fa",
     surface: "#FFFFFF",
-    primary: "#004d40",
+    primary: "#1b4965",
     "primary-darken-1": "#3700B3",
-    secondary: "#03DAC6",
+    secondary: "#1c7293",
     "secondary-darken-1": "#018786",
-    error: "#B00020",
-    info: "#2196F3",
-    success: "#4CAF50",
-    warning: "#FB8C00",
+    error: "#a4133c",
+    info: "#82a3a1",
+    success: "#137547",
+    warning: "#db7c26",
   },
 };
+
 const vuetify = createVuetify({
   components,
   directives,

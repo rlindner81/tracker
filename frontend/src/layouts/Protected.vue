@@ -54,7 +54,7 @@ onUnmounted(() => {
     <v-navigation-drawer v-model="navVisible" permanent>
       <v-list-item class="my-2" :title="commonStore.user?.email">
         <template v-slot:prepend>
-          <v-avatar color="primary">
+          <v-avatar color="secondary">
             <span class="text-h6">RL</span>
           </v-avatar>
         </template>
@@ -78,7 +78,7 @@ onUnmounted(() => {
 
       <template v-slot:append>
         <div class="pa-4">
-          <v-btn style="width: 100%" @click.prevent="logout()"> Logout </v-btn>
+          <v-btn color="secondary" style="width: 100%" @click.prevent="logout()"> Logout </v-btn>
         </div>
       </template>
     </v-navigation-drawer>
