@@ -3,7 +3,6 @@ import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
 import Toggle from "@vueform/toggle";
 import Slider from "@vueform/slider";
-import LoadingButton from "./LoadingButton.vue";
 import { TRACK_FIELD_INPUT, TRACK_FIELD_TYPE } from "@/constants";
 
 const trackStore = useTrackStore();
@@ -89,7 +88,7 @@ const handleChange = (enabled, fieldKey) => {
 
     <div class="button-row">
       <button type="button" @click="$emit('closed')">Cancel</button>
-      <LoadingButton>Track It</LoadingButton>
+      <button>Track It</button>
     </div>
   </form>
 </template>

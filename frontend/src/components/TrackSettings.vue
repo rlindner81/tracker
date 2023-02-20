@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useTrackStore } from "@/store/track";
 import Modal from "./Modal.vue";
-import LoadingButton from "./LoadingButton.vue";
 import AddTrack from "./AddTrack.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -57,7 +56,7 @@ const exportTrack = () => {
     <Modal v-show="showDeleteModal">
       <p>Do you really want to delete this track?</p>
       <div class="buttons">
-        <LoadingButton @click="onDeleteClicked">Delete</LoadingButton>
+        <button @click="onDeleteClicked">Delete</button>
         <button @click="toggleShowDeleteModal">Cancel</button>
       </div>
     </Modal>

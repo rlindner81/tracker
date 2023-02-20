@@ -3,7 +3,6 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { logout } from "@/firebase/auth";
-import LoadingButton from "@/components/LoadingButton.vue";
 import { tracksLoadedPromise, usersLoadedPromise } from "@/firebase/db";
 import { useUserStore } from "@/store/user";
 
@@ -49,7 +48,7 @@ onUnmounted(() => {
 
         <p v-if="commonStore.user" class="logout">
           Logged in as {{ commonStore.user?.email }}
-          <LoadingButton @click.prevent="logout()">Logout</LoadingButton>
+          <button @click.prevent="logout()">Logout</button>
         </p>
 
         <div class="toggle-nav" @click="toggleMobileNav">

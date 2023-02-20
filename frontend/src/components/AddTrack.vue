@@ -4,7 +4,6 @@ import { useTrackStore } from "@/store/track";
 import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_INPUT_TYPE } from "@/constants";
 import Toggle from "@vueform/toggle";
 import Modal from "./Modal.vue";
-import LoadingButton from "./LoadingButton.vue";
 
 const trackStore = useTrackStore();
 
@@ -224,101 +223,11 @@ onBeforeMount(() => {
 
       <div class="button-row">
         <button class="inverted" type="button" @click="$emit('close')">Cancel</button>
-        <LoadingButton>{{ edit ? "Update" : "Create Track" }}</LoadingButton>
+        <button>{{ edit ? "Update" : "Create Track" }}</button>
       </div>
     </form>
   </Modal>
 </template>
 
 <style src="@vueform/toggle/themes/default.css"></style>
-<style lang="less">
-@import "../less/variables";
-@import "../less/helpers";
-
-.component.add-track {
-  .toggle {
-    --toggle-width: 3.5rem;
-  }
-
-  .toggle-wrapper {
-    margin: 0 0 1rem 0;
-  }
-
-  .general {
-    .shadow();
-    background: @white;
-    padding: 1rem;
-  }
-
-  .button-row {
-    .row();
-
-    > * {
-      margin: 0;
-      &:first-child {
-        margin-right: 1rem;
-      }
-    }
-  }
-
-  .value {
-    .row(flex-start, space-between);
-    margin: 0.5rem 0;
-
-    .remover {
-      width: auto;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.8rem;
-    }
-    input {
-      margin: 0 1rem 0 0;
-
-      &:last-child {
-        margin: 0;
-      }
-    }
-  }
-
-  .fields {
-    .column(flex-end);
-
-    input,
-    select,
-    label,
-    .field {
-      width: 100%;
-
-      &[disabled] {
-        background: #efefef;
-        cursor: not-allowed;
-      }
-    }
-
-    .field {
-      .shadow();
-      margin: 1rem auto;
-      padding: 1rem;
-      background: @white;
-      position: relative;
-
-      .remove {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        padding: 0.1rem 0.3rem;
-        width: auto;
-        margin: 0;
-        font-size: 0.8rem;
-      }
-    }
-
-    .add-field {
-      width: 150px;
-      margin: 0.5rem 0;
-      border: 1px solid @highlight;
-      background: @white;
-      color: @highlight;
-    }
-  }
-}
-</style>
+<style></style>

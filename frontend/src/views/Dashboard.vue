@@ -43,37 +43,4 @@ const toggleAddTrack = () => {
   </div>
 </template>
 
-<style lang="less">
-@import "../less/variables";
-@import "../less/helpers";
-
-.view.dashboard {
-  > .tiles .tiles-container {
-    .track {
-      .column(center, center);
-      .size(~"calc(25% - 2rem)", 6rem);
-      .shadow();
-      transition: all 0.2s ease-in-out;
-      margin: 1rem;
-      background: white;
-
-      @media @small {
-        .size(~"calc(50% - 2rem)", 6rem);
-      }
-    }
-  }
-
-  > h2 {
-  }
-  .heading {
-    margin: 0.5rem 0;
-  }
-  .subheading-container {
-    margin: 0.15rem 0 0 0;
-    > span {
-      font-size: smaller;
-      text-align: start;
-    }
-  }
-}
-</style>
+<style></style>
