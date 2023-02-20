@@ -1,0 +1,33 @@
+.flex (@align: flex-start, @justify: flex-start, @wrap: nowrap, @flex: row) {
+  display: flex;
+  flex-direction: @flex;
+  align-items: @align;
+  justify-content: @justify;
+  flex-wrap: @wrap;
+}
+
+.row (@align: flex-start, @justify: flex-start, @wrap: nowrap) {
+  .flex(@align, @justify, @wrap)
+}
+
+.column (@align: flex-start, @justify: flex-start, @wrap: nowrap) {
+  .flex(@align, @justify, @wrap, column)
+}
+
+.size (@width, @height) {
+  width: @width;
+  height: @height;
+}
+
+.max (@width) {
+  width: 100%;
+  max-width: @width;
+}
+
+.shadow () {
+  box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    box-shadow: 0 2px 15px 0px rgba(0, 0, 0, 0.15);
+  }
+}
