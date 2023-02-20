@@ -17,13 +17,20 @@ const doRegister = () => {
 
 <template>
   <v-form ref="form" @submit.prevent="doRegister">
-    <v-text-field label="Name" prepend-icon="mdi-account" v-model="name"></v-text-field>
+    <v-text-field label="Name" prepend-icon="mdi-account" v-model="name" variant="underlined"></v-text-field>
     <!--                :error-messages="errorMessages.email"-->
 
-    <v-text-field label="E-mail" prepend-icon="mdi-email" v-model="email" required></v-text-field>
+    <v-text-field label="E-mail" prepend-icon="mdi-email" v-model="email" variant="underlined" required></v-text-field>
     <!--                :error-messages="errorMessages.email"-->
 
-    <v-text-field label="Password" prepend-icon="mdi-lock" type="password" v-model="password" required></v-text-field>
+    <v-text-field
+      label="Password"
+      prepend-icon="mdi-lock"
+      type="password"
+      v-model="password"
+      variant="underlined"
+      required
+    ></v-text-field>
 
     <div class="text-center">
       <v-btn :loading="loading" class="large text rounded" type="submit">Sign Up</v-btn>

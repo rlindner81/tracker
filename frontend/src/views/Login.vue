@@ -15,10 +15,17 @@ const doLogin = () => {
 
 <template>
   <v-form ref="form" @submit.prevent="doLogin">
-    <v-text-field label="E-mail" prepend-icon="mdi-email" v-model="email" required></v-text-field>
+    <v-text-field prepend-icon="mdi-email" label="E-mail" v-model="email" variant="underlined" required></v-text-field>
     <!--                :error-messages="errorMessages.email"-->
 
-    <v-text-field label="Password" prepend-icon="mdi-lock" type="password" v-model="password" required></v-text-field>
+    <v-text-field
+      prepend-icon="mdi-lock"
+      label="Password"
+      type="password"
+      v-model="password"
+      variant="underlined"
+      required
+    ></v-text-field>
 
     <div class="text-center">
       <v-btn :loading="loading" class="large text rounded" type="submit">Sign In</v-btn>
