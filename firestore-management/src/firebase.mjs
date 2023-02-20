@@ -8,8 +8,12 @@ import { getFirestore, Timestamp } from "firebase-admin/firestore";
 import Batch from "./Batch.mjs";
 import { getAuth } from "firebase-admin/auth";
 
+// const accountFilepath = new URL(
+//   "../../temp/trackit-f1b79-firebase-adminsdk-5o81p-2735d318f7.json",
+//   import.meta.url
+// );
 const accountFilepath = new URL(
-  "../../temp/trackit-f1b79-firebase-adminsdk-5o81p-2735d318f7.json",
+  "../../temp/trackit-dev-fde62-firebase-adminsdk-bddbu-a0ae2bbcb7.json",
   import.meta.url
 );
 
@@ -138,5 +142,15 @@ export const resetPassword = async (app, email, password) => {
     email,
     emailVerified: true,
     password,
+  });
+};
+
+export const createUser = async (app, uid, email, password) => {
+  const auth = getAuth(app);
+  const user = await auth.createUser({
+    uid,
+    email,
+    emailVerified: true,
+    password
   });
 };

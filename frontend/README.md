@@ -58,6 +58,9 @@ npx firebase-tools deploy --only firestore:indexes
 
 # write rules
 npx firebase-tools deploy --only firestore:rules
+
+# deploy hosting
+npx firebase-tools deploy --only hosting
 ```
 
 ## Migration notes
