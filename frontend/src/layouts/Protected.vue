@@ -80,64 +80,9 @@ onUnmounted(() => {
     </v-navigation-drawer>
 
     <v-main>
-      <v-container fluid>
-        <v-row dense>
-          <v-col v-for="track in trackStore.tracks" :key="track._id" cols="12" sm="4">
-            <v-card style="min-height: 10rem" :to="{ name: 'Track', params: { track: track._id } }">
-              <v-card-text>
-                <p class="text-h4 mb-6 text--primary">
-                  {{ track.name }}
-                </p>
-                <p>Members: {{ track.members.length }}</p>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-        <!--              <router-view v-if="initialized" :key="$route.path"></router-view>-->
-      </v-container>
+      <router-view v-if="initialized" :key="$route.path"></router-view>
     </v-main>
-    <!--        <v-container fluid class="fill-height">-->
-    <!--          <v-layout class="align-center justify-center">-->
-    <!--            <v-flex style="width: 350px">-->
-    <!--              <v-card>-->
-    <!--                <v-card-text>-->
-    <!--                  <div class="text-center mb-6">-->
-    <!--                    <img src="../assets/logo.png" />-->
-    <!--                  </div>-->
-
-    <!--                  <transition name="fade" mode="out-in">-->
-    <!--                    <router-view></router-view>-->
-    <!--                  </transition>-->
-    <!--                </v-card-text>-->
-    <!--              </v-card>-->
-    <!--            </v-flex>-->
-    <!--          </v-layout>-->
-    <!--        </v-container>-->
   </v-app>
-
-  <!--  <div class="layout protected">-->
-  <!--    <div class="letter-box">-->
-  <!--      <nav :data-open="mobileNavVisible || null">-->
-  <!--        <router-link :to="{ name: 'Home' }">Dashboard</router-link>-->
-
-  <!--        <h1>Tracks</h1>-->
-
-  <!--        <router-link-->
-  <!--          v-for="track in trackStore.tracks"-->
-  <!--          :key="track._id"-->
-  <!--          :to="{ name: 'Track', params: { track: track._id } }"-->
-  <!--          >{{ track.name }}</router-link-->
-  <!--        >-->
-
-  <!--        <p v-if="commonStore.user" class="logout">-->
-  <!--          Logged in as {{ commonStore.user?.email }}-->
-  <!--          <button @click.prevent="logout()">Logout</button>-->
-  <!--        </p>-->
-  <!--      </nav>-->
-
-  <!--      <main></main>-->
-  <!--    </div>-->
-  <!--  </div>-->
 </template>
 
 <style></style>
