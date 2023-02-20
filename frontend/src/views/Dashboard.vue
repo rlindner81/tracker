@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useTrackStore } from "@/store/track";
+import AddTrack from "@/components/AddTrack.vue";
 
 const trackStore = useTrackStore();
 let showAddTrack = ref(false);
@@ -23,8 +24,17 @@ const toggleAddTrack = () => {
           </v-card-text>
         </v-card>
       </v-col>
+      <v-col v-if="trackStore.tracks.length === 0" cols="12" sm="4">
+        <v-card style="min-height: 10rem" elevation="4">
+          <v-card-title class="text-center text-h5 ma-4 my-6">
+            <div>Add your first track</div>
+          </v-card-title>
+          <v-card-text class="text-center text-h6"> <v-icon icon="mdi-plus"></v-icon> </v-card-text>
+        </v-card>
+      </v-col>
     </v-row>
   </v-container>
+  <AddTrack v-show="false" @close="toggleAddTrack"></AddTrack>
 
   <!--  <div class="view dashboard">-->
   <!--    <h1>Dashboard</h1>-->
