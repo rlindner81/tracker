@@ -13,10 +13,6 @@ const trackStore = useTrackStore();
 let initialized = ref(false);
 let navVisible = ref(false);
 
-const toggleNav = () => {
-  navVisible.value = !navVisible.value;
-};
-
 onMounted(async () => {
   userStore.subscribeUsers();
   trackStore.subscribeTracks();

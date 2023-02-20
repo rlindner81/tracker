@@ -24,46 +24,4 @@ const stepStore = useStepStore();
   </div>
 </template>
 
-<style lang="less">
-@import "../less/variables";
-@import "../less/helpers";
-
-.component.track-list {
-  .step {
-    transition: all 0.15s ease-in-out;
-
-    .posted {
-      padding: 0.25rem 0.5rem;
-      font-size: smaller;
-    }
-    .other {
-      text-align: end;
-    }
-
-    .values {
-      padding: 0.25rem 0.5rem;
-      margin-bottom: 0.5rem;
-      background: @white;
-      .shadow();
-      .row(flex-start);
-
-      .value {
-        margin-right: 1rem;
-      }
-    }
-
-    label {
-      font-size: smaller;
-      margin-bottom: 0.25rem;
-    }
-
-    span {
-      font-weight: bold;
-    }
-
-    .master-data {
-      text-align: end;
-    }
-  }
-}
-</style>
+<style></style>
