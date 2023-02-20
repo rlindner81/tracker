@@ -59,7 +59,7 @@ onUnmounted(() => {
       <v-divider></v-divider>
 
       <v-list density="compact" nav>
-        <v-list-subheader title="Tracks"> </v-list-subheader>
+        <v-list-subheader title="Tracks"></v-list-subheader>
         <v-list-item
           v-for="track in trackStore.tracks"
           :key="track._id"
@@ -74,42 +74,45 @@ onUnmounted(() => {
 
       <template v-slot:append>
         <div class="pa-4">
-          <v-btn style="width: 100%" @click.prevent="logout()"> Logout </v-btn>
+          <v-btn style="width: 100%" @click.prevent="logout()"> Logout</v-btn>
         </div>
       </template>
     </v-navigation-drawer>
 
     <v-main>
-      <!--      <v-container fluid>-->
-      <!--        <v-row dense>-->
-      <!--          <v-col v-for="n in 4" :key="n" cols="12">-->
-      <!--            <v-card-->
-      <!--              :title="`Content ${n}`"-->
-      <!--              :subtitle="`Subtitle for Content ${n}`"-->
-      <!--              text="Lorem ipsum dolor sit amet consectetur, adipisicing elit.?"-->
-      <!--            ></v-card>-->
-      <!--          </v-col>-->
-      <!--        </v-row>-->
-      <!--        <router-view v-if="initialized" :key="$route.path"></router-view>-->
-      <!--      </v-container>-->
+      <v-container fluid>
+        <v-row dense>
+          <v-col v-for="track in trackStore.tracks" :key="track._id" cols="12" sm="4">
+            <v-card style="min-height: 10rem" :to="{ name: 'Track', params: { track: track._id } }">
+              <v-card-text>
+                <p class="text-h4 mb-6 text--primary">
+                  {{ track.name }}
+                </p>
+                <p>Members: {{ track.members.length }}</p>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+        <!--              <router-view v-if="initialized" :key="$route.path"></router-view>-->
+      </v-container>
     </v-main>
-    <!--    <v-container fluid class="fill-height">-->
-    <!--      <v-layout class="align-center justify-center">-->
-    <!--        <v-flex style="width: 350px">-->
-    <!--          <v-card>-->
-    <!--            <v-card-text>-->
-    <!--              <div class="text-center mb-6">-->
-    <!--                <img src="../assets/logo.png" />-->
-    <!--              </div>-->
+    <!--        <v-container fluid class="fill-height">-->
+    <!--          <v-layout class="align-center justify-center">-->
+    <!--            <v-flex style="width: 350px">-->
+    <!--              <v-card>-->
+    <!--                <v-card-text>-->
+    <!--                  <div class="text-center mb-6">-->
+    <!--                    <img src="../assets/logo.png" />-->
+    <!--                  </div>-->
 
-    <!--              <transition name="fade" mode="out-in">-->
-    <!--                <router-view></router-view>-->
-    <!--              </transition>-->
-    <!--            </v-card-text>-->
-    <!--          </v-card>-->
-    <!--        </v-flex>-->
-    <!--      </v-layout>-->
-    <!--    </v-container>-->
+    <!--                  <transition name="fade" mode="out-in">-->
+    <!--                    <router-view></router-view>-->
+    <!--                  </transition>-->
+    <!--                </v-card-text>-->
+    <!--              </v-card>-->
+    <!--            </v-flex>-->
+    <!--          </v-layout>-->
+    <!--        </v-container>-->
   </v-app>
 
   <!--  <div class="layout protected">-->
