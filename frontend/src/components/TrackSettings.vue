@@ -63,7 +63,4 @@ const exportTrack = () => {
   </div>
 </template>
 
-<style lang="less">
-@import "../less/variables";
-@import "../less/helpers";
-</style>
+<style></style>

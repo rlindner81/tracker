@@ -45,33 +45,4 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="less">
-@import "../less/variables";
-@import "../less/helpers";
-
-.component.tabs {
-  width: 100%;
-  .tabs {
-    width: 100%;
-    ul {
-      .row();
-      border-bottom: 2px solid #ccc;
-
-      li {
-        margin-right: 1rem;
-        padding: 0.25rem 0.5rem;
-        border-bottom: 2px solid transparent;
-        transform: translateY(2px);
-
-        a {
-          font-size: 1.2rem;
-        }
-
-        &.is-active {
-          border-color: @highlight;
-        }
-      }
-    }
-  }
-}
-</style>
+<style></style>
