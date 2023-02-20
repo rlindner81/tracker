@@ -13,18 +13,4 @@ const commonStore = useCommonStore();
   </button>
 </template>
 
-<style lang="less">
-@import "./../less/variables";
-
-.component.loading-button {
-  position: relative;
-
-  span {
-    color: @white;
-  }
-
-  .hidden {
-    opacity: 0;
-  }
-}
-</style>
+<style></style>

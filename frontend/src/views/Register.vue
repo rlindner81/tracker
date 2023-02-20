@@ -9,24 +9,19 @@ let password = ref<string | null>(null);
 </script>
 
 <template>
-  <div class="view register">
-    <form @submit.prevent="register({ email, password })">
-      <input v-model="email" type="text" placeholder="Email" />
-      <input v-model="password" type="password" placeholder="Password" />
-      <LoadingButton>Register</LoadingButton>
-    </form>
-  </div>
+  <v-form ref="form" @submit.prevent="register">
+    <v-text-field label="E-mail" prepend-icon="mdi-account" v-model="email" required></v-text-field>
+    <!--                :error-messages="errorMessages.email"-->
+
+    <v-text-field label="Password" prepend-icon="mdi-lock" type="password" v-model="password" required></v-text-field>
+
+    <div class="text-center">
+      <v-btn color="primary" class="large text rounded" type="submit">Sign Up</v-btn>
+    </div>
+    <div class="d-flex justify-start">
+      <router-link :to="{ name: 'Login' }">Login</router-link>
+    </div>
+  </v-form>
 </template>
 
-<style lang="less">
-@import "../less/variables";
-@import "../less/helpers";
-
-.view.register {
-  .shadow();
-  transition: all 0.1s ease-in-out;
-  width: 300px;
-  background: @white;
-  padding: 2rem;
-}
-</style>
+<style></style>

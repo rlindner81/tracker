@@ -1,51 +1,27 @@
 <template>
-  <div class="layout public">
-    <div class="flex-aligner">
-      <main>
-        <router-view></router-view>
-      </main>
+  <v-app>
+    <v-container fluid class="fill-height" id="login-page">
+      <v-layout class="align-center justify-center">
+        <v-flex style="width: 350px">
+          <v-card>
+            <v-card-text>
+              <div class="text-center mb-6">
+                <img src="../assets/logo.png" />
+              </div>
 
-      <nav>
-        <router-link :to="{ name: 'Login' }">Login</router-link>
-        <router-link :to="{ name: 'Register' }">Register</router-link>
-      </nav>
-    </div>
-  </div>
+              <transition name="fade" mode="out-in">
+                <router-view></router-view>
+              </transition>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-app>
 </template>
 
-<style lang="less">
-@import "../less/variables";
-@import "../less/helpers";
-
-.layout.public {
-  .size(100%, 100%);
-  .row(center, center);
-  background: url("@/assets/paper.png") repeat;
-
-  .flex-aligner {
-    .column();
-
-    main {
-      margin-bottom: 1rem;
-    }
-
-    nav {
-      .row(center, center);
-      width: 100%;
-
-      > a {
-        transition: transform 0.1s ease-in-out;
-        margin: 0.5rem 1rem;
-
-        &.router-link-exact-active {
-          border-bottom: 1px solid @font-color;
-        }
-
-        &:hover {
-          transform: scale(1.1) rotate(5deg);
-        }
-      }
-    }
-  }
+<style scoped>
+#login-page {
+  background-color: #34495e;
 }
 </style>

@@ -8,10 +8,22 @@ import App from "./App.vue";
 import router from "./router";
 import { readableDateTime, readableRelativeDateTime } from "./datetime";
 
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+
+import "@mdi/font/css/materialdesignicons.css";
+
+const vuetify = createVuetify({
+  components,
+  directives,
+});
+
 // https://vite-pwa-org.netlify.app/guide/auto-update.html
 registerSW({ immediate: true });
 
-const app = createApp(App).use(createPinia()).use(router);
+const app = createApp(App).use(vuetify).use(createPinia()).use(router);
 app.mount("#app");
 
 // https://primitive.dev/blog/vue-3-global-filters/
