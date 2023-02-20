@@ -9,7 +9,7 @@ import Batch from "./Batch.mjs";
 import { getAuth } from "firebase-admin/auth";
 
 const accountFilepath = new URL(
-  "../../temp/trackit-f1b79-firebase-adminsdk-5o81p-fff95050db.json",
+  "../../temp/trackit-f1b79-firebase-adminsdk-5o81p-2735d318f7.json",
   import.meta.url
 );
 
