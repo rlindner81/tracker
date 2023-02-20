@@ -47,7 +47,7 @@ onUnmounted(() => {
       <!--      </v-btn>-->
     </v-app-bar>
 
-    <v-navigation-drawer v-model="navVisible" permanent>
+    <v-navigation-drawer v-model="navVisible" temporary>
       <v-list-item class="my-2" :title="commonStore.user?.email">
         <template v-slot:prepend>
           <v-avatar color="primary">

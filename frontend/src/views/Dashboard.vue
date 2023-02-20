@@ -13,7 +13,7 @@ const toggleAddTrack = () => {
 <template>
   <v-container fluid>
     <v-row dense>
-      <v-col v-for="track in trackStore.tracks" :key="track._id" cols="12" sm="4">
+      <v-col v-for="track in trackStore.tracks" :key="track._id" cols="12" sm="6" md="4" lg="3">
         <v-card density="comfortable" style="min-height: 10rem" :to="{ name: 'Track', params: { track: track._id } }">
           <div>
             <v-card-text>
