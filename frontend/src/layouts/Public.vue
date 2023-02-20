@@ -22,6 +22,6 @@
 
 <style scoped>
 .outer {
-  background: radial-gradient(circle, rgba(29, 56, 28, 1) 0%, rgba(71, 143, 68, 1) 100%);
+  background: radial-gradient(circle, rgb(var(--v-theme-surface)) 0%, rgb(var(--v-theme-primary)) 100%);
 }
 </style>
