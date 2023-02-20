@@ -12,17 +12,19 @@ const toggleAddTrack = () => {
 
 <template>
   <v-container fluid>
-    <v-row dense>
+    <v-row>
       <v-col v-for="track in trackStore.tracks" :key="track._id" cols="12" sm="6" md="4" lg="3">
-        <v-card density="comfortable" style="min-height: 10rem" :to="{ name: 'Track', params: { track: track._id } }">
-          <div>
-            <v-card-text>
-              <p class="text-h4 mb-6 text--primary">
-                {{ track.name }}
-              </p>
-              <p class="text-h6">{{ track.members.length === 1 ? "personal" : `${track.members.length} 🕵🕵` }}</p>
-            </v-card-text>
-          </div>
+        <v-card style="min-height: 10rem" :to="{ name: 'Track', params: { track: track._id } }" elevation="4">
+          <v-card-title class="justify-center">
+            <div>{{ track.name }}</div>
+            <!--            <p class="text-h5 ma-4 mb-6">-->
+            <!--            </p>-->
+            <!--            <p class="text-h6 mx-auto">-->
+            <!--            </p>-->
+          </v-card-title>
+          <v-card-text>
+            {{ track.members.length === 1 ? "personal" : `${track.members.length} 🕵🕵` }}
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
