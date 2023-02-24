@@ -10,6 +10,7 @@ import { readableDateTime, readableRelativeDateTime } from "./datetime";
 
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
+import { VDataTable } from "vuetify/labs/VDataTable";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 
@@ -32,7 +33,10 @@ const myCustomLightTheme = {
 };
 
 const vuetify = createVuetify({
-  components,
+  components: {
+    ...components,
+    VDataTable,
+  },
   directives,
   theme: {
     defaultTheme: "myCustomLightTheme",
