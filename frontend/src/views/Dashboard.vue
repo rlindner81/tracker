@@ -33,6 +33,8 @@ const toggleAddTrack = () => {
         </v-card>
       </v-col>
     </v-row>
+
+    <v-btn class="mb-5 mr-5" position="fixed" location="bottom right" icon="mdi-plus" color="primary" />
   </v-container>
   <AddTrack v-show="false" @close="toggleAddTrack"></AddTrack>
 

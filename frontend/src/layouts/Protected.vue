@@ -60,8 +60,10 @@ const routeStartsWithTrack = computed(() => {
 
       <!--      <v-spacer></v-spacer>-->
 
-      <v-btn v-if="!routeStartsWithTrack && trackStore.tracks.length !== 0" prepend-icon="mdi-plus"> Add Track </v-btn>
-      <v-btn v-if="routeStartsWithTrack" prepend-icon="mdi-plus"> Add Step </v-btn>
+      <!--      <v-btn v-if="!routeStartsWithTrack && trackStore.tracks.length !== 0" prepend-icon="mdi-plus"> Add Track </v-btn>-->
+      <!--      <v-btn v-if="routeStartsWithTrack" @click.stop="showScheduleForm = true" prepend-icon="mdi-plus">-->
+      <!--        Add Step-->
+      <!--      </v-btn>-->
     </v-app-bar>
 
     <v-navigation-drawer v-model="navVisible" temporary>
