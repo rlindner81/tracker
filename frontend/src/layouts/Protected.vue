@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { logout } from "@/firebase/auth";
 import { tracksLoadedPromise, usersLoadedPromise } from "@/firebase/db";
 import { useUserStore } from "@/store/user";
+import { useRoute } from "vue-router";
 
 const commonStore = useCommonStore();
 const userStore = useUserStore();
 const trackStore = useTrackStore();
+const route = useRoute();
 
 let initialized = ref(false);
 let navVisible = ref(false);
@@ -25,6 +27,10 @@ onUnmounted(() => {
   trackStore.unsubscribeTracks();
   initialized.value = false;
 });
+
+const routeStartsWithTrack = computed(() => {
+  return route.path.startsWith("/track");
+});
 </script>
 
 <template>
@@ -35,14 +41,27 @@ onUnmounted(() => {
       <!--      </template>-->
 
       <template v-slot:prepend>
-        <v-app-bar-nav-icon variant="text" @click.stop="navVisible = !navVisible"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon
+          v-if="!routeStartsWithTrack"
+          variant="text"
+          @click.stop="navVisible = !navVisible"
+        ></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon
+          v-if="routeStartsWithTrack"
+          icon="mdi-chevron-left"
+          variant="text"
+          @click.stop="navVisible = !navVisible"
+          @click="$router.go(-1)"
+        ></v-app-bar-nav-icon>
       </template>
 
-      <v-app-bar-title>Tracks</v-app-bar-title>
+      <v-app-bar-title v-if="!routeStartsWithTrack">Tracks</v-app-bar-title>
+      <v-app-bar-title v-if="routeStartsWithTrack">Steps</v-app-bar-title>
 
       <!--      <v-spacer></v-spacer>-->
 
-      <v-btn v-if="trackStore.tracks.length !== 0" prepend-icon="mdi-plus"> Add Track </v-btn>
+      <v-btn v-if="!routeStartsWithTrack && trackStore.tracks.length !== 0" prepend-icon="mdi-plus"> Add Track </v-btn>
+      <v-btn v-if="routeStartsWithTrack" prepend-icon="mdi-plus"> Add Step </v-btn>
     </v-app-bar>
 
     <v-navigation-drawer v-model="navVisible" temporary>
