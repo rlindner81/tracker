@@ -39,9 +39,13 @@ onBeforeUnmount(() => {
 
 <template>
   <v-container>
-    <AddStep :addStepDialogIsVisible="showAddStepModal" @closed="toggleShowAddStepModal"></AddStep>
+    <AddStep
+      :addStepDialogIsVisible="showAddStepModal"
+      @tracked="toggleShowAddStepModal"
+      @closed="toggleShowAddStepModal"
+    ></AddStep>
     <v-btn
-      @click="toggleShowAddStepModal"
+      @click="onAddStepClicked"
       style="position: fixed; bottom: 15px; right: 15px"
       icon="mdi-plus"
       color="secondary"
@@ -53,7 +57,6 @@ onBeforeUnmount(() => {
         <Tab title="Tracking" :selected="true">
           <div class="title-with-button">
             <h2>Steps</h2>
-            <button @click="onAddStepClicked">Add Step</button>
           </div>
 
           <div class="info" v-if="stepStore.steps && !stepStore.steps.length">
@@ -67,11 +70,6 @@ onBeforeUnmount(() => {
           <TrackSettings></TrackSettings>
         </Tab>
       </Tabs>
-
-      <!-- <Modal v-show="showAddStepModal">
-        <h2>Add a Step</h2>
-        <AddStep @tracked="toggleShowAddStepModal" @closed="toggleShowAddStepModal"></AddStep>
-      </Modal> -->
     </div>
   </v-container>
 </template>

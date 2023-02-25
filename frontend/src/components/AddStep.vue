@@ -43,13 +43,14 @@ const handleChange = (enabled, fieldKey) => {
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-row v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
+            <v-row align="center" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
               <v-col cols="2" xs="1" sm="1">
                 <div v-if="trackStore.current.fields.some(({ optional }) => optional)">
                   <v-checkbox
                     v-if="field.optional"
                     v-model="stepStore.newStepEnabled[field.key]"
                     @change="handleChange($event, field.key)"
+                    color="secondary"
                   />
               </div>
               </v-col>
@@ -61,6 +62,7 @@ const handleChange = (enabled, fieldKey) => {
                     :placeholder="`Enter ${field.name}`"
                     v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.STRING"
                     :disabled="!stepStore.newStepEnabled[field.key]"
+                    density="compact"
                   />
                   <v-text-field
                     type="number"
@@ -69,6 +71,7 @@ const handleChange = (enabled, fieldKey) => {
                     :placeholder="`Enter ${field.name}`"
                     v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.FLOAT"
                     :disabled="!stepStore.newStepEnabled[field.key]"
+                    density="compact"
                   />
                   <v-text-field
                     type="number"
@@ -77,6 +80,7 @@ const handleChange = (enabled, fieldKey) => {
                     :placeholder="`Enter ${field.name}`"
                     v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.INTEGER"
                     :disabled="!stepStore.newStepEnabled[field.key]"
+                    density="compact"
                   />
                   <v-select
                     v-if="field.input === TRACK_FIELD_INPUT.SELECT"
@@ -85,6 +89,7 @@ const handleChange = (enabled, fieldKey) => {
                     :disabled="!stepStore.newStepEnabled[field.key]"
                     item-value="value"
                     item-title="name"
+                    density="compact"
                   />
                   <v-slider
                     v-if="field.input === TRACK_FIELD_INPUT.SLIDER"
@@ -92,8 +97,14 @@ const handleChange = (enabled, fieldKey) => {
                     :disabled="!stepStore.newStepEnabled[field.key]"
                     :min="field.params.min ? parseFloat(field.params.min) : 0"
                     :max="field.params.max ? parseFloat(field.params.max) : 1000"
-                    :step="field.params.step ? (parseFloat(field.params.step) < 1 ? -1 : parseFloat(field.params.step)) : 1"
+                    :step="
+                      field.params.step ? (parseFloat(field.params.step) < 1 ? -1 : parseFloat(field.params.step)) : 1
+                    "
+                    color="primary"
                     thumb-label="always"
+                    thumb-size="15"
+                    thumb-color="primary"
+                    style="margin-top: 20px"
                   />
                 </div>
               </v-col>
@@ -102,79 +113,11 @@ const handleChange = (enabled, fieldKey) => {
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue-darken-1" variant="text" @click="$emit('closed')"> Close </v-btn>
-          <v-btn color="blue-darken-1" variant="text" @click="$emit('closed')"> Save </v-btn>
+          <v-btn @click="$emit('closed')"> Close </v-btn>
+          <v-btn color="secondary" variant="flat" @click="submit"> Track It </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- <form
-      class="component add-step"
-      @submit.prevent="submit"
-      v-if="trackStore.current && stepStore.newStepValues && stepStore.newStepEnabled"
-    >
-      <div class="input" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
-        <div class="optional-wrapper">
-          <div class="toggle-wrapper" v-if="trackStore.current.fields.some(({ optional }) => optional)">
-            <Toggle
-              v-if="field.optional"
-              v-model="stepStore.newStepEnabled[field.key]"
-              @change="handleChange($event, field.key)"
-            />
-          </div>
-          <div class="choice-wrapper">
-            <label :class="stepStore.newStepEnabled[field.key] ? '' : 'disable'">{{ field.name }}</label>
-            <input
-              type="text"
-              v-model="stepStore.newStepValues[field.key]"
-              :placeholder="`Enter ${field.name}`"
-              v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.STRING"
-              :disabled="!stepStore.newStepEnabled[field.key]"
-            />
-            <input
-              type="number"
-              step="0.00001"
-              v-model="stepStore.newStepValues[field.key]"
-              :placeholder="`Enter ${field.name}`"
-              v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.FLOAT"
-              :disabled="!stepStore.newStepEnabled[field.key]"
-            />
-            <input
-              type="number"
-              step="1"
-              v-model="stepStore.newStepValues[field.key]"
-              :placeholder="`Enter ${field.name}`"
-              v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.INTEGER"
-              :disabled="!stepStore.newStepEnabled[field.key]"
-            />
-            <select
-              v-if="field.input === TRACK_FIELD_INPUT.SELECT"
-              v-model="stepStore.newStepValues[field.key]"
-              :disabled="!stepStore.newStepEnabled[field.key]"
-            >
-              <option v-for="(option, optionIndex) in field.params.choices" :key="optionIndex" :value="option.value">
-                {{ option.name }}
-              </option>
-            </select>
-            <div class="slider" v-if="field.input === TRACK_FIELD_INPUT.SLIDER">
-              <div class="slider-container">
-                <Slider
-                  :min="field.params.min ? parseFloat(field.params.min) : 0"
-                  :max="field.params.max ? parseFloat(field.params.max) : 1000"
-                  :step="field.params.step ? (parseFloat(field.params.step) < 1 ? -1 : parseFloat(field.params.step)) : 1"
-                  v-model="stepStore.newStepValues[field.key]"
-                  :disabled="!stepStore.newStepEnabled[field.key]"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="button-row">
-        <button type="button" @click="$emit('closed')">Cancel</button>
-        <button>Track It</button>
-      </div>
-    </form> -->
   </div>
 </template>
 
