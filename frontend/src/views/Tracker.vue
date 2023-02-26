@@ -2,7 +2,6 @@
 import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
 
-import Modal from "@/components/Modal.vue";
 import AddStep from "@/components/AddStep.vue";
 import Tabs from "@/components/Tabs.vue";
 import Tab from "@/components/Tab.vue";
@@ -38,32 +37,39 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="view tracker">
-    <h1>{{ trackStore.titleById($route.params.track) }}</h1>
+  <v-container>
+    <AddStep :isVisible="showAddStepModal" @tracked="toggleShowAddStepModal" @closed="toggleShowAddStepModal"></AddStep>
+    <v-btn
+      @click="onAddStepClicked"
+      class="mb-5 mr-5"
+      position="fixed"
+      location="bottom right"
+      icon="mdi-plus"
+      color="secondary"
+    />
 
-    <Tabs>
-      <Tab title="Tracking" :selected="true">
-        <!--        <div class="title-with-button">-->
-        <!--          <button @click="onAddStepClicked">Add Step</button>-->
-        <!--        </div>-->
+    <div>
+      <h1>{{ trackStore.titleById($route.params.track) }}</h1>
 
-        <div class="info" v-if="stepStore.steps && !stepStore.steps.length">
-          <p>You don't have any step tracked yet.</p>
-        </div>
+      <Tabs>
+        <Tab title="Tracking" :selected="true">
+          <div>
+            <h2>Steps</h2>
+          </div>
 
-        <TrackList></TrackList>
-      </Tab>
+          <div v-if="stepStore.steps && !stepStore.steps.length">
+            <p>You don't have any step tracked yet.</p>
+          </div>
 
-      <Tab title="Settings">
-        <TrackSettings></TrackSettings>
-      </Tab>
-    </Tabs>
+          <TrackList></TrackList>
+        </Tab>
 
-    <Modal v-show="showAddStepModal">
-      <h2>Add a Step</h2>
-      <AddStep @tracked="toggleShowAddStepModal" @closed="toggleShowAddStepModal"></AddStep>
-    </Modal>
-  </div>
+        <Tab title="Settings">
+          <TrackSettings></TrackSettings>
+        </Tab>
+      </Tabs>
+    </div>
+  </v-container>
 </template>
 
 <style></style>
