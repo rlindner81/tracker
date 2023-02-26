@@ -34,9 +34,9 @@ const toggleAddTrack = () => {
       </v-col>
     </v-row>
 
+    <AddTrack v-show="false" @close="toggleAddTrack"></AddTrack>
     <v-btn class="mb-5 mr-5" position="fixed" location="bottom right" icon="mdi-plus" color="primary" />
   </v-container>
-  <AddTrack v-show="false" @close="toggleAddTrack"></AddTrack>
 
   <!--  <div class="view dashboard">-->
   <!--    <h1>Dashboard</h1>-->

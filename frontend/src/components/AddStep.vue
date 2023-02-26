@@ -2,34 +2,23 @@
 import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
 import { TRACK_FIELD_INPUT, TRACK_FIELD_TYPE } from "@/constants";
+import { ref } from "vue";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
 
-defineProps({
-  isVisible: {
-    type: Boolean,
-    required: true,
-  },
-});
-
-const emit = defineEmits(["tracked", "closed"]);
+let showAddStepModal = ref(false);
 
 const submit = async () => {
+  showAddStepModal.value = false;
   await stepStore.createStep();
-  emit("tracked");
-};
-
-const handleChange = (event, fieldKey) => {
-  if (!event.target.checked) {
-    stepStore.newStepValues && Reflect.deleteProperty(stepStore.newStepValues, fieldKey);
-  }
 };
 </script>
 
 <template>
   <v-dialog
-    v-model="$props.isVisible"
+    activator="parent"
+    v-model="showAddStepModal"
     persistent
     v-if="trackStore.current && stepStore.newStepValues && stepStore.newStepEnabled"
   >
@@ -42,12 +31,7 @@ const handleChange = (event, fieldKey) => {
           <v-row align="center" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
             <v-col cols="2" xs="1" sm="1">
               <div v-if="trackStore.current.fields.some(({ optional }) => optional)">
-                <v-switch
-                  v-if="field.optional"
-                  v-model="stepStore.newStepEnabled[field.key]"
-                  @change="handleChange($event, field.key)"
-                  color="secondary"
-                />
+                <v-checkbox v-if="field.optional" v-model="stepStore.newStepEnabled[field.key]" color="secondary" />
               </div>
             </v-col>
             <v-col>
@@ -109,8 +93,8 @@ const handleChange = (event, fieldKey) => {
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="$emit('closed')"> Close </v-btn>
-        <v-btn color="secondary" variant="flat" @click="submit"> Track It </v-btn>
+        <v-btn @click="showAddStepModal = false"> Close </v-btn>
+        <v-btn @click="submit" color="secondary" variant="flat"> Track It </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
