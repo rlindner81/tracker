@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
-import Toggle from "@vueform/toggle";
-import Slider from "@vueform/slider";
 import { TRACK_FIELD_INPUT, TRACK_FIELD_TYPE } from "@/constants";
-import { computed, defineComponent, defineEmits, defineProps, ref } from 'vue';
+
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
 
-const props = defineProps({
+defineProps({
   addStepDialogIsVisible: {
     type: Boolean,
-    required: true
-  }
-})
-const addStepDialogIsVisibleInternal = computed(() => props.addStepDialogIsVisible)
+    required: true,
+  },
+});
 
 const emit = defineEmits(["tracked", "closed"]);
 
@@ -25,7 +22,7 @@ const submit = async () => {
 
 const handleChange = (enabled, fieldKey) => {
   if (!enabled) {
-    stepStore.newStepValues[fieldKey] = undefined;
+    stepStore.newStepValues && Reflect.deleteProperty(stepStore.newStepValues, fieldKey);
   }
 };
 </script>
@@ -33,7 +30,7 @@ const handleChange = (enabled, fieldKey) => {
 <template>
   <div>
     <v-dialog
-      v-model="addStepDialogIsVisibleInternal"
+      v-model="$props.addStepDialogIsVisible"
       persistent
       v-if="trackStore.current && stepStore.newStepValues && stepStore.newStepEnabled"
     >
@@ -52,7 +49,7 @@ const handleChange = (enabled, fieldKey) => {
                     @change="handleChange($event, field.key)"
                     color="secondary"
                   />
-              </div>
+                </div>
               </v-col>
               <v-col>
                 <div>
@@ -121,6 +118,4 @@ const handleChange = (enabled, fieldKey) => {
   </div>
 </template>
 
-<style src="@vueform/toggle/themes/default.css"></style>
-<style src="@vueform/slider/themes/default.css"></style>
 <style></style>
