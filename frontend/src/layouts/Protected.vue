@@ -52,7 +52,7 @@ onUnmounted(() => {
     </v-app-bar>
 
     <v-navigation-drawer v-model="isNavVisible" temporary>
-      <v-list-item class="my-2" :title="commonStore.user?.email">
+      <v-list-item class="my-2" :title="commonStore.user?.email || undefined">
         <template v-slot:prepend>
           <v-avatar color="secondary">
             <span class="text-h6">RL</span>
