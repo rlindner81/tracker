@@ -7,22 +7,15 @@ import Tabs from "@/components/Tabs.vue";
 import Tab from "@/components/Tab.vue";
 import TrackList from "@/components/TrackList.vue";
 import TrackSettings from "@/components/TrackSettings.vue";
-import { onBeforeMount, onBeforeUnmount, ref } from "vue";
+import { onBeforeMount, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
 const route = useRoute();
 
-let showAddStepModal = ref(false);
-
-const toggleShowAddStepModal = () => {
-  showAddStepModal.value = !showAddStepModal.value;
-};
-
 const onAddStepClicked = () => {
   stepStore.resetNewStepValues();
-  showAddStepModal.value = true;
 };
 
 onBeforeMount(() => {
@@ -38,16 +31,6 @@ onBeforeUnmount(() => {
 
 <template>
   <v-container>
-    <AddStep :isVisible="showAddStepModal" @tracked="toggleShowAddStepModal" @closed="toggleShowAddStepModal"></AddStep>
-    <v-btn
-      @click="onAddStepClicked"
-      class="mb-5 mr-5"
-      position="fixed"
-      location="bottom right"
-      icon="mdi-plus"
-      color="secondary"
-    />
-
     <div>
       <h1>{{ trackStore.titleById($route.params.track) }}</h1>
 
@@ -69,6 +52,11 @@ onBeforeUnmount(() => {
         </Tab>
       </Tabs>
     </div>
+
+    <v-btn @click="onAddStepClicked" class="mb-5 mr-5" position="fixed" location="bottom right" icon color="secondary">
+      <v-icon>mdi-plus</v-icon>
+      <AddStep></AddStep>
+    </v-btn>
   </v-container>
 </template>
 
