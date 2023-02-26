@@ -31,9 +31,9 @@ const _getFallbackValueForField = (field) => {
   return null;
 };
 
-const _filterUndefined = (obj) => {
-  return Object.entries(obj).reduce((result, [key, value]) => {
-    if (value !== undefined) {
+const _filterDisabled = (enabledMap, valuesMap) => {
+  return Object.entries(valuesMap).reduce((result, [key, value]) => {
+    if (enabledMap[key] !== false) {
       result[key] = value;
     }
     return result;
@@ -137,7 +137,7 @@ export const useStepStore = defineStore("step", {
     },
     async createStep() {
       await createStep(useCommonStore().userId, useTrackStore().currentId, {
-        values: _filterUndefined(toRaw(this.newStepValues)),
+        values: _filterDisabled(toRaw(this.newStepEnabled), toRaw(this.newStepValues)),
       });
     },
   },

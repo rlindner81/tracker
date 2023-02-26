@@ -16,14 +16,8 @@ defineProps({
 const emit = defineEmits(["tracked", "closed"]);
 
 const submit = async () => {
-  await stepStore.createStep();
   emit("tracked");
-};
-
-const handleChange = (event, fieldKey) => {
-  if (!event.target.checked) {
-    stepStore.newStepValues && Reflect.deleteProperty(stepStore.newStepValues, fieldKey);
-  }
+  await stepStore.createStep();
 };
 </script>
 
@@ -42,12 +36,7 @@ const handleChange = (event, fieldKey) => {
           <v-row align="center" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
             <v-col cols="2" xs="1" sm="1">
               <div v-if="trackStore.current.fields.some(({ optional }) => optional)">
-                <v-switch
-                  v-if="field.optional"
-                  v-model="stepStore.newStepEnabled[field.key]"
-                  @change="handleChange($event, field.key)"
-                  color="secondary"
-                />
+                <v-checkbox v-if="field.optional" v-model="stepStore.newStepEnabled[field.key]" color="secondary" />
               </div>
             </v-col>
             <v-col>
