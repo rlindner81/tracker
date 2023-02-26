@@ -37,7 +37,6 @@ const rows = computed(() => {
     item-value="name"
     class="elevation-1"
   />
-  <v-btn class="mb-5 mr-5" position="fixed" location="bottom right" icon="mdi-plus" color="primary" />
 </template>
 
 <style></style>
