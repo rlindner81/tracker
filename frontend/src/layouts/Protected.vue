@@ -12,61 +12,46 @@ const userStore = useUserStore();
 const trackStore = useTrackStore();
 const route = useRoute();
 
-let initialized = ref(false);
-let navVisible = ref(false);
+let isInitialized = ref(false);
+let isNavVisible = ref(false);
+let isHomeRoute = computed(() => route.name === "Home");
 
 onMounted(async () => {
   userStore.subscribeUsers();
   trackStore.subscribeTracks();
   // TODO this promise approach doesn't really work for the unmount case... is there a better way?
   await Promise.all([usersLoadedPromise, tracksLoadedPromise]);
-  initialized.value = true;
+  isInitialized.value = true;
 });
 onUnmounted(() => {
   userStore.unsubscribeUsers();
   trackStore.unsubscribeTracks();
-  initialized.value = false;
-});
-
-const routeStartsWithTrack = computed(() => {
-  return route.path.startsWith("/track");
+  isInitialized.value = false;
 });
 </script>
 
 <template>
   <v-app>
     <v-app-bar color="primary">
-      <!--      <template v-slot:image>-->
-      <!--        <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>-->
-      <!--      </template>-->
-
       <template v-slot:prepend>
         <v-app-bar-nav-icon
-          v-if="!routeStartsWithTrack"
+          v-if="isHomeRoute"
           variant="text"
-          @click.stop="navVisible = !navVisible"
+          @click.stop="isNavVisible = !isNavVisible"
         ></v-app-bar-nav-icon>
         <v-app-bar-nav-icon
-          v-if="routeStartsWithTrack"
+          v-if="!isHomeRoute"
           icon="mdi-chevron-left"
           variant="text"
-          @click.stop="navVisible = !navVisible"
+          @click.stop="isNavVisible = !isNavVisible"
           @click="$router.go(-1)"
         ></v-app-bar-nav-icon>
       </template>
 
-      <v-app-bar-title v-if="!routeStartsWithTrack">Tracks</v-app-bar-title>
-      <v-app-bar-title v-if="routeStartsWithTrack">Steps</v-app-bar-title>
-
-      <!--      <v-spacer></v-spacer>-->
-
-      <!--      <v-btn v-if="!routeStartsWithTrack && trackStore.tracks.length !== 0" prepend-icon="mdi-plus"> Add Track </v-btn>-->
-      <!--      <v-btn v-if="routeStartsWithTrack" @click.stop="showScheduleForm = true" prepend-icon="mdi-plus">-->
-      <!--        Add Step-->
-      <!--      </v-btn>-->
+      <v-app-bar-title>{{ $route.meta.title }}</v-app-bar-title>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="navVisible" temporary>
+    <v-navigation-drawer v-model="isNavVisible" temporary>
       <v-list-item class="my-2" :title="commonStore.user?.email">
         <template v-slot:prepend>
           <v-avatar color="secondary">
@@ -99,7 +84,7 @@ const routeStartsWithTrack = computed(() => {
     </v-navigation-drawer>
 
     <v-main>
-      <router-view v-if="initialized" :key="$route.path"></router-view>
+      <router-view v-if="isInitialized" :key="$route.path"></router-view>
     </v-main>
   </v-app>
 </template>
