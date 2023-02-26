@@ -76,12 +76,12 @@ export const useStepStore = defineStore("step", {
       const fields = useTrackStore().current?.fields;
       if (!fields) return [];
       const stepsDisplayRows: StepDisplayRow[] = state.steps.map((step) => {
-        const values = fields.map((field) => ({
-          label: field.name,
-          value: _computeStepValue(field, step),
-        }));
+        const values = fields.reduce((result, field) => {
+          result[field.key] = _computeStepValue(field, step);
+          return result;
+        }, {});
         const meta = {
-          postedBy: step.posted_by,
+          postedBy: useUserStore().emailById(step.posted_by),
           postedAt: readableRelativeDateTime(step.posted_at),
         };
         return { values, meta };

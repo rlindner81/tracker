@@ -29,11 +29,17 @@ const routes: Array<RouteRecordRaw> = [
         name: "Login",
         path: "login",
         component: Login,
+        meta: {
+          title: "Login",
+        },
       },
       {
         name: "Register",
         path: "register",
         component: Register,
+        meta: {
+          title: "Register",
+        },
       },
     ],
   },
@@ -52,11 +58,17 @@ const routes: Array<RouteRecordRaw> = [
         name: "Home",
         path: "/",
         component: Home,
+        meta: {
+          title: "Tracks",
+        },
       },
       {
         name: "Track",
         path: "/track/:track",
         component: Track,
+        meta: {
+          title: "Steps",
+        },
       },
     ],
   },
