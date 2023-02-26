@@ -43,10 +43,9 @@ onBeforeUnmount(() => {
 
     <Tabs>
       <Tab title="Tracking" :selected="true">
-        <div class="title-with-button">
-          <h2>Steps</h2>
-          <button @click="onAddStepClicked">Add Step</button>
-        </div>
+        <!--        <div class="title-with-button">-->
+        <!--          <button @click="onAddStepClicked">Add Step</button>-->
+        <!--        </div>-->
 
         <div class="info" v-if="stepStore.steps && !stepStore.steps.length">
           <p>You don't have any step tracked yet.</p>
