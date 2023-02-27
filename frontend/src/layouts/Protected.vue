@@ -43,7 +43,6 @@ onUnmounted(() => {
           v-if="!isHomeRoute"
           icon="mdi-chevron-left"
           variant="text"
-          @click.stop="isNavVisible = !isNavVisible"
           @click="$router.go(-1)"
         ></v-app-bar-nav-icon>
       </template>
