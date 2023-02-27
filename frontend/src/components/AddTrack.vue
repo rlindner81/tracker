@@ -1,19 +1,17 @@
 <script setup lang="ts">
-import { onBeforeMount, computed } from "vue";
+import { onBeforeMount, computed, ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_INPUT_TYPE } from "@/constants";
-import Toggle from "@vueform/toggle";
-import Modal from "./Modal.vue";
 
 const trackStore = useTrackStore();
-
-const emit = defineEmits(["close"]);
 
 const props = defineProps({
   edit: {
     default: false,
   },
 });
+
+let showAddTrack = ref(false);
 
 const relevant = computed(() => (props.edit ? trackStore.newUpdateTrack : trackStore.newCreateTrack));
 
@@ -29,8 +27,8 @@ const addField = () => {
   });
 };
 
-const removeField = (index) => {
-  relevant.value.fields?.splice(index, 1);
+const removeField = () => {
+  relevant.value.fields.pop();
 };
 
 const submit = async () => {
@@ -39,7 +37,6 @@ const submit = async () => {
   } else {
     await trackStore.createTrack();
   }
-  emit("close");
 };
 
 const addSelectValue = (field) => {
@@ -125,6 +122,29 @@ onBeforeMount(() => {
 </script>
 
 <template>
+  <v-dialog activator="parent" v-model="showAddTrack" persistent>
+    <v-card class="pa-2">
+      <v-card-title class="text-h5">{{ edit ? "Edit" : "Add" }} Track</v-card-title>
+      <v-container>
+        <v-text-field label="Track Name" v-model="relevant.name" variant="underlined" required></v-text-field>
+        <v-card class="my-2" elevation="0" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
+          <v-text-field label="Field Name" v-model="field.name" variant="underlined" required></v-text-field>
+        </v-card>
+      </v-container>
+      <v-card-actions>
+        <v-btn @click="removeField">Remove Field</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn @click="addField" color="secondary" variant="flat">Add Field</v-btn>
+      </v-card-actions>
+      <v-card-actions>
+        <v-btn @click="showAddTrack = false">Close</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn @click="submit" color="primary" variant="flat">{{ edit ? "Update" : "Create" }} Track</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!--
   <Modal>
     <form @submit.prevent="submit" class="component add-track" v-if="relevant">
       <div class="general">
@@ -233,7 +253,6 @@ onBeforeMount(() => {
       </div>
     </form>
   </Modal>
-</template>
+--></template>
 
-<style src="@vueform/toggle/themes/default.css"></style>
 <style></style>
