@@ -89,7 +89,7 @@ const messages = {
       track: "Verfolg Es Nach",
       cancel: "Abbrechen",
       noData: "Du hast bisher keinen Schritt hinzugefügt.",
-    }
+    },
   },
 };
 
