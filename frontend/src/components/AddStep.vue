@@ -88,6 +88,7 @@ const submit = async () => {
       <v-card-actions>
         <v-btn @click="showAddStepModal = false">{{ $t("action.cancel") }}</v-btn>
         <v-spacer></v-spacer>
+        <v-btn @click="showAddStepModal = false"> Close </v-btn>
         <v-btn @click="submit" color="secondary" variant="flat">{{ $t("entity.step.track") }}</v-btn>
       </v-card-actions>
     </v-card>
