@@ -27,8 +27,8 @@ const addField = () => {
   });
 };
 
-const removeField = () => {
-  relevant.value.fields.pop();
+const removeField = (index) => {
+  relevant.value.fields?.splice(index, 1);
 };
 
 const submit = async () => {
@@ -127,19 +127,24 @@ onBeforeMount(() => {
       <v-card-title class="text-h5">{{ edit ? "Edit" : "Add" }} Track</v-card-title>
       <v-container>
         <v-text-field label="Track Name" v-model="relevant.name" variant="underlined" required></v-text-field>
-        <v-card class="my-2" elevation="0" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
+        <v-card class="py-2" elevation="0" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
           <v-text-field label="Field Name" v-model="field.name" variant="underlined" required></v-text-field>
+          <v-btn
+            @click="removeField(fieldIndex)"
+            position="absolute"
+            class="pa-0 ma-0"
+            location="top right"
+            variant="text"
+            icon="mdi-trash-can"
+            color="secondary"
+          ></v-btn>
         </v-card>
       </v-container>
       <v-card-actions>
-        <v-btn @click="removeField">Remove Field</v-btn>
         <v-spacer></v-spacer>
-        <v-btn @click="addField" color="secondary" variant="flat">Add Field</v-btn>
-      </v-card-actions>
-      <v-card-actions>
         <v-btn @click="showAddTrack = false">Close</v-btn>
-        <v-spacer></v-spacer>
-        <v-btn @click="submit" color="primary" variant="flat">{{ edit ? "Update" : "Create" }} Track</v-btn>
+        <v-btn @click="addField" color="secondary" variant="flat">Add Field</v-btn>
+        <v-btn @click="submit" color="primary" variant="flat">{{ edit ? "Update" : "Create" }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
