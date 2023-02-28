@@ -128,16 +128,14 @@ onBeforeMount(() => {
       <v-container>
         <v-text-field label="Track Name" v-model="relevant.name" variant="underlined" required></v-text-field>
         <v-card class="py-2" elevation="0" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
-          <v-text-field label="Field Name" v-model="field.name" variant="underlined" required></v-text-field>
-          <v-btn
-            @click="removeField(fieldIndex)"
-            position="absolute"
-            class="pa-0 ma-0"
-            location="top right"
-            variant="text"
-            icon="mdi-trash-can"
-            color="secondary"
-          ></v-btn>
+          <v-row no-gutters class="flex-nowrap">
+            <v-col class="flex-grow-1 flex-shrink-0">
+              <v-text-field label="Field Name" v-model="field.name" variant="underlined" required></v-text-field>
+            </v-col>
+            <v-col class="flex-grow-0 flex-shrink-1">
+              <v-btn @click="removeField(fieldIndex)" variant="text" icon="mdi-trash-can" color="secondary"></v-btn>
+            </v-col>
+          </v-row>
         </v-card>
       </v-container>
       <v-card-actions>
