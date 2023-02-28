@@ -14,7 +14,7 @@ const toggleAddTrack = () => {
 
 <template>
   <div class="view dashboard">
-    <h1>Dashboard</h1>
+    <h1>{{ $t("nav.dashboard") }}</h1>
 
     <Tiles>
       <router-link
@@ -36,7 +36,7 @@ const toggleAddTrack = () => {
     </Tiles>
 
     <button @click="toggleAddTrack">
-      {{ trackStore.tracks.length === 0 ? "Add your first track" : "Add a track" }}
+      {{ trackStore.tracks.length === 0 ? $t("track.first") : $t("track.add") }}
     </button>
 
     <AddTrack v-show="showAddTrack" @close="toggleAddTrack"></AddTrack>

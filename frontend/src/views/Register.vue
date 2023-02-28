@@ -11,9 +11,9 @@ let password = ref<string | null>(null);
 <template>
   <div class="view register">
     <form @submit.prevent="register({ email, password })">
-      <input v-model="email" type="text" placeholder="Email" />
-      <input v-model="password" type="password" placeholder="Password" />
-      <LoadingButton>Register</LoadingButton>
+      <input v-model="email" type="text" :placeholder="$t('login.email')" />
+      <input v-model="password" type="password" :placeholder="$t('login.password')" />
+      <LoadingButton>{{ $t("register.button") }}</LoadingButton>
     </form>
   </div>
 </template>

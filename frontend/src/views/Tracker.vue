@@ -10,10 +10,12 @@ import TrackList from "@/components/TrackList.vue";
 import TrackSettings from "@/components/TrackSettings.vue";
 import { onBeforeMount, onBeforeUnmount, ref } from "vue";
 import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
 const route = useRoute();
+const { t } = useI18n();
 
 let showAddStepModal = ref(false);
 
@@ -42,26 +44,26 @@ onBeforeUnmount(() => {
     <h1>{{ trackStore.titleById($route.params.track) }}</h1>
 
     <Tabs>
-      <Tab title="Tracking" :selected="true">
+      <Tab :title="$t('tabs.tracking')" :selected="true">
         <div class="title-with-button">
-          <h2>Steps</h2>
-          <button @click="onAddStepClicked">Add Step</button>
+          <h2>{{ $t("step.plural") }}</h2>
+          <button @click="onAddStepClicked">{{ $t("step.add") }}</button>
         </div>
 
         <div class="info" v-if="stepStore.steps && !stepStore.steps.length">
-          <p>You don't have any step tracked yet.</p>
+          <p>{{ $t("step.noData") }}</p>
         </div>
 
         <TrackList></TrackList>
       </Tab>
 
-      <Tab title="Settings">
+      <Tab :title="$t('tabs.settings')">
         <TrackSettings></TrackSettings>
       </Tab>
     </Tabs>
 
     <Modal v-show="showAddStepModal">
-      <h2>Add a Step</h2>
+      <h2>{{ $t("step.add") }}</h2>
       <AddStep @tracked="toggleShowAddStepModal" @closed="toggleShowAddStepModal"></AddStep>
     </Modal>
   </div>
