@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { logout } from "@/firebase/auth";
 import { tracksLoadedPromise, usersLoadedPromise } from "@/firebase/db";
 import { useUserStore } from "@/store/user";
-import { useRoute } from "vue-router";
 
 const commonStore = useCommonStore();
 const userStore = useUserStore();
 const trackStore = useTrackStore();
-const route = useRoute();
 
 let isInitialized = ref(false);
 let isNavVisible = ref(false);
-let isHomeRoute = computed(() => route.name === "Home");
 
 onMounted(async () => {
   userStore.subscribeUsers();
@@ -35,16 +32,12 @@ onUnmounted(() => {
     <v-app-bar color="primary">
       <template v-slot:prepend>
         <v-app-bar-nav-icon
-          v-if="isHomeRoute"
-          variant="text"
-          @click.stop="isNavVisible = !isNavVisible"
-        ></v-app-bar-nav-icon>
-        <v-app-bar-nav-icon
-          v-if="!isHomeRoute"
+          v-if="$route.meta.back"
           icon="mdi-chevron-left"
           variant="text"
-          @click="$router.go(-1)"
+          @click="$router.push({ name: $route.meta.back })"
         ></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon v-else variant="text" @click.stop="isNavVisible = !isNavVisible"></v-app-bar-nav-icon>
       </template>
 
       <v-app-bar-title>{{ $route.meta.title }}</v-app-bar-title>

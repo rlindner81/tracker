@@ -68,6 +68,7 @@ const routes: Array<RouteRecordRaw> = [
         component: Track,
         meta: {
           title: "Steps",
+          back: "Home",
         },
       },
     ],
