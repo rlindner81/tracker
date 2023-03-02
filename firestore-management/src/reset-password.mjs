@@ -1,7 +1,7 @@
 import { initializeApp, resetPassword } from "./firebase.mjs";
 
 const RESET_PASSWORDS = {
-  // "kasselmann.jana@gmail.com": "test1234",
+  // "paolo.sfilio@sap.com": "test1234",
 };
 
 const main = async () => {
