@@ -43,21 +43,21 @@ const exportTrack = () => {
 
 <template>
   <div class="component track-settings">
-    <h2>Track</h2>
-    <button @click="onEditTrackClicked">Edit Track</button>
+    <h2>{{ $t("entity.track.singular") }}</h2>
+    <button @click="onEditTrackClicked">{{ $t("entity.track.edit") }}</button>
 
-    <button @click="exportTrack">Export Tack</button>
+    <button @click="exportTrack">{{ $t("entity.track.export") }}</button>
 
-    <h2>Danger Zone</h2>
-    <button @click="toggleShowDeleteModal">Delete Track</button>
+    <h2>{{ $t("entity.track.dangerZone") }}</h2>
+    <button @click="toggleShowDeleteModal">{{ $t("entity.track.delete") }}</button>
 
     <AddTrack :edit="true" v-show="showEditModal" @close="toggleShowEditModal"></AddTrack>
 
     <Modal v-show="showDeleteModal">
-      <p>Do you really want to delete this track?</p>
+      <p>{{ $t("entity.track.deletionWarning") }}</p>
       <div class="buttons">
-        <button @click="onDeleteClicked">Delete</button>
-        <button @click="toggleShowDeleteModal">Cancel</button>
+        <button @click="onDeleteClicked">{{ $t("action.delete") }}</button>
+        <button @click="toggleShowDeleteModal">{{ $t("action.cancel") }}</button>
       </div>
     </Modal>
   </div>

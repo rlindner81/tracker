@@ -6,6 +6,7 @@ import { registerSW } from "virtual:pwa-register";
 
 import App from "./App.vue";
 import router from "./router";
+import i18n from "./i18n";
 import { readableDateTime, readableRelativeDateTime } from "./datetime";
 
 import "vuetify/styles";
@@ -47,7 +48,7 @@ const vuetify = createVuetify({
 // https://vite-pwa-org.netlify.app/guide/auto-update.html
 registerSW({ immediate: true });
 
-const app = createApp(App).use(vuetify).use(createPinia()).use(router);
+const app = createApp(App).use(vuetify).use(createPinia()).use(router).use(i18n);
 app.mount("#app");
 
 // https://primitive.dev/blog/vue-3-global-filters/

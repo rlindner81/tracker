@@ -15,12 +15,18 @@ const doLogin = () => {
 
 <template>
   <v-form ref="form" @submit.prevent="doLogin">
-    <v-text-field prepend-icon="mdi-email" label="E-mail" v-model="email" variant="underlined" required></v-text-field>
+    <v-text-field
+      prepend-icon="mdi-email"
+      :label="$t('auth.login.email')"
+      v-model="email"
+      variant="underlined"
+      required
+    ></v-text-field>
     <!--                :error-messages="errorMessages.email"-->
 
     <v-text-field
       prepend-icon="mdi-lock"
-      label="Password"
+      :label="$t('auth.login.password')"
       type="password"
       v-model="password"
       variant="underlined"
@@ -28,10 +34,10 @@ const doLogin = () => {
     ></v-text-field>
 
     <div class="text-center">
-      <v-btn :loading="loading" class="large text rounded" type="submit">Sign In</v-btn>
+      <v-btn :loading="loading" class="large text rounded" type="submit">{{ $t("auth.login.signIn") }}</v-btn>
     </div>
     <div class="d-flex justify-end">
-      <router-link :to="{ name: 'Register' }">Register</router-link>
+      <router-link :to="{ name: 'Register' }">{{ $t("auth.register.signUp") }}</router-link>
     </div>
   </v-form>
 </template>

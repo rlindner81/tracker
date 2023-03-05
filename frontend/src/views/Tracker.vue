@@ -35,19 +35,19 @@ onBeforeUnmount(() => {
       <h1>{{ trackStore.titleById($route.params.track) }}</h1>
 
       <Tabs>
-        <Tab title="Tracking" :selected="true">
+        <Tab :title="$t('nav.tab.tracking')" :selected="true">
           <div>
-            <h2>Steps</h2>
+            <h2>{{ $t("nav.tab.settings") }}</h2>
           </div>
 
           <div v-if="stepStore.steps && !stepStore.steps.length">
-            <p>You don't have any step tracked yet.</p>
+            <p>{{ $t("entity.step.noData") }}</p>
           </div>
 
           <TrackList></TrackList>
         </Tab>
 
-        <Tab title="Settings">
+        <Tab :title="$t('nav.tab.settings')">
           <TrackSettings></TrackSettings>
         </Tab>
       </Tabs>

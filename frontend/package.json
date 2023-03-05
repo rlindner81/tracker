@@ -25,7 +25,9 @@
     "pinia": "^2.0.30",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
-    "vuetify": "^3.1.5"
+    "vuetify": "^3.1.5",
+    "@intlify/unplugin-vue-i18n": "^0.8.2",
+    "vue-i18n": "^9.2.2"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
