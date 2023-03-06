@@ -24,7 +24,7 @@ const submit = async () => {
   >
     <v-card>
       <v-card-title>
-        <span class="text-h5">Add Step</span>
+        <span class="text-h5">{{ $t("entity.step.add") }}</span>
       </v-card-title>
       <v-card-text>
         <v-container>
@@ -39,7 +39,7 @@ const submit = async () => {
                 <label :class="stepStore.newStepEnabled[field.key] ? '' : 'disable'">{{ field.name }}</label>
                 <v-text-field
                   v-model="stepStore.newStepValues[field.key]"
-                  :placeholder="`Enter ${field.name}`"
+                  :placeholder="$t('entity.track.enter', field.name)"
                   v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.STRING"
                   :disabled="!stepStore.newStepEnabled[field.key]"
                   density="compact"
@@ -48,7 +48,7 @@ const submit = async () => {
                   type="number"
                   step="0.00001"
                   v-model="stepStore.newStepValues[field.key]"
-                  :placeholder="`Enter ${field.name}`"
+                  :placeholder="$t('entity.track.enter', field.name)"
                   v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.FLOAT"
                   :disabled="!stepStore.newStepEnabled[field.key]"
                   density="compact"
@@ -57,7 +57,7 @@ const submit = async () => {
                   type="number"
                   step="1"
                   v-model="stepStore.newStepValues[field.key]"
-                  :placeholder="`Enter ${field.name}`"
+                  :placeholder="$t('entity.track.enter', field.name)"
                   v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.INTEGER"
                   :disabled="!stepStore.newStepEnabled[field.key]"
                   density="compact"
@@ -93,8 +93,8 @@ const submit = async () => {
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="showAddStepModal = false"> Close </v-btn>
-        <v-btn @click="submit" color="secondary" variant="flat"> Track It </v-btn>
+        <v-btn @click="showAddStepModal = false">{{ $t("action.cancel") }}</v-btn>
+        <v-btn @click="submit" color="secondary" variant="flat">{{ $t("entity.step.track") }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

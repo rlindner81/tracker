@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "tab": {
+      "tracking": "Tracking",
+      "settings": "Settings"
+    }
+  },
+  "auth": {
+    "login": {
+      "email": "Email",
+      "password": "Password",
+      "signIn": "Sign In"
+    },
+    "register": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "signUp": "Sign Up"
+    },
+    "logout": "Sign Out"
+  },
+  "action": {
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "remove": "Remove",
+    "update": "Update",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "entity": {
+    "track": {
+      "singular": "Track",
+      "plural": "Tracks",
+      "create": "Create Track",
+      "edit": "Edit Track",
+      "export": "Export Track",
+      "delete": "Delete Track",
+      "name": "Name",
+      "value": "Value",
+      "fieldName": "Field Name",
+      "fieldKey": "Field Key",
+      "namePlaceholder": "Enter a name ...",
+      "first": "Add your first track",
+      "deletionWarning": "Do you really want to delete this track?",
+      "entryOptional": "Entry is optional",
+      "inputMethod": "Input Method",
+      "valueType": "Value Type",
+      "minValue": "Min Value",
+      "maxValue": "Max Value",
+      "addValue": "Add Value",
+      "defaultSelection": "Default Selection",
+      "removeField": "Remove Field",
+      "addField": "Add Field",
+      "enter": "Enter {0}",
+      "dangerZone": "Danger Zone"
+    },
+    "step": {
+      "singular": "Step",
+      "plural": "Steps",
+      "add": "Add Step",
+      "size": "Step Size",
+      "noData": "You don't have any steps tracked yet.",
+      "track": "Track It"
+    }
+  }
+}

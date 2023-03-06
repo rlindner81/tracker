@@ -17,14 +17,25 @@ const doRegister = () => {
 
 <template>
   <v-form ref="form" @submit.prevent="doRegister">
-    <v-text-field label="Name" prepend-icon="mdi-account" v-model="name" variant="underlined"></v-text-field>
-    <!--                :error-messages="errorMessages.email"-->
-
-    <v-text-field label="E-mail" prepend-icon="mdi-email" v-model="email" variant="underlined" required></v-text-field>
+    <v-text-field
+      :label="$t('auth.register.name')"
+      prepend-icon="mdi-account"
+      v-model="name"
+      variant="underlined"
+    ></v-text-field>
     <!--                :error-messages="errorMessages.email"-->
 
     <v-text-field
-      label="Password"
+      :label="$t('auth.register.email')"
+      prepend-icon="mdi-email"
+      v-model="email"
+      variant="underlined"
+      required
+    ></v-text-field>
+    <!--                :error-messages="errorMessages.email"-->
+
+    <v-text-field
+      :label="$t('auth.register.password')"
       prepend-icon="mdi-lock"
       type="password"
       v-model="password"
@@ -33,10 +44,10 @@ const doRegister = () => {
     ></v-text-field>
 
     <div class="text-center">
-      <v-btn :loading="loading" class="large text rounded" type="submit">Sign Up</v-btn>
+      <v-btn :loading="loading" class="large text rounded" type="submit">{{ $t("auth.register.signUp") }}</v-btn>
     </div>
     <div class="d-flex justify-start">
-      <router-link :to="{ name: 'Login' }">Login</router-link>
+      <router-link :to="{ name: 'Login' }">{{ $t("auth.login.signIn") }}</router-link>
     </div>
   </v-form>
 </template>

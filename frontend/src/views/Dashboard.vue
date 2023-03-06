@@ -27,7 +27,7 @@ const toggleAddTrack = () => {
       <v-col v-if="trackStore.tracks.length === 0" cols="12" sm="4">
         <v-card style="min-height: 10rem" elevation="4">
           <v-card-title class="text-center text-h5 ma-4 my-6">
-            <div>Add your first track</div>
+            <div>{{ $t("entity.track.first") }}</div>
           </v-card-title>
           <v-card-text class="text-center text-h6"> <v-icon icon="mdi-plus"></v-icon> </v-card-text>
         </v-card>

@@ -55,7 +55,7 @@ onUnmounted(() => {
       <v-divider></v-divider>
 
       <v-list density="compact" nav>
-        <v-list-subheader title="Tracks"></v-list-subheader>
+        <v-list-subheader :title="$t('entity.track.plural')"></v-list-subheader>
         <v-list-item
           v-for="track in trackStore.tracks"
           :key="track._id"
@@ -70,7 +70,7 @@ onUnmounted(() => {
 
       <template v-slot:append>
         <div class="pa-4">
-          <v-btn color="secondary" style="width: 100%" @click.prevent="logout()"> Logout </v-btn>
+          <v-btn color="secondary" style="width: 100%" @click.prevent="logout()">{{ $t("auth.logout") }}</v-btn>
         </div>
       </template>
     </v-navigation-drawer>

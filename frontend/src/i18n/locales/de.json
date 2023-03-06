@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "tab": {
+      "tracking": "Tracking",
+      "settings": "Einstellungen"
+    }
+  },
+  "auth": {
+    "login": {
+      "email": "E-Mail",
+      "password": "Passwort",
+      "signIn": "Anmelden"
+    },
+    "register": {
+      "name": "Name",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "signUp": "Registrieren"
+    },
+    "logout": "Abmelden"
+  },
+  "action": {
+    "delete": "Löschen",
+    "cancel": "Abbrechen",
+    "remove": "Entfernen",
+    "update": "Aktualisieren",
+    "yes": "Ja",
+    "no": "Nein"
+  },
+  "entity": {
+    "track": {
+      "singular": "Track",
+      "plural": "Tracks",
+      "create": "Track erstellen",
+      "edit": "Track bearbeiten",
+      "export": "Track exportieren",
+      "delete": "Track löschen",
+      "name": "Name",
+      "value": "Wert",
+      "fieldName": "Feldname",
+      "fieldKey": "Feldschlüssel",
+      "namePlaceholder": "Gib einen Namen ein ...",
+      "first": "Füge deinen ersten Track hinzu",
+      "deletionWarning": "Bist du dir sicher, dass du diesen Track löschen möchtest?",
+      "entryOptional": "Eintrag ist optional",
+      "inputMethod": "Eingeabemethode",
+      "valueType": "Werteart",
+      "minValue": "Minimalwert",
+      "maxValue": "Maximalwert",
+      "addValue": "Wert hinzufügen",
+      "defaultSelection": "Standardauswahl",
+      "removeField": "Feld entfernen",
+      "addField": "Feld hinzufügen",
+      "enter": "Füge {0} hinzu",
+      "dangerZone": "Gefahrenzone"
+    },
+    "step": {
+      "singular": "Schritt",
+      "plural": "Schritte",
+      "add": "Schritt hinzufügen",
+      "size": "Schrittgröße",
+      "noData": "Du hast bisher keine Schritte getrackt.",
+      "track": "Tracken"
+    }
+  }
+}
