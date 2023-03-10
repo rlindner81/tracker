@@ -13,6 +13,8 @@ const Home = () => import(/* webpackChunkName: "home" */ "@/views/Dashboard.vue"
 
 const Track = () => import(/* webpackChunkName: "track" */ "@/views/Tracker.vue");
 
+const CreateTrack = () => import("@/views/CreateTrack.vue");
+
 const routes: Array<RouteRecordRaw> = [
   {
     name: "Unprotected",
@@ -68,6 +70,15 @@ const routes: Array<RouteRecordRaw> = [
         component: Track,
         meta: {
           title: "Steps",
+          back: "Home",
+        },
+      },
+      {
+        name: "CreateTrack",
+        path: "/createTrack",
+        component: CreateTrack,
+        meta: {
+          title: "Create Track",
           back: "Home",
         },
       },

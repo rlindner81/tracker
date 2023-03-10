@@ -35,7 +35,14 @@ const toggleAddTrack = () => {
     </v-row>
 
     <AddTrack v-show="false" @close="toggleAddTrack"></AddTrack>
-    <v-btn class="mb-5 mr-5" position="fixed" location="bottom right" icon="mdi-plus" color="primary" />
+    <v-btn
+      class="mb-5 mr-5"
+      position="fixed"
+      location="bottom right"
+      icon="mdi-plus"
+      color="primary"
+      @click="$router.push({ name: 'CreateTrack' })"
+    />
   </v-container>
 
   <!--  <div class="view dashboard">-->
