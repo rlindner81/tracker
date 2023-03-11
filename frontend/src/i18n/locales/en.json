@@ -20,12 +20,11 @@
     "logout": "Sign Out"
   },
   "action": {
+    "save": "Save",
     "delete": "Delete",
     "cancel": "Cancel",
     "remove": "Remove",
-    "update": "Update",
-    "yes": "Yes",
-    "no": "No"
+    "update": "Update"
   },
   "entity": {
     "track": {

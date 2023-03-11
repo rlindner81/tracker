@@ -20,12 +20,11 @@
     "logout": "Abmelden"
   },
   "action": {
+    "save": "Sichern",
     "delete": "Löschen",
     "cancel": "Abbrechen",
     "remove": "Entfernen",
-    "update": "Aktualisieren",
-    "yes": "Ja",
-    "no": "Nein"
+    "update": "Aktualisieren"
   },
   "entity": {
     "track": {

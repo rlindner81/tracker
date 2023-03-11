@@ -146,7 +146,7 @@ onBeforeMount(() => {
 
           <label>{{ $t("entity.track.entryOptional") }}</label>
           <div class="toggle-wrapper">
-            <Toggle v-model="field.optional" :on-label="$t('action.yes')" :off-label="$t('action.no')" />
+            <Toggle v-model="field.optional"/>
           </div>
 
           <label>{{ $t("entity.track.inputMethod") }}</label>
