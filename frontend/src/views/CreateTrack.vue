@@ -2,7 +2,7 @@
 import { onBeforeMount, computed } from "vue";
 import { useTrackStore } from "@/store/track";
 import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_INPUT_TYPE } from "@/constants";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import TrackField from "@/components/TrackField.vue";
 
 const trackStore = useTrackStore();
@@ -12,7 +12,18 @@ const props = defineProps({
   },
 });
 
+const router = useRouter();
+
 const relevant = computed(() => (props.edit ? trackStore.newUpdateTrack : trackStore.newCreateTrack));
+
+const onSave = async () => {
+  if (props.edit) {
+    await trackStore.updateTrack();
+  } else {
+    await trackStore.createTrack();
+  }
+  router.push({ name: "Home" });
+};
 
 onBeforeMount(() => {
   if (props.edit) {
@@ -36,12 +47,11 @@ onBeforeMount(() => {
         <v-text-field label="Track Description" placeholder="Enter a description ..." density="compact"></v-text-field>
       </v-card-text>
     </v-card>
-    <TrackField></TrackField>
   </v-container>
-  <v-card flat location="bottom" position="fixed" color="primary" :rounded="0" min-width="100%">
+  <v-card flat location="bottom" position="fixed" color="primary" :rounded="0" width="100%">
     <v-card-actions>
-        <v-btn>Cancel</v-btn>
-        <v-btn color="success" variant="elevated">Save</v-btn>
+      <v-btn>Cancel</v-btn>
+      <v-btn color="success" variant="elevated" @click="onSave()">Save</v-btn>
     </v-card-actions>
   </v-card>
 </template>
