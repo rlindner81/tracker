@@ -9,6 +9,7 @@ const trackStore = useTrackStore();
 const show = ref(false);
 const edit = ref(false);
 const trackFieldInput = Object.keys(TRACK_FIELD_INPUT);
+const trackFieldType = Object.keys(TRACK_FIELD_TYPE);
 
 const router = useRouter();
 
@@ -169,7 +170,13 @@ onBeforeMount(() => {
                   @input="onFieldNameChange($event, field)"
                 />
 
-                <v-text-field type="text" :value="field.key" :disabled="true" :label="$t('entity.track.fieldKey')" />
+                <v-text-field
+                  type="text"
+                  :value="field.key"
+                  :disabled="true"
+                  :label="$t('entity.track.fieldKey')"
+                  density="compact"
+                />
 
                 <v-checkbox v-model="field.optional" color="secondary" :label="$t('entity.track.entryOptional')" />
 
@@ -179,92 +186,108 @@ onBeforeMount(() => {
                   :items="trackFieldInput"
                   @change="onChangeFieldInput(field)"
                   :label="$t('entity.track.inputMethod')"
+                  density="compact"
                 >
                 </v-select>
 
-                <label>{{ $t("entity.track.valueType") }}</label>
-                <select :disabled="edit" v-model="field.type">
-                  <option v-for="(type, typeIndex) in getFieldTypes(field)" :key="typeIndex" :value="type">
-                    {{ type }}
-                  </option>
-                </select>
+                <v-select
+                  :disabled="edit"
+                  v-model="field.type"
+                  :label="$t('entity.track.valueType')"
+                  :items="trackFieldType"
+                  density="compact"
+                >
+                </v-select>
 
-                <div class="slider" v-if="field.input === TRACK_FIELD_INPUT.SLIDER">
-                  <label>{{ $t("entity.track.minValue") }}</label>
-                  <input
+                <div v-if="field.input === TRACK_FIELD_INPUT.SLIDER">
+                  <v-text-field
                     v-if="field.type === TRACK_FIELD_TYPE.INTEGER"
                     type="number"
                     step="1"
+                    :label="$t('entity.track.minValue')"
                     v-model="field.params.min"
+                    density="compact"
                   />
-                  <input
+                  <v-text-field
                     v-if="field.type === TRACK_FIELD_TYPE.FLOAT"
                     type="number"
                     step="0.0000001"
+                    :label="$t('entity.track.minValue')"
                     v-model="field.params.min"
+                    density="compact"
                   />
 
-                  <label>{{ $t("entity.track.maxValue") }}</label>
-                  <input
+                  <v-text-field
                     v-if="field.type === TRACK_FIELD_TYPE.INTEGER"
                     type="number"
                     step="1"
+                    :label="$t('entity.track.maxValue')"
                     v-model="field.params.max"
+                    density="compact"
                   />
-                  <input
+                  <v-text-field
                     v-if="field.type === TRACK_FIELD_TYPE.FLOAT"
                     type="number"
                     step="0.0000001"
+                    :label="$t('entity.track.maxValue')"
                     v-model="field.params.max"
+                    density="compact"
                   />
 
-                  <label>{{ $t("entity.step.size") }}</label>
-                  <input
+                  <v-text-field
                     v-if="field.type === TRACK_FIELD_TYPE.INTEGER"
                     type="number"
                     step="1"
+                    :label="$t('entity.step.size')"
                     v-model="field.params.step"
+                    density="compact"
                   />
-                  <input
+                  <v-text-field
                     v-if="field.type === TRACK_FIELD_TYPE.FLOAT"
                     type="number"
                     step="0.0000001"
+                    :label="$t('entity.step.size')"
                     v-model="field.params.step"
+                    density="compact"
                   />
                 </div>
 
-                <div class="select" v-if="field.input === TRACK_FIELD_INPUT.SELECT">
-                  <div class="value" v-for="(choice, choiceIndex) in field.params.choices" :key="choiceIndex">
-                    <input
-                      type="text"
+                <div v-if="field.input === TRACK_FIELD_INPUT.SELECT">
+                  <div v-for="(choice, choiceIndex) in field.params.choices" :key="choiceIndex">
+                    <v-text-field
                       :placeholder="$t('entity.track.name')"
                       v-model="choice.name"
                       @input="!edit && (choice.value = slugify(choice.name))"
+                      density="compact"
                     />
-                    <input type="text" :placeholder="$t('entity.track.value')" v-model="choice.value" />
+                    <v-text-field :placeholder="$t('entity.track.value')" v-model="choice.value" density="compact" />
 
                     <button class="remover" type="button" @click="removeSelectValue(field, choiceIndex)">
                       {{ $t("action.remove") }}
                     </button>
                   </div>
-                  <button type="button" @click="addSelectValue(field)">{{ $t("entity.track.addValue") }}</button>
+                  <v-btn @click="addSelectValue(field)">{{ $t("entity.track.addValue") }}</v-btn>
 
-                  <label>{{ $t("entity.track.defaultSelection") }}</label>
-                  <select v-model="field.params.default_choice">
-                    <option :value="null"></option>
-                    <option
+                  <v-select
+                    v-model="field.params.default_choice"
+                    :label="$t('entity.track.defaultSelection')"
+                    :items="field.params.choices"
+                    density="compact"
+                  >
+                    <!--option :value="null"></option-->
+                    <!--option
                       v-for="(choice, choiceIndex) in field.params.choices"
                       :key="choiceIndex"
                       :value="choice.value"
                     >
                       {{ choice.name }}
-                    </option>
-                  </select>
+                    </option-->
+                  </v-select>
                 </div>
 
-                <button v-if="!edit" type="button" class="remove" @click="removeField(i)">
+                <v-btn v-if="!edit" @click="removeField(i)">
                   {{ $t("entity.track.removeField") }}
-                </button>
+                </v-btn>
               </div>
             </v-card-text>
           </div>
