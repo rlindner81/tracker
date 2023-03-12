@@ -184,7 +184,7 @@ onBeforeMount(() => {
                   :disabled="edit"
                   v-model="field.input"
                   :items="trackFieldInput"
-                  @change="onChangeFieldInput(field)"
+                  @update:modelValue="onChangeFieldInput(field)"
                   :label="$t('entity.track.inputMethod')"
                   density="compact"
                 >
