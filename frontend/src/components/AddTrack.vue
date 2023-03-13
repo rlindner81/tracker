@@ -47,7 +47,10 @@ const addSelectValue = (field) => {
 };
 
 const removeSelectValue = (field, index) => {
-  field.params.choices.splice(index, 1);
+  const [entry] = field.params.choices.splice(index, 1);
+  if (entry.value === field.params.default_choice || field.params.choices.length === 0) {
+    field.params.default_choice = null;
+  }
 };
 
 const slugify = (str) => {
@@ -80,8 +83,8 @@ const prepareFieldParams = (field) => {
     }
     case TRACK_FIELD_INPUT.SELECT: {
       field.params = {
-        choices: [],
-        default_choice: 0,
+        choices: [{ name: null, value: null }],
+        default_choice: null,
       };
       return;
     }
@@ -135,7 +138,7 @@ onBeforeMount(() => {
         <v-card class="py-2" elevation="0" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
           <v-divider :thickness="4" />
           <v-container class="py-2 px-0">
-            <v-row no-gutters class="flex-nowrap">
+            <v-row class="flex-nowrap">
               <v-col class="flex-grow-1 flex-shrink-0">
                 <v-text-field
                   :label="$t('entity.track.fieldName')"
@@ -145,14 +148,11 @@ onBeforeMount(() => {
                   @input="onFieldNameChange($event, field)"
                 ></v-text-field>
               </v-col>
+              <v-col class="flex-grow-1 flex-shrink-0">
+                <v-text-field :label="$t('entity.track.fieldKey')" variant="underlined" v-model="field.key" disabled />
+              </v-col>
               <v-col class="flex-grow-0 flex-shrink-1">
                 <v-btn @click="removeField(fieldIndex)" variant="text" icon="mdi-trash-can" color="secondary"></v-btn>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col>
-                <v-text-field :label="$t('entity.track.fieldKey')" variant="underlined" v-model="field.key" disabled />
               </v-col>
             </v-row>
 
@@ -174,9 +174,6 @@ onBeforeMount(() => {
                   @update:modelValue="onChangeFieldInput($event, field)"
                 />
               </v-col>
-            </v-row>
-
-            <v-row>
               <v-col>
                 <v-select
                   :label="$t('entity.track.valueType')"
@@ -188,6 +185,85 @@ onBeforeMount(() => {
                 />
               </v-col>
             </v-row>
+
+            <div v-if="field.input === TRACK_FIELD_INPUT.SELECT">
+              <v-row class="flex-nowrap" v-for="(choice, choiceIndex) in field.params.choices" :key="choiceIndex">
+                <v-col class="flex-grow-1 flex-shrink-0">
+                  <v-text-field
+                    :label="$t('entity.track.name')"
+                    v-model="choice.name"
+                    variant="underlined"
+                    required
+                    @input="!edit && (choice.value = slugify(choice.name))"
+                  ></v-text-field>
+                </v-col>
+                <v-col class="flex-grow-1 flex-shrink-0">
+                  <v-text-field
+                    :label="$t('entity.track.value')"
+                    v-model="choice.value"
+                    variant="underlined"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col class="flex-grow-0 flex-shrink-1">
+                  <v-btn
+                    @click="removeSelectValue(field, choiceIndex)"
+                    variant="text"
+                    icon="mdi-trash-can"
+                    color="secondary"
+                  ></v-btn>
+                </v-col>
+              </v-row>
+              <v-row v-if="field.params.choices.length > 0">
+                <v-col>
+                  <v-select
+                    :label="$t('entity.track.defaultSelection')"
+                    :items="field.params.choices"
+                    item-title="name"
+                    item-value="value"
+                    variant="underlined"
+                    density="compact"
+                    v-model="field.params.default_choice"
+                  />
+                </v-col>
+              </v-row>
+              <v-btn @click="addSelectValue(field)">Add Choice</v-btn>
+            </div>
+
+            <div v-if="field.input === TRACK_FIELD_INPUT.SLIDER">
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    :label="$t('entity.track.minValue')"
+                    type="number"
+                    :step="field.type === TRACK_FIELD_TYPE.FLOAT ? 0.01 : 1"
+                    v-model="field.params.min"
+                    variant="underlined"
+                    density="compact"
+                  />
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    :label="$t('entity.track.maxValue')"
+                    type="number"
+                    :step="field.type === TRACK_FIELD_TYPE.FLOAT ? 0.01 : 1"
+                    v-model="field.params.max"
+                    variant="underlined"
+                    density="compact"
+                  />
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    :label="$t('entity.step.size')"
+                    type="number"
+                    :step="field.type === TRACK_FIELD_TYPE.FLOAT ? 0.01 : 1"
+                    v-model="field.params.step"
+                    variant="underlined"
+                    density="compact"
+                  />
+                </v-col>
+              </v-row>
+            </div>
           </v-container>
         </v-card>
       </v-container>

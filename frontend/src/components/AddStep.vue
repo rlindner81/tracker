@@ -64,8 +64,8 @@ const submit = async () => {
                 v-model="stepStore.newStepValues[field.key]"
                 :items="field.params.choices"
                 :disabled="!stepStore.newStepEnabled[field.key]"
-                item-value="value"
                 item-title="name"
+                item-value="value"
                 density="compact"
               />
               <v-slider
