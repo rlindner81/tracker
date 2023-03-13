@@ -69,7 +69,7 @@ const slugify = (str) => {
   return str;
 };
 
-const getFieldTypes = (field) => TRACK_INPUT_TYPE[field.input];
+const getFieldTypes = (input) => TRACK_INPUT_TYPE[input];
 
 const prepareFieldParams = (field) => {
   switch (field.input) {
@@ -96,8 +96,8 @@ const prepareFieldParams = (field) => {
   }
 };
 
-const onChangeFieldInput = (field) => {
-  const matchingTypes = getFieldTypes(field);
+const onChangeFieldInput = (input, field) => {
+  const matchingTypes = getFieldTypes(input);
   if (matchingTypes.length === 0) return;
   if (!field.type || !matchingTypes.includes(field.type)) {
     field.type = matchingTypes[0];
@@ -171,7 +171,7 @@ onBeforeMount(() => {
                   density="compact"
                   v-model="field.input"
                   :disabled="edit"
-                  @change="onChangeFieldInput(field)"
+                  @update:modelValue="onChangeFieldInput($event, field)"
                 />
               </v-col>
             </v-row>
@@ -180,7 +180,7 @@ onBeforeMount(() => {
               <v-col>
                 <v-select
                   :label="$t('entity.track.valueType')"
-                  :items="getFieldTypes(field)"
+                  :items="getFieldTypes(field.input)"
                   variant="underlined"
                   density="compact"
                   v-model="field.type"
