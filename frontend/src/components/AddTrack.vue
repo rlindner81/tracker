@@ -126,16 +126,69 @@ onBeforeMount(() => {
     <v-card class="pa-2">
       <v-card-title class="text-h5">{{ edit ? "Edit" : "Add" }} Track</v-card-title>
       <v-container>
-        <v-text-field label="Track Name" v-model="relevant.name" variant="underlined" required></v-text-field>
+        <v-text-field
+          :label="$t('entity.track.name')"
+          v-model="relevant.name"
+          variant="underlined"
+          required
+        ></v-text-field>
         <v-card class="py-2" elevation="0" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
-          <v-row no-gutters class="flex-nowrap">
-            <v-col class="flex-grow-1 flex-shrink-0">
-              <v-text-field label="Field Name" v-model="field.name" variant="underlined" required></v-text-field>
-            </v-col>
-            <v-col class="flex-grow-0 flex-shrink-1">
-              <v-btn @click="removeField(fieldIndex)" variant="text" icon="mdi-trash-can" color="secondary"></v-btn>
-            </v-col>
-          </v-row>
+          <v-divider :thickness="4" />
+          <v-container class="py-2 px-0">
+            <v-row no-gutters class="flex-nowrap">
+              <v-col class="flex-grow-1 flex-shrink-0">
+                <v-text-field
+                  :label="$t('entity.track.fieldName')"
+                  v-model="field.name"
+                  variant="underlined"
+                  required
+                  @input="onFieldNameChange($event, field)"
+                ></v-text-field>
+              </v-col>
+              <v-col class="flex-grow-0 flex-shrink-1">
+                <v-btn @click="removeField(fieldIndex)" variant="text" icon="mdi-trash-can" color="secondary"></v-btn>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-text-field :label="$t('entity.track.fieldKey')" variant="underlined" v-model="field.key" disabled />
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-checkbox :label="$t('entity.track.entryOptional')" v-model="field.optional" />
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-select
+                  :label="$t('entity.track.inputMethod')"
+                  :items="Object.values(TRACK_FIELD_INPUT)"
+                  variant="underlined"
+                  density="compact"
+                  v-model="field.input"
+                  :disabled="edit"
+                  @change="onChangeFieldInput(field)"
+                />
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <v-select
+                  :label="$t('entity.track.valueType')"
+                  :items="getFieldTypes(field)"
+                  variant="underlined"
+                  density="compact"
+                  v-model="field.type"
+                  :disabled="edit"
+                />
+              </v-col>
+            </v-row>
+          </v-container>
         </v-card>
       </v-container>
       <v-card-actions>
