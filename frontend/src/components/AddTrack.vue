@@ -187,6 +187,19 @@ onBeforeMount(() => {
             </v-row>
 
             <div v-if="field.input === TRACK_FIELD_INPUT.SELECT">
+              <v-row v-if="field.params.choices.length > 0">
+                <v-col>
+                  <v-select
+                    :label="$t('entity.track.defaultSelection')"
+                    :items="field.params.choices"
+                    item-title="name"
+                    item-value="value"
+                    variant="underlined"
+                    density="compact"
+                    v-model="field.params.default_choice"
+                  />
+                </v-col>
+              </v-row>
               <v-row class="flex-nowrap" v-for="(choice, choiceIndex) in field.params.choices" :key="choiceIndex">
                 <v-col class="flex-grow-1 flex-shrink-0">
                   <v-text-field
@@ -212,19 +225,6 @@ onBeforeMount(() => {
                     icon="mdi-trash-can"
                     color="secondary"
                   ></v-btn>
-                </v-col>
-              </v-row>
-              <v-row v-if="field.params.choices.length > 0">
-                <v-col>
-                  <v-select
-                    :label="$t('entity.track.defaultSelection')"
-                    :items="field.params.choices"
-                    item-title="name"
-                    item-value="value"
-                    variant="underlined"
-                    density="compact"
-                    v-model="field.params.default_choice"
-                  />
                 </v-col>
               </v-row>
               <v-btn @click="addSelectValue(field)">Add Choice</v-btn>
@@ -275,116 +275,6 @@ onBeforeMount(() => {
       </v-card-actions>
     </v-card>
   </v-dialog>
-
-  <!--
-  <Modal>
-    <form @submit.prevent="submit" class="component add-track" v-if="relevant">
-      <div class="general">
-        <label>{{ $t("entity.track.name") }}</label>
-        <input type="text" v-model="relevant.name" :placeholder="$t('entity.track.namePlaceholder')" />
-      </div>
-      <div class="fields">
-        <div class="field" v-for="(field, i) in relevant.fields" :key="i">
-          <label>{{ $t("entity.track.fieldName") }}</label>
-          <input
-            type="text"
-            v-model="field.name"
-            :placeholder="$t('entity.track.namePlaceholder')"
-            @input="onFieldNameChange($event, field)"
-          />
-
-          <label>{{ $t("entity.track.fieldKey") }}</label>
-          <input type="text" :value="field.key" :disabled="true" />
-
-          <label>{{ $t("entity.track.entryOptional") }}</label>
-          <div class="toggle-wrapper">
-            <Toggle v-model="field.optional" :on-label="$t('action.yes')" :off-label="$t('action.no')" />
-          </div>
-
-          <label>{{ $t("entity.track.inputMethod") }}</label>
-          <select :disabled="edit" v-model="field.input" @change="onChangeFieldInput(field)">
-            <option v-for="(input, inputIndex) in TRACK_FIELD_INPUT" :key="inputIndex" :value="input">
-              {{ input }}
-            </option>
-          </select>
-
-          <label>{{ $t("entity.track.valueType") }}</label>
-          <select :disabled="edit" v-model="field.type">
-            <option v-for="(type, typeIndex) in getFieldTypes(field)" :key="typeIndex" :value="type">
-              {{ type }}
-            </option>
-          </select>
-
-          <div class="slider" v-if="field.input === TRACK_FIELD_INPUT.SLIDER">
-            <label>{{ $t("entity.track.minValue") }}</label>
-            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.params.min" />
-            <input
-              v-if="field.type === TRACK_FIELD_TYPE.FLOAT"
-              type="number"
-              step="0.0000001"
-              v-model="field.params.min"
-            />
-
-            <label>{{ $t("entity.track.maxValue") }}</label>
-            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.params.max" />
-            <input
-              v-if="field.type === TRACK_FIELD_TYPE.FLOAT"
-              type="number"
-              step="0.0000001"
-              v-model="field.params.max"
-            />
-
-            <label>{{ $t("entity.step.size") }}</label>
-            <input v-if="field.type === TRACK_FIELD_TYPE.INTEGER" type="number" step="1" v-model="field.params.step" />
-            <input
-              v-if="field.type === TRACK_FIELD_TYPE.FLOAT"
-              type="number"
-              step="0.0000001"
-              v-model="field.params.step"
-            />
-          </div>
-
-          <div class="select" v-if="field.input === TRACK_FIELD_INPUT.SELECT">
-            <div class="value" v-for="(choice, choiceIndex) in field.params.choices" :key="choiceIndex">
-              <input
-                type="text"
-                :placeholder="$t('entity.track.name')"
-                v-model="choice.name"
-                @input="!edit && (choice.value = slugify(choice.name))"
-              />
-              <input type="text" :placeholder="$t('entity.track.value')" v-model="choice.value" />
-
-              <button class="remover" type="button" @click="removeSelectValue(field, choiceIndex)">
-                {{ $t("action.remove") }}
-              </button>
-            </div>
-            <button type="button" @click="addSelectValue(field)">{{ $t("entity.track.addValue") }}</button>
-
-            <label>{{ $t("entity.track.defaultSelection") }}</label>
-            <select v-model="field.params.default_choice">
-              <option :value="null"></option>
-              <option v-for="(choice, choiceIndex) in field.params.choices" :key="choiceIndex" :value="choice.value">
-                {{ choice.name }}
-              </option>
-            </select>
-          </div>
-
-          <button v-if="!edit" type="button" class="remove" @click="removeField(i)">
-            {{ $t("entity.track.removeField") }}
-          </button>
-        </div>
-
-        <button v-if="!edit" class="add-field" type="button" @click="addField">
-          {{ $t("entity.track.addField") }}
-        </button>
-      </div>
-
-      <div class="button-row">
-        <button class="inverted" type="button" @click="$emit('close')">{{ $t("action.cancel") }}</button>
-        <button>{{ edit ? $t("action.update") : $t("entity.track.create") }}</button>
-      </div>
-    </form>
-  </Modal>
---></template>
+</template>
 
 <style></style>
