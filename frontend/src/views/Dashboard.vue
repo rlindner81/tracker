@@ -1,14 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { useTrackStore } from "@/store/track";
-import AddTrack from "@/components/AddTrack.vue";
 
 const trackStore = useTrackStore();
-let showAddTrack = ref(false);
-
-const toggleAddTrack = () => {
-  showAddTrack.value = !showAddTrack.value;
-};
 </script>
 
 <template>
@@ -34,7 +27,6 @@ const toggleAddTrack = () => {
       </v-col>
     </v-row>
 
-    <AddTrack v-show="false" @close="toggleAddTrack"></AddTrack>
     <v-btn
       class="mb-5 mr-5"
       position="fixed"
