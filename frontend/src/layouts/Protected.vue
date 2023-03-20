@@ -18,6 +18,7 @@ const stepStore = useStepStore();
 
 let isInitialized = ref(false);
 let isNavVisible = ref(false);
+let showDeleteConfirmation = ref(false);
 
 const onTrackExport = () => {
   const data = stepStore.stepsExportRows;
@@ -26,9 +27,10 @@ const onTrackExport = () => {
   exportFromJSON({ data, fileName, exportType });
 };
 const onTrackDelete = async () => {
+  showDeleteConfirmation.value = false;
+  await router.replace({ name: "Home" });
   stepStore.unsubscribeSteps();
   await trackStore.deleteTrack();
-  await router.replace({ name: "Home" });
 };
 
 onMounted(async () => {
@@ -70,7 +72,18 @@ onUnmounted(() => {
                 <AddTrack :edit="true"></AddTrack>
               </v-list-item>
               <v-list-item title="Export" @click="onTrackExport()" />
-              <v-list-item title="Delete" @click="onTrackDelete()" />
+              <v-list-item title="Delete">
+                <v-dialog v-model="showDeleteConfirmation" activator="parent" width="auto">
+                  <v-card>
+                    <v-card-text> This will delete all step and track data. Are you sure? </v-card-text>
+                    <v-card-actions>
+                      <v-spacer />
+                      <v-btn variant="flat" @click="showDeleteConfirmation = false">Close</v-btn>
+                      <v-btn variant="flat" color="error" @click="onTrackDelete()">Confirm Delete</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-list-item>
             </v-list>
           </v-menu>
         </v-btn>

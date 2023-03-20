@@ -33,6 +33,7 @@ const removeField = (index) => {
 };
 
 const submit = async () => {
+  showAddTrack.value = false;
   if (props.edit) {
     await trackStore.updateTrack();
   } else {
