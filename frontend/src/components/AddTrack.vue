@@ -120,10 +120,10 @@ onBeforeMount(() => {
           v-model="relevant.name"
           variant="underlined"
           density="compact"
+          hide-details="auto"
           required
         ></v-text-field>
-        <v-card class="py-2" elevation="0" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
-          <v-divider :thickness="4" />
+        <v-card class="my-4" elevation="2" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
           <v-container class="py-2 px-0">
             <v-row class="flex-nowrap">
               <v-col class="flex-grow-1 flex-shrink-0">
@@ -132,23 +132,27 @@ onBeforeMount(() => {
                   v-model="field.name"
                   variant="underlined"
                   density="compact"
+                  hide-details="auto"
                   required
                   @input="onFieldNameChange($event, field)"
                 ></v-text-field>
               </v-col>
               <v-col class="flex-grow-1 flex-shrink-0">
-                <v-text-field :label="$t('entity.track.fieldKey')" variant="underlined" v-model="field.key" disabled />
+                <v-text-field
+                  :label="$t('entity.track.fieldKey')"
+                  variant="underlined"
+                  density="compact"
+                  hide-details="auto"
+                  v-model="field.key"
+                  disabled
+                />
               </v-col>
               <v-col class="flex-grow-0 flex-shrink-1">
                 <v-btn @click="removeField(fieldIndex)" variant="text" icon="mdi-trash-can" color="secondary"></v-btn>
               </v-col>
             </v-row>
 
-            <v-row>
-              <v-col>
-                <v-checkbox :label="$t('entity.track.entryOptional')" v-model="field.optional" />
-              </v-col>
-            </v-row>
+            <v-checkbox :label="$t('entity.track.entryOptional')" density="compact" v-model="field.optional" />
 
             <v-row>
               <v-col>
@@ -157,17 +161,22 @@ onBeforeMount(() => {
                   :items="Object.values(TRACK_FIELD_INPUT)"
                   variant="underlined"
                   density="compact"
+                  hide-details="auto"
                   v-model="field.input"
                   :disabled="edit"
                   @update:modelValue="onChangeFieldInput($event, field)"
                 />
               </v-col>
+            </v-row>
+
+            <v-row>
               <v-col>
                 <v-select
                   :label="$t('entity.track.valueType')"
                   :items="getFieldTypes(field.input)"
                   variant="underlined"
                   density="compact"
+                  hide-details="auto"
                   v-model="field.type"
                   :disabled="edit"
                 />
