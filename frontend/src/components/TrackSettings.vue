@@ -44,14 +44,15 @@ const exportTrack = () => {
 <template>
   <div class="component track-settings">
     <h2>{{ $t("entity.track.singular") }}</h2>
-    <button @click="onEditTrackClicked">{{ $t("entity.track.edit") }}</button>
+    <button @click="onEditTrackClicked">
+      {{ $t("entity.track.edit") }}
+      <!--      <AddTrack :edit="true" v-show="showEditModal" @close="toggleShowEditModal"></AddTrack>-->
+    </button>
 
     <button @click="exportTrack">{{ $t("entity.track.export") }}</button>
 
     <h2>{{ $t("entity.track.dangerZone") }}</h2>
     <button @click="toggleShowDeleteModal">{{ $t("entity.track.delete") }}</button>
-
-    <AddTrack :edit="true" v-show="showEditModal" @close="toggleShowEditModal"></AddTrack>
 
     <Modal v-show="showDeleteModal">
       <p>{{ $t("entity.track.deletionWarning") }}</p>
