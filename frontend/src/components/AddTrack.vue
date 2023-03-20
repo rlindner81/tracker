@@ -7,12 +7,17 @@ import { slugify } from "@/shared";
 const trackStore = useTrackStore();
 
 const props = defineProps({
+  show: {
+    type: Boolean,
+    default: false,
+  },
   edit: {
+    type: Boolean,
     default: false,
   },
 });
 
-let showAddTrack = ref(false);
+const emit = defineEmits(["close"]);
 
 const relevant = computed(() => (props.edit ? trackStore.newUpdateTrack : trackStore.newCreateTrack));
 
@@ -42,7 +47,7 @@ const resetData = () => {
 };
 
 const onCreateOrUpdate = async () => {
-  showAddTrack.value = false;
+  emit("close");
   if (props.edit) {
     await trackStore.updateTrack();
   } else {
@@ -51,7 +56,7 @@ const onCreateOrUpdate = async () => {
 };
 
 const onClose = async () => {
-  showAddTrack.value = false;
+  emit("close");
   resetData();
 };
 
@@ -118,7 +123,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-dialog activator="parent" v-model="showAddTrack" persistent>
+  <v-dialog v-model="$props.show" persistent>
     <v-card class="pa-2">
       <v-card-title class="text-h5">{{ edit ? "Edit" : "Add" }} Track</v-card-title>
       <v-container>

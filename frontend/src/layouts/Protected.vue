@@ -18,15 +18,29 @@ const stepStore = useStepStore();
 
 let isInitialized = ref(false);
 let isNavVisible = ref(false);
+let showTrackMenu = ref(false);
+let showEditTrack = ref(false);
 let showDeleteConfirmation = ref(false);
 
+const onTrackEdit = () => {
+  showTrackMenu.value = false;
+  showEditTrack.value = true;
+};
+
 const onTrackExport = () => {
+  showTrackMenu.value = false;
   const data = stepStore.stepsExportRows;
   const fileName = trackStore.current.name;
   const exportType = exportFromJSON.types["csv"];
   exportFromJSON({ data, fileName, exportType });
 };
-const onTrackDelete = async () => {
+
+const onTrackDelete = () => {
+  showTrackMenu.value = false;
+  showDeleteConfirmation.value = true;
+};
+
+const onTrackConfirmedDelete = async () => {
   showDeleteConfirmation.value = false;
   await router.replace({ name: "Home" });
   stepStore.unsubscribeSteps();
@@ -65,31 +79,31 @@ onUnmounted(() => {
       <template v-slot:append v-if="$route.name === 'Track'">
         <v-btn icon>
           <v-icon icon="mdi-dots-vertical"></v-icon>
-          <v-menu activator="parent">
+          <v-menu v-model="showTrackMenu" activator="parent">
             <v-list>
-              <v-list-item title="Edit" @click.stop>
-                <!-- TODO this is painfully slow somehow -->
-                <AddTrack :edit="true"></AddTrack>
-              </v-list-item>
+              <v-list-item title="Edit" @click="onTrackEdit()" />
               <v-list-item title="Export" @click="onTrackExport()" />
-              <v-list-item title="Delete" @click.stop>
-                <v-dialog v-model="showDeleteConfirmation" activator="parent" width="auto">
-                  <v-card>
-                    <v-card-title>Delete Track</v-card-title>
-                    <v-card-text>This will delete all step and track data. Are you sure?</v-card-text>
-                    <v-card-actions>
-                      <v-spacer />
-                      <v-btn variant="flat" @click="showDeleteConfirmation = false">Close</v-btn>
-                      <v-btn variant="flat" color="error" @click="onTrackDelete()">Confirm Delete</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </v-list-item>
+              <v-list-item title="Delete" @click="onTrackDelete()" />
             </v-list>
           </v-menu>
         </v-btn>
       </template>
     </v-app-bar>
+
+    <!-- TODO this is painfully slow somehow -->
+    <AddTrack :edit="true" :show="showEditTrack" @close="showEditTrack = false"></AddTrack>
+
+    <v-dialog v-model="showDeleteConfirmation" width="auto">
+      <v-card>
+        <v-card-title>Delete Track</v-card-title>
+        <v-card-text>This will delete all step and track data. Are you sure?</v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn variant="flat" @click="showDeleteConfirmation = false">Close</v-btn>
+          <v-btn variant="flat" color="error" @click="onTrackConfirmedDelete()">Confirm Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <v-navigation-drawer v-model="isNavVisible" temporary>
       <v-list-item class="my-2" :title="commonStore.user?.email || undefined">

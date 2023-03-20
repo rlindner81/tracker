@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import AddTrack from "@/components/AddTrack.vue";
 
 const trackStore = useTrackStore();
+
+let showAddTrack = ref(false);
 </script>
 
 <template>
@@ -30,9 +33,9 @@ const trackStore = useTrackStore();
       </v-row>
     </v-container>
 
-    <v-btn class="mb-5 mr-5" position="fixed" location="bottom right" icon color="primary">
+    <v-btn class="mb-5 mr-5" position="fixed" location="bottom right" icon color="primary" @click="showAddTrack = true">
       <v-icon>mdi-plus</v-icon>
-      <AddTrack :edit="false"></AddTrack>
+      <AddTrack :edit="false" :show="showAddTrack" @close="showAddTrack = false"></AddTrack>
     </v-btn>
   </div>
 </template>
