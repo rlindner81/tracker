@@ -124,7 +124,7 @@ onBeforeMount(() => {
           required
         ></v-text-field>
         <v-card class="my-4" elevation="2" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
-          <v-container class="py-2 px-0">
+          <v-container class="py-2">
             <v-row class="flex-nowrap">
               <v-col class="flex-grow-1 flex-shrink-0">
                 <v-text-field
@@ -152,7 +152,16 @@ onBeforeMount(() => {
               </v-col>
             </v-row>
 
-            <v-checkbox :label="$t('entity.track.entryOptional')" density="compact" v-model="field.optional" />
+            <v-row>
+              <v-col>
+                <v-checkbox
+                  :label="$t('entity.track.entryOptional')"
+                  density="compact"
+                  hide-details="auto"
+                  v-model="field.optional"
+                />
+              </v-col>
+            </v-row>
 
             <v-row>
               <v-col>
@@ -184,19 +193,6 @@ onBeforeMount(() => {
             </v-row>
 
             <div v-if="field.input === TRACK_FIELD_INPUT.SELECT">
-              <v-row v-if="field.params.choices.length > 0">
-                <v-col>
-                  <v-select
-                    :label="$t('entity.track.defaultSelection')"
-                    :items="field.params.choices"
-                    item-title="name"
-                    item-value="value"
-                    variant="underlined"
-                    density="compact"
-                    v-model="field.params.default_choice"
-                  />
-                </v-col>
-              </v-row>
               <v-row class="flex-nowrap" v-for="(choice, choiceIndex) in field.params.choices" :key="choiceIndex">
                 <v-col class="flex-grow-1 flex-shrink-0">
                   <v-text-field
@@ -204,6 +200,7 @@ onBeforeMount(() => {
                     v-model="choice.name"
                     variant="underlined"
                     density="compact"
+                    hide-details="auto"
                     required
                     @input="!edit && (choice.value = slugify(choice.name))"
                   ></v-text-field>
@@ -214,6 +211,7 @@ onBeforeMount(() => {
                     v-model="choice.value"
                     variant="underlined"
                     density="compact"
+                    hide-details="auto"
                     required
                   ></v-text-field>
                 </v-col>
@@ -226,7 +224,24 @@ onBeforeMount(() => {
                   ></v-btn>
                 </v-col>
               </v-row>
-              <v-btn @click="addSelectValue(field)">Add Choice</v-btn>
+              <v-row v-if="field.params.choices.length > 0">
+                <v-col>
+                  <v-select
+                    :label="$t('entity.track.defaultSelection')"
+                    :items="field.params.choices"
+                    item-title="name"
+                    item-value="value"
+                    variant="underlined"
+                    density="compact"
+                    hide-details="auto"
+                    v-model="field.params.default_choice"
+                  />
+                </v-col>
+              </v-row>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn variant="flat" color="secondary" @click="addSelectValue(field)">Add Choice</v-btn>
+              </v-card-actions>
             </div>
 
             <div v-if="field.input === TRACK_FIELD_INPUT.SLIDER">
