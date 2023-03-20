@@ -9,7 +9,7 @@ const stepStore = useStepStore();
 
 let showAddStepModal = ref(false);
 
-const submit = async () => {
+const onCreate = async () => {
   showAddStepModal.value = false;
   await stepStore.createStep();
 };
@@ -98,7 +98,7 @@ const submit = async () => {
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn @click="showAddStepModal = false">{{ $t("action.cancel") }}</v-btn>
-        <v-btn @click="submit" color="secondary" variant="flat">{{ $t("entity.step.track") }}</v-btn>
+        <v-btn @click="onCreate" color="secondary" variant="flat">{{ $t("entity.step.track") }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, computed, ref } from "vue";
+import { onMounted, computed, ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_INPUT_TYPE } from "@/constants";
 import { slugify } from "@/shared";
@@ -32,13 +32,27 @@ const removeField = (index) => {
   relevant.value.fields?.splice(index, 1);
 };
 
-const submit = async () => {
+const resetData = () => {
+  if (props.edit) {
+    trackStore.prepareNewUpdateTrack();
+  } else {
+    trackStore.prepareNewCreateTrack();
+    addField();
+  }
+};
+
+const onCreateOrUpdate = async () => {
   showAddTrack.value = false;
   if (props.edit) {
     await trackStore.updateTrack();
   } else {
     await trackStore.createTrack();
   }
+};
+
+const onClose = async () => {
+  showAddTrack.value = false;
+  resetData();
 };
 
 const addSelectValue = (field) => {
@@ -98,16 +112,8 @@ const onFieldNameChange = (event, field) => {
   }
 };
 
-if (props.edit) {
-  addField();
-}
-
-onBeforeMount(() => {
-  if (props.edit) {
-    trackStore.prepareNewUpdateTrack();
-  } else {
-    trackStore.prepareNewCreateTrack();
-  }
+onMounted(() => {
+  resetData();
 });
 </script>
 
@@ -155,6 +161,7 @@ onBeforeMount(() => {
                   icon="mdi-trash-can"
                   color="secondary"
                   density="compact"
+                  :disabled="edit"
                 ></v-btn>
               </v-col>
             </v-row>
@@ -297,9 +304,9 @@ onBeforeMount(() => {
       </v-container>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="showAddTrack = false">Close</v-btn>
-        <v-btn @click="addField" color="secondary" variant="flat">Add Field</v-btn>
-        <v-btn @click="submit" color="primary" variant="flat">{{ edit ? "Update" : "Create" }}</v-btn>
+        <v-btn @click="onClose">Close</v-btn>
+        <v-btn @click="addField" color="secondary" variant="flat" :disabled="edit">Add Field</v-btn>
+        <v-btn @click="onCreateOrUpdate" color="primary" variant="flat">{{ edit ? "Update" : "Create" }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
