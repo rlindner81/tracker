@@ -1,26 +1,34 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { logout } from "@/firebase/auth";
 import { tracksLoadedPromise, usersLoadedPromise } from "@/firebase/db";
 import { useUserStore } from "@/store/user";
+import { useStepStore } from "@/store/step";
+import AddTrack from "@/components/AddTrack.vue";
+import exportFromJSON from "export-from-json";
 
+const router = useRouter();
 const commonStore = useCommonStore();
 const userStore = useUserStore();
 const trackStore = useTrackStore();
+const stepStore = useStepStore();
 
 let isInitialized = ref(false);
 let isNavVisible = ref(false);
 
-const onTrackEdit = () => {
-  console.log("edit");
-};
 const onTrackExport = () => {
-  console.log("export");
+  const data = stepStore.stepsExportRows;
+  const fileName = trackStore.current.name;
+  const exportType = exportFromJSON.types["csv"];
+  exportFromJSON({ data, fileName, exportType });
 };
-const onTrackDelete = () => {
-  console.log("delete");
+const onTrackDelete = async () => {
+  stepStore.unsubscribeSteps();
+  await trackStore.deleteTrack();
+  await router.replace({ name: "Home" });
 };
 
 onMounted(async () => {
@@ -57,7 +65,10 @@ onUnmounted(() => {
           <v-icon icon="mdi-dots-vertical"></v-icon>
           <v-menu activator="parent">
             <v-list>
-              <v-list-item title="Edit" @click="onTrackEdit()" />
+              <v-list-item title="Edit" @click.prevent>
+                <!-- TODO this is painfully slow somehow -->
+                <AddTrack :edit="true"></AddTrack>
+              </v-list-item>
               <v-list-item title="Export" @click="onTrackExport()" />
               <v-list-item title="Delete" @click="onTrackDelete()" />
             </v-list>
