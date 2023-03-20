@@ -75,7 +75,8 @@ onUnmounted(() => {
               <v-list-item title="Delete">
                 <v-dialog v-model="showDeleteConfirmation" activator="parent" width="auto">
                   <v-card>
-                    <v-card-text> This will delete all step and track data. Are you sure? </v-card-text>
+                    <v-card-title>Delete Track</v-card-title>
+                    <v-card-text>This will delete all step and track data. Are you sure?</v-card-text>
                     <v-card-actions>
                       <v-spacer />
                       <v-btn variant="flat" @click="showDeleteConfirmation = false">Close</v-btn>
