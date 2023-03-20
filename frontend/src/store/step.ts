@@ -14,13 +14,24 @@ interface State {
   newStepEnabled: {} | null;
 }
 
+const _getSelectDefaultChoice = (field) => {
+  switch (typeof field.params.default_choice) {
+    case "number":
+      return field.params.choices[field.params.default_choice];
+    case "string":
+      return field.params.choices.find((choice) => choice.value === field.params.default_choice);
+    default:
+      return field.params.choices[0];
+  }
+};
+
 const _getFallbackValueForField = (field) => {
   switch (field.input) {
     case TRACK_FIELD_INPUT.TEXT_FIELD: {
       return "";
     }
     case TRACK_FIELD_INPUT.SELECT: {
-      const { value } = field.params.choices[field.params.default_choice] || field.params.choices[0] || {};
+      const { value } = _getSelectDefaultChoice(field) || {};
       if (value !== undefined) return value;
       break;
     }
