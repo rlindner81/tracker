@@ -162,6 +162,7 @@ onBeforeMount(() => {
               <v-col>
                 <v-checkbox
                   :label="$t('entity.track.entryOptional')"
+                  color="secondary"
                   density="compact"
                   hide-details="auto"
                   v-model="field.optional"
