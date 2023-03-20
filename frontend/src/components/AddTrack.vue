@@ -2,6 +2,7 @@
 import { onBeforeMount, computed, ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_INPUT_TYPE } from "@/constants";
+import { slugify } from "@/shared";
 
 const trackStore = useTrackStore();
 
@@ -53,25 +54,6 @@ const removeSelectValue = (field, index) => {
   }
 };
 
-const slugify = (str) => {
-  str = str.replace(/^\s+|\s+$/g, ""); // trim
-  str = str.toLowerCase();
-
-  // remove accents, swap ñ for n, etc
-  const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
-  const to = "aaaaeeeeiiiioooouuuunc______";
-  for (let i = 0, l = from.length; i < l; i++) {
-    str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
-  }
-
-  str = str
-    .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
-    .replace(/\s+/g, "_") // collapse whitespace and replace by -
-    .replace(/-+/g, "_"); // collapse dashes
-
-  return str;
-};
-
 const getFieldTypes = (input) => TRACK_INPUT_TYPE[input];
 
 const prepareFieldParams = (field) => {
@@ -114,6 +96,10 @@ const onFieldNameChange = (event, field) => {
     field.key = slugify(target.value);
   }
 };
+
+if (props.edit) {
+  addField();
+}
 
 onBeforeMount(() => {
   if (props.edit) {
