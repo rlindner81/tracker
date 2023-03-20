@@ -125,7 +125,7 @@ onBeforeMount(() => {
         ></v-text-field>
         <v-card class="my-4" elevation="2" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
           <v-container class="py-2">
-            <v-row class="flex-nowrap">
+            <v-row class="flex-nowrap align-center">
               <v-col class="flex-grow-1 flex-shrink-0">
                 <v-text-field
                   :label="$t('entity.track.fieldName')"
@@ -148,7 +148,13 @@ onBeforeMount(() => {
                 />
               </v-col>
               <v-col class="flex-grow-0 flex-shrink-1">
-                <v-btn @click="removeField(fieldIndex)" variant="text" icon="mdi-trash-can" color="secondary"></v-btn>
+                <v-btn
+                  @click="removeField(fieldIndex)"
+                  variant="text"
+                  icon="mdi-trash-can"
+                  color="secondary"
+                  density="compact"
+                ></v-btn>
               </v-col>
             </v-row>
 
@@ -193,7 +199,11 @@ onBeforeMount(() => {
             </v-row>
 
             <div v-if="field.input === TRACK_FIELD_INPUT.SELECT">
-              <v-row class="flex-nowrap" v-for="(choice, choiceIndex) in field.params.choices" :key="choiceIndex">
+              <v-row
+                class="flex-nowrap align-center"
+                v-for="(choice, choiceIndex) in field.params.choices"
+                :key="choiceIndex"
+              >
                 <v-col class="flex-grow-1 flex-shrink-0">
                   <v-text-field
                     :label="$t('entity.track.name')"
@@ -221,6 +231,7 @@ onBeforeMount(() => {
                     variant="text"
                     icon="mdi-trash-can"
                     color="secondary"
+                    density="compact"
                   ></v-btn>
                 </v-col>
               </v-row>
