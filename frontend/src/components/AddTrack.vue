@@ -133,6 +133,7 @@ onBeforeMount(() => {
           :label="$t('entity.track.name')"
           v-model="relevant.name"
           variant="underlined"
+          density="compact"
           required
         ></v-text-field>
         <v-card class="py-2" elevation="0" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
@@ -144,6 +145,7 @@ onBeforeMount(() => {
                   :label="$t('entity.track.fieldName')"
                   v-model="field.name"
                   variant="underlined"
+                  density="compact"
                   required
                   @input="onFieldNameChange($event, field)"
                 ></v-text-field>
@@ -206,6 +208,7 @@ onBeforeMount(() => {
                     :label="$t('entity.track.name')"
                     v-model="choice.name"
                     variant="underlined"
+                    density="compact"
                     required
                     @input="!edit && (choice.value = slugify(choice.name))"
                   ></v-text-field>
@@ -215,6 +218,7 @@ onBeforeMount(() => {
                     :label="$t('entity.track.value')"
                     v-model="choice.value"
                     variant="underlined"
+                    density="compact"
                     required
                   ></v-text-field>
                 </v-col>
