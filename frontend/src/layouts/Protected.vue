@@ -67,12 +67,12 @@ onUnmounted(() => {
           <v-icon icon="mdi-dots-vertical"></v-icon>
           <v-menu activator="parent">
             <v-list>
-              <v-list-item title="Edit" @click.prevent>
+              <v-list-item title="Edit" @click.stop>
                 <!-- TODO this is painfully slow somehow -->
                 <AddTrack :edit="true"></AddTrack>
               </v-list-item>
               <v-list-item title="Export" @click="onTrackExport()" />
-              <v-list-item title="Delete">
+              <v-list-item title="Delete" @click.stop>
                 <v-dialog v-model="showDeleteConfirmation" activator="parent" width="auto">
                   <v-card>
                     <v-card-title>Delete Track</v-card-title>
