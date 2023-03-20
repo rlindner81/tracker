@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onBeforeMount, computed, ref } from "vue";
+import { onMounted, computed, ref } from "vue";
 import { useTrackStore } from "@/store/track";
 import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_INPUT_TYPE } from "@/constants";
+import { slugify } from "@/shared";
 
 const trackStore = useTrackStore();
 
@@ -31,12 +32,27 @@ const removeField = (index) => {
   relevant.value.fields?.splice(index, 1);
 };
 
-const submit = async () => {
+const resetData = () => {
+  if (props.edit) {
+    trackStore.prepareNewUpdateTrack();
+  } else {
+    trackStore.prepareNewCreateTrack();
+    addField();
+  }
+};
+
+const onCreateOrUpdate = async () => {
+  showAddTrack.value = false;
   if (props.edit) {
     await trackStore.updateTrack();
   } else {
     await trackStore.createTrack();
   }
+};
+
+const onClose = async () => {
+  showAddTrack.value = false;
+  resetData();
 };
 
 const addSelectValue = (field) => {
@@ -51,25 +67,6 @@ const removeSelectValue = (field, index) => {
   if (entry.value === field.params.default_choice || field.params.choices.length === 0) {
     field.params.default_choice = null;
   }
-};
-
-const slugify = (str) => {
-  str = str.replace(/^\s+|\s+$/g, ""); // trim
-  str = str.toLowerCase();
-
-  // remove accents, swap ñ for n, etc
-  const from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
-  const to = "aaaaeeeeiiiioooouuuunc______";
-  for (let i = 0, l = from.length; i < l; i++) {
-    str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
-  }
-
-  str = str
-    .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
-    .replace(/\s+/g, "_") // collapse whitespace and replace by -
-    .replace(/-+/g, "_"); // collapse dashes
-
-  return str;
 };
 
 const getFieldTypes = (input) => TRACK_INPUT_TYPE[input];
@@ -115,12 +112,8 @@ const onFieldNameChange = (event, field) => {
   }
 };
 
-onBeforeMount(() => {
-  if (props.edit) {
-    trackStore.prepareNewUpdateTrack();
-  } else {
-    trackStore.prepareNewCreateTrack();
-  }
+onMounted(() => {
+  resetData();
 });
 </script>
 
@@ -133,32 +126,55 @@ onBeforeMount(() => {
           :label="$t('entity.track.name')"
           v-model="relevant.name"
           variant="underlined"
+          density="compact"
+          hide-details="auto"
           required
         ></v-text-field>
-        <v-card class="py-2" elevation="0" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
-          <v-divider :thickness="4" />
-          <v-container class="py-2 px-0">
-            <v-row class="flex-nowrap">
+        <v-card class="my-4" elevation="2" v-for="(field, fieldIndex) in relevant.fields" :key="fieldIndex">
+          <v-container class="py-2">
+            <v-row class="flex-nowrap align-center">
               <v-col class="flex-grow-1 flex-shrink-0">
                 <v-text-field
                   :label="$t('entity.track.fieldName')"
                   v-model="field.name"
                   variant="underlined"
+                  density="compact"
+                  hide-details="auto"
                   required
                   @input="onFieldNameChange($event, field)"
                 ></v-text-field>
               </v-col>
               <v-col class="flex-grow-1 flex-shrink-0">
-                <v-text-field :label="$t('entity.track.fieldKey')" variant="underlined" v-model="field.key" disabled />
+                <v-text-field
+                  :label="$t('entity.track.fieldKey')"
+                  variant="underlined"
+                  density="compact"
+                  hide-details="auto"
+                  v-model="field.key"
+                  disabled
+                />
               </v-col>
               <v-col class="flex-grow-0 flex-shrink-1">
-                <v-btn @click="removeField(fieldIndex)" variant="text" icon="mdi-trash-can" color="secondary"></v-btn>
+                <v-btn
+                  @click="removeField(fieldIndex)"
+                  variant="text"
+                  icon="mdi-trash-can"
+                  color="secondary"
+                  density="compact"
+                  :disabled="edit"
+                ></v-btn>
               </v-col>
             </v-row>
 
             <v-row>
               <v-col>
-                <v-checkbox :label="$t('entity.track.entryOptional')" v-model="field.optional" />
+                <v-checkbox
+                  :label="$t('entity.track.entryOptional')"
+                  color="secondary"
+                  density="compact"
+                  hide-details="auto"
+                  v-model="field.optional"
+                />
               </v-col>
             </v-row>
 
@@ -169,17 +185,22 @@ onBeforeMount(() => {
                   :items="Object.values(TRACK_FIELD_INPUT)"
                   variant="underlined"
                   density="compact"
+                  hide-details="auto"
                   v-model="field.input"
                   :disabled="edit"
-                  @update:modelValue="onChangeFieldInput($event, field)"
+                  @update:model-value="onChangeFieldInput($event, field)"
                 />
               </v-col>
+            </v-row>
+
+            <v-row>
               <v-col>
                 <v-select
                   :label="$t('entity.track.valueType')"
                   :items="getFieldTypes(field.input)"
                   variant="underlined"
                   density="compact"
+                  hide-details="auto"
                   v-model="field.type"
                   :disabled="edit"
                 />
@@ -187,25 +208,18 @@ onBeforeMount(() => {
             </v-row>
 
             <div v-if="field.input === TRACK_FIELD_INPUT.SELECT">
-              <v-row v-if="field.params.choices.length > 0">
-                <v-col>
-                  <v-select
-                    :label="$t('entity.track.defaultSelection')"
-                    :items="field.params.choices"
-                    item-title="name"
-                    item-value="value"
-                    variant="underlined"
-                    density="compact"
-                    v-model="field.params.default_choice"
-                  />
-                </v-col>
-              </v-row>
-              <v-row class="flex-nowrap" v-for="(choice, choiceIndex) in field.params.choices" :key="choiceIndex">
+              <v-row
+                class="flex-nowrap align-center"
+                v-for="(choice, choiceIndex) in field.params.choices"
+                :key="choiceIndex"
+              >
                 <v-col class="flex-grow-1 flex-shrink-0">
                   <v-text-field
                     :label="$t('entity.track.name')"
                     v-model="choice.name"
                     variant="underlined"
+                    density="compact"
+                    hide-details="auto"
                     required
                     @input="!edit && (choice.value = slugify(choice.name))"
                   ></v-text-field>
@@ -215,7 +229,10 @@ onBeforeMount(() => {
                     :label="$t('entity.track.value')"
                     v-model="choice.value"
                     variant="underlined"
+                    density="compact"
+                    hide-details="auto"
                     required
+                    disabled
                   ></v-text-field>
                 </v-col>
                 <v-col class="flex-grow-0 flex-shrink-1">
@@ -224,10 +241,28 @@ onBeforeMount(() => {
                     variant="text"
                     icon="mdi-trash-can"
                     color="secondary"
+                    density="compact"
                   ></v-btn>
                 </v-col>
               </v-row>
-              <v-btn @click="addSelectValue(field)">Add Choice</v-btn>
+              <v-row v-if="field.params.choices.length > 0">
+                <v-col>
+                  <v-select
+                    :label="$t('entity.track.defaultSelection')"
+                    :items="field.params.choices"
+                    item-title="name"
+                    item-value="value"
+                    variant="underlined"
+                    density="compact"
+                    hide-details="auto"
+                    v-model="field.params.default_choice"
+                  />
+                </v-col>
+              </v-row>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn variant="flat" color="secondary" @click="addSelectValue(field)">Add Choice</v-btn>
+              </v-card-actions>
             </div>
 
             <div v-if="field.input === TRACK_FIELD_INPUT.SLIDER">
@@ -269,9 +304,9 @@ onBeforeMount(() => {
       </v-container>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="showAddTrack = false">Close</v-btn>
-        <v-btn @click="addField" color="secondary" variant="flat">Add Field</v-btn>
-        <v-btn @click="submit" color="primary" variant="flat">{{ edit ? "Update" : "Create" }}</v-btn>
+        <v-btn @click="onClose">Close</v-btn>
+        <v-btn @click="addField" color="secondary" variant="flat" :disabled="edit">Add Field</v-btn>
+        <v-btn @click="onCreateOrUpdate" color="primary" variant="flat">{{ edit ? "Update" : "Create" }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

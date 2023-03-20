@@ -35,7 +35,7 @@ const rows = computed(() => {
     :headers="headers"
     :items="rows"
     item-value="name"
-    class="elevation-1"
+    class="elevation-2"
   />
 </template>
 

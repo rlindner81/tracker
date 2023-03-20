@@ -9,7 +9,7 @@ const stepStore = useStepStore();
 
 let showAddStepModal = ref(false);
 
-const submit = async () => {
+const onCreate = async () => {
   showAddStepModal.value = false;
   await stepStore.createStep();
 };
@@ -39,16 +39,20 @@ const submit = async () => {
                 :placeholder="$t('entity.track.enter', field.name)"
                 v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.STRING"
                 :disabled="!stepStore.newStepEnabled[field.key]"
+                variant="underlined"
                 density="compact"
+                hide-details="auto"
               />
               <v-text-field
                 type="number"
-                step="0.00001"
+                step="0.001"
                 v-model="stepStore.newStepValues[field.key]"
                 :placeholder="$t('entity.track.enter', field.name)"
                 v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.FLOAT"
                 :disabled="!stepStore.newStepEnabled[field.key]"
+                variant="underlined"
                 density="compact"
+                hide-details="auto"
               />
               <v-text-field
                 type="number"
@@ -57,7 +61,9 @@ const submit = async () => {
                 :placeholder="$t('entity.track.enter', field.name)"
                 v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.INTEGER"
                 :disabled="!stepStore.newStepEnabled[field.key]"
+                variant="underlined"
                 density="compact"
+                hide-details="auto"
               />
               <v-select
                 v-if="field.input === TRACK_FIELD_INPUT.SELECT"
@@ -66,7 +72,9 @@ const submit = async () => {
                 :disabled="!stepStore.newStepEnabled[field.key]"
                 item-title="name"
                 item-value="value"
+                variant="underlined"
                 density="compact"
+                hide-details="auto"
               />
               <v-slider
                 v-if="field.input === TRACK_FIELD_INPUT.SLIDER"
@@ -74,12 +82,14 @@ const submit = async () => {
                 :disabled="!stepStore.newStepEnabled[field.key]"
                 :min="field.params.min ? parseFloat(field.params.min) : 0"
                 :max="field.params.max ? parseFloat(field.params.max) : 1000"
-                :step="field.params.step ? (parseFloat(field.params.step) < 1 ? -1 : parseFloat(field.params.step)) : 1"
+                :step="field.params.step ? parseFloat(field.params.step) : 1"
                 color="primary"
                 thumb-label="always"
                 thumb-size="15"
                 thumb-color="primary"
                 style="margin-top: 20px"
+                density="compact"
+                hide-details="auto"
               />
             </div>
           </v-col>
@@ -88,7 +98,7 @@ const submit = async () => {
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn @click="showAddStepModal = false">{{ $t("action.cancel") }}</v-btn>
-        <v-btn @click="submit" color="secondary" variant="flat">{{ $t("entity.step.track") }}</v-btn>
+        <v-btn @click="onCreate" color="secondary" variant="flat">{{ $t("entity.step.track") }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

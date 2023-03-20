@@ -3,10 +3,7 @@ import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
 
 import AddStep from "@/components/AddStep.vue";
-import Tabs from "@/components/Tabs.vue";
-import Tab from "@/components/Tab.vue";
 import TrackList from "@/components/TrackList.vue";
-import TrackSettings from "@/components/TrackSettings.vue";
 import { onBeforeMount, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
 
@@ -30,34 +27,17 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <v-container>
-    <div>
-      <h1>{{ trackStore.titleById($route.params.track) }}</h1>
-
-      <Tabs>
-        <Tab :title="$t('nav.tab.tracking')" :selected="true">
-          <div>
-            <h2>{{ $t("nav.tab.settings") }}</h2>
-          </div>
-
-          <div v-if="stepStore.steps && !stepStore.steps.length">
-            <p>{{ $t("entity.step.noData") }}</p>
-          </div>
-
-          <TrackList></TrackList>
-        </Tab>
-
-        <Tab :title="$t('nav.tab.settings')">
-          <TrackSettings></TrackSettings>
-        </Tab>
-      </Tabs>
-    </div>
+  <v-card class="py-4 fill-height">
+    <v-card-title class="text-h4">{{ trackStore.titleById($route.params.track) }}</v-card-title>
+    <v-container fluid>
+      <TrackList></TrackList>
+    </v-container>
 
     <v-btn @click="onAddStepClicked" class="mb-5 mr-5" position="fixed" location="bottom right" icon color="secondary">
       <v-icon>mdi-plus</v-icon>
       <AddStep></AddStep>
     </v-btn>
-  </v-container>
+  </v-card>
 </template>
 
 <style></style>
