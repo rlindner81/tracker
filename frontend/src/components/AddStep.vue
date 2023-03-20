@@ -45,7 +45,7 @@ const onCreate = async () => {
               />
               <v-text-field
                 type="number"
-                step="0.00001"
+                step="0.001"
                 v-model="stepStore.newStepValues[field.key]"
                 :placeholder="$t('entity.track.enter', field.name)"
                 v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.FLOAT"
@@ -82,7 +82,7 @@ const onCreate = async () => {
                 :disabled="!stepStore.newStepEnabled[field.key]"
                 :min="field.params.min ? parseFloat(field.params.min) : 0"
                 :max="field.params.max ? parseFloat(field.params.max) : 1000"
-                :step="field.params.step ? (parseFloat(field.params.step) < 1 ? -1 : parseFloat(field.params.step)) : 1"
+                :step="field.params.step ? parseFloat(field.params.step) : 1"
                 color="primary"
                 thumb-label="always"
                 thumb-size="15"

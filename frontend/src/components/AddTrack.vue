@@ -188,7 +188,7 @@ onMounted(() => {
                   hide-details="auto"
                   v-model="field.input"
                   :disabled="edit"
-                  @update:modelValue="onChangeFieldInput($event, field)"
+                  @update:model-value="onChangeFieldInput($event, field)"
                 />
               </v-col>
             </v-row>
