@@ -10,7 +10,7 @@ const trackStore = useTrackStore();
     <v-container fluid>
       <v-row>
         <v-col v-for="track in trackStore.tracks" :key="track._id" cols="12" sm="6" md="4" lg="3">
-          <v-card style="min-height: 10rem" :to="{ name: 'Track', params: { track: track._id } }" elevation="4">
+          <v-card style="min-height: 10rem" :to="{ name: 'Track', params: { track: track._id } }" elevation="3">
             <v-card-title class="text-center text-h5 ma-4 my-6">
               <div>{{ track.name }}</div>
             </v-card-title>
@@ -20,7 +20,7 @@ const trackStore = useTrackStore();
           </v-card>
         </v-col>
         <v-col v-if="trackStore.tracks.length === 0" cols="12" sm="4">
-          <v-card style="min-height: 10rem" elevation="4">
+          <v-card style="min-height: 10rem" elevation="3">
             <v-card-title class="text-center text-h5 ma-4 my-6">
               <div>{{ $t("entity.track.first") }}</div>
             </v-card-title>
