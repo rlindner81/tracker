@@ -8,7 +8,7 @@ const trackStore = useTrackStore();
 </script>
 
 <template>
-    {{ 'This is my component.' }}
+  {{ "This is my component." }}
 </template>
 
 <style></style>
