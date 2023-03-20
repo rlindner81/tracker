@@ -234,7 +234,7 @@ const onFieldNameChange = (event, field) => {
                     density="compact"
                     hide-details="auto"
                     required
-                    @input="!edit && (choice.value = slugify(choice.name))"
+                    @input="choice.value = slugify(choice.name)"
                   ></v-text-field>
                 </v-col>
                 <v-col class="flex-grow-1 flex-shrink-0">
