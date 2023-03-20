@@ -7,7 +7,6 @@ import {
   orderBy,
   Timestamp,
   doc,
-  getDocs,
   addDoc,
   setDoc,
   deleteDoc,

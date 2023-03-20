@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, computed, ref } from "vue";
+import { computed, watch } from "vue";
 import { useTrackStore } from "@/store/track";
 import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_INPUT_TYPE } from "@/constants";
 import { slugify } from "@/shared";
@@ -19,7 +19,20 @@ const props = defineProps({
 
 const emit = defineEmits(["close"]);
 
-const relevant = computed(() => (props.edit ? trackStore.newUpdateTrack : trackStore.newCreateTrack));
+const relevant = computed(() => {
+  return props.edit ? trackStore.newUpdateTrack : trackStore.newCreateTrack;
+});
+
+// NOTE: this is a little weird, but props.show is _not_ reactive, so we cannot watch it
+//   directly and wrapping it in toRef would be misleading, since its readonly, so
+//   computed is a fair compromise
+const show = computed(() => props.show);
+
+watch(show, (newValue) => {
+  if (newValue) {
+    resetData();
+  }
+});
 
 const addField = () => {
   relevant.value.fields?.push({
@@ -57,7 +70,6 @@ const onCreateOrUpdate = async () => {
 
 const onClose = async () => {
   emit("close");
-  resetData();
 };
 
 const addSelectValue = (field) => {
@@ -116,17 +128,13 @@ const onFieldNameChange = (event, field) => {
     field.key = slugify(target.value);
   }
 };
-
-onMounted(() => {
-  resetData();
-});
 </script>
 
 <template>
-  <v-dialog v-model="$props.show" persistent>
+  <v-dialog v-model="show" persistent>
     <v-card class="pa-2">
       <v-card-title class="text-h5">{{ edit ? "Edit" : "Add" }} Track</v-card-title>
-      <v-container>
+      <v-container v-if="relevant">
         <v-text-field
           :label="$t('entity.track.name')"
           v-model="relevant.name"
