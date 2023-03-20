@@ -13,6 +13,16 @@ const trackStore = useTrackStore();
 let isInitialized = ref(false);
 let isNavVisible = ref(false);
 
+const onTrackEdit = () => {
+  console.log("edit");
+};
+const onTrackExport = () => {
+  console.log("export");
+};
+const onTrackDelete = () => {
+  console.log("delete");
+};
+
 onMounted(async () => {
   userStore.subscribeUsers();
   trackStore.subscribeTracks();
@@ -43,7 +53,16 @@ onUnmounted(() => {
       <v-app-bar-title>{{ $route.meta.title }}</v-app-bar-title>
 
       <template v-slot:append v-if="$route.name === 'Track'">
-        <v-btn icon="mdi-dots-vertical"></v-btn>
+        <v-btn icon>
+          <v-icon icon="mdi-dots-vertical"></v-icon>
+          <v-menu activator="parent">
+            <v-list>
+              <v-list-item title="Edit" @click="onTrackEdit()" />
+              <v-list-item title="Export" @click="onTrackExport()" />
+              <v-list-item title="Delete" @click="onTrackDelete()" />
+            </v-list>
+          </v-menu>
+        </v-btn>
       </template>
     </v-app-bar>
 
