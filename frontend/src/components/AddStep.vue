@@ -41,6 +41,7 @@ const submit = async () => {
                 :disabled="!stepStore.newStepEnabled[field.key]"
                 variant="underlined"
                 density="compact"
+                hide-details="auto"
               />
               <v-text-field
                 type="number"
@@ -49,8 +50,9 @@ const submit = async () => {
                 :placeholder="$t('entity.track.enter', field.name)"
                 v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.FLOAT"
                 :disabled="!stepStore.newStepEnabled[field.key]"
-                density="compact"
                 variant="underlined"
+                density="compact"
+                hide-details="auto"
               />
               <v-text-field
                 type="number"
@@ -61,6 +63,7 @@ const submit = async () => {
                 :disabled="!stepStore.newStepEnabled[field.key]"
                 variant="underlined"
                 density="compact"
+                hide-details="auto"
               />
               <v-select
                 v-if="field.input === TRACK_FIELD_INPUT.SELECT"
@@ -71,6 +74,7 @@ const submit = async () => {
                 item-value="value"
                 variant="underlined"
                 density="compact"
+                hide-details="auto"
               />
               <v-slider
                 v-if="field.input === TRACK_FIELD_INPUT.SLIDER"
@@ -84,6 +88,8 @@ const submit = async () => {
                 thumb-size="15"
                 thumb-color="primary"
                 style="margin-top: 20px"
+                density="compact"
+                hide-details="auto"
               />
             </div>
           </v-col>
