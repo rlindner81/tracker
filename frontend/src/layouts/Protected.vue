@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { logout } from "@/firebase/auth";
@@ -11,6 +11,7 @@ import AddTrack from "@/components/AddTrack.vue";
 import exportFromJSON from "export-from-json";
 
 const router = useRouter();
+const route = useRoute();
 const commonStore = useCommonStore();
 const userStore = useUserStore();
 const trackStore = useTrackStore();
@@ -21,6 +22,13 @@ let isNavVisible = ref(false);
 let showTrackMenu = ref(false);
 let showEditTrack = ref(false);
 let showDeleteConfirmation = ref(false);
+
+let appBarTitle = computed(() => {
+  if (route.name === "Track") {
+    return trackStore.current?.name ?? "";
+  }
+  return route.meta?.title ?? "";
+});
 
 const onTrackEdit = () => {
   showTrackMenu.value = false;
@@ -63,7 +71,7 @@ onUnmounted(() => {
 
 <template>
   <v-app>
-    <v-app-bar color="primary">
+    <v-app-bar color="primary" :title="appBarTitle">
       <template v-slot:prepend>
         <v-app-bar-nav-icon
           v-if="$route.meta.back"
@@ -73,8 +81,6 @@ onUnmounted(() => {
         ></v-app-bar-nav-icon>
         <v-app-bar-nav-icon v-else variant="text" @click.stop="isNavVisible = !isNavVisible"></v-app-bar-nav-icon>
       </template>
-
-      <v-app-bar-title>{{ $route.meta.title }}</v-app-bar-title>
 
       <template v-slot:append v-if="$route.name === 'Track'">
         <v-btn icon>
