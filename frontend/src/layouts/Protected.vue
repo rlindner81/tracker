@@ -1,21 +1,58 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { logout } from "@/firebase/auth";
-import LoadingButton from "@/components/LoadingButton.vue";
 import { tracksLoadedPromise, usersLoadedPromise } from "@/firebase/db";
 import { useUserStore } from "@/store/user";
+import { useStepStore } from "@/store/step";
+import AddTrack from "@/components/AddTrack.vue";
+import exportFromJSON from "export-from-json";
 
+const router = useRouter();
+const route = useRoute();
 const commonStore = useCommonStore();
 const userStore = useUserStore();
 const trackStore = useTrackStore();
+const stepStore = useStepStore();
 
-let initialized = ref(false);
-let mobileNavVisible = ref(false);
+let isInitialized = ref(false);
+let isNavVisible = ref(false);
+let showTrackMenu = ref(false);
+let showEditTrack = ref(false);
+let showDeleteConfirmation = ref(false);
 
-const toggleMobileNav = () => {
-  mobileNavVisible.value = !mobileNavVisible.value;
+let appBarTitle = computed(() => {
+  if (route.name === "Track") {
+    return trackStore.current?.name ?? "";
+  }
+  return route.meta?.title ?? "";
+});
+
+const onTrackEdit = () => {
+  showTrackMenu.value = false;
+  showEditTrack.value = true;
+};
+
+const onTrackExport = () => {
+  showTrackMenu.value = false;
+  const data = stepStore.stepsExportRows;
+  const fileName = trackStore.current.name;
+  const exportType = exportFromJSON.types["csv"];
+  exportFromJSON({ data, fileName, exportType });
+};
+
+const onTrackDelete = () => {
+  showTrackMenu.value = false;
+  showDeleteConfirmation.value = true;
+};
+
+const onTrackConfirmedDelete = async () => {
+  showDeleteConfirmation.value = false;
+  await router.replace({ name: "Home" });
+  stepStore.unsubscribeSteps();
+  await trackStore.deleteTrack();
 };
 
 onMounted(async () => {
@@ -23,183 +60,91 @@ onMounted(async () => {
   trackStore.subscribeTracks();
   // TODO this promise approach doesn't really work for the unmount case... is there a better way?
   await Promise.all([usersLoadedPromise, tracksLoadedPromise]);
-  initialized.value = true;
+  isInitialized.value = true;
 });
 onUnmounted(() => {
   userStore.unsubscribeUsers();
   trackStore.unsubscribeTracks();
-  initialized.value = false;
+  isInitialized.value = false;
 });
 </script>
 
 <template>
-  <div class="layout protected">
-    <div class="letter-box">
-      <nav :data-open="mobileNavVisible || null">
-        <router-link :to="{ name: 'Home' }">Dashboard</router-link>
+  <v-app>
+    <v-app-bar color="primary" :title="appBarTitle">
+      <template v-slot:prepend>
+        <v-app-bar-nav-icon
+          v-if="$route.meta.back"
+          icon="mdi-chevron-left"
+          variant="text"
+          @click="$router.push({ name: $route.meta.back })"
+        ></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon v-else variant="text" @click.stop="isNavVisible = !isNavVisible"></v-app-bar-nav-icon>
+      </template>
 
-        <h1>Tracks</h1>
+      <template v-slot:append v-if="$route.name === 'Track'">
+        <v-btn icon>
+          <v-icon icon="mdi-dots-vertical"></v-icon>
+          <v-menu v-model="showTrackMenu" activator="parent">
+            <v-list>
+              <v-list-item title="Edit" @click="onTrackEdit()" />
+              <v-list-item title="Export" @click="onTrackExport()" />
+              <v-list-item title="Delete" @click="onTrackDelete()" />
+            </v-list>
+          </v-menu>
+        </v-btn>
+      </template>
+    </v-app-bar>
 
-        <router-link
+    <!-- TODO this is painfully slow somehow -->
+    <AddTrack :edit="true" :show="showEditTrack" @close="showEditTrack = false"></AddTrack>
+
+    <v-dialog v-model="showDeleteConfirmation" width="auto">
+      <v-card>
+        <v-card-title>Delete Track</v-card-title>
+        <v-card-text>This will delete all step and track data. Are you sure?</v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn variant="flat" @click="showDeleteConfirmation = false">Close</v-btn>
+          <v-btn variant="flat" color="error" @click="onTrackConfirmedDelete()">Confirm Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-navigation-drawer v-model="isNavVisible" temporary>
+      <v-list-item class="my-2" :title="commonStore.user?.email || undefined">
+        <template v-slot:prepend>
+          <v-avatar icon="mdi-account" color="secondary" />
+        </template>
+      </v-list-item>
+
+      <v-divider></v-divider>
+
+      <v-list density="compact" nav>
+        <v-list-subheader :title="$t('entity.track.plural')"></v-list-subheader>
+        <v-list-item
           v-for="track in trackStore.tracks"
           :key="track._id"
-          :to="{ name: 'Track', params: { track: track._id } }"
-          >{{ track.name }}</router-link
+          :title="track.name"
+          :value="track._id"
+          @click="$router.push({ name: 'Track', params: { track: track._id } })"
         >
+        </v-list-item>
+      </v-list>
 
-        <p v-if="commonStore.user" class="logout">
-          Logged in as {{ commonStore.user?.email }}
-          <LoadingButton @click.prevent="logout()">Logout</LoadingButton>
-        </p>
+      <v-divider></v-divider>
 
-        <div class="toggle-nav" @click="toggleMobileNav">
-          <div></div>
-          <div></div>
-          <div></div>
+      <template v-slot:append>
+        <div class="pa-4">
+          <v-btn color="secondary" style="width: 100%" @click.prevent="logout()">{{ $t("auth.logout") }}</v-btn>
         </div>
-      </nav>
+      </template>
+    </v-navigation-drawer>
 
-      <main>
-        <router-view v-if="initialized" :key="$route.path"></router-view>
-      </main>
-    </div>
-  </div>
+    <v-main>
+      <router-view v-if="isInitialized" :key="$route.path"></router-view>
+    </v-main>
+  </v-app>
 </template>
 
-<style lang="less">
-@import "../less/variables";
-@import "../less/helpers";
-
-.layout.protected {
-  .size(100%, 100%);
-  overflow-y: auto;
-  padding: 8rem 4rem;
-  position: relative;
-  background: url("@/assets/paper.png") repeat;
-
-  @media @medium {
-    padding: 4rem 0;
-  }
-
-  @media @small {
-    padding: 0;
-    overflow: hidden;
-  }
-
-  .letter-box {
-    .max(1000px);
-    .row();
-    margin: 0 auto;
-  }
-
-  nav {
-    width: 200px;
-    flex-shrink: 0;
-    text-align: end;
-    margin-top: 3.5rem;
-
-    h1 {
-      margin: 1rem 0;
-      font-size: 1.5rem;
-    }
-
-    a {
-      margin-top: 0.25rem;
-      transition: all 0.1s ease;
-
-      &.router-link-active:not(:first-child),
-      &.router-link-exact-active {
-        color: @highlight;
-        text-decoration: underline;
-      }
-
-      &:hover {
-        transform: translateX(5px);
-      }
-    }
-
-    .toggle-nav {
-      .column(space-between, space-between);
-      transition: all 0.1s ease-in-out;
-      width: 30px;
-      height: 25px;
-      position: absolute;
-      top: -50px;
-      right: 1rem;
-      cursor: pointer;
-
-      > div {
-        width: 100%;
-        height: 3px;
-        background: @font-color;
-      }
-    }
-
-    .logout {
-      margin: 1rem 0;
-    }
-
-    @media @small {
-      .shadow();
-      width: 100%;
-      transition: all 0.2s ease-in-out;
-      transform: translateY(100%);
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: 0 auto;
-      padding: 1rem;
-      background: @white;
-      z-index: 1;
-      text-align: left;
-      a {
-        font-size: 1.25rem;
-      }
-
-      h1 {
-        font-size: 2.5rem;
-      }
-
-      .toggle-nav {
-        display: flex;
-      }
-
-      &[data-open] {
-        transform: translateY(0);
-
-        .toggle-nav > div {
-          &:nth-child(1) {
-            transform: translateY(11px) rotate(45deg);
-          }
-          &:nth-child(2) {
-            display: none;
-          }
-          &:nth-child(3) {
-            transform: translateY(-10px) rotate(-45deg);
-          }
-        }
-      }
-    }
-  }
-
-  main {
-    flex-grow: 1;
-    padding: 0 4rem;
-
-    h1 {
-      font-size: 2.5rem;
-    }
-
-    @media @full, @medium {
-      max-width: ~"calc(100% - 200px)";
-    }
-
-    @media @small {
-      padding: 1rem;
-      height: 100vh;
-      overflow-y: auto;
-    }
-  }
-}
-</style>
+<style></style>

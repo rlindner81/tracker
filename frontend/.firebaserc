@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "trackit-dev-fde62"
-  }
+    "default": "trackit-dev-fde62",
+    "dev": "trackit-dev-fde62",
+    "prod": "trackit-f1b79"
+  },
+  "targets": {},
+  "etags": {}
 }

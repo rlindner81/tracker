@@ -7,7 +7,6 @@ import {
   orderBy,
   Timestamp,
   doc,
-  getDocs,
   addDoc,
   setDoc,
   deleteDoc,
@@ -89,7 +88,7 @@ export const subscribeToUsers = async (callback) => {
       resolveUsersLoaded();
     }
   };
-  processSnapshot(await getDocs(userQuery));
+  // processSnapshot(await getDocs(userQuery));
   usersUnsubscribe = onSnapshot(userQuery, processSnapshot, (err) => {
     console.error(err.message);
     useCommonStore().addTransientError("error during user subscribe");
@@ -115,7 +114,7 @@ export const subscribeToTracks = async (userId, callback) => {
       resolveTracksLoaded();
     }
   };
-  processSnapshot(await getDocs(trackQuery));
+  // processSnapshot(await getDocs(trackQuery));
   tracksUnsubscribe = onSnapshot(trackQuery, processSnapshot, (err) => {
     console.error(err.message);
     useCommonStore().addTransientError("error during track subscribe");
@@ -164,7 +163,7 @@ export const subscribeToSteps = async (userId, trackId, callback) => {
     const steps = unpackSnapshotDocs(snapshot.docs);
     callback(steps);
   };
-  processSnapshot(await getDocs(stepQuery));
+  // processSnapshot(await getDocs(stepQuery));
   stepsUnsubscribe = onSnapshot(stepQuery, processSnapshot, (err) => {
     console.error(err.message);
     useCommonStore().addTransientError("error during step subscribe");

@@ -6,12 +6,45 @@ import { registerSW } from "virtual:pwa-register";
 
 import App from "./App.vue";
 import router from "./router";
+import i18n from "./i18n";
 import { readableDateTime, readableRelativeDateTime } from "./datetime";
+
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+import { VDataTable } from "vuetify/labs/VDataTable";
+
+import "@mdi/font/css/materialdesignicons.css";
+
+const myCustomLightTheme = {
+  dark: false,
+  colors: {
+    background: "#f8f9fa",
+    surface: "#FFFFFF",
+    primary: "#1b4965",
+    "primary-darken-1": "#3700B3",
+    secondary: "#1c7293",
+    "secondary-darken-1": "#018786",
+    error: "#a4133c",
+    info: "#82a3a1",
+    success: "#137547",
+    warning: "#db7c26",
+  },
+};
+
+const vuetify = createVuetify({
+  components: {
+    VDataTable,
+  },
+  theme: {
+    defaultTheme: "myCustomLightTheme",
+    themes: { myCustomLightTheme },
+  },
+});
 
 // https://vite-pwa-org.netlify.app/guide/auto-update.html
 registerSW({ immediate: true });
 
-const app = createApp(App).use(createPinia()).use(router);
+const app = createApp(App).use(vuetify).use(createPinia()).use(router).use(i18n);
 app.mount("#app");
 
 // https://primitive.dev/blog/vue-3-global-filters/

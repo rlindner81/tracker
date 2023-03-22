@@ -14,13 +14,24 @@ interface State {
   newStepEnabled: {} | null;
 }
 
+const _getSelectDefaultChoice = (field) => {
+  switch (typeof field.params.default_choice) {
+    case "number":
+      return field.params.choices[field.params.default_choice];
+    case "string":
+      return field.params.choices.find((choice) => choice.value === field.params.default_choice);
+    default:
+      return field.params.choices[0];
+  }
+};
+
 const _getFallbackValueForField = (field) => {
   switch (field.input) {
     case TRACK_FIELD_INPUT.TEXT_FIELD: {
       return "";
     }
     case TRACK_FIELD_INPUT.SELECT: {
-      const { value } = field.params.choices[field.params.default_choice] || field.params.choices[0] || {};
+      const { value } = _getSelectDefaultChoice(field) || {};
       if (value !== undefined) return value;
       break;
     }
@@ -31,9 +42,9 @@ const _getFallbackValueForField = (field) => {
   return null;
 };
 
-const _filterUndefined = (obj) => {
-  return Object.entries(obj).reduce((result, [key, value]) => {
-    if (value !== undefined) {
+const _filterDisabled = (enabledMap, valuesMap) => {
+  return Object.entries(valuesMap).reduce((result, [key, value]) => {
+    if (enabledMap[key] !== false) {
       result[key] = value;
     }
     return result;
@@ -76,12 +87,12 @@ export const useStepStore = defineStore("step", {
       const fields = useTrackStore().current?.fields;
       if (!fields) return [];
       const stepsDisplayRows: StepDisplayRow[] = state.steps.map((step) => {
-        const values = fields.map((field) => ({
-          label: field.name,
-          value: _computeStepValue(field, step),
-        }));
+        const values = fields.reduce((result, field) => {
+          result[field.key] = _computeStepValue(field, step);
+          return result;
+        }, {});
         const meta = {
-          postedBy: step.posted_by,
+          postedBy: useUserStore().emailById(step.posted_by),
           postedAt: readableRelativeDateTime(step.posted_at),
         };
         return { values, meta };
@@ -137,7 +148,7 @@ export const useStepStore = defineStore("step", {
     },
     async createStep() {
       await createStep(useCommonStore().userId, useTrackStore().currentId, {
-        values: _filterUndefined(toRaw(this.newStepValues)),
+        values: _filterDisabled(toRaw(this.newStepEnabled), toRaw(this.newStepValues)),
       });
     },
   },
