@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "deploy": "npm run build-only && npx firebase-tools use dev && npx firebase-tools deploy --only hosting",
+    "deploy:dev": "npm run build-only && npx firebase-tools use dev && npx firebase-tools deploy --only hosting",
+    "deploy:prod": "npm run build-only && npx firebase-tools use prod && npx firebase-tools deploy --only hosting",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock"
   },
