@@ -245,7 +245,6 @@ const onFieldNameChange = (event, field) => {
                     density="compact"
                     hide-details="auto"
                     required
-                    disabled
                   ></v-text-field>
                 </v-col>
                 <v-col class="flex-grow-0 flex-shrink-1">
