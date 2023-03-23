@@ -151,6 +151,6 @@ export const createUser = async (app, uid, email, password) => {
     uid,
     email,
     emailVerified: true,
-    password
+    password,
   });
 };
