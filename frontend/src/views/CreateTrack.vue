@@ -147,8 +147,10 @@ onBeforeMount(() => {
             <v-icon>mdi-dots-vertical</v-icon>
             <v-menu activator="parent">
               <v-list>
-                <v-list-item v-for="(item, index) in items" :key="index" :value="index">
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                <v-list-item>
+                  <v-list-item-title>{{ "Move Up" }}</v-list-item-title>
+                  <v-list-item-title>{{ "Move Down" }}</v-list-item-title>
+                  <v-list-item-title>{{ "Delete Field" }}</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -172,7 +174,7 @@ onBeforeMount(() => {
 
                 <v-text-field
                   type="text"
-                  :value="field.key"
+                  v-model="field.key"
                   :disabled="true"
                   :label="$t('entity.track.fieldKey')"
                   density="compact"
