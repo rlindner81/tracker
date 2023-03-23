@@ -92,3 +92,10 @@ const router = createRouter({
 });
 
 export default router;
+
+declare module "vue-router" {
+  interface RouteMeta {
+    title?: string;
+    back?: string;
+  }
+}
