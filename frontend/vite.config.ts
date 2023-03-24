@@ -26,6 +26,8 @@ export default defineConfig(({ mode }) => {
         manifest: {
           name: env.VITE_APP_NAME,
           short_name: env.VITE_APP_NAME,
+          theme_color: env.VITE_COLOR_PRIMARY,
+          background_color: env.VITE_COLOR_BACKGROUND,
           description: "TrackIt allows you to track interesting or curious events in your life in a structured way.",
           icons: [
             {
@@ -41,8 +43,6 @@ export default defineConfig(({ mode }) => {
           ],
           start_url: "./",
           display: "standalone",
-          background_color: "#f8f9fa",
-          theme_color: "#1b4965",
         },
       }),
     ],

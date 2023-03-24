@@ -18,12 +18,12 @@ import "@mdi/font/css/materialdesignicons.css";
 const myCustomLightTheme = {
   dark: false,
   colors: {
-    background: "#f8f9fa",
-    surface: "#FFFFFF",
-    primary: "#1b4965",
-    "primary-darken-1": "#3700B3",
-    secondary: "#1c7293",
+    primary: import.meta.env.VITE_COLOR_PRIMARY,
+    "primary-darken-1": "#3700b3",
+    secondary: import.meta.env.VITE_COLOR_SECONDARY,
     "secondary-darken-1": "#018786",
+    background: import.meta.env.VITE_COLOR_BACKGROUND,
+    surface: "#ffffff",
     error: "#a4133c",
     info: "#82a3a1",
     success: "#137547",
