@@ -1,0 +1,46 @@
+{
+  "name": "tracker",
+  "version": "1.0.0",
+  "description": "Track anything",
+  "author": "Richard Lindner <rlindner81@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com:rlindner81/tracker.git"
+  },
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:eslint": "eslint --fix .",
+    "lint:prettier": "prettier --write --loglevel error .",
+    "test": "jest",
+    "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock"
+  },
+  "engines": {
+    "node": ">=12.0.0",
+    "npm": ">=6.0.0"
+  },
+  "dependencies": {
+    "@seald-io/nedb": "^3.0.0",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "csv": "^6.2.0",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "joi": "^17.6.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "uuid": "^8.3.2",
+    "winston": "^3.8.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jest": "^26.8.3",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^28.1.3",
+    "prettier": "^2.7.1",
+    "supertest": "^6.2.4"
+  }
+}

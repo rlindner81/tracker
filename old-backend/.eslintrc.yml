@@ -6,7 +6,11 @@ env:
   es2020: true
 parserOptions:
   ecmaVersion: 2020
-  sourceType: module
+plugins:
+  - jest
 extends:
   - "eslint:recommended"
+  - "plugin:jest/recommended"
   - prettier
+rules:
+  jest/no-done-callback: off

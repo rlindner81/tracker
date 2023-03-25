@@ -18,7 +18,10 @@ let showAddTrack = ref(false);
               <div>{{ track.name }}</div>
             </v-card-title>
             <v-card-text class="text-center text-h6">
-              {{ track.members.length === 1 ? "personal" : `${track.members.length} 🕵🕵` }}
+              {{ track.members.length === 1 ? "1 🕵" : `${track.members.length} 🕵🕵` }}
+            </v-card-text>
+            <v-card-text v-if="track.step_count" class="text-center text-h6">
+              {{ `${track.step_count} 👣` }}
             </v-card-text>
           </v-card>
         </v-col>
