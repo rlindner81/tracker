@@ -1,5 +1,5 @@
 {
-  "name": "tracker-frontend",
+  "name": "trackit-frontend",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -45,5 +45,11 @@
     "vite": "^4.2.1",
     "vite-plugin-pwa": "^0.14.4",
     "vue-tsc": "^1.2.0"
+  },
+  "author": "Richard Lindner <rlindner81@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com:rlindner81/tracker.git"
   }
 }

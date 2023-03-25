@@ -1,13 +1,7 @@
 {
-  "name": "tracker",
+  "name": "trackit-serverless-functions",
   "version": "1.0.0",
-  "description": "Track anything",
-  "author": "Richard Lindner <rlindner81@gmail.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com:rlindner81/tracker.git"
-  },
+  "private": true,
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -42,5 +36,11 @@
     "jest": "^28.1.3",
     "prettier": "^2.7.1",
     "supertest": "^6.2.4"
+  },
+  "author": "Richard Lindner <rlindner81@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com:rlindner81/tracker.git"
   }
 }

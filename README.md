@@ -1,4 +1,4 @@
-# Tracker
+# TrackIt
 
 Check out the [Documentation](https://rlindner81.github.io/tracker/)
 

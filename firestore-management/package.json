@@ -1,7 +1,7 @@
 {
-  "name": "firestore-migration",
+  "name": "trackit-firestore-management",
   "version": "1.0.0",
-  "description": "migrate user data to firestore",
+  "private": true,
   "scripts": {
     "upgrade-lock": "npx shx rm -rf package-lock.json node_modules && npm i --package-lock",
     "lint": "prettier . --write",
@@ -15,5 +15,11 @@
   },
   "devDependencies": {
     "prettier": "^2.8.3"
+  },
+  "author": "Richard Lindner <rlindner81@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com:rlindner81/tracker.git"
   }
 }

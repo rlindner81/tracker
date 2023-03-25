@@ -1,4 +1,4 @@
-# Tracker
+# TrackIt Backend
 
 This is the Javascript backend for the ultimate tracker.
 
