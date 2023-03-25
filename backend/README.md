@@ -1,6 +1,6 @@
-# TrackIt Backend
+# TrackIt Serverless Functions
 
-This is the nodejs backend for trackit.
+Serverless functions to support TrackIt.
 
 ## Dependencies
 
