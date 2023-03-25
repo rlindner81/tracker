@@ -2,12 +2,15 @@
 
 The documentation is based on the excellent package [Just the Docs](https://just-the-docs.github.io/just-the-docs/).
 
-## Local development
+### upgrade gems
 
-Running documentation locally:
+```sh
+npx shx rm -rf vendor Gemfile.lock && bundle install
+```
 
-```bash
-bundle install
+### local serve
+
+```sh
 bundle exec jekyll serve
 ```
 

@@ -25,7 +25,7 @@ description: >-
 
 # Build settings
 markdown: kramdown
-remote_theme: just-the-docs/just-the-docs@main
+remote_theme: just-the-docs/just-the-docs@v0.4.0
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -47,6 +47,17 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
+
+callouts:
+  info:
+    title: INFO
+    color: blue
+  warn:
+    title: WARNING
+    color: yellow
+  danger:
+    title: DANGER
+    color: red
 
 # Search config
 search_enabled: true
