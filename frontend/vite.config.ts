@@ -1,5 +1,6 @@
 import { fileURLToPath, URL } from "node:url";
 import { resolve, dirname } from "node:path";
+import { execSync } from "node:child_process";
 
 import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
@@ -8,9 +9,16 @@ import vuetify from "vite-plugin-vuetify";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
+// https://vitejs.dev/config/#using-environment-variables-in-config
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
+  const gitCommit = execSync("git rev-parse --short HEAD", { encoding: "utf-8" }).trim();
   return {
+    // https://vitejs.dev/config/shared-options.html#define
+    define: {
+      __VITE_MODE__: JSON.stringify(mode),
+      __GIT_COMMIT__: JSON.stringify(gitCommit),
+    },
     plugins: [
       vue(),
       VueI18nPlugin({
