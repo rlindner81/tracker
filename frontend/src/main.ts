@@ -53,6 +53,14 @@ app.config.globalProperties.$filters = {
   readableRelativeDateTime,
 };
 
+console.log(
+  "running %s v%s (%s, %s)",
+  import.meta.env.VITE_NPM_NAME,
+  import.meta.env.VITE_NPM_VERSION,
+  __VITE_MODE__,
+  __GIT_COMMIT__
+);
+
 // see https://stackoverflow.com/questions/64175742/using-globalproperties-in-vue-3-and-typescript
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
