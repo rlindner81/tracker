@@ -104,7 +104,7 @@ export const subscribeToTracks = async (userId, callback) => {
     tracksRef,
     where("members", "array-contains", userId),
     orderBy("_created_at", "desc"),
-    limit(100)
+    limit(1000)
   );
   const processSnapshot = (snapshot) => {
     const tracks = unpackSnapshotDocs(snapshot.docs);
@@ -158,7 +158,7 @@ export const subscribeToSteps = async (userId, trackId, callback) => {
   if (!userId || !trackId) {
     unsubscribeSteps();
   }
-  const stepQuery = query(stepsRef, where("track_id", "==", trackId), orderBy("posted_at", "desc"), limit(100));
+  const stepQuery = query(stepsRef, where("track_id", "==", trackId), orderBy("posted_at", "desc"), limit(1000));
   const processSnapshot = (snapshot) => {
     const steps = unpackSnapshotDocs(snapshot.docs);
     callback(steps);
