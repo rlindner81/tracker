@@ -15,4 +15,4 @@ interface StepEntity {
   values: Array<StepValue>; // implicitly matches order of track fields, this way key is not really needed
 }
 
-export default StepEntity;
+export type { StepEntity as default };

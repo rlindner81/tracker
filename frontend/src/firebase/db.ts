@@ -104,7 +104,7 @@ export const subscribeToTracks = async (userId, callback) => {
     tracksRef,
     where("members", "array-contains", userId),
     orderBy("_created_at", "desc"),
-    limit(1000)
+    limit(1000),
   );
   const processSnapshot = (snapshot) => {
     const tracks = unpackSnapshotDocs(snapshot.docs);
@@ -144,7 +144,7 @@ export const updateTrack = async (userId, trackId, track) => {
       _updated_at: now,
       _updated_by: userId,
     },
-    { merge: true }
+    { merge: true },
   );
 };
 
