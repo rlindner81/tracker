@@ -22,8 +22,8 @@ const _getRelativeDateTime = (d1, d2) => {
   let unit, limit, diff;
   for (const unitLimitPair of Object.entries(TIME_UNIT_LIMITS)) {
     [unit, limit] = unitLimitPair;
-    if (Math.abs(elapsed) > limit || unit === TIME_UNITS.SECOND) {
-      diff = Math.round(elapsed / limit);
+    if (Math.abs(elapsed) >= limit || unit === TIME_UNITS.SECOND) {
+      diff = Math.trunc(elapsed / limit);
       break;
     }
   }
@@ -58,9 +58,8 @@ export const readableShortDateTime = (value: Date): string => {
   return `${day}.${month}.${year}`;
 };
 
-export const readableRelativeDateTime = (value: Date): string => {
+export const readableRelativeDateTime = (value: Date, now: Date = new Date()): string => {
   if (!value) return "";
-  const now = new Date();
   const relativeMillis = value.getTime() - now.getTime();
   if (-NOW_TOLERANCE <= relativeMillis && relativeMillis <= NOW_TOLERANCE) {
     return "now";
