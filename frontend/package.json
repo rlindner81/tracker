@@ -20,8 +20,6 @@
   "dependencies": {
     "@intlify/unplugin-vue-i18n": "^1.4.0",
     "@mdi/font": "^7.3.67",
-    "@vueform/slider": "^2.1.9",
-    "@vueform/toggle": "^2.1.4",
     "export-from-json": "^1.7.3",
     "firebase": "^10.5.0",
     "pinia": "^2.1.7",
