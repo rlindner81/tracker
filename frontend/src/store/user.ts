@@ -22,7 +22,7 @@ export const useUserStore = defineStore("user", {
           users.reduce((result, { _id: userId, email }) => {
             result[userId] = email;
             return result;
-          }, {})
+          }, {}),
         );
       });
     },

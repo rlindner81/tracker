@@ -81,4 +81,4 @@ interface TrackOpen extends TrackBase {
 
 type TrackEntity = TrackPersonal | TrackGroup | TrackOpen;
 
-export default TrackEntity;
+export type { TrackEntity as default };
