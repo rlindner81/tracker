@@ -1,0 +1,15 @@
+---
+root: true
+env:
+  es2020: true
+extends:
+  - plugin:vue/vue3-essential
+  - eslint:recommended
+  - "@vue/eslint-config-typescript"
+  - "@vue/eslint-config-prettier"
+globals:
+  __VITE_MODE__: false
+  __GIT_COMMIT__: false
+rules:
+  "@typescript-eslint/no-explicit-any": 'off'
+  vue/multi-word-component-names: 'off'
