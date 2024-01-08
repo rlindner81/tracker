@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { ref, computed, onBeforeMount, onBeforeUnmount, toRaw } from "vue";
+import { useRoute } from "vue-router";
 import { useUserStore } from "@/store/user";
 import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
 
 import { STEP_SYMBOL } from "@/constants";
-import { ref, computed, onBeforeMount, onBeforeUnmount } from "vue";
-import { useRoute } from "vue-router";
 import AddOrEditStep from "@/components/AddOrEditStep.vue";
 
 const userStore = useUserStore();
@@ -26,7 +26,7 @@ const onEditStepClicked = (item) => {
   editStepModal.value = true;
   showStepModal.value = true;
   const editStep = item[STEP_SYMBOL];
-  stepStore.resetActiveStep(editStep);
+  stepStore.resetActiveStep(toRaw(editStep));
 };
 
 const headers = computed(() => {

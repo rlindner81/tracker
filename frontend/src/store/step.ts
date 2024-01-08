@@ -129,19 +129,27 @@ export const useStepStore = defineStore("step", {
         this.activeStepEnabled = null;
         return;
       }
+      let activeStepId = null;
       const activeStepValues = {};
       const activeStepEnabled = {};
 
-      if (input) {
-        debugger;
-      }
       for (const field of fields) {
-        activeStepEnabled[field.key] = true;
-
-        const fallbackValue = _getFallbackValueForField(field);
-        activeStepValues[field.key] = fallbackValue;
+        if (input) {
+          activeStepId = input._id;
+          if (input.values?.[field.key]) {
+            activeStepEnabled[field.key] = true;
+            activeStepValues[field.key] = input.values[field.key];
+          } else {
+            activeStepEnabled[field.key] = false;
+            activeStepValues[field.key] = _getFallbackValueForField(field);
+          }
+        } else {
+          activeStepEnabled[field.key] = true;
+          activeStepValues[field.key] = _getFallbackValueForField(field);
+        }
       }
 
+      this.activeStepId = activeStepId;
       this.activeStepValues = activeStepValues;
       this.activeStepEnabled = activeStepEnabled;
     },
