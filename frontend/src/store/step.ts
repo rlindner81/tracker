@@ -122,7 +122,7 @@ export const useStepStore = defineStore("step", {
     setSteps(input) {
       this.steps = input;
     },
-    resetActiveStep(input = undefined) {
+    resetActiveStep(input: any = undefined) {
       const fields = useTrackStore().current?.fields;
       if (!fields) {
         this.activeStepValues = null;
