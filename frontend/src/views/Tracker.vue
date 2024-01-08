@@ -19,13 +19,14 @@ let showStepModal = ref(false);
 const onAddStepClicked = () => {
   editStepModal.value = false;
   showStepModal.value = true;
-  stepStore.resetNewStepValues();
+  stepStore.resetActiveStep();
 };
 
-const onEditStepClicked = (step) => {
+const onEditStepClicked = (item) => {
   editStepModal.value = true;
   showStepModal.value = true;
-  // TODO prepare store stuff
+  const editStep = item[STEP_SYMBOL];
+  stepStore.resetActiveStep(editStep);
 };
 
 const headers = computed(() => {
@@ -56,7 +57,7 @@ const rows = computed(() => {
 
 onBeforeMount(() => {
   trackStore.setCurrentId(route.params.track);
-  stepStore.resetNewStepValues();
+  stepStore.resetActiveStep();
   stepStore.subscribeSteps();
 });
 

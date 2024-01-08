@@ -28,25 +28,18 @@ const show = computed(() => props.show);
 
 watch(show, (newValue) => {
   if (newValue) {
-    resetData();
+    if (!props.edit) {
+      stepStore.resetActiveStep();
+    }
   }
 });
-
-const resetData = () => {
-  if (props.edit) {
-    // trackStore.prepareNewUpdateTrack();
-  } else {
-    // trackStore.prepareNewCreateTrack();
-  }
-};
 
 const onCreateOrUpdate = async () => {
   emit("close");
   if (props.edit) {
-    // await trackStore.updateTrack();
+    await stepStore.updateStep();
   } else {
     await stepStore.createStep();
-    // await trackStore.createTrack();
   }
 };
 
@@ -60,21 +53,21 @@ const onClose = async () => {
     <v-card class="pa-2">
       <v-card-title class="text-h5">{{ edit ? $t("entity.step.edit") : $t("entity.step.add") }}</v-card-title>
       <!-- TODO v-else would be nice-->
-      <v-container v-if="trackStore.current && stepStore.newStepValues && stepStore.newStepEnabled">
+      <v-container v-if="trackStore.current && stepStore.activeStepValues && stepStore.activeStepEnabled">
         <v-row align="center" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
           <v-col cols="2" xs="1" sm="1">
             <div v-if="trackStore.current.fields.some(({ optional }) => optional)">
-              <v-checkbox v-if="field.optional" v-model="stepStore.newStepEnabled[field.key]" color="secondary" />
+              <v-checkbox v-if="field.optional" v-model="stepStore.activeStepEnabled[field.key]" color="secondary" />
             </div>
           </v-col>
           <v-col>
             <div>
-              <label :class="stepStore.newStepEnabled[field.key] ? '' : 'disable'">{{ field.name }}</label>
+              <label :class="stepStore.activeStepEnabled[field.key] ? '' : 'disable'">{{ field.name }}</label>
               <v-text-field
-                v-model="stepStore.newStepValues[field.key]"
+                v-model="stepStore.activeStepValues[field.key]"
                 :placeholder="$t('entity.track.enter', field.name)"
                 v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.STRING"
-                :disabled="!stepStore.newStepEnabled[field.key]"
+                :disabled="!stepStore.activeStepEnabled[field.key]"
                 variant="underlined"
                 density="compact"
                 hide-details="auto"
@@ -82,10 +75,10 @@ const onClose = async () => {
               <v-text-field
                 type="number"
                 step="0.001"
-                v-model="stepStore.newStepValues[field.key]"
+                v-model="stepStore.activeStepValues[field.key]"
                 :placeholder="$t('entity.track.enter', field.name)"
                 v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.FLOAT"
-                :disabled="!stepStore.newStepEnabled[field.key]"
+                :disabled="!stepStore.activeStepEnabled[field.key]"
                 variant="underlined"
                 density="compact"
                 hide-details="auto"
@@ -93,19 +86,19 @@ const onClose = async () => {
               <v-text-field
                 type="number"
                 step="1"
-                v-model="stepStore.newStepValues[field.key]"
+                v-model="stepStore.activeStepValues[field.key]"
                 :placeholder="$t('entity.track.enter', field.name)"
                 v-if="field.input === TRACK_FIELD_INPUT.TEXT_FIELD && field.type === TRACK_FIELD_TYPE.INTEGER"
-                :disabled="!stepStore.newStepEnabled[field.key]"
+                :disabled="!stepStore.activeStepEnabled[field.key]"
                 variant="underlined"
                 density="compact"
                 hide-details="auto"
               />
               <v-select
                 v-if="field.input === TRACK_FIELD_INPUT.SELECT"
-                v-model="stepStore.newStepValues[field.key]"
+                v-model="stepStore.activeStepValues[field.key]"
                 :items="field.params.choices"
-                :disabled="!stepStore.newStepEnabled[field.key]"
+                :disabled="!stepStore.activeStepEnabled[field.key]"
                 item-title="name"
                 item-value="value"
                 variant="underlined"
@@ -114,8 +107,8 @@ const onClose = async () => {
               />
               <v-slider
                 v-if="field.input === TRACK_FIELD_INPUT.SLIDER"
-                v-model="stepStore.newStepValues[field.key]"
-                :disabled="!stepStore.newStepEnabled[field.key]"
+                v-model="stepStore.activeStepValues[field.key]"
+                :disabled="!stepStore.activeStepEnabled[field.key]"
                 :min="field.params.min ? parseFloat(field.params.min) : 0"
                 :max="field.params.max ? parseFloat(field.params.max) : 1000"
                 :step="field.params.step ? parseFloat(field.params.step) : 1"

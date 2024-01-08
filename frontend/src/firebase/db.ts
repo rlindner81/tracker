@@ -184,3 +184,18 @@ export const createStep = async (userId, trackId, step) => {
     _updated_by: userId,
   });
 };
+
+export const updateStep = async (userId, trackId, stepId, step) => {
+  if (!userId || !trackId || !stepId || !step) return;
+  const now = new Date();
+  const stepRef = doc(stepsRef, stepId);
+  await setDoc(
+    stepRef,
+    {
+      ...step,
+      _updated_at: now,
+      _updated_by: userId,
+    },
+    { merge: true },
+  );
+};
