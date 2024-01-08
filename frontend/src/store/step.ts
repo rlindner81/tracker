@@ -129,14 +129,13 @@ export const useStepStore = defineStore("step", {
         this.activeStepEnabled = null;
         return;
       }
-      let activeStepId = null;
+      const activeStepId = input._id ?? null;
       const activeStepValues = {};
       const activeStepEnabled = {};
 
       for (const field of fields) {
-        if (input) {
-          activeStepId = input._id;
-          if (input.values?.[field.key]) {
+        if (input.values) {
+          if (input.values[field.key]) {
             activeStepEnabled[field.key] = true;
             activeStepValues[field.key] = input.values[field.key];
           } else {
