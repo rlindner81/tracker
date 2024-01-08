@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref, computed, onBeforeMount, onBeforeUnmount, toRaw } from "vue";
 import { useRoute } from "vue-router";
-import { useUserStore } from "@/store/user";
+import { useCommonStore } from "@/store/common";
 import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
 
 import { STEP_SYMBOL } from "@/constants";
 import AddOrEditStep from "@/components/AddOrEditStep.vue";
 
-const userStore = useUserStore();
+const commonStore = useCommonStore();
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
 const route = useRoute();
@@ -20,6 +20,11 @@ const onAddStepClicked = () => {
   editStepModal.value = false;
   showStepModal.value = true;
   stepStore.resetActiveStep();
+};
+
+const doShowEditForItem = (item) => {
+  const editStep = item[STEP_SYMBOL];
+  return useCommonStore().userId === editStep.posted_by;
 };
 
 const onEditStepClicked = (item) => {
@@ -78,7 +83,9 @@ onBeforeUnmount(() => {
       class="elevation-2"
     >
       <template v-slot:item.edit="{ item }">
-        <v-icon class="me-3" color="primary" @click="onEditStepClicked(item)"> mdi-pencil </v-icon>
+        <v-icon v-if="doShowEditForItem(item)" class="me-3" color="primary" @click="onEditStepClicked(item)">
+          mdi-pencil
+        </v-icon>
       </template>
     </v-data-table>
     <v-btn class="mb-5 mr-5" position="fixed" location="bottom right" icon color="secondary" @click="onAddStepClicked">
