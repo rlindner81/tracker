@@ -1,7 +1,7 @@
 import { toRaw } from "vue";
 import { defineStore } from "pinia";
 
-import { TRACK_FIELD_INPUT } from "@/constants";
+import { TRACK_FIELD_INPUT, STEP_SYMBOL } from "@/constants";
 import { createStep, subscribeToSteps, unsubscribeSteps } from "@/firebase/db";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
@@ -74,6 +74,7 @@ interface StepDisplayRow {
     postedAt: string;
     postedBy: string;
   };
+  [STEP_SYMBOL]: object;
 }
 
 export const useStepStore = defineStore("step", {
@@ -95,7 +96,7 @@ export const useStepStore = defineStore("step", {
           postedBy: useUserStore().emailById(step.posted_by),
           postedAt: readableRelativeDateTime(step.posted_at),
         };
-        return { values, meta };
+        return { values, meta, [STEP_SYMBOL]: toRaw(step) };
       });
       return stepsDisplayRows;
     },
