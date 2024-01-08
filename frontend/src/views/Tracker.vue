@@ -13,17 +13,19 @@ const trackStore = useTrackStore();
 const stepStore = useStepStore();
 const route = useRoute();
 
+let editStepModal = ref(false);
 let showStepModal = ref(false);
 
 const onAddStepClicked = () => {
+  editStepModal.value = false;
   showStepModal.value = true;
   stepStore.resetNewStepValues();
 };
 
 const onEditStepClicked = (step) => {
-  showStepModal = true;
-  console.log("hit edit step");
-  debugger;
+  editStepModal.value = true;
+  showStepModal.value = true;
+  // TODO prepare store stuff
 };
 
 const headers = computed(() => {
@@ -65,6 +67,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div>
+    <AddOrEditStep :edit="editStepModal" :show="showStepModal" @close="showStepModal = false"></AddOrEditStep>
     <v-data-table
       :v-if="rows.length"
       items-per-page="20"
@@ -74,16 +77,11 @@ onBeforeUnmount(() => {
       class="elevation-2"
     >
       <template v-slot:item.edit="{ item }">
-        <v-btn class="me-3" icon color="secondary" @click="onEditStepClicked(item)">
-          <v-icon>mdi-pencil</v-icon>
-          <AddOrEditStep :edit="true" :show="showStepModal" @close="showStepModal = false"></AddOrEditStep>
-        </v-btn>
-        <!--        <v-icon class="" @click="editStep(item)"> mdi-pencil </v-icon>-->
+        <v-icon class="me-3" color="primary" @click="onEditStepClicked(item)"> mdi-pencil </v-icon>
       </template>
     </v-data-table>
     <v-btn class="mb-5 mr-5" position="fixed" location="bottom right" icon color="secondary" @click="onAddStepClicked">
       <v-icon>mdi-plus</v-icon>
-      <AddOrEditStep :edit="false" :show="showStepModal" @close="showStepModal = false"></AddOrEditStep>
     </v-btn>
   </div>
 </template>
