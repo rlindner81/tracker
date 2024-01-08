@@ -24,7 +24,7 @@ const onAddStepClicked = () => {
 
 const doShowEditForItem = (item) => {
   const editStep = item[STEP_SYMBOL];
-  return useCommonStore().userId === editStep.posted_by;
+  return commonStore.userId === editStep.posted_by;
 };
 
 const onEditStepClicked = (item) => {
