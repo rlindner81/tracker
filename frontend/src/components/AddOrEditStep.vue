@@ -27,10 +27,8 @@ const emit = defineEmits(["close"]);
 const show = computed(() => props.show);
 
 watch(show, (newValue) => {
-  if (newValue) {
-    if (!props.edit) {
-      stepStore.resetActiveStep();
-    }
+  if (newValue && !props.edit) {
+    stepStore.resetActiveStep();
   }
 });
 
