@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, watch } from "vue";
-import { useTrackStore } from "@/store/track";
-import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_INPUT_TYPE } from "@/constants";
 import { slugify } from "@/shared";
+import { TRACK_FIELD_TYPE, TRACK_FIELD_INPUT, TRACK_INPUT_TYPE } from "@/constants";
+import { useTrackStore } from "@/store/track";
 
 const trackStore = useTrackStore();
 

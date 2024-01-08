@@ -1,23 +1,27 @@
 <script setup lang="ts">
+import { useUserStore } from "@/store/user";
 import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
 
 import { STEP_SYMBOL } from "@/constants";
-import AddStep from "@/components/AddStep.vue";
-import { computed, onBeforeMount, onBeforeUnmount } from "vue";
+import { ref, computed, onBeforeMount, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
+import AddOrEditStep from "@/components/AddOrEditStep.vue";
 
+const userStore = useUserStore();
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
 const route = useRoute();
 
-let dialog = false;
+let showStepModal = ref(false);
 
 const onAddStepClicked = () => {
+  showStepModal.value = true;
   stepStore.resetNewStepValues();
 };
 
-const editStep = (step) => {
+const onEditStepClicked = (step) => {
+  showStepModal = true;
   console.log("hit edit step");
   debugger;
 };
@@ -70,12 +74,16 @@ onBeforeUnmount(() => {
       class="elevation-2"
     >
       <template v-slot:item.edit="{ item }">
-        <v-icon class="me-3" @click="editStep(item)"> mdi-pencil </v-icon>
+        <v-btn class="me-3" icon color="secondary" @click="onEditStepClicked(item)">
+          <v-icon>mdi-pencil</v-icon>
+          <AddOrEditStep :edit="true" :show="showStepModal" @close="showStepModal = false"></AddOrEditStep>
+        </v-btn>
+        <!--        <v-icon class="" @click="editStep(item)"> mdi-pencil </v-icon>-->
       </template>
     </v-data-table>
-    <v-btn @click="onAddStepClicked" class="mb-5 mr-5" position="fixed" location="bottom right" icon color="secondary">
+    <v-btn class="mb-5 mr-5" position="fixed" location="bottom right" icon color="secondary" @click="onAddStepClicked">
       <v-icon>mdi-plus</v-icon>
-      <AddStep></AddStep>
+      <AddOrEditStep :edit="false" :show="showStepModal" @close="showStepModal = false"></AddOrEditStep>
     </v-btn>
   </div>
 </template>

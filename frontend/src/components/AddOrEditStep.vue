@@ -1,30 +1,66 @@
 <script setup lang="ts">
+import { computed, watch } from "vue";
+import { TRACK_FIELD_INPUT, TRACK_FIELD_TYPE } from "@/constants";
+
 import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
-import { TRACK_FIELD_INPUT, TRACK_FIELD_TYPE } from "@/constants";
-import { ref } from "vue";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
 
-let showAddStepModal = ref(false);
+const props = defineProps({
+  show: {
+    type: Boolean,
+    default: false,
+  },
+  edit: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-const onCreate = async () => {
-  showAddStepModal.value = false;
-  await stepStore.createStep();
+const emit = defineEmits(["close"]);
+
+// NOTE: this is a little weird, but props.show is _not_ reactive, so we cannot watch it
+//   directly and wrapping it in toRef would be misleading, since its readonly, so
+//   computed is a fair compromise
+const show = computed(() => props.show);
+
+watch(show, (newValue) => {
+  if (newValue) {
+    resetData();
+  }
+});
+
+const resetData = () => {
+  if (props.edit) {
+    // trackStore.prepareNewUpdateTrack();
+  } else {
+    // trackStore.prepareNewCreateTrack();
+  }
+};
+
+const onCreateOrUpdate = async () => {
+  emit("close");
+  if (props.edit) {
+    // await trackStore.updateTrack();
+  } else {
+    await stepStore.createStep();
+    // await trackStore.createTrack();
+  }
+};
+
+const onClose = async () => {
+  emit("close");
 };
 </script>
 
 <template>
-  <v-dialog
-    activator="parent"
-    v-model="showAddStepModal"
-    persistent
-    v-if="trackStore.current && stepStore.newStepValues && stepStore.newStepEnabled"
-  >
+  <v-dialog v-model="show" persistent>
     <v-card class="pa-2">
-      <v-card-title class="text-h5">{{ $t("entity.step.add") }}</v-card-title>
-      <v-container>
+      <v-card-title class="text-h5">{{ edit ? $t("entity.step.edit") : $t("entity.step.add") }}</v-card-title>
+      <!-- TODO v-else would be nice-->
+      <v-container v-if="trackStore.current && stepStore.newStepValues && stepStore.newStepEnabled">
         <v-row align="center" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
           <v-col cols="2" xs="1" sm="1">
             <div v-if="trackStore.current.fields.some(({ optional }) => optional)">
@@ -97,8 +133,8 @@ const onCreate = async () => {
       </v-container>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="showAddStepModal = false">{{ $t("action.cancel") }}</v-btn>
-        <v-btn @click="onCreate" color="secondary" variant="flat">{{ $t("entity.step.track") }}</v-btn>
+        <v-btn @click="onClose">{{ $t("action.cancel") }}</v-btn>
+        <v-btn @click="onCreateOrUpdate" color="primary" variant="flat">{{ $t("entity.step.track") }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

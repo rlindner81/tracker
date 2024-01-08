@@ -58,6 +58,7 @@
       "singular": "Schritt",
       "plural": "Schritte",
       "add": "Schritt hinzufügen",
+      "edit": "Schritt bearbeiten",
       "size": "Schrittgröße",
       "noData": "Du hast bisher keine Schritte getrackt.",
       "track": "Tracken"
