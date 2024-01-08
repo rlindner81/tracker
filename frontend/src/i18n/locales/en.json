@@ -58,6 +58,7 @@
       "singular": "Step",
       "plural": "Steps",
       "add": "Add Step",
+      "edit": "Edit Step",
       "size": "Step Size",
       "noData": "You don't have any steps tracked yet.",
       "track": "Track It"

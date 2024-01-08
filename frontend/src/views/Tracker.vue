@@ -1,17 +1,37 @@
 <script setup lang="ts">
+import { ref, computed, onBeforeMount, onBeforeUnmount, toRaw } from "vue";
+import { useRoute } from "vue-router";
+import { useCommonStore } from "@/store/common";
 import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
 
-import AddStep from "@/components/AddStep.vue";
-import { computed, onBeforeMount, onBeforeUnmount } from "vue";
-import { useRoute } from "vue-router";
+import { STEP_SYMBOL } from "@/constants";
+import AddOrEditStep from "@/components/AddOrEditStep.vue";
 
+const commonStore = useCommonStore();
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
 const route = useRoute();
 
+let editStepModal = ref(false);
+let showStepModal = ref(false);
+
 const onAddStepClicked = () => {
-  stepStore.resetNewStepValues();
+  editStepModal.value = false;
+  showStepModal.value = true;
+  stepStore.resetActiveStep();
+};
+
+const doShowEditForItem = (item) => {
+  const editStep = item[STEP_SYMBOL];
+  return commonStore.userId === editStep.posted_by;
+};
+
+const onEditStepClicked = (item) => {
+  editStepModal.value = true;
+  showStepModal.value = true;
+  const editStep = item[STEP_SYMBOL];
+  stepStore.resetActiveStep(toRaw(editStep));
 };
 
 const headers = computed(() => {
@@ -20,24 +40,29 @@ const headers = computed(() => {
   const metaFields = [
     { name: "Tracked By", key: "postedBy" },
     { name: "Tracked On", key: "postedAt" },
+    { name: "Edit", key: "edit", sortable: false },
   ];
   return trackFields.concat(metaFields).map((field) => ({
     title: field.name,
     key: field.key,
-    align: "start",
-    sortable: true,
+    align: field.align ?? "start",
+    sortable: field.sortable ?? true,
   }));
 });
 
 const rows = computed(() => {
   return !stepStore.stepsDisplayRows.length
     ? []
-    : stepStore.stepsDisplayRows.map(({ values, meta }) => ({ ...values, ...meta }));
+    : stepStore.stepsDisplayRows.map(({ values, meta, [STEP_SYMBOL]: step }) => ({
+        ...values,
+        ...meta,
+        [STEP_SYMBOL]: step,
+      }));
 });
 
 onBeforeMount(() => {
   trackStore.setCurrentId(route.params.track);
-  stepStore.resetNewStepValues();
+  stepStore.resetActiveStep();
   stepStore.subscribeSteps();
 });
 
@@ -48,6 +73,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div>
+    <AddOrEditStep :edit="editStepModal" :show="showStepModal" @close="showStepModal = false"></AddOrEditStep>
     <v-data-table
       :v-if="rows.length"
       items-per-page="20"
@@ -55,10 +81,15 @@ onBeforeUnmount(() => {
       :items="rows"
       item-value="name"
       class="elevation-2"
-    />
-    <v-btn @click="onAddStepClicked" class="mb-5 mr-5" position="fixed" location="bottom right" icon color="secondary">
+    >
+      <template v-slot:item.edit="{ item }">
+        <v-icon v-if="doShowEditForItem(item)" class="me-3" color="primary" @click="onEditStepClicked(item)">
+          mdi-pencil
+        </v-icon>
+      </template>
+    </v-data-table>
+    <v-btn class="mb-5 mr-5" position="fixed" location="bottom right" icon color="secondary" @click="onAddStepClicked">
       <v-icon>mdi-plus</v-icon>
-      <AddStep></AddStep>
     </v-btn>
   </div>
 </template>

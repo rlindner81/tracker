@@ -7,7 +7,7 @@ import { logout } from "@/firebase/auth";
 import { tracksLoadedPromise, usersLoadedPromise } from "@/firebase/db";
 import { useUserStore } from "@/store/user";
 import { useStepStore } from "@/store/step";
-import AddTrack from "@/components/AddTrack.vue";
+import EditTrack from "@/components/AddOrEditTrack.vue";
 import exportFromJSON from "export-from-json";
 
 const router = useRouter();
@@ -97,7 +97,7 @@ onUnmounted(() => {
     </v-app-bar>
 
     <!-- TODO this is painfully slow somehow -->
-    <AddTrack :edit="true" :show="showEditTrack" @close="showEditTrack = false"></AddTrack>
+    <EditTrack :edit="true" :show="showEditTrack" @close="showEditTrack = false"></EditTrack>
 
     <v-dialog v-model="showDeleteConfirmation" width="auto">
       <v-card>

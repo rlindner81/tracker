@@ -9,6 +9,7 @@ import {
   doc,
   addDoc,
   setDoc,
+  updateDoc,
   deleteDoc,
   limit,
 } from "firebase/firestore";
@@ -180,6 +181,19 @@ export const createStep = async (userId, trackId, step) => {
     track_id: trackId,
     _created_at: now,
     _created_by: userId,
+    _updated_at: now,
+    _updated_by: userId,
+  });
+};
+
+export const updateStep = async (userId, trackId, stepId, step) => {
+  if (!userId || !trackId || !stepId || !step) return;
+  const now = new Date();
+  const stepRef = doc(stepsRef, stepId);
+  // NOTE: updateDoc will overwrite deep values, which is what we want here. Alternatively we could persist the
+  //   enabled map alongside the values map. That would be cleaner we could setDoc again.
+  await updateDoc(stepRef, {
+    ...step,
     _updated_at: now,
     _updated_by: userId,
   });

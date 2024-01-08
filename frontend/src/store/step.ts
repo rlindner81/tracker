@@ -1,8 +1,8 @@
 import { toRaw } from "vue";
 import { defineStore } from "pinia";
 
-import { TRACK_FIELD_INPUT } from "@/constants";
-import { createStep, subscribeToSteps, unsubscribeSteps } from "@/firebase/db";
+import { TRACK_FIELD_INPUT, STEP_SYMBOL } from "@/constants";
+import { createStep, subscribeToSteps, unsubscribeSteps, updateStep } from "@/firebase/db";
 import { useTrackStore } from "@/store/track";
 import { useCommonStore } from "@/store/common";
 import { readableRelativeDateTime } from "@/datetime";
@@ -10,8 +10,9 @@ import { useUserStore } from "@/store/user";
 
 interface State {
   steps: any[];
-  newStepValues: {} | null;
-  newStepEnabled: {} | null;
+  activeStepId: string | null;
+  activeStepValues: {} | null;
+  activeStepEnabled: {} | null;
 }
 
 const _getSelectDefaultChoice = (field) => {
@@ -74,13 +75,15 @@ interface StepDisplayRow {
     postedAt: string;
     postedBy: string;
   };
+  [STEP_SYMBOL]: object;
 }
 
 export const useStepStore = defineStore("step", {
   state: (): State => ({
     steps: [],
-    newStepValues: null,
-    newStepEnabled: null,
+    activeStepId: null,
+    activeStepValues: null,
+    activeStepEnabled: null,
   }),
   getters: {
     stepsDisplayRows(state) {
@@ -95,7 +98,7 @@ export const useStepStore = defineStore("step", {
           postedBy: useUserStore().emailById(step.posted_by),
           postedAt: readableRelativeDateTime(step.posted_at),
         };
-        return { values, meta };
+        return { values, meta, [STEP_SYMBOL]: toRaw(step) };
       });
       return stepsDisplayRows;
     },
@@ -119,25 +122,35 @@ export const useStepStore = defineStore("step", {
     setSteps(input) {
       this.steps = input;
     },
-    resetNewStepValues() {
+    resetActiveStep(input: any = {}) {
       const fields = useTrackStore().current?.fields;
       if (!fields) {
-        this.newStepValues = null;
-        this.newStepEnabled = null;
+        this.activeStepValues = null;
+        this.activeStepEnabled = null;
         return;
       }
-      const newStepValues = {};
-      const newStepEnabled = {};
+      const activeStepId = input._id ?? null;
+      const activeStepValues = {};
+      const activeStepEnabled = {};
 
       for (const field of fields) {
-        newStepEnabled[field.key] = true;
-
-        const fallbackValue = _getFallbackValueForField(field);
-        newStepValues[field.key] = fallbackValue;
+        if (input.values) {
+          if (input.values[field.key]) {
+            activeStepEnabled[field.key] = true;
+            activeStepValues[field.key] = input.values[field.key];
+          } else {
+            activeStepEnabled[field.key] = false;
+            activeStepValues[field.key] = _getFallbackValueForField(field);
+          }
+        } else {
+          activeStepEnabled[field.key] = true;
+          activeStepValues[field.key] = _getFallbackValueForField(field);
+        }
       }
 
-      this.newStepValues = newStepValues;
-      this.newStepEnabled = newStepEnabled;
+      this.activeStepId = activeStepId;
+      this.activeStepValues = activeStepValues;
+      this.activeStepEnabled = activeStepEnabled;
     },
     subscribeSteps() {
       subscribeToSteps(useCommonStore().userId, useTrackStore().currentId, (steps) => this.setSteps(steps));
@@ -148,7 +161,12 @@ export const useStepStore = defineStore("step", {
     },
     async createStep() {
       await createStep(useCommonStore().userId, useTrackStore().currentId, {
-        values: _filterDisabled(toRaw(this.newStepEnabled), toRaw(this.newStepValues)),
+        values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)),
+      });
+    },
+    async updateStep() {
+      await updateStep(useCommonStore().userId, useTrackStore().currentId, this.activeStepId, {
+        values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)),
       });
     },
   },

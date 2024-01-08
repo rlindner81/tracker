@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useTrackStore } from "@/store/track";
-import AddTrack from "@/components/AddTrack.vue";
+import AddTrack from "@/components/AddOrEditTrack.vue";
 
 const trackStore = useTrackStore();
 
