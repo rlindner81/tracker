@@ -171,13 +171,13 @@ export const subscribeToSteps = async (userId, trackId, callback) => {
   });
 };
 
-export const createStep = async (userId, trackId, step) => {
+export const createStep = async (userId, trackId, step, postedAt: Date | null = null) => {
   if (!userId || !trackId || !step) return;
   const now = new Date();
   await addDoc(stepsRef, {
     ...step,
     posted_by: userId,
-    posted_at: now, // TODO this should be changeable in UI
+    posted_at: postedAt?.toISOString() ?? now,
     track_id: trackId,
     _created_at: now,
     _created_by: userId,
@@ -186,7 +186,7 @@ export const createStep = async (userId, trackId, step) => {
   });
 };
 
-export const updateStep = async (userId, trackId, stepId, step) => {
+export const updateStep = async (userId, trackId, stepId, step, postedAt: Date | null = null) => {
   if (!userId || !trackId || !stepId || !step) return;
   const now = new Date();
   const stepRef = doc(stepsRef, stepId);
@@ -194,6 +194,7 @@ export const updateStep = async (userId, trackId, stepId, step) => {
   //   enabled map alongside the values map. That would be cleaner we could setDoc again.
   await updateDoc(stepRef, {
     ...step,
+    ...((postedAt && { posted_at: postedAt.toISOString() }) ?? {}),
     _updated_at: now,
     _updated_by: userId,
   });

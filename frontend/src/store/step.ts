@@ -13,6 +13,7 @@ interface State {
   activeStepId: string | null;
   activeStepValues: {} | null;
   activeStepEnabled: {} | null;
+  activeStepPostedAt: Date | null;
 }
 
 const _getSelectDefaultChoice = (field) => {
@@ -84,6 +85,7 @@ export const useStepStore = defineStore("step", {
     activeStepId: null,
     activeStepValues: null,
     activeStepEnabled: null,
+    activeStepPostedAt: null,
   }),
   getters: {
     stepsDisplayRows(state) {
@@ -127,9 +129,13 @@ export const useStepStore = defineStore("step", {
       if (!fields) {
         this.activeStepValues = null;
         this.activeStepEnabled = null;
+        this.activeStepPostedAt = null;
         return;
       }
-      const activeStepId = input._id ?? null;
+
+      this.activeStepId = input._id ?? null;
+      this.activeStepPostedAt = input.posted_at ?? null;
+
       const activeStepValues = {};
       const activeStepEnabled = {};
 
@@ -148,7 +154,6 @@ export const useStepStore = defineStore("step", {
         }
       }
 
-      this.activeStepId = activeStepId;
       this.activeStepValues = activeStepValues;
       this.activeStepEnabled = activeStepEnabled;
     },
@@ -160,14 +165,18 @@ export const useStepStore = defineStore("step", {
       this.setSteps([]);
     },
     async createStep() {
-      await createStep(useCommonStore().userId, useTrackStore().currentId, {
-        values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)),
-      });
+      const step = { values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)) };
+      await createStep(useCommonStore().userId, useTrackStore().currentId, step, this.activeStepPostedAt);
     },
     async updateStep() {
-      await updateStep(useCommonStore().userId, useTrackStore().currentId, this.activeStepId, {
-        values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)),
-      });
+      const step = { values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)) };
+      await updateStep(
+        useCommonStore().userId,
+        useTrackStore().currentId,
+        this.activeStepId,
+        step,
+        this.activeStepPostedAt,
+      );
     },
   },
 });
