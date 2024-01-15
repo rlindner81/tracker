@@ -13,6 +13,8 @@ interface State {
   activeStepId: string | null;
   activeStepValues: {} | null;
   activeStepEnabled: {} | null;
+  activeStepPostedAt: Date | null;
+  activeStepPostedAtEnabled: boolean;
 }
 
 const _getSelectDefaultChoice = (field) => {
@@ -84,6 +86,8 @@ export const useStepStore = defineStore("step", {
     activeStepId: null,
     activeStepValues: null,
     activeStepEnabled: null,
+    activeStepPostedAt: null,
+    activeStepPostedAtEnabled: false,
   }),
   getters: {
     stepsDisplayRows(state) {
@@ -127,9 +131,15 @@ export const useStepStore = defineStore("step", {
       if (!fields) {
         this.activeStepValues = null;
         this.activeStepEnabled = null;
+        this.activeStepPostedAt = null;
+        this.activeStepPostedAtEnabled = false;
         return;
       }
-      const activeStepId = input._id ?? null;
+
+      this.activeStepId = input._id ?? null;
+      this.activeStepPostedAt = input.posted_at ?? null;
+      this.activeStepPostedAtEnabled = false;
+
       const activeStepValues = {};
       const activeStepEnabled = {};
 
@@ -148,7 +158,6 @@ export const useStepStore = defineStore("step", {
         }
       }
 
-      this.activeStepId = activeStepId;
       this.activeStepValues = activeStepValues;
       this.activeStepEnabled = activeStepEnabled;
     },
@@ -160,14 +169,23 @@ export const useStepStore = defineStore("step", {
       this.setSteps([]);
     },
     async createStep() {
-      await createStep(useCommonStore().userId, useTrackStore().currentId, {
-        values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)),
-      });
+      const step = { values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)) };
+      await createStep(
+        useCommonStore().userId,
+        useTrackStore().currentId,
+        step,
+        this.activeStepPostedAtEnabled ? this.activeStepPostedAt : null,
+      );
     },
     async updateStep() {
-      await updateStep(useCommonStore().userId, useTrackStore().currentId, this.activeStepId, {
-        values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)),
-      });
+      const step = { values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)) };
+      await updateStep(
+        useCommonStore().userId,
+        useTrackStore().currentId,
+        this.activeStepId,
+        step,
+        this.activeStepPostedAtEnabled ? this.activeStepPostedAt : null,
+      );
     },
   },
 });

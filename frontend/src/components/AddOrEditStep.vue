@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed, reactive, watch } from "vue";
 import { TRACK_FIELD_INPUT, TRACK_FIELD_TYPE } from "@/constants";
 
 import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
+import { dateToEditableTime, editableTimeToDate, isEditableTime } from "@/datetime";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
@@ -27,12 +28,29 @@ const emit = defineEmits(["close"]);
 const show = computed(() => props.show);
 
 watch(show, (newValue) => {
-  if (newValue && !props.edit) {
-    stepStore.resetActiveStep();
+  if (newValue) {
+    activeStepPostedAtEditable.value = stepStore.activeStepPostedAt
+      ? dateToEditableTime(stepStore.activeStepPostedAt)
+      : dateToEditableTime(new Date());
+    if (!props.edit) {
+      stepStore.resetActiveStep();
+    }
   }
 });
 
+const activeStepPostedAtEditable = defineModel<string>();
+const activeStepPostedAtEditableRules = reactive([(value) => isEditableTime(value) || "Enter a valid time."]);
+
 const onCreateOrUpdate = async () => {
+  if (stepStore.activeStepPostedAtEnabled && activeStepPostedAtEditable.value) {
+    if (!isEditableTime(activeStepPostedAtEditable.value)) {
+      // NOTE: cannot accept submission if postedAt is enabled, but not valid
+      return;
+    } else {
+      stepStore.activeStepPostedAt = editableTimeToDate(activeStepPostedAtEditable.value);
+    }
+  }
+
   emit("close");
   if (props.edit) {
     await stepStore.updateStep();
@@ -52,6 +70,26 @@ const onClose = async () => {
       <v-card-title class="text-h5">{{ edit ? $t("entity.step.edit") : $t("entity.step.add") }}</v-card-title>
       <!-- TODO v-else would be nice-->
       <v-container v-if="trackStore.current && stepStore.activeStepValues && stepStore.activeStepEnabled">
+        <v-row align="center">
+          <v-col cols="2" xs="1" sm="1">
+            <div>
+              <v-checkbox v-model="stepStore.activeStepPostedAtEnabled" color="secondary" />
+            </div>
+          </v-col>
+          <v-col>
+            <div>
+              <label :class="stepStore.activeStepPostedAtEnabled ? '' : 'disable'">Tracked On</label>
+              <v-text-field
+                v-model="activeStepPostedAtEditable"
+                :rules="activeStepPostedAtEditableRules"
+                :disabled="!stepStore.activeStepPostedAtEnabled"
+                density="compact"
+                hide-details="auto"
+              />
+            </div>
+          </v-col>
+        </v-row>
+
         <v-row align="center" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
           <v-col cols="2" xs="1" sm="1">
             <div v-if="trackStore.current.fields.some(({ optional }) => optional)">

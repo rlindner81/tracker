@@ -70,3 +70,29 @@ export const readableRelativeDateTime = (value: Date, now: Date = new Date()): s
       : relativeDateTime;
   }
 };
+
+const editableTimeRe = /^(\d\d).(\d\d).(\d\d\d\d) \| (\d\d):(\d\d)$/;
+
+export const dateToEditableTime = (value: Date): string => {
+  if (!value) {
+    return "";
+  }
+  const day = _leadingZero2(value.getDate());
+  const month = _leadingZero2(value.getMonth() + 1);
+  const year = value.getFullYear();
+  const hour = _leadingZero2(value.getHours());
+  const minute = _leadingZero2(value.getMinutes());
+  return `${day}.${month}.${year} | ${hour}:${minute}`;
+};
+
+export const editableTimeToDate = (value: string): Date => {
+  if (!value) {
+    return new Date();
+  }
+  const [match, dayIn, monthIn, yearIn, hourIn, minuteIn] = editableTimeRe.exec(value) ?? [];
+  return match
+    ? new Date(parseInt(yearIn), parseInt(monthIn) - 1, parseInt(dayIn), parseInt(hourIn), parseInt(minuteIn))
+    : new Date();
+};
+
+export const isEditableTime = (value: any): boolean => typeof value === "string" && editableTimeRe.test(value);
