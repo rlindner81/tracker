@@ -78,7 +78,7 @@ const onClose = async () => {
           </v-col>
           <v-col>
             <div>
-              <label :class="stepStore.activeStepPostedAtEnabled ? '' : 'disable'">Posted At</label>
+              <label :class="stepStore.activeStepPostedAtEnabled ? '' : 'disable'">Tracked On</label>
               <v-text-field
                 v-model="activeStepPostedAtEditable"
                 :rules="activeStepPostedAtEditableRules"
