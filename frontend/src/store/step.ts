@@ -13,7 +13,7 @@ interface State {
   activeStepId: string | null;
   activeStepValues: {} | null;
   activeStepEnabled: {} | null;
-  activeStepPostedAt: string | null;
+  activeStepPostedAt: Date | null;
   activeStepPostedAtEnabled: boolean;
 }
 
@@ -137,7 +137,7 @@ export const useStepStore = defineStore("step", {
       }
 
       this.activeStepId = input._id ?? null;
-      this.activeStepPostedAt = input.posted_at?.toISOString() ?? null;
+      this.activeStepPostedAt = input.posted_at ?? null;
       this.activeStepPostedAtEnabled = false;
 
       const activeStepValues = {};

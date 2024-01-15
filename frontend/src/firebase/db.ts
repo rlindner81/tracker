@@ -171,7 +171,7 @@ export const subscribeToSteps = async (userId, trackId, callback) => {
   });
 };
 
-export const createStep = async (userId, trackId, step, postedAt: string | null = null) => {
+export const createStep = async (userId, trackId, step, postedAt: Date | null = null) => {
   if (!userId || !trackId || !step) return;
   const now = new Date();
   await addDoc(stepsRef, {
@@ -186,7 +186,7 @@ export const createStep = async (userId, trackId, step, postedAt: string | null 
   });
 };
 
-export const updateStep = async (userId, trackId, stepId, step, postedAt: string | null = null) => {
+export const updateStep = async (userId, trackId, stepId, step, postedAt: Date | null = null) => {
   if (!userId || !trackId || !stepId || !step) return;
   const now = new Date();
   const stepRef = doc(stepsRef, stepId);

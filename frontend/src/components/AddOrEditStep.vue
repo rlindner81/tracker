@@ -4,7 +4,7 @@ import { TRACK_FIELD_INPUT, TRACK_FIELD_TYPE } from "@/constants";
 
 import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
-import { dateToEditableTime, editableTimeToIsoTimestamp, isEditableTime, isoTimestampToEditableTime } from "@/datetime";
+import { dateToEditableTime, editableTimeToDate, isEditableTime } from "@/datetime";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
@@ -30,7 +30,7 @@ const show = computed(() => props.show);
 watch(show, (newValue) => {
   if (newValue) {
     activeStepPostedAt.value = stepStore.activeStepPostedAt
-      ? isoTimestampToEditableTime(stepStore.activeStepPostedAt)
+      ? dateToEditableTime(stepStore.activeStepPostedAt)
       : dateToEditableTime(new Date());
     if (!props.edit) {
       stepStore.resetActiveStep();
@@ -47,9 +47,7 @@ const activeStepPostedAt = defineModel<string>({
 const onCreateOrUpdate = async () => {
   emit("close");
   if (stepStore.activeStepPostedAtEnabled) {
-    stepStore.activeStepPostedAt = activeStepPostedAt.value
-      ? editableTimeToIsoTimestamp(activeStepPostedAt.value)
-      : null;
+    stepStore.activeStepPostedAt = activeStepPostedAt.value ? editableTimeToDate(activeStepPostedAt.value) : null;
   }
   if (props.edit) {
     await stepStore.updateStep();
