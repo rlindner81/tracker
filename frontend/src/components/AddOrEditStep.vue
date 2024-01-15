@@ -40,16 +40,17 @@ watch(show, (newValue) => {
 
 const activeStepPostedAt = defineModel<string>({
   set(newValue) {
-    const oldValue = activeStepPostedAt.value;
-    if (isEditableTime(newValue)) {
-      activeStepPostedAt.value = newValue;
-    }
+    return isEditableTime(newValue) ? newValue : activeStepPostedAt.value;
   },
 });
 
 const onCreateOrUpdate = async () => {
   emit("close");
-  stepStore.activeStepPostedAt = activeStepPostedAt.value ? editableTimeToIsoTimestamp(activeStepPostedAt.value) : null;
+  if (stepStore.activeStepPostedAtEnabled) {
+    stepStore.activeStepPostedAt = activeStepPostedAt.value
+      ? editableTimeToIsoTimestamp(activeStepPostedAt.value)
+      : null;
+  }
   if (props.edit) {
     await stepStore.updateStep();
   } else {

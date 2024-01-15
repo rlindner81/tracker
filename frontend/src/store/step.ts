@@ -138,7 +138,7 @@ export const useStepStore = defineStore("step", {
 
       this.activeStepId = input._id ?? null;
       this.activeStepPostedAt = input.posted_at?.toISOString() ?? null;
-      this.activeStepPostedAtEnabled = this.activeStepPostedAt !== null;
+      this.activeStepPostedAtEnabled = false;
 
       const activeStepValues = {};
       const activeStepEnabled = {};

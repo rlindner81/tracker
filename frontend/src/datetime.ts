@@ -71,7 +71,7 @@ export const readableRelativeDateTime = (value: Date, now: Date = new Date()): s
   }
 };
 
-let editableTimeRe = /(\d\d).(\d\d).(\d\d\d\d) | (\d\d):(\d\d)/;
+const editableTimeRe = /(\d\d).(\d\d).(\d\d\d\d) | (\d\d):(\d\d)/g;
 
 export const dateToEditableTime = (value: Date): string => {
   if (!value) {
@@ -82,7 +82,7 @@ export const dateToEditableTime = (value: Date): string => {
   const year = value.getFullYear();
   const hour = _leadingZero2(value.getHours());
   const minute = _leadingZero2(value.getMinutes());
-  return `${day}.${month}.${year} ${hour}:${minute}`;
+  return `${day}.${month}.${year} | ${hour}:${minute}`;
 };
 
 export const editableTimeToDate = (value: string): Date => {
