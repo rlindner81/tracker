@@ -70,3 +70,11 @@ export const readableRelativeDateTime = (value: Date, now: Date = new Date()): s
       : relativeDateTime;
   }
 };
+
+export const dateToEditableTime = (value: Date): string => isoTimestampToEditableTime(value.toISOString());
+
+export const isoTimestampToEditableTime = (value: string): string => "";
+
+export const editableTimeToIsoTimestamp = (value: string): string => "";
+
+export const isEditableTime = (value: string): boolean => false;

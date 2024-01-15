@@ -4,6 +4,7 @@ import { TRACK_FIELD_INPUT, TRACK_FIELD_TYPE } from "@/constants";
 
 import { useTrackStore } from "@/store/track";
 import { useStepStore } from "@/store/step";
+import { dateToEditableTime, editableTimeToIsoTimestamp, isEditableTime, isoTimestampToEditableTime } from "@/datetime";
 
 const trackStore = useTrackStore();
 const stepStore = useStepStore();
@@ -27,13 +28,28 @@ const emit = defineEmits(["close"]);
 const show = computed(() => props.show);
 
 watch(show, (newValue) => {
-  if (newValue && !props.edit) {
-    stepStore.resetActiveStep();
+  if (newValue) {
+    activeStepPostedAt.value = stepStore.activeStepPostedAt
+      ? isoTimestampToEditableTime(stepStore.activeStepPostedAt)
+      : dateToEditableTime(new Date());
+    if (!props.edit) {
+      stepStore.resetActiveStep();
+    }
   }
+});
+
+const activeStepPostedAt = defineModel<string>({
+  set(newValue) {
+    const oldValue = activeStepPostedAt.value;
+    if (isEditableTime(newValue)) {
+      activeStepPostedAt.value = newValue;
+    }
+  },
 });
 
 const onCreateOrUpdate = async () => {
   emit("close");
+  stepStore.activeStepPostedAt = activeStepPostedAt.value ? editableTimeToIsoTimestamp(activeStepPostedAt.value) : null;
   if (props.edit) {
     await stepStore.updateStep();
   } else {
@@ -62,7 +78,7 @@ const onClose = async () => {
             <div>
               <label :class="stepStore.activeStepPostedAtEnabled ? '' : 'disable'">Posted At</label>
               <v-text-field
-                v-model="stepStore.activeStepPostedAt"
+                v-model="activeStepPostedAt"
                 :disabled="!stepStore.activeStepPostedAtEnabled"
                 density="compact"
                 hide-details="auto"
