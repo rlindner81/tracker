@@ -95,4 +95,4 @@ export const editableTimeToDate = (value: string): Date => {
     : new Date();
 };
 
-export const isEditableTime = (value: string): boolean => editableTimeRe.test(value);
+export const isEditableTime = (value: any): boolean => typeof value === "string" && editableTimeRe.test(value);

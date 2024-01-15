@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed, reactive, watch } from "vue";
 import { TRACK_FIELD_INPUT, TRACK_FIELD_TYPE } from "@/constants";
 
 import { useTrackStore } from "@/store/track";
@@ -39,6 +39,7 @@ watch(show, (newValue) => {
 });
 
 const activeStepPostedAtEditable = defineModel<string>();
+const activeStepPostedAtEditableRules = reactive([(value) => isEditableTime(value) || "Enter a valid time."]);
 
 const onCreateOrUpdate = async () => {
   if (stepStore.activeStepPostedAtEnabled && activeStepPostedAtEditable.value) {
@@ -80,7 +81,7 @@ const onClose = async () => {
               <label :class="stepStore.activeStepPostedAtEnabled ? '' : 'disable'">Posted At</label>
               <v-text-field
                 v-model="activeStepPostedAtEditable"
-                :rules="[isEditableTime]"
+                :rules="activeStepPostedAtEditableRules"
                 :disabled="!stepStore.activeStepPostedAtEnabled"
                 density="compact"
                 hide-details="auto"
