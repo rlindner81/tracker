@@ -13,7 +13,8 @@ interface State {
   activeStepId: string | null;
   activeStepValues: {} | null;
   activeStepEnabled: {} | null;
-  activeStepPostedAt: Date | null;
+  activeStepPostedAt: string | null;
+  activeStepPostedAtEnabled: boolean;
 }
 
 const _getSelectDefaultChoice = (field) => {
@@ -86,6 +87,7 @@ export const useStepStore = defineStore("step", {
     activeStepValues: null,
     activeStepEnabled: null,
     activeStepPostedAt: null,
+    activeStepPostedAtEnabled: false,
   }),
   getters: {
     stepsDisplayRows(state) {
@@ -130,11 +132,13 @@ export const useStepStore = defineStore("step", {
         this.activeStepValues = null;
         this.activeStepEnabled = null;
         this.activeStepPostedAt = null;
+        this.activeStepPostedAtEnabled = false;
         return;
       }
 
       this.activeStepId = input._id ?? null;
-      this.activeStepPostedAt = input.posted_at ?? null;
+      this.activeStepPostedAt = input.posted_at?.toISOString() ?? null;
+      this.activeStepPostedAtEnabled = this.activeStepPostedAt !== null;
 
       const activeStepValues = {};
       const activeStepEnabled = {};
@@ -166,7 +170,12 @@ export const useStepStore = defineStore("step", {
     },
     async createStep() {
       const step = { values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)) };
-      await createStep(useCommonStore().userId, useTrackStore().currentId, step, this.activeStepPostedAt);
+      await createStep(
+        useCommonStore().userId,
+        useTrackStore().currentId,
+        step,
+        this.activeStepPostedAtEnabled ? this.activeStepPostedAt : null,
+      );
     },
     async updateStep() {
       const step = { values: _filterDisabled(toRaw(this.activeStepEnabled), toRaw(this.activeStepValues)) };
@@ -175,7 +184,7 @@ export const useStepStore = defineStore("step", {
         useTrackStore().currentId,
         this.activeStepId,
         step,
-        this.activeStepPostedAt,
+        this.activeStepPostedAtEnabled ? this.activeStepPostedAt : null,
       );
     },
   },

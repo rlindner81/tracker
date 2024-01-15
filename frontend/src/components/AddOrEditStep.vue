@@ -52,6 +52,25 @@ const onClose = async () => {
       <v-card-title class="text-h5">{{ edit ? $t("entity.step.edit") : $t("entity.step.add") }}</v-card-title>
       <!-- TODO v-else would be nice-->
       <v-container v-if="trackStore.current && stepStore.activeStepValues && stepStore.activeStepEnabled">
+        <v-row align="center">
+          <v-col cols="2" xs="1" sm="1">
+            <div>
+              <v-checkbox v-model="stepStore.activeStepPostedAtEnabled" color="secondary" />
+            </div>
+          </v-col>
+          <v-col>
+            <div>
+              <label :class="stepStore.activeStepPostedAtEnabled ? '' : 'disable'">Posted At</label>
+              <v-text-field
+                v-model="stepStore.activeStepPostedAt"
+                :disabled="!stepStore.activeStepPostedAtEnabled"
+                density="compact"
+                hide-details="auto"
+              />
+            </div>
+          </v-col>
+        </v-row>
+
         <v-row align="center" v-for="(field, fieldIndex) in trackStore.current.fields" :key="fieldIndex">
           <v-col cols="2" xs="1" sm="1">
             <div v-if="trackStore.current.fields.some(({ optional }) => optional)">
