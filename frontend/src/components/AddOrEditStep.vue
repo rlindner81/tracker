@@ -29,7 +29,7 @@ const show = computed(() => props.show);
 
 watch(show, (newValue) => {
   if (newValue) {
-    activeStepPostedAt.value = stepStore.activeStepPostedAt
+    activeStepPostedAtEditable.value = stepStore.activeStepPostedAt
       ? dateToEditableTime(stepStore.activeStepPostedAt)
       : dateToEditableTime(new Date());
     if (!props.edit) {
@@ -38,17 +38,19 @@ watch(show, (newValue) => {
   }
 });
 
-const activeStepPostedAt = defineModel<string>({
-  set(newValue) {
-    return isEditableTime(newValue) ? newValue : activeStepPostedAt.value;
-  },
-});
+const activeStepPostedAtEditable = defineModel<string>();
 
 const onCreateOrUpdate = async () => {
-  emit("close");
-  if (stepStore.activeStepPostedAtEnabled) {
-    stepStore.activeStepPostedAt = activeStepPostedAt.value ? editableTimeToDate(activeStepPostedAt.value) : null;
+  if (stepStore.activeStepPostedAtEnabled && activeStepPostedAtEditable.value) {
+    if (!isEditableTime(activeStepPostedAtEditable.value)) {
+      // NOTE: cannot accept submission if postedAt is enabled, but not valid
+      return;
+    } else {
+      stepStore.activeStepPostedAt = editableTimeToDate(activeStepPostedAtEditable.value);
+    }
   }
+
+  emit("close");
   if (props.edit) {
     await stepStore.updateStep();
   } else {
@@ -77,7 +79,8 @@ const onClose = async () => {
             <div>
               <label :class="stepStore.activeStepPostedAtEnabled ? '' : 'disable'">Posted At</label>
               <v-text-field
-                v-model="activeStepPostedAt"
+                v-model="activeStepPostedAtEditable"
+                :rules="[isEditableTime]"
                 :disabled="!stepStore.activeStepPostedAtEnabled"
                 density="compact"
                 hide-details="auto"
