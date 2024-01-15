@@ -71,7 +71,7 @@ export const readableRelativeDateTime = (value: Date, now: Date = new Date()): s
   }
 };
 
-const editableTimeRe = /(\d\d).(\d\d).(\d\d\d\d) \| (\d\d):(\d\d)/;
+const editableTimeRe = /^(\d\d).(\d\d).(\d\d\d\d) \| (\d\d):(\d\d)$/;
 
 export const dateToEditableTime = (value: Date): string => {
   if (!value) {
@@ -95,4 +95,4 @@ export const editableTimeToDate = (value: string): Date => {
     : new Date();
 };
 
-export const isEditableTime = (value: string): boolean => (value ? editableTimeRe.test(value) : value === "");
+export const isEditableTime = (value: string): boolean => editableTimeRe.test(value);
