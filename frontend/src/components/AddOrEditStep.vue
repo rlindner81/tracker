@@ -39,7 +39,7 @@ watch(show, (newValue) => {
 });
 
 const activeStepPostedAtEditable = defineModel<string>();
-const activeStepPostedAtEditableRules = reactive([(value) => isEditableTime(value) || "Enter a valid time."]);
+const activeStepPostedAtEditableRules = reactive([(value: any) => isEditableTime(value) || "Enter a valid time."]);
 
 const onCreateOrUpdate = async () => {
   if (stepStore.activeStepPostedAtEnabled && activeStepPostedAtEditable.value) {
@@ -78,11 +78,19 @@ const onClose = async () => {
           </v-col>
           <v-col>
             <div>
-              <label :class="stepStore.activeStepPostedAtEnabled ? '' : 'disable'">Tracked On</label>
+              <label v-if="stepStore.activeStepPostedAtEnabled">Override Tracked On</label>
+              <label v-else class="disable">Tracked On</label>
               <v-text-field
+                v-if="stepStore.activeStepPostedAtEnabled"
                 v-model="activeStepPostedAtEditable"
                 :rules="activeStepPostedAtEditableRules"
-                :disabled="!stepStore.activeStepPostedAtEnabled"
+                density="compact"
+                hide-details="auto"
+              />
+              <v-text-field
+                v-else
+                :value="edit && stepStore.activeStepPostedAt ? dateToEditableTime(stepStore.activeStepPostedAt) : 'now'"
+                disabled
                 density="compact"
                 hide-details="auto"
               />
