@@ -145,7 +145,7 @@ export const useStepStore = defineStore("step", {
 
       for (const field of fields) {
         if (input.values) {
-          if (input.values[field.key]) {
+          if (input.values[field.key] !== undefined) {
             activeStepEnabled[field.key] = true;
             activeStepValues[field.key] = input.values[field.key];
           } else {
